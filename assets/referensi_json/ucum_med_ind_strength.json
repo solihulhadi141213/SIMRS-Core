@@ -1,0 +1,344 @@
+{
+    "list": [
+        {
+            "system": "https://ucum.org/",
+            "code": "m",
+            "display": "meter"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "s",
+            "display": "detik"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "g",
+            "display": "gram"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[pi]",
+            "display": "pi"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "%",
+            "display": "persen"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[ppth]",
+            "display": "bagian per seribu"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[ppm]",
+            "display": "bagian per sejuta"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[ppb]",
+            "display": "bagian per semilyar"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[pptr]",
+            "display": "parts per trillion"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "mol",
+            "display": "mol"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "Cel",
+            "display": "derajat Celcius"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "L",
+            "display": "Liter"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "min",
+            "display": "Menit"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "h",
+            "display": "jam"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "d",
+            "display": "hari"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "a",
+            "display": "tahun"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "wk",
+            "display": "minggu"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "mo",
+            "display": "bulan"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "t",
+            "display": "ton"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "bar",
+            "display": "bar"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[in_i]",
+            "display": "inci"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[mil_i]",
+            "display": "mil"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[mesh_i]",
+            "display": "mesh"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "eq",
+            "display": "equivalent"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "osm",
+            "display": "osmol"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[pH]",
+            "display": "pH"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "g%",
+            "display": "gram persen"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "U",
+            "display": "enzim unit"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[IU]",
+            "display": "internasional unit"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[tb'U]",
+            "display": "tuberculin unit"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[CCID_50]",
+            "display": "50% cell culture infectious dose"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[PFU]",
+            "display": "plaque forming units"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[CFU]",
+            "display": "colony forming units"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[Lf]",
+            "display": "Limit of flocculation"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[Lf]",
+            "display": "Limit of flocculation"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "[D'ag'U]",
+            "display": "D-antigen unit (polio)"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/d",
+            "display": "per hari"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/g",
+            "display": "per gram"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/kg",
+            "display": "per kilogram"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/L",
+            "display": "per liter"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/m2",
+            "display": "per meter persegi"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/m3",
+            "display": "per meter kubik"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/mg",
+            "display": "per milligram"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/min",
+            "display": "per menit"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/mL",
+            "display": "per milliliter"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/mm",
+            "display": "per millimeter"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/s",
+            "display": "per detik"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "/U",
+            "display": "per unit enzim"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "10*3",
+            "display": "10^3 (jumlah cell)"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "10*5",
+            "display": "10^5"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "10*6",
+            "display": "10^6"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "cg",
+            "display": "sentigram"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "cL",
+            "display": "sentiliter"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "cm",
+            "display": "sentimeter"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "cm2",
+            "display": "sentimeter persegi"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "kcal",
+            "display": "kilokalori"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "kg",
+            "display": "kilogram"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "kL",
+            "display": "kiloliter"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "km",
+            "display": "kilometer"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "mg",
+            "display": "milligram"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "mL",
+            "display": "milliliter"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "mm",
+            "display": "millimeter"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "mmol",
+            "display": "millimol"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "ng",
+            "display": "nanogram"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "ug",
+            "display": "mikrogram"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "uL",
+            "display": "mikroliter"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "10*9",
+            "display": "10^9"
+        },
+        {
+            "system": "https://ucum.org/",
+            "code": "10*10",
+            "display": "10^10"
+        }
+    ]
+}

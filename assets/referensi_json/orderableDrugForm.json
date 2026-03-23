@@ -1,0 +1,829 @@
+{
+    "list": [
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "_AdministrableDrugForm",
+            "display": "AdministrableDrugForm"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "APPFUL",
+            "display": "Applicatorful"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "DROP",
+            "display": "Drops"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "NDROP",
+            "display": "Nasal Drops"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OPDROP",
+            "display": "Ophthalmic Drops"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ORDROP",
+            "display": "Oral Drops"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OTDROP",
+            "display": "Otic Drops"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "PUFF",
+            "display": "Puff"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SCOOP",
+            "display": "Scoops"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SPRY",
+            "display": "Sprays"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "_DispensableDrugForm",
+            "display": "DispensableDrugForm"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "_GasDrugForm",
+            "display": "GasDrugForm"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "_GasLiquidMixture",
+            "display": "GasLiquidMixture"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "AER",
+            "display": "Aerosol"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "BAINHL",
+            "display": "Breath Activated Inhaler"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "INHLSOL",
+            "display": "Inhalant Solution"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "MDINHL",
+            "display": "Metered Dose Inhaler"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "NASSPRY",
+            "display": "Nasal Spray"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "DERMSPRY",
+            "display": "Dermal Spray"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "FOAM",
+            "display": "Foam"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "FOAMAPL",
+            "display": "Foam with Applicator"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "RECFORM",
+            "display": "Rectal foam"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VAGFOAM",
+            "display": "Vaginal foam"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VAGFOAMAPL",
+            "display": "Vaginal foam with applicator"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "RECSPRY",
+            "display": "Rectal Spray"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VAGSPRY",
+            "display": "Vaginal Spray"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "_GasSolidSpray",
+            "display": "GasSolidSpray"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "INHL",
+            "display": "Inhalant"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "BAINHLPWD",
+            "display": "Breath Activated Powder Inhaler"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "INHLPWD",
+            "display": "Inhalant Powder"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "MDINHLPWD",
+            "display": "Metered Dose Powder Inhaler"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "NASINHL",
+            "display": "Nasal Inhalant"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ORINHL",
+            "display": "Oral Inhalant"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "PWDSPRY",
+            "display": "Powder Spray"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SPRYADAPT",
+            "display": "Spray with Adaptor"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "_Liquid",
+            "display": "Liquid"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "LIQCLN",
+            "display": "Liquid Cleanser"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "LIQSOAP",
+            "display": "Medicated Liquid Soap"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SHMP",
+            "display": "Shampoo"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OIL",
+            "display": "Oil"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TOPOIL",
+            "display": "Topical Oil"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SOL",
+            "display": "Solution"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "IPSOL",
+            "display": "Intraperitoneal Solution"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SOL",
+            "display": "Solution"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "IRSOL",
+            "display": "Irrigation Solution"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "DOUCHE",
+            "display": "Douche"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ENEMA",
+            "display": "Enema"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OPIRSOL",
+            "display": "Ophthalmic Irrigation Solution"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "IVSOL",
+            "display": "Intravenous Solution"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ORALSOL",
+            "display": "Oral Solution"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ELIXIR",
+            "display": "Elixir"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "RINSE",
+            "display": "Mouthwash/Rinse"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SYRUP",
+            "display": "Syrup"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ORDROP",
+            "display": "Oral Drops"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "RECSOL",
+            "display": "Rectal Solution"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TOPSOL",
+            "display": "Topical Solution"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "LIN",
+            "display": "Liniment"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "MUCTOPSOL",
+            "display": "Mucous Membrane Topical Solution"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TINC",
+            "display": "Tincture"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "DROP",
+            "display": "Tincture"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "_LiquidLiquidEmulsion",
+            "display": "LiquidLiquidEmulsion"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "CRM",
+            "display": "Cream"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "NASCRM",
+            "display": "Nasal Cream"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OPCRM",
+            "display": "Ophthalmic Cream"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ORCRM",
+            "display": "Oral Cream"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OTCRM",
+            "display": "Otic Cream"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "RECCRM",
+            "display": "Rectal Cream"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TOPCRM",
+            "display": "Topical Cream"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VAGCRM",
+            "display": "Vaginal Cream"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VAGCRMAPL",
+            "display": "Vaginal Cream with Applicator"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "LTN",
+            "display": "Lotion"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TOPLTN",
+            "display": "Topical Lotion"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OINT",
+            "display": "Ointment"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "NASOINT",
+            "display": "Nasal Ointment"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OINTAPL",
+            "display": "Ointment with Applicator"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OPOINT",
+            "display": "Ophthalmic Ointment"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OTOINT",
+            "display": "Otic Ointment"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "RECOINT",
+            "display": "Rectal Ointment"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TOPOINT",
+            "display": "Topical Ointment"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VAGOINT",
+            "display": "Vaginal Ointment"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VAGOINTAPL",
+            "display": "Vaginal Ointment with Applicator"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "_LiquidSolidSuspension",
+            "display": "LiquidSolidSuspension"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "GEL",
+            "display": "Gel"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "GELAPL",
+            "display": "Gel with Applicator"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "NASGEL",
+            "display": "Nasal Gel"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OPGEL",
+            "display": "Ophthalmic Gel"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OTGEL",
+            "display": "Otic Gel"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TOPGEL",
+            "display": "Topical Gel"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "URETHGEL",
+            "display": "Urethral Gel"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VAGGEL",
+            "display": "Vaginal Gel"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VGELAPL",
+            "display": "Vaginal Gel with Applicator"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "PASTE",
+            "display": "Paste"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "PUD",
+            "display": "Pudding"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TPASTE",
+            "display": "Toothpaste"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SUSP",
+            "display": "Suspension"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ITSUSP",
+            "display": "Intrathecal Suspension"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OPSUSP",
+            "display": "Ophthalmic Suspension"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ORSUSP",
+            "display": "Oral Suspension"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERSUSP",
+            "display": "Extended-Release Suspension"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERSUSP12",
+            "display": "12 Hour Extended-Release Suspension"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERSUSP24",
+            "display": "24 Hour Extended Release Suspension"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "OTSUSP",
+            "display": "Otic Suspension"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "RECSUSP",
+            "display": "Rectal Suspension"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "_SolidDrugForm",
+            "display": "SolidDrugForm"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "BAR",
+            "display": "Bar"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "BARSOAP",
+            "display": "Bar Soap"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "MEDBAR",
+            "display": "Medicated Bar Soap"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "CHEWBAR",
+            "display": "Chewable Bar"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "BEAD",
+            "display": "Beads"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "CAKE",
+            "display": "Cake"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "CEMENT",
+            "display": "Cement"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "CRYS",
+            "display": "Crystals"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "DISK",
+            "display": "Disk"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "FLAKE",
+            "display": "Flakes"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "GRAN",
+            "display": "Granules"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "GUM",
+            "display": "ChewingGum"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "PAD",
+            "display": "Pad"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "MEDPAD",
+            "display": "Medicated Pad"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "PATCH",
+            "display": "Patch"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TPATCH",
+            "display": "Transdermal Patch"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TPATH16",
+            "display": "16 Hour Transdermal Patch"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TPATH24",
+            "display": "24 Hour Transdermal Patch"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TPATH2WK",
+            "display": "Biweekly Transdermal Patch"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TPATH72",
+            "display": "72 Hour Transdermal Patch"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TPATHWK",
+            "display": "Weekly Transdermal Patch"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "PELLET",
+            "display": "Pellet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "PILL",
+            "display": "Pill"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "CAP",
+            "display": "Capsule"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ORCAP",
+            "display": "Oral Capsule"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ENTCAP",
+            "display": "Enteric Coated Capsule"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERENTCAP",
+            "display": "Extended Release Enteric Coated Capsule"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERCAP",
+            "display": "Extended Release Capsule"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERCAP12",
+            "display": "12 Hour Extended Release Capsule"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERCAP24",
+            "display": "24 Hour Extended Release Capsule"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERECCAP",
+            "display": "Extended Release Enteric Coated Capsule"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERENTCAP",
+            "display": "Extended Release Enteric Coated Capsule"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TAB",
+            "display": "Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ORTAB",
+            "display": "Oral Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "BUCTAB",
+            "display": "Buccal Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SRBUCTAB",
+            "display": "Sustained Release Buccal Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "CAPLET",
+            "display": "Caplet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "CHEWTAB",
+            "display": "Chewable Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "CPTAB",
+            "display": "Coated Particles Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "DISINTAB",
+            "display": "Disintegrating Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "DRTAB",
+            "display": "Delayed Release Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ECTAB",
+            "display": "Enteric Coated Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERECTAB",
+            "display": "Extended Release Enteric Coated Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERTAB",
+            "display": "Extended Release Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERTAB12",
+            "display": "12 Hour Extended Release Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERTAB24",
+            "display": "24 Hour Extended Release Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ERECTAB",
+            "display": "Extended Release Enteric Coated Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "ORTROCHE",
+            "display": "Lozenge/Oral Troche"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SLTAB",
+            "display": "Sublingual Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VAGTAB",
+            "display": "Vaginal Tablet"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "POWD",
+            "display": "Powder"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "TOPPWD",
+            "display": "Topical Powder"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "RECPWD",
+            "display": "Rectal Powder"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VAGPWD",
+            "display": "Vaginal Powder"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SUPP",
+            "display": "Suppository"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "RECSUPP",
+            "display": "Rectal Suppository"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "URETHSUPP",
+            "display": "Urethral suppository"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "VAGSUPP",
+            "display": "Vaginal Suppository"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "SWAB",
+            "display": "Swab"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "MEDSWAB",
+            "display": "Medicated swab"
+        },
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "code": "WAFER",
+            "display": "Wafer"
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+#API
+/API/vendor/
+
+# File environment
+.env
+
+# DEPENDENCIES
+/vendor/
+/node_modules/
+
+# File Image
+/assets/images/pasien/
+/assets/images/PengajuanAkses/
+/assets/images/Radiologi/
+/assets/images/user/
+
+#CSS
+/assets/css/animate.css/
+/assets/css/bootstrap/
+/assets/css/chartist/
+/assets/css/morris.js/
+
+# ICON
+/assets/icon/
+
+# JS
+/assets/apexcharts/
+/assets/jQuery-Mask-Plugin/
+/assets/js/
+/assets/phpqrcode/
+/assets/sweetalert2/
+/assets/tinymce/
+
+#Pages
+/assets/pages/

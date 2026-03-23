@@ -1,0 +1,489 @@
+{
+    "list": [
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS001",
+            "display": "Aerosol Foam"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS002",
+            "display": "Aerosol Metered Dose"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS003",
+            "display": "Aerosol Spray"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS004",
+            "display": "Oral Spray"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS005",
+            "display": "Buscal Spray"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS006",
+            "display": "Transdermal Spray"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS007",
+            "display": "Topical Spray"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS008",
+            "display": "Serbuk Spray"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS009",
+            "display": "Eliksir"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS010",
+            "display": "Emulsi"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS011",
+            "display": "Enema"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS012",
+            "display": "Gas"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS013",
+            "display": "Gel"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS014",
+            "display": "Gel Mata"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS015",
+            "display": "Granul Effervescent"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS016",
+            "display": "Granula"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS017",
+            "display": "Intra Uterine Device (IUD)"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS018",
+            "display": "Implant"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS019",
+            "display": "Kapsul"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS020",
+            "display": "Kapsul Lunak"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS021",
+            "display": "Kapsul Pelepasan Lambat"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS022",
+            "display": "Kaplet"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS023",
+            "display": "Kaplet Salut Selaput"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS024",
+            "display": "Kaplet Salut Enterik"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS025",
+            "display": "Kaplet Salut Gula"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS026",
+            "display": "Kaplet Pelepasan Lambat"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS027",
+            "display": "Kaplet Pelepasan Cepat"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS028",
+            "display": "Kaplet Kunyah"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS029",
+            "display": "Kaplet Kunyah Salut Selaput"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS030",
+            "display": "Krim"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS031",
+            "display": "Krim Lemak"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS032",
+            "display": "Larutan"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS033",
+            "display": "Larutan Inhalasi"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS034",
+            "display": "Larutan Injeksi"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS035",
+            "display": "Infus"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS036",
+            "display": "Obat Kumur"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS037",
+            "display": "Ovula"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS038",
+            "display": "Pasta"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS039",
+            "display": "Pil"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS040",
+            "display": "Patch"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS041",
+            "display": "Pessary"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS042",
+            "display": "Salep"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS043",
+            "display": "Salep Mata"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS044",
+            "display": "Sampo"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS045",
+            "display": "Semprot Hidung"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS046",
+            "display": "Serbuk Aerosol"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS047",
+            "display": "Serbuk Oral"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS048",
+            "display": "Serbuk Inhaler"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS049",
+            "display": "Serbuk Injeksi"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS050",
+            "display": "Serbuk Injeksi Liofilisasi"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS051",
+            "display": "Serbuk Infus"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS052",
+            "display": "Serbuk Obat Luar / Serbuk Tabur"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS053",
+            "display": "Serbuk Steril"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS054",
+            "display": "Serbuk Effervescent"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS055",
+            "display": "Sirup"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS056",
+            "display": "Sirup Kering"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS057",
+            "display": "Sirup Kering Pelepasan Lambat"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS058",
+            "display": "Subdermal Implants"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS059",
+            "display": "Supositoria"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS060",
+            "display": "Suspensi"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS061",
+            "display": "Suspensi Injeksi"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS062",
+            "display": "Suspensi / Cairan Obat Luar"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS063",
+            "display": "Cairan Steril"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS064",
+            "display": "Cairan Mata"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS065",
+            "display": "Cairan Diagnostik"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS066",
+            "display": "Tablet"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS067",
+            "display": "Tablet Effervescent"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS068",
+            "display": "Tablet Hisap"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS069",
+            "display": "Tablet Kunyah"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS070",
+            "display": "Tablet Pelepasan Cepat"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS071",
+            "display": "Tablet Pelepasan Lambat"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS072",
+            "display": "Tablet Disintegrasi Oral"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS073",
+            "display": "Tablet Dispersibel"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS074",
+            "display": "Tablet Cepat Larut"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS075",
+            "display": "Tablet Salut Gula"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS076",
+            "display": "Tablet Salut Enterik"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS077",
+            "display": "Tablet Salut Selaput"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS078",
+            "display": "Tablet Sublingual"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS079",
+            "display": "Tablet Sublingual Pelepasan Lambat"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS080",
+            "display": "Tablet Vaginal"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS081",
+            "display": "Tablet Lapis"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS082",
+            "display": "Tablet Lapis Lepas Lambat"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS083",
+            "display": "Chewing Gum"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS084",
+            "display": "Tetes Mata"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS085",
+            "display": "Tetes Hidung"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS086",
+            "display": "Tetes Telinga"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS087",
+            "display": "Tetes Oral (Oral Drops)"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS088",
+            "display": "Tetes Mata Dan Telinga"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS089",
+            "display": "Transdermal"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS090",
+            "display": "Transdermal Urethral"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS091",
+            "display": "Tulle/Plester Obat"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS092",
+            "display": "Vaginal Cream"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS093",
+            "display": "Vaginal Gel"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS094",
+            "display": "Vaginal Douche"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS095",
+            "display": "Vaginal Ring"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS096",
+            "display": "Vaginal Tissue"
+        },
+        {
+            "system": "https://terminology.kemkes.go.id/CodeSystem/medication-form",
+            "code": "BS097",
+            "display": "Suspensi Inhalasi"
+        }
+    ]
+}

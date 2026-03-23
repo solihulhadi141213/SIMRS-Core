@@ -1,0 +1,184 @@
+{
+    "list": [
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "implant",
+            "display": "Implant",
+            "keterangan": "Implant"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "Inhal",
+            "display": "Inhalation",
+            "keterangan": "dihirup"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "Instill",
+            "display": "Instillation",
+            "keterangan": "Instillation"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "N",
+            "display": "N",
+            "keterangan": "Nasal"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "O",
+            "display": "Oral",
+            "keterangan": "Oral"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "P",
+            "display": "Parenteral",
+            "keterangan": "Parenteral"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "R",
+            "display": "Rectal",
+            "keterangan": "Rectal"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "SL",
+            "display": "Sublingual/Buccal/Oromucosal",
+            "keterangan": "Diantara lidah/ diantara gusi/ Pipi"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "TD",
+            "display": "Transdermal",
+            "keterangan": "Transdermal"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "V",
+            "display": "Vaginal",
+            "keterangan": "Vagina"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "Inhal.powder",
+            "display": "Inhalation Powder",
+            "keterangan": "Bubuk inhalasi"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "Inhal.aerosol",
+            "display": "Inhalation Aerosol",
+            "keterangan": "Aerosol inhalasi"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "Inhal.solution",
+            "display": "Inhalation Solution",
+            "keterangan": "Larutan inhalasi"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "urethral",
+            "display": "Urethral",
+            "keterangan": "Uretra"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "TD patch",
+            "display": "Transdermal Patch",
+            "keterangan": "Transdermal patch"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "intravesical",
+            "display": "Intravesical",
+            "keterangan": "Intravesical"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "Instill.solution",
+            "display": "Instillation Solution",
+            "keterangan": "Instillation solution"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "lamella",
+            "display": "Lamella",
+            "keterangan": "Ophtalmic"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "oral aerosol",
+            "display": "Oral Aerosol",
+            "keterangan": "Aerosol oral"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "s.c. implant",
+            "display": "S.C. Implant",
+            "keterangan": "S.C. implant"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "ocular",
+            "display": "Ocular",
+            "keterangan": "Ocular (mata)"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "otic",
+            "display": "Otic",
+            "keterangan": "Otic (telinga)"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "cutaneous",
+            "display": "Cutaneous",
+            "keterangan": "Kutanea (kulit)"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "inj.subcutaneous",
+            "display": "Injection Subcutaneous",
+            "keterangan": "Subkutan Injeksi (di bawah kulit)"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "inj.intramuscular",
+            "display": "Injection Intramuscular",
+            "keterangan": "Intramuskular Injeksi (di dalam otot)"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "inj.intravenous",
+            "display": "Injection Intravenous",
+            "keterangan": "Intravena Injeksi (ke pembuluh darah)"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "inj.intrathecal",
+            "display": "Injection Intrathecal",
+            "keterangan": "Intratekal Injeksi (sekitar sumsum tulang belakang)"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "Chewing Gum",
+            "display": "Chewing Gum",
+            "keterangan": "Dikunyah"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "ointment",
+            "display": "Ointment",
+            "keterangan": "Topikal"
+        },
+        {
+            "system": "http://www.whocc.no/atc",
+            "code": "stomatologic",
+            "display": "stomatologic",
+            "keterangan": "stomatologic"
+        }
+    ]
+}

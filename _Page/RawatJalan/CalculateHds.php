@@ -1,0 +1,44 @@
+<?php
+    if(empty($_POST['resikoi_jatuh_hds1'])){
+        $hds1=0;
+    }else{
+        $hds1=$_POST['resikoi_jatuh_hds1'];
+    }
+    if(empty($_POST['resikoi_jatuh_hds2'])){
+        $hds2=0;
+    }else{
+        $hds2=$_POST['resikoi_jatuh_hds2'];
+    }
+    if(empty($_POST['resikoi_jatuh_hds3'])){
+        $hds3=0;
+    }else{
+        $hds3=$_POST['resikoi_jatuh_hds3'];
+    }
+    if(empty($_POST['resikoi_jatuh_hds4'])){
+        $hds4=0;
+    }else{
+        $hds4=$_POST['resikoi_jatuh_hds4'];
+    }
+    if(empty($_POST['resikoi_jatuh_hds5'])){
+        $hds5=0;
+    }else{
+        $hds5=$_POST['resikoi_jatuh_hds5'];
+    }
+    if(empty($_POST['resikoi_jatuh_hds6'])){
+        $hds6=0;
+    }else{
+        $hds6=$_POST['resikoi_jatuh_hds6'];
+    }
+    if(empty($_POST['resikoi_jatuh_hds7'])){
+        $hds7=0;
+    }else{
+        $hds7=$_POST['resikoi_jatuh_hds7'];
+    }
+    $JumlahTotal=$hds1+$hds2+$hds3+$hds4+$hds5+$hds6+$hds7;
+    if($JumlahTotal<=11){
+        $Kategori="Resiko Rendah";
+    }else{
+        $Kategori="Resiko Tinggi";
+    }
+    echo "Skor $JumlahTotal ($Kategori)";
+?>

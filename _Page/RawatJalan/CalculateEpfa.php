@@ -1,0 +1,54 @@
+<?php
+    if(empty($_POST['resikoi_jatuh_epfra1'])){
+        $epfra1=0;
+    }else{
+        $epfra1=$_POST['resikoi_jatuh_epfra1'];
+    }
+    if(empty($_POST['resikoi_jatuh_epfra2'])){
+        $epfra2=0;
+    }else{
+        $epfra2=$_POST['resikoi_jatuh_epfra2'];
+    }
+    if(empty($_POST['resikoi_jatuh_epfra3'])){
+        $epfra3=0;
+    }else{
+        $epfra3=$_POST['resikoi_jatuh_epfra3'];
+    }
+    if(empty($_POST['resikoi_jatuh_epfra4'])){
+        $epfra4=0;
+    }else{
+        $epfra4=$_POST['resikoi_jatuh_epfra4'];
+    }
+    if(empty($_POST['resikoi_jatuh_epfra5'])){
+        $epfra5=0;
+    }else{
+        $epfra5=$_POST['resikoi_jatuh_epfra5'];
+    }
+    if(empty($_POST['resikoi_jatuh_epfra6'])){
+        $epfra6=0;
+    }else{
+        $epfra6=$_POST['resikoi_jatuh_epfra6'];
+    }
+    if(empty($_POST['resikoi_jatuh_epfra7'])){
+        $epfra7=0;
+    }else{
+        $epfra7=$_POST['resikoi_jatuh_epfra7'];
+    }
+    if(empty($_POST['resikoi_jatuh_epfra8'])){
+        $epfra8=0;
+    }else{
+        $epfra8=$_POST['resikoi_jatuh_epfra8'];
+    }
+    if(empty($_POST['resikoi_jatuh_epfra9'])){
+        $epfra9=0;
+    }else{
+        $epfra9=$_POST['resikoi_jatuh_epfra9'];
+    }
+    $JumlahTotal=$epfra1+$epfra2+$epfra3+$epfra4+$epfra5+$epfra6+$epfra7+$epfra8+$epfra9;
+    if($JumlahTotal<=89){
+        $Kategori="Resiko Rendah";
+    }else{
+        $Kategori="Resiko Tinggi";
+    }
+    echo "Skor $JumlahTotal ($Kategori)";
+?>

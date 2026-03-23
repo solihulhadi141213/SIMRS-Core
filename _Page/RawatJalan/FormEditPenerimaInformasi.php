@@ -1,0 +1,110 @@
+<?php
+    date_default_timezone_set('Asia/Jakarta');
+    include "../../_Config/Connection.php";
+    include "../../_Config/Session.php";
+    include "../../_Config/SimrsFunction.php";
+    if(empty($_POST['id_kunjungan'])){
+        echo '<div class="modal-body">';
+        echo '  <div class="row">';
+        echo '      <div class="col-md-12 text-center text-danger">';
+        echo '          ID Kunjungan Tidak Boleh Kosong!';
+        echo '      </div>';
+        echo '  </div>';
+        echo '</div>';
+        echo '<div class="modal-footer">';
+        echo '  <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">';
+        echo '      <i class="ti ti-close"></i> Tutup';
+        echo '  </div>';
+        echo '</div>';
+    }else{
+        if(empty($_POST['id'])){
+            echo '<div class="modal-body">';
+            echo '  <div class="row">';
+            echo '      <div class="col-md-12 text-center text-danger">';
+            echo '          ID Data Tidak Boleh Kosong!';
+            echo '      </div>';
+            echo '  </div>';
+            echo '</div>';
+            echo '<div class="modal-footer">';
+            echo '  <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">';
+            echo '      <i class="ti ti-close"></i> Tutup';
+            echo '  </div>';
+            echo '</div>';
+        }else{
+            $id=$_POST['id'];
+            $id_kunjungan=$_POST['id_kunjungan'];
+            $id_general_consent=getDataDetail($Conn,"general_consent",'id_kunjungan',$id_kunjungan,'id_general_consent');
+            $general_consent=getDataDetail($Conn,"general_consent",'id_kunjungan',$id_kunjungan,'general_consent');
+            $JsonGeneralConsent =json_decode($general_consent, true);
+            foreach ($JsonGeneralConsent['pihak_lain'] as $row){
+                if($row["id"]==$id){
+                    $nama=$row["nama"];
+                    $nik=$row["nik"];
+                    $kontak=$row["kontak"];
+                    $alamat=$row["alamat"];
+                    $hubungan=$row["hubungan"];
+                    $keterangan=$row["keterangan"];
+                }
+            }
+?>
+    <div class="modal-body">
+        <input type="hidden" name="id_general_consent" id="id_general_consent" class="form-control" value="<?php echo "$id_general_consent"; ?>">
+        <input type="hidden" name="id_kunjungan" id="id_kunjungan" class="form-control" value="<?php echo "$id_kunjungan"; ?>">
+        <input type="hidden" name="id" id="id" class="form-control" value="<?php echo "$id"; ?>">
+        <div class="row mb-3">
+            <div class="col-md-12 mb-2">
+                Tambahkan data pihak keluarga, penanggung jawab atau pihak lain yang berhak memperoleh informasi pasien.
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4 mb-2">Nama Lengkap</div>
+            <div class="col-md-8 mb-2">
+                <input type="text" name="nama" id="nama" class="form-control" value="<?php echo "$nama"; ?>">
+                <small>Sesuai KTP</small>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4 mb-2">NIK</div>
+            <div class="col-md-8 mb-2">
+                <input type="text" name="nik" id="nik" class="form-control" value="<?php echo "$nik"; ?>">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4 mb-2">Kontak</div>
+            <div class="col-md-8 mb-2">
+                <input type="text" name="kontak" id="kontak" class="form-control" value="<?php echo "$kontak"; ?>">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4 mb-2">Alamat</div>
+            <div class="col-md-8 mb-2">
+                <input type="text" name="alamat" id="alamat" class="form-control" value="<?php echo "$alamat"; ?>">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4 mb-2">Hubungan Dengan Pasien</div>
+            <div class="col-md-8 mb-2">
+                <input type="text" name="hubungan" id="hubungan" class="form-control" value="<?php echo "$hubungan"; ?>">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4 mb-2">Keterangan</div>
+            <div class="col-md-8 mb-2">
+                <input type="text" name="keterangan" id="keterangan" class="form-control" value="<?php echo "$keterangan"; ?>">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12" id="NotifikasiEditPenerimaInformasi">
+                <span class="text-primary">Pastikan data pihak penerima informasi pasien ini terisi dengan benar dan lengkap!</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-sm btn-primary mr-3">
+            <i class="ti ti-save"></i> Simpan
+        </button>
+        <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">
+            <i class="ti ti-close"></i> Tutup
+        </button>
+    </div>
+<?php }} ?>
