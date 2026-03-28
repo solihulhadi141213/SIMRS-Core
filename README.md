@@ -9,11 +9,15 @@ Pada versi ini, terdapat perubahan yang cukup besar dan cara kerja yang berbeda 
 * MySql 9.1.0
 * Apache 2.4.62.1
 
-### Pustaka ###
+### Dependencies ###
 
 * Bootstrap 5.3.8
 * Jquery 4.0.0
-* Configuration
+* sweetalert2 ^11.26.24
+* themify-icons
+* icofont
+* font-awesome
+* 
 
 ### Module ###
 

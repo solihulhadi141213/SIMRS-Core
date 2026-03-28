@@ -6,23 +6,50 @@ $('#TampilkanPassword').click(function(){
         $('#password').attr('type','password');
     }
 });
+
 //Proses Login
 $('#ProsesLogin').submit(function(){
-    var ProsesLogin = $('#ProsesLogin').serialize();
-    var Loading='<div class="modal-body"><div class="row"><div class="col col-md-12">Loading..</div></div></div>';
-    $('#NotifikasiLogin').html(Loading);
+    // Tangkap Data Login Dari Form
+    var ProsesLogin = $(this).serialize();
+
+    // Loading Notifikasi
+    $('#NotifikasiLogin').html('<div class="modal-body"><div class="row"><div class="col col-md-12">Loading..</div></div></div>');
+
+    // Disable Button 
+    $("#button_login").prop("disabled", true);
+
+    // Kirim Data Dengan AJAX
     $.ajax({
         type 	    : 'POST',
-        url 	    : '_Page/Login/Login.php',
+        url 	    : '_Page/Login/ProsesLogin.php',
+        dataType    : 'json',
         data 	    :  ProsesLogin,
-        success     : function(data){
-            $('#NotifikasiLogin').html(data);
-            var NotifikasiLoginBerhasil = $('#NotifikasiLoginBerhasil').html();
-            if(NotifikasiLoginBerhasil=="Success"){
+        success     : function(response){
+            var status  = response.status;
+            var message = response.message;
+
+            // Jika Berhasil
+            if(status=="success"){
+                
+                // Kosongkan Notifikasi
+                $('#NotifikasiLogin').html('');
+
+                // Reload Halaman Ke 'index.php'
                 window.location.href='index.php';
+            }else{
+
+                // Jika Gagal, Tampilkan Notifikasi
+                $('#NotifikasiLogin').html('<div class="alert alert-danger text-center">'+message+'</div>');
             }
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', error);
+            $('#NotifikasiLogin').html('<div class="alert alert-danger"><small>Terjadi Kesalahan! Silahkan Hubungi Admin Untuk Memeprbaiki Kesalahan Ini.</small></div>');
         }
     });
+
+    // Enable Button 
+    $("#button_login").prop("disabled", false);
 });
 $.ajax({
     type 	    : 'POST',
@@ -38,6 +65,89 @@ $('#ReloadCaptcha').click(function(){
         url 	    : '_Page/Login/CaptchaUrl.php',
         success     : function(data){
             $("#GetUrlCaptcha").attr("src",data);
+        }
+    });
+});
+
+//Click 'modal_pengajuan_akses'
+$(document).on('click', '#modal_pengajuan_akses', function(){
+    // Tampilkan Modal
+    $("#ModalPengajuanAkses").modal('show');
+});
+$('#ModalPengajuanAkses').on('shown.bs.modal', function () {
+    $('#nama').trigger('focus');
+});
+
+//Reload captcha Pengajuan Akses
+$('#ReloadGambarCaptcha').click(function(){
+    $.ajax({
+        type 	    : 'POST',
+        url 	    : '_Page/Login/CaptchaUrl.php',
+        success     : function(data){
+            $("#ViewCaptcha").attr("src",data);
+        }
+    });
+});
+
+let isSubmitting = false;
+
+// Submit
+$('#ProsesPengajuanAkses').submit(function(e){
+    e.preventDefault();
+
+    if(isSubmitting) return false;
+    isSubmitting = true;
+
+    var form = $(this)[0];
+    var data = new FormData(form); // ✅ WAJIB untuk file
+    var btn  = $("#button_kirim_pengajuan");
+
+    $('#NotifikasiPengajuanAkses').html('Loading...');
+
+    btn.prop("disabled", true).html('<i class="spinner-border spinner-border-sm"></i> Processing...');
+
+    $.ajax({
+        type: 'POST',
+        url: '_Page/Login/ProsesPengajuanAkses.php',
+        data: data,
+        dataType: 'json',
+
+        processData: false, // ❗ penting
+        contentType: false, // ❗ penting
+
+        success: function(response){
+            if(response.status == "success"){
+                
+                $('#NotifikasiPengajuanAkses').html('');
+
+                $('#ModalPengajuanAkses').modal('hide');
+
+                Swal.fire({
+                    title: "Mantap!!",
+                    text: "Pengajuan Akses Berhasil",
+                    icon: "success"
+                });
+
+                // reset form + captcha
+                $('#ProsesPengajuanAkses')[0].reset();
+                $('#ReloadGambarCaptcha').click();
+
+            }else{
+                $('#NotifikasiPengajuanAkses').html(
+                    '<div class="alert alert-danger"><b>Error!</b><br>'+response.message+'</div>'
+                );
+            }
+        },
+
+        error: function(){
+            $('#NotifikasiPengajuanAkses').html(
+                '<div class="alert alert-danger">Terjadi kesalahan server!</div>'
+            );
+        },
+
+        complete: function(){
+            isSubmitting = false;
+            btn.prop("disabled", false).html('<i class="icofont icofont-paper-plane"></i> Kirim Pengajuan');
         }
     });
 });

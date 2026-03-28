@@ -11,7 +11,7 @@
 <script type="text/javascript" src="assets/js/popper.js/popper.min.js"></script>
 
 <!-- bootstrap -->
-<script type="text/javascript" src="assets/js/bootstrap/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 <!-- excanvas -->

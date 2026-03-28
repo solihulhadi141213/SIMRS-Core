@@ -25,21 +25,8 @@
                             <a class="mobile-menu waves-effect waves-light" id="mobile-collapse" href="javascript:void(0);">
                                 <i class="ti-menu"></i>
                             </a>
-                            <div class="mobile-search waves-effect waves-light">
-                                <div class="header-search">
-                                    <div class="main-search morphsearch-search">
-                                        <div class="input-group">
-                                            <form action="index.php" method="GET">
-                                                <span class="input-group-addon search-close"><i class="ti-close"></i></span>
-                                                <input type="text" class="form-control" placeholder="cari Bantuan">
-                                                <button type="submit" class="input-group-addon search-btn"><i class="ti-search"></i></button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="index.php">
-                                <h4><b><?php echo "$hospital_name"; ?></b></h4>
+                            <a href="index.php" class="">
+                                <h4><?php echo "$hospital_name"; ?></h4>
                             </a>
                             <a class="mobile-options waves-effect waves-light">
                                 <i class="ti-more"></i>
@@ -49,20 +36,6 @@
                             <ul class="nav-left">
                                 <li>
                                     <div class="sidebar_toggle"><a href="javascript:void(0)"><i class="ti-menu"></i></a></div>
-                                </li>
-                                <li class="header-search">
-                                    <div class="main-search morphsearch-search">
-                                        <form action="index.php" method="GET">
-                                            <input type="hidden" name="Page" value="Help">
-                                            <div class="input-group">
-                                                <span class="input-group-addon search-close"><i class="ti-close"></i></span>
-                                                <input type="text" id="KeywordBantuan" name="keyword" class="form-control" placeholder="Cari Bantuan">
-                                                <button type="button" class="input-group-addon search-btn" id="PencarianBantuanAtas">
-                                                    <i class="ti-search"></i>
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
                                 </li>
                                 <li>
                                     <a href="javascript:void(0);" onclick="javascript:toggleFullScreen()" class="waves-effect waves-light">

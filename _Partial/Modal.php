@@ -3,6 +3,9 @@
     //Gunakan kondisi Page agar lebih ringan
     //Global 
     include "_Page/Dashboard/ModalDashboard.php";
+    include "_Page/Logout/ModalLogout.php";
+
+    // Berdasarkan $Page
     if($Page=="ProfileUser"){
         include "_Page/ProfileUser/ModalProfileUser.php";
     }elseif($Page=="Bantuan"||$Page=="Help"){
@@ -184,5 +187,6 @@
     }elseif($Page=="Laboratorium2"){
         include "_Page/Laboratorium2/ModalLaboratorium2.php";
     }else{
+        // Tidak Include Apapun
     }
 ?>

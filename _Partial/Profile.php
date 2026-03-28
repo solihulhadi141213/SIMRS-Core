@@ -33,7 +33,7 @@
             </a>
         </li>
         <li class="waves-effect waves-light">
-            <a href="javascript:void(0);" data-toggle="modal" data-target="#ModalLogout">
+            <a href="javascript:void(0);" class="p p-3" data-bs-toggle="modal" data-bs-target="#ModalLogout">
                 <i class="ti-lock"></i> Logout
             </a>
         </li>
