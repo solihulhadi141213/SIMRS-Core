@@ -13,6 +13,7 @@
         <meta name="description" content="<?php echo $aplication_description; ?>" />
         <meta name="keywords" content="<?php echo $aplication_keyword_show; ?>" />
         <meta name="author" content="<?php echo $aplication_author; ?>" />
+        
         <!-- Favicon icon -->
         <link rel="icon" href="assets/images/<?php echo "$favicon"; ?>" type="image/x-icon">
         

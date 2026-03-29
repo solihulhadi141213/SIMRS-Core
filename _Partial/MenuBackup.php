@@ -1066,12 +1066,17 @@
                     <span class="pcoded-mcaret"></span>
                 </a>
             </li>
+            <li class="text-center mb-3">
+                <span class="text-center mb-3">
+                    Hallo
+                </span>
+            </li>
         </ul>
 
         <div class="text-center mb-3">
             <div class="main-menu-footer">
                 <span class="text-center mb-3">
-                   
+                    Hallo
                 </span>
             </div>
         </div>

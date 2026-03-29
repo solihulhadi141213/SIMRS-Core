@@ -13,11 +13,14 @@ Pada versi ini, terdapat perubahan yang cukup besar dan cara kerja yang berbeda 
 
 * Bootstrap 5.3.8
 * Jquery 4.0.0
+* jquery-ui-1.14.2
 * sweetalert2 ^11.26.24
+* tinymce ^8.3.2
 * themify-icons
 * icofont
 * font-awesome
-* 
+* apexcharts ^5.10.4
+
 
 ### Module ###
 
@@ -29,15 +32,25 @@ Pada versi ini, terdapat perubahan yang cukup besar dan cara kerja yang berbeda 
 
 ### Database ###
 
-* Repo owner or admin
-* Other community or team contact
+* akses
+* akses_acc
+* akses_entitas
+* akses_login
+* akses_pengajuan
+* akses_ref
+* akun_perkiraan
 
 ### Integrasi ###
 
-* Repo owner or admin
-* Other community or team contact
+* BPJS
+* SATUSEHAT
+* SIMRS Online
+* Email Gateway
+* Radix
+* Analyza
+
+
 
 ### Dokumentasi ###
 
-* Repo owner or admin
-* Other community or team contact
+* https://rsu-el-syifa.gitbook.io/rsu-el-syifa-docs
