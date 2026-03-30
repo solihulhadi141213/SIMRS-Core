@@ -5,6 +5,18 @@
     include "_Config/SettingGeneral.php";
     include "_Config/SettingAkses.php";
     include "_Config/SettingFaskes.php";
+
+    // Routing Page
+    if(!empty($_GET['Page'])){
+        $Page=$_GET['Page'];
+    }else{
+        $Page="";
+    }
+    if(!empty($_GET['Sub'])){
+        $Sub=$_GET['Sub'];
+    }else{
+        $Sub="";
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">

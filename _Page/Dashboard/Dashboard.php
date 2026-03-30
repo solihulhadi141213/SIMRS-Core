@@ -3,13 +3,13 @@
     include "_Config/WebFunction.php";
     date_default_timezone_set('Asia/Jakarta');
     //jumlah User
-    $JumlahPasien = mysqli_num_rows(mysqli_query($Conn, "SELECT id_pasien FROM pasien"));
-    $JumlahPasien = "" . number_format($JumlahPasien,0,',','.');
-    $JumlahKunjungan = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama"));
-    $JumlahKunjungan = "" . number_format($JumlahKunjungan,0,',','.');
-    $JumlahAntrian = mysqli_num_rows(mysqli_query($Conn, "SELECT id_antrian FROM antrian WHERE status='Terdaftar'"));
-    $JumlahAntrian = "" . number_format($JumlahAntrian,0,',','.');
-    $JumlahDokter = mysqli_num_rows(mysqli_query($Conn, "SELECT id_dokter FROM dokter WHERE status='Aktiv'"));
+    $JumlahPasien     = mysqli_num_rows(mysqli_query($Conn, "SELECT id_pasien FROM pasien"));
+    $JumlahPasien     = "" . number_format($JumlahPasien,0,',','.');
+    $JumlahKunjungan  = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama"));
+    $JumlahKunjungan  = "" . number_format($JumlahKunjungan,0,',','.');
+    $JumlahAntrian    = mysqli_num_rows(mysqli_query($Conn, "SELECT id_antrian FROM antrian WHERE status='Terdaftar'"));
+    $JumlahAntrian    = "" . number_format($JumlahAntrian,0,',','.');
+    $JumlahDokter     = mysqli_num_rows(mysqli_query($Conn, "SELECT id_dokter FROM dokter WHERE status='Aktiv'"));
     $JumlahPoliklinik = mysqli_num_rows(mysqli_query($Conn, "SELECT id_poliklinik FROM poliklinik"));
     //Informasi Lainnya
     $JumlahBed = mysqli_num_rows(mysqli_query($Conn, "SELECT id_ruang_rawat FROM ruang_rawat WHERE kategori='bed'"));
@@ -42,310 +42,322 @@
 <!-- Page-header start -->
 <div class="page-header">
     <div class="page-block">
-        <div class="row align-items-center">
+        <div class="row">
             <div class="col-md-12">
-                <div class="page-header-title">
-                    <a href="" class="text-white">
-                        <h5 class="m-b-10" id="step1">Dashboard</h5>
-                    </a>
-                    <p class="m-b-0" id="step2">Ringkasan Data dan Informasi Faskes</p>
-                </div>
+                <a href="" class="text-decoration-none text-white">
+                    <h4 class="m-b-10 mb-2" id="step1">Dashboard</h4>
+                </a>
+                <p class="m-b-0 mb-0 text-white" id="step2">
+                    Ringkasan Data dan Informasi Faskes
+                </p>
             </div>
         </div>
     </div>
 </div>
 <!-- Page-header end -->
+
 <div class="pcoded-inner-content">
     <!-- Main-body start -->
     <div class="main-body">
         <div class="page-wrapper">
-            <!-- Page-body start -->
-            <div class="page-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-block bg-c-blue">
-                                <div class="row align-items-center">
-                                    <div class="col-8">
-                                        <h4 class="text-light"><?php echo "$JumlahPasien";?></h4>
-                                        <h6 class="text-light m-b-0">Pasien</h6>
-                                    </div>
-                                    <div class="col-4 text-right text-light">
-                                        <i class="icofont-patient-file icofont-3x"></i>
-                                    </div>
-                                </div>
+
+            <!-- DASHBOARD CARD -->
+            <div class="row mb-3">
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body d-flex align-items-center">
+                            
+                            <!-- ICON -->
+                            <div class="stat-icon bg-primary">
+                                <i class="bi bi-people"></i>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-block bg-c-orenge">
-                                <div class="row align-items-center">
-                                    <div class="col-8">
-                                        <h4 class="text-light"><?php echo "$JumlahKunjungan";?></h4>
-                                        <h6 class="text-light m-b-0">Kunjungan</h6>
-                                    </div>
-                                    <div class="col-4 text-right text-light">
-                                        <i class="icofont-ambulance-cross icofont-3x"></i>
-                                    </div>
-                                </div>
+
+                            <!-- TEXT -->
+                            <div class="ms-3">
+                                <h4 class="mb-0 fw-bold" id="jumlah_pasien">0</h4>
+                                <small class="text-muted">Jumlah Pasien</small>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-block bg-amazon">
-                                <div class="row align-items-center">
-                                    <div class="col-8">
-                                        <h4 class="text-light"><?php echo "$JumlahDokter";?></h4>
-                                        <h6 class="text-light m-b-0">Dokter</h6>
-                                    </div>
-                                    <div class="col-4 text-right text-light">
-                                        <i class="icofont-doctor-alt icofont-3x"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-block bg-success">
-                                <div class="row align-items-center">
-                                    <div class="col-8">
-                                        <h4 class="text-light"><?php echo "$JumlahPoliklinik";?></h4>
-                                        <h6 class="text-light m-b-0">Poliklinik</h6>
-                                    </div>
-                                    <div class="col-4 text-right text-light">
-                                        <i class="icofont-stethoscope-alt icofont-3x"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-block bg-info">
-                                <div class="row align-items-center">
-                                    <div class="col-8">
-                                        <h4 class="text-light"><?php echo "$JumlahBed";?></h4>
-                                        <h6 class="text-light m-b-0">Tempat Tidur</h6>
-                                    </div>
-                                    <div class="col-4 text-right text-light">
-                                        <i class="icofont-patient-bed icofont-3x"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-block bg-youtube">
-                                <div class="row align-items-center">
-                                    <div class="col-8">
-                                        <h4 class="text-light"><?php echo "$JumlahLaboratorium";?></h4>
-                                        <h6 class="text-light m-b-0">Laboratorium</h6>
-                                    </div>
-                                    <div class="col-4 text-right text-light">
-                                        <i class="icofont-test-tube icofont-3x"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-block bg-c-lite-green">
-                                <div class="row align-items-center">
-                                    <div class="col-8">
-                                        <h4 class="text-light"><?php echo "$JumlahObat";?></h4>
-                                        <h6 class="text-light m-b-0">Item Obat</h6>
-                                    </div>
-                                    <div class="col-4 text-right text-light">
-                                        <i class="icofont-pills icofont-3x"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-block bg-instagram">
-                                <div class="row align-items-center">
-                                    <div class="col-8">
-                                        <h4 class="text-light"><?php echo "$JumlahRadiologi";?></h4>
-                                        <h6 class="text-light m-b-0">Radiologi</h6>
-                                    </div>
-                                    <div class="col-4 text-right text-light">
-                                        <i class="icofont-xray icofont-3x"></i>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <h4><i class="icofont-chart-histogram"></i> Grafik Kunjungan Pasien</h4>
-                                        </div>
-                                        <div class="col-md-2 text-right">
-                                            <a href="javascript:void(0);" id="PetunjukGrafik">
-                                                <i class="ti ti-help-alt"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body" id="Grafic_Card">
-                                    <form action="index.php" method="POST">
-                                        <div class="row mb-4" id="FormFilterGrafik">
-                                            <div class="col-md-3">
-                                                <select name="KategoriGrafik" id="KategoriGrafik" class="form-control">
-                                                    <option <?php if($KategoriGrafik=="Tahunan"){echo "selected";} ?> value="Tahunan">Tahunan</option>
-                                                    <option <?php if($KategoriGrafik=="Bulanan"){echo "selected";} ?> value="Bulanan">Bulanan</option>
-                                                </select>
-                                                <small>Kategori</small>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <select name="tahun" id="tahun" class="form-control">
-                                                    <?php
-                                                        if(empty($GetTahun)){
-                                                            $TahunSekarang=date('Y');
-                                                        }else{
-                                                            $TahunSekarang=$GetTahun;
-                                                        }
-                                                        for ($i=2017; $i<=$TahunSekarang; $i++ ){
-                                                            if($TahunSekarang==$i){
-                                                                echo '<option selected value="'.$i.'">'.$i.'</option>';
-                                                            }else{
-                                                                echo '<option value="'.$i.'">'.$i.'</option>';
-                                                            }
-                                                        }
-                                                    ?>
-                                                </select>
-                                                <small>Tahun</small>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <select name="bulan" id="bulan" class="form-control">
-                                                    <?php
-                                                        if(empty($GetBulan)){
-                                                            $BulanSekarang=date('m');
-                                                        }else{
-                                                            $BulanSekarang=$GetBulan;
-                                                        }
-                                                        for ($i=1; $i<=12; $i++ ){
-                                                            //ZeroPadding
-                                                            $Bulan=sprintf("%02d", $i);
-                                                            if($i==1){
-                                                                $NamaBulan="Januari";
-                                                            }else{
-                                                                if($i==2){
-                                                                    $NamaBulan="Februari";
-                                                                }else{
-                                                                    if($i==3){
-                                                                        $NamaBulan="Maret";
-                                                                    }else{
-                                                                        if($i==4){
-                                                                            $NamaBulan="April";
-                                                                        }else{
-                                                                            if($i==5){
-                                                                                $NamaBulan="Mei";
-                                                                            }else{
-                                                                                if($i==6){
-                                                                                    $NamaBulan="Juni";
-                                                                                }else{
-                                                                                    if($i==7){
-                                                                                        $NamaBulan="Juli";
-                                                                                    }else{
-                                                                                        if($i==8){
-                                                                                            $NamaBulan="Agustus";
-                                                                                        }else{
-                                                                                            if($i==9){
-                                                                                                $NamaBulan="September";
-                                                                                            }else{
-                                                                                                if($i==10){
-                                                                                                    $NamaBulan="Oktober";
-                                                                                                }else{
-                                                                                                    if($i==11){
-                                                                                                        $NamaBulan="November";
-                                                                                                    }else{
-                                                                                                        if($i==12){
-                                                                                                            $NamaBulan="Desember";
-                                                                                                        }else{
-                                                                                                            $NamaBulan="$i";
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                            if($Bulan==$BulanSekarang){
-                                                                echo '<option selected value="'.$Bulan.'">'.$NamaBulan.'</option>';
-                                                            }else{
-                                                                echo '<option value="'.$Bulan.'">'.$NamaBulan.'</option>';
-                                                            }
-                                                        }
-                                                    ?>
-                                                </select>
-                                                <small>Bulan</small>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button type="submit" class="btn btn-md btn-outline-dark btn-block">
-                                                    <i class="ti-arrow-circle-down"></i> Tampilkan
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <div class="row">
-                                        <div class="col-md-12" id="GrafikPasien">
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body d-flex align-items-center">
+                            
+                            <!-- ICON -->
+                            <div class="stat-icon bg-info">
+                                <i class="bi bi-people"></i>
+                            </div>
 
-                                        </div>
+                            <!-- TEXT -->
+                            <div class="ms-3">
+                                <h4 class="mb-0 fw-bold" id="jumlah_kunjungan">0</h4>
+                                <small class="text-muted">Jumlah Kunjungan</small>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body d-flex align-items-center">
+                            
+                            <!-- ICON -->
+                            <div class="stat-icon bg-dark">
+                                <i class="bi bi-people"></i>
+                            </div>
+
+                            <!-- TEXT -->
+                            <div class="ms-3">
+                                <h4 class="mb-0 fw-bold" id="jumlah_poliklinik">0</h4>
+                                <small class="text-muted">Poliklinik</small>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body d-flex align-items-center">
+                            
+                            <!-- ICON -->
+                            <div class="stat-icon bg-success">
+                                <i class="bi bi-people"></i>
+                            </div>
+
+                            <!-- TEXT -->
+                            <div class="ms-3">
+                                <h4 class="mb-0 fw-bold" id="jumlah_bed">0</h4>
+                                <small class="text-muted">Tempat Tidur</small>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row d-flex align-items-stretch">
+
+                <!-- GRAFIK -->
+                <div class="col-md-9 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 text-end">
+                                    <div class="icon icon-btn">
+                                        <button type="button" class="btn btn-md btn-outline-secondary btn-icon ganti_periode_grafik">
+                                            <i class="bi bi-filter"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="card-body" id="GrafikPasien">
+                            <!-- Menampilkan Grafik -->
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="card ">
-                            <div class="card-header">
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <h4><i class="icofont-connection"></i> Koneksi</h4>
-                                    </div>
-                                    <div class="col-md-2 text-right">
-                                        <a href="javascript:void(0);" id="ReloadConnection" class="text-info">
-                                            <i class="ti ti-reload"></i> Reload Connection
-                                        </a>
-                                    </div>
+                </div>
+
+                <!-- PROFIL FASKES -->
+                <div class="col-md-3 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-12 text-center">
+                                    <img class="img-80 img-radius" src="assets/images/<?php echo "$logo"; ?>" alt="User-Profile-Image">
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div class="row mb-2 sub-title">
-                                    <div class="col-md-6">Satu Sehat</div>
-                                    <div class="col-md-6 text-right" id="KoneksiSatuSehat"></div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 text-center">
+                                    <h3>
+                                        <?php echo "$hospital_name";?>
+                                    </h3>
+                                    <span><?php echo "$hospital_address";?></span>
                                 </div>
-                                <div class="row mb-2 sub-title">
-                                    <div class="col-md-6">Bridging BPJS</div>
-                                    <div class="col-md-6 text-right" id="KoneksiBridging"></div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-12 text-center mb-3 icon-btn">
+                                    <a href="<?php echo "$medsos_instagram";?>" target="_blank" class="btn btn-icon btn-sm btn-outline-dark m-1">
+                                        <i class="bi bi-instagram"></i>
+                                    </a>
+                                    <a href="<?php echo "$medsos_facebook";?>" target="_blank" class="btn btn-icon btn-sm btn-outline-dark m-1">
+                                        <i class="bi bi-facebook"></i>
+                                    </a>
+                                    <a href="<?php echo "$medsos_tiktok";?>" target="_blank" class="btn btn-icon btn-sm btn-outline-dark m-1">
+                                        <i class="bi bi-tiktok"></i>
+                                    </a>
+                                    <a href="<?php echo "$medsos_whatsapp";?>" target="_blank" class="btn btn-icon btn-sm btn-outline-dark m-1">
+                                        <i class="bi bi-whatsapp"></i>
+                                    </a>
                                 </div>
-                                <div class="row mb-2 sub-title">
-                                    <div class="col-md-6">Website</div>
-                                    <div class="col-md-6 text-right" id="KoneksiWebsite"></div>
-                                </div>
+                            </div>
+
+                            <div class="row mb-2 mt-3">
+                                <div class="col-5"><small>Kontak</small></div>
+                                <div class="col-1"><small>:</small></div>
+                                <div class="col-6"><small class="text text-muted"><?php echo "$hospital_contact";?></small></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-5"><small>Email</small></div>
+                                <div class="col-1"><small>:</small></div>
+                                <div class="col-6"><small class="text text-muted"><?php echo "$hospital_email";?></small></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-5"><small>Kode Faskes</small></div>
+                                <div class="col-1"><small>:</small></div>
+                                <div class="col-6"><small class="text text-muted"><?php echo "$hospital_code";?></small></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-5"><small>Manajer / Direktur</small></div>
+                                <div class="col-1"><small>:</small></div>
+                                <div class="col-6"><small class="text text-muted"><?php echo "$hospital_manager";?></small></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-5"><small>Nama Aplikasi</small></div>
+                                <div class="col-1"><small>:</small></div>
+                                <div class="col-6"><small class="text text-muted"><?php echo "$aplication_name";?></small></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-5"><small>Author</small></div>
+                                <div class="col-1"><small>:</small></div>
+                                <div class="col-6"><small class="text text-muted"><?php echo "$aplication_author";?></small></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-5"><small>Base URL</small></div>
+                                <div class="col-1"><small>:</small></div>
+                                <div class="col-6"><small class="text text-muted"><?php echo "$base_url";?></small></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="row d-flex align-items-stretch">
+                <div class="col-md-9">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-10">
+                                    <b class="card-title"># Pasien Belum Pulang <i>(Existing)</i></b>
+                                </div>
+                                <div class="col-2 text-right icon-btn">
+                                    <button type="button" class="btn btn-md btn-outline-secondary btn-icon filter_pasien_existing">
+                                        <i class="bi bi-filter"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <di class="table table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <td class="text-center"><b>No</b></td>
+                                            <td class="text-center"><b>RM</b></td>
+                                            <td class="text-center"><b>Nama</b></td>
+                                            <td class="text-center"><b>Tanggal</b></td>
+                                            <td class="text-center"><b>Kujungan</b></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="TabelPasienExisting">
+                                        <tr>
+                                            <td colspan="7" class="text-center">
+                                                <small>No Data</small>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </di>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-6">
+                                    <small id="page_info">Page 0 Of 0 </small>
+                                </div>
+                                <div class="col-6 text-right icon-btn">
+                                    <button type="button" class="btn btn-sm btn-icon btn-outline-secondary" id="previous_page">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-icon btn-outline-secondary" id="next_page">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <b class="card-title"># Aplikasi Terhubung Lainnya</b>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group">
+
+                                <a href="https://satusehat.kemkes.go.id/platform" target="_blank" class="list-group-item list-group-item-action" aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1 text-primary">SATUSEHAT</h5>
+                                    </div>
+                                    <p class="mb-1">
+                                       <small>
+                                            Platform penghubung berbagai sistem informasi kesehatan melalui standardisasi dan integrasi rekam medis elektronik (RME)
+                                       </small>
+                                    </p>
+                                </a>
+                                <a href="https://sirs.kemkes.go.id" target="_blank" class="list-group-item list-group-item-action" aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1 text-primary">SIRS Online</h5>
+                                    </div>
+                                    <p class="mb-1">
+                                       <small>
+                                            SIRS Online adalah sistem informasi pelaporan berbasis web dari fasilitas kesehatan kepada 
+                                            Kementerian Kesehatan untuk mengumpulkan, mengolah, dan menyajikan data Rumah Sakit di Indonesia secara real-time
+                                       </small>
+                                    </p>
+                                </a>
+                                <a href="http://182.253.36.132/rms" target="_blank" class="list-group-item list-group-item-action" aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1 text-primary">Radix</h5>
+                                    </div>
+                                    <p class="mb-1">
+                                       <small>
+                                            Radix adalah aplikasi **Radiology Management System (RMS)** yang dirancang untuk membantu pengelolaan layanan radiologi 
+                                            secara terintegrasi, aman, dan efisien. Aplikasi ini mendukung koneksi dengan berbagai sistem eksternal seperti **SIMRS**, 
+                                            **SATU SEHAT**, dan **PACS**, sehingga memudahkan pertukaran data klinis dan operasional radiologi.
+                                       </small>
+                                    </p>
+                                </a>
+                                <a href="http://localhost/Analyza" target="_blank" class="list-group-item list-group-item-action" aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1 text-primary">Analyza</h5>
+                                    </div>
+                                    <p class="mb-1">
+                                       <small>
+                                            Analyza adalah Aplikasi microservice berbasis web untuk pelayanan laboratorium pada SIMRS rumah sakit. 
+                                       </small>
+                                    </p>
+                                </a>
+                                <a href="http://localhost/Analyza" target="_blank" class="list-group-item list-group-item-action" aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1 text-primary">Email Gateway</h5>
+                                    </div>
+                                    <p class="mb-1">
+                                       <small>
+                                            Email Gateway adalah API service yang memudahkan pengiriman Email melalui SMTP 
+                                       </small>
+                                    </p>
+                                </a>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
         </div>
     </div>
 </div>

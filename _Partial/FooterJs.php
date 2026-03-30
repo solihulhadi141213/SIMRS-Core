@@ -9,7 +9,11 @@
 <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 <!-- apexcharts -->
-<script src="node_modules/apexcharts/dist/apexcharts.min.js"></script>
+<?php
+    if($Page==""||$Page=="Dashboard"){
+        echo '<script src="node_modules/apexcharts/dist/apexcharts.min.js"></script>';
+    }
+?>
 
 <!-- menu js -->
 <script type="text/javascript" src="assets/js/accordion.js"></script>
@@ -17,7 +21,7 @@
 <script src="assets/js/vertical-layout.min.js "></script>
 
 <!-- script.js -->
-<script type="text/javascript" src="assets/js/script.js"></script>
+<script type="text/javascript" src="assets/js/script.js?v=1"></script>
 
 <!-- Summernote -->
 <link href="vendor\Sumernote\summernote.min.css" rel="stylesheet">
@@ -31,3 +35,6 @@
 
 <!-- Select2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- popper -->
+<script src="node_modules\@popperjs\core\dist\umd\popper.min.js" crossorigin="anonymous"></script>

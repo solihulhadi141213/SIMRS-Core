@@ -20,6 +20,7 @@ Pada versi ini, terdapat perubahan yang cukup besar dan cara kerja yang berbeda 
 * icofont
 * font-awesome
 * apexcharts ^5.10.4
+* bootstrap-icons ^1.13.1
 
 
 ### Module ###

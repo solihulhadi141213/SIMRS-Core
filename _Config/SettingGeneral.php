@@ -25,6 +25,11 @@
     $hospital_contact       = $DataSettingGeneral['hospital_contact'] ?? null;
     $hospital_email         = $DataSettingGeneral['hospital_email'] ?? null;
     $hospital_code          = $DataSettingGeneral['hospital_code'] ?? null;
+    $hospital_manager       = $DataSettingGeneral['hospital_manager'] ?? null;
+    $medsos_instagram       = $DataSettingGeneral['medsos_instagram'] ?? null;
+    $medsos_facebook        = $DataSettingGeneral['medsos_facebook'] ?? null;
+    $medsos_tiktok          = $DataSettingGeneral['medsos_tiktok'] ?? null;
+    $medsos_whatsapp        = $DataSettingGeneral['medsos_whatsapp'] ?? null;
     $favicon                = $DataSettingGeneral['favicon'] ?? null;
     $logo                   = $DataSettingGeneral['logo'] ?? null;
 

@@ -4,16 +4,6 @@
     }else{
         $LinkGambar="user/$SessionGambar";
     }
-    if(!empty($_GET['Page'])){
-        $Page=$_GET['Page'];
-    }else{
-        $Page="";
-    }
-    if(!empty($_GET['Sub'])){
-        $Sub=$_GET['Sub'];
-    }else{
-        $Sub="";
-    }
 ?>
     <div class="sidebar_toggle">
         <a href="javascrip:void(0);">

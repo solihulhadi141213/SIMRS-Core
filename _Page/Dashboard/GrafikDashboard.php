@@ -1,85 +1,85 @@
 <?php
-    //koneksi dan session
+    // Header JSON
+    header('Content-Type: application/json');
+
+    // Koneksi & timezone
     date_default_timezone_set('Asia/Jakarta');
     include "../../_Config/Connection.php";
-    if(!empty($_POST['KategoriGrafik'])){
-        $KategoriGrafik=$_POST['KategoriGrafik'];
-        if(empty($_POST['GetTahun'])){
-            $GetTahun=date('Y');
-        }else{
-            $GetTahun=$_POST['GetTahun'];
+
+    // Ambil input dengan default
+    $periode = !empty($_POST['periode']) ? $_POST['periode'] : "Tahunan";
+    $tahun   = !empty($_POST['tahun']) ? $_POST['tahun'] : date('Y');
+    $bulan   = !empty($_POST['bulan']) ? $_POST['bulan'] : date('m');
+
+    // Inisialisasi
+    $kategori = [];
+    $data = [];
+
+    // Karena tanggal = VARCHAR → pakai STR_TO_DATE
+    $colTanggal = "STR_TO_DATE(tanggal, '%Y-%m-%d')";
+
+    // ================= BULANAN =================
+    if ($periode == "Bulanan") {
+
+        $query = mysqli_query($Conn, "
+            SELECT 
+                DAY($colTanggal) as hari,
+                COUNT(*) as jumlah
+            FROM kunjungan_utama
+            WHERE YEAR($colTanggal) = '$tahun'
+            AND MONTH($colTanggal) = '$bulan'
+            GROUP BY DAY($colTanggal)
+            ORDER BY DAY($colTanggal)
+        ");
+
+        if (!$query) {
+            echo json_encode([
+                "status" => "error",
+                "message" => mysqli_error($Conn)
+            ]);
+            exit;
         }
-        if(empty($_POST['GetBulan'])){
-            $GetBulan=date('m');
-        }else{
-            $GetBulan=$_POST['GetBulan'];
+
+        while ($row = mysqli_fetch_assoc($query)) {
+            $kategori[] = $row['hari'];
+            $data[] = (int)$row['jumlah'];
         }
-        
-        if($KategoriGrafik=="Tahunan"){
-            $a=1;
-            $b=12;
-            for ( $i =$a; $i<=$b; $i++ ){
-                //Zero pading
-                $BulanNomor = sprintf("%02d", $i);
-                $BulanList = array(
-                    '01' => 'Januari',
-                    '02' => 'Februari',
-                    '03' => 'Maret',
-                    '04' => 'April',
-                    '05' => 'Mei',
-                    '06' => 'Juni',
-                    '07' => 'Juli',
-                    '08' => 'Agustus',
-                    '09' => 'September',
-                    '10' => 'Oktober',
-                    '11' => 'November',
-                    '12' => 'Desember',
-                );
-                $NamaBulan=$BulanList[$BulanNomor];
-                $KeywordGrafik="$GetTahun-$BulanNomor";
-                $JumlahKunjungan=mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama WHERE tanggal like '%$KeywordGrafik%'"));
-                $data [] = array(
-                    'x' => $NamaBulan,
-                    'y' => $JumlahKunjungan
-                );
-            }
-        }else{
-            if($KategoriGrafik=="Bulanan"){
-                $a=1;
-                $b=cal_days_in_month(CAL_GREGORIAN, $GetBulan, $GetTahun);
-                for ( $i =$a; $i<=$b; $i++ ){
-                    $HariNomor = sprintf("%02d", $i);
-                    $BulanNomor = sprintf("%02d", $BulanData);
-                    $BulanList = array(
-                        '01' => 'Januari',
-                        '02' => 'Februari',
-                        '03' => 'Maret',
-                        '04' => 'April',
-                        '05' => 'Mei',
-                        '06' => 'Juni',
-                        '07' => 'Juli',
-                        '08' => 'Agustus',
-                        '09' => 'September',
-                        '10' => 'Oktober',
-                        '11' => 'November',
-                        '12' => 'Desember',
-                    );
-                    $NamaBulan=$BulanList[$bulan];
-                    $x="$i $NamaBulan";
-                    //Hitung Jumlah
-                    $KeywordGrafik="$GetTahun-$GetBulan-$HariNomor";
-                    $JumlahKunjungan=mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama WHERE tanggal like '%$KeywordGrafik%'"));
-                    $data [] = array(
-                        'x' => $x,
-                        'y' => $JumlahKunjungan
-                    );
-                }
-            }else{
-                
-            }
-        }
-        $FileName="GrafikDashboard.json";
-        $jsonfile = json_encode($data, JSON_PRETTY_PRINT);
-        file_put_contents($FileName, $jsonfile);
     }
+
+    // ================= TAHUNAN =================
+    elseif ($periode == "Tahunan") {
+
+        $query = mysqli_query($Conn, "
+            SELECT 
+                MONTH($colTanggal) as bulan,
+                COUNT(*) as jumlah
+            FROM kunjungan_utama
+            WHERE YEAR($colTanggal) = '$tahun'
+            GROUP BY MONTH($colTanggal)
+            ORDER BY MONTH($colTanggal)
+        ");
+
+        if (!$query) {
+            echo json_encode([
+                "status" => "error",
+                "message" => mysqli_error($Conn)
+            ]);
+            exit;
+        }
+
+        while ($row = mysqli_fetch_assoc($query)) {
+            $kategori[] = date('M', mktime(0, 0, 0, $row['bulan'], 1));
+            $data[] = (int)$row['jumlah'];
+        }
+    }
+
+    // ================= OUTPUT =================
+    echo json_encode([
+        "status" => "success",
+        "periode" => $periode,
+        "tahun" => $tahun,
+        "bulan" => $bulan,
+        "kategori" => $kategori,
+        "data" => $data
+    ]);
 ?>

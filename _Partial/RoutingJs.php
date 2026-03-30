@@ -105,5 +105,5 @@
     }
 
     // Tambahan default script (selalu dimuat)
-    echo '<script type="text/javascript" src="_Page/Dashboard/Dashboard.js"></script>' . PHP_EOL;
+    echo '<script type="text/javascript" src="_Page/Dashboard/Dashboard.js?v='.$version.'"></script>' . PHP_EOL;
 ?>

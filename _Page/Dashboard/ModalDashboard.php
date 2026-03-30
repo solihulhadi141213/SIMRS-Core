@@ -1,67 +1,104 @@
-<!--- Modal Konfirmasi Ijin Akses ---->
-<div class="modal fade" id="ModalKonfirmasiIjinAksesBerkas" tabindex="-1" role="dialog" aria-labelledby="ModalKonfirmasiIjinAksesBerkas" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+<!-- Filter Periode Grafik -->
+<div class="modal fade" id="ModalFilterPeriodeGrafik" tabindex="-1">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <b cass="text-light"><i class="ti-bell"></i> Permintaan Akses Berkas</b> 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div id="FormPermintaanAksesBerkas">
-                <!---- Form Permintaan Akses Berkas disini ----->
-            </div>
+            <form action="javascript:void(0);" id="ProsesFilterPeriodeGrafik" autocomplete="off">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark">
+                        <i class="bi bi-calendar"></i> Periode Data
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="periode">Periode</label>
+                            <select name="periode" id="periode" class="form-control">
+                                <option value="">Pilih</option>
+                                <option value="Tahunan">Tahunan</option>
+                                <option value="Bulanan">Bulanan</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="tahun">Tahun</label>
+                            <select name="tahun" id="tahun" class="form-control">
+                                <option value="">Pilih</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="bulan">Bulan</label>
+                            <select name="bulan" id="bulan" class="form-control">
+                                <option value="">Pilih</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-sm btn-primary btn-rounded">
+                        <i class="bi bi-save"></i> Tampilkan
+                    </button>
+                    <button type="button" class="btn btn-sm btn-secondary btn-rounded" data-bs-dismiss="modal">
+                        <i class="bi bi-x"></i> Tutup
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-<!--- Modal Verifikasi Surat Menyurat ---->
-<div class="modal fade" id="ModalVerifikasiSurat" tabindex="-1" role="dialog" aria-labelledby="ModalVerifikasiSurat" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+<!-- Filter Pasien Existing -->
+<div class="modal fade" id="ModalPasienExisting" tabindex="-1">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <b cass="text-light"><i class="ti-file"></i> Verifikasi Surat</b> 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div id="DetailVerifikasiSuratNotifikasi">
-                <!---- Notifikasi Verifikasi Surat ------->
-            </div>
+            <form action="javascript:void(0);" id="ProsesFilterPasienExisting" autocomplete="off">
+                <input type="hidden" name="page" id="page" value="1">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark">
+                        <i class="bi bi-filter"></i> Filter Data
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-5">
+                            <label for="limit">Batas</label>
+                        </div>
+                        <div class="col-1">:</div>
+                        <div class="col-6">
+                            <select name="limit" id="limit" class="form-control">
+                                <option value="10">10</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-5">
+                            <label for="keyword">Kata Kunci</label>
+                        </div>
+                        <div class="col-1">:</div>
+                        <div class="col-6">
+                            <input type="text" name="keyword" id="keyword" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-sm btn-primary btn-rounded">
+                        <i class="bi bi-filter"></i> Tampilkan
+                    </button>
+                    <button type="button" class="btn btn-sm btn-secondary btn-rounded" data-bs-dismiss="modal">
+                        <i class="bi bi-x"></i> Tutup
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-<!---Modal Ringkasan Guru---->
-<div class="modal fade" id="ModalRingkasanGuru" tabindex="-1" role="dialog" aria-labelledby="ModalRingkasanGuru" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-inverse">
-                <b cass="text-light"><i class="ti-file"></i> Ringkasan Data Guru</b> 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div id="RingkasanDataGuru">
-                <!---- Ringkasan Data Guru ------->
-            </div>
-        </div>
-    </div>
-</div>
-<!---Modal Cetak Ringkasan Guru---->
-<div class="modal fade" id="ModalCetakRingkasanGuru" tabindex="-1" role="dialog" aria-labelledby="ModalCetakRingkasanGuru" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <b cass="text-light"><i class="ti-file"></i> Cetak Ringkasan Data Guru</b> 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div id="FormCetakRingkasanGuru">
-                <!---- Form Cetak Ringkasan Data Guru ------->
-            </div>
-        </div>
-    </div>
-</div>
+
 <!---Modal Dashboard Antrian---->
 <div class="modal fade" id="ModalDashboardAntiran" tabindex="-1" role="dialog" aria-labelledby="ModalDashboardAntiran" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
