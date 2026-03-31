@@ -2,7 +2,7 @@
     $version = date('YmdHis');
     // Daftar halaman dan lokasi file JS-nya
     $pages = [
-        "ProfileUser"               => "_Page/ProfileUser/ProfileUser.js",
+        "ProfileUser"               => "_Page/ProfileUser/ProfileUser.js?v='.$version.'",
         "Bantuan"                   => "_Page/Bantuan/Bantuan.js",
         "Help"                      => "_Page/Bantuan/Bantuan.js",
         "Akses"                     => "_Page/Akses/Akses.js",

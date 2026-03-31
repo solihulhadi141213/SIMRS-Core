@@ -1,42 +1,121 @@
+// Menampilkan Profile Saya
+function ProfilSaya() {
+    
+    // Loading
+    $('#content_my_profile').html('<div class="col-12 text-center">Loading...</div>');
+
+    $.ajax({
+        type: 'POST',
+        url: '_Page/ProfileUser/MyProfile.php',
+        success: function(data) {
+            $('#content_my_profile').html(data);
+        }
+    });
+}
+
+//Menampilkan Data Pertama Kali
+$(document).ready(function() {
+    ProfilSaya();
+});
+
+
+
 //Modal Edit Profile
 $('#ModalEditProfile').on('show.bs.modal', function (e) {
-    $('#FormEditProfile').load('_Page/Inventory/ModalLoader.php');
+    // Loading
+    $('#FormEditProfile').html('Loading...');
+
+    // Kosongkan Notifikasi
+    $('#NotifikasiEditProfile').html('');
+
+    // Tampilkan Form
     $.ajax({
         type 	    : 'POST',
         url 	    : '_Page/ProfileUser/FormEditProfile.php',
         success     : function(data){
             $('#FormEditProfile').html(data);
-            //Proses Edit Profile
-            $('#ProsesEditProfile').submit(function(){
-                var ProsesEditProfile = $('#ProsesEditProfile').serialize();
-                $('#NotifikasiEditProfile').html('Loading...');
-                $.ajax({
-                    type 	    : 'POST',
-                    url 	    : '_Page/ProfileUser/ProsesEditProfile.php',
-                    data 	    :  ProsesEditProfile,
-                    success     : function(data){
-                        $('#NotifikasiEditProfile').html(data);
-                        var NotifikasiBerhasil=$('#NotifikasiBerhasil').html();
-                        if(NotifikasiBerhasil=="Success"){
-                            location.reload();
-                        }
-                    }
-                });
-            });
         }
     });
 });
+
+//Proses Edit Profile (delegated, form dimuat via AJAX)
+$(document).on('submit', '#ProsesEditProfile', function (e) {
+    e.preventDefault();
+
+    var $form    = $(this);
+    var formData = $form.serialize();
+    var $notif   = $('#NotifikasiEditProfile');
+    var $btn     = $form.find('button[type="submit"]');
+
+    $notif.html('Loading...');
+    $btn.prop('disabled', true);
+
+    $.ajax({
+        type    : 'POST',
+        url     : '_Page/ProfileUser/ProsesEditProfile.php',
+        data    : formData,
+        dataType: 'json',
+
+        beforeSend: function () {
+            $notif.html('<small>Loading...</small>');
+        },
+
+        success: function (response) {
+            if (!response || typeof response !== 'object') {
+                $notif.html('<div class="alert alert-danger">Response tidak valid</div>');
+                return;
+            }
+
+            var status  = response.status || 'error';
+            var message = response.message || 'Terjadi kesalahan';
+
+            if (status === 'success') {
+                // Tutup Modal
+                $('#ModalEditProfile').modal('hide');
+
+                // Tampilkan Swal
+                $notif.empty();
+                Swal.fire({
+                    title: 'Mantap!',
+                    text: message,
+                    icon: 'success',
+                    confirmButtonText: 'Tutup'
+                }).then(function () {
+                    window.location.reload();
+                });
+            } else {
+                $notif.html('<div class="alert alert-danger">' + message + '</div>');
+            }
+        },
+
+        error: function (xhr) {
+            console.error('AJAX Error:', xhr.responseText);
+            $notif.html('<div class="alert alert-danger">Server error / response tidak valid</div>');
+        },
+
+        complete: function () {
+            $btn.prop('disabled', false);
+        }
+    });
+});
+
 //Modal Ganti Password
 $('#ModalGantiPassword').on('show.bs.modal', function (e) {
-    $('#FormGantiPassword').load('_Page/Inventory/ModalLoader.php');
+    
+    // Loading
+    $('#FormGantiPassword').html('Loading...');
+
+    // Kosongkan Notifikasi
+    $('#NotifikasiGantiPassword').html('Loading...');
+
+    // Tampilkan Form Dengan Ajax
     $.ajax({
         type 	    : 'POST',
         url 	    : '_Page/ProfileUser/FormGantiPassword.php',
         success     : function(data){
             $('#FormGantiPassword').html(data);
-            $('#password1').val('');
-            $('#password2').val('');
-            //Kondisi saat tampilkan password
+            
+            //Event saat tampilkan password
             $('#TampilkanPasswordProfile').click(function(){
                 if($(this).is(':checked')){
                     $('#password1').attr('type','text');
@@ -46,26 +125,28 @@ $('#ModalGantiPassword').on('show.bs.modal', function (e) {
                     $('#password2').attr('type','password');
                 }
             });
-            //Proses Edit Profile
-            $('#ProsesGantiPassword').submit(function(){
-                var ProsesGantiPassword = $('#ProsesGantiPassword').serialize();
-                $('#NotifikasGantiPassword').html('Loading...');
-                $.ajax({
-                    type 	    : 'POST',
-                    url 	    : '_Page/ProfileUser/ProsesGantiPassword.php',
-                    data 	    :  ProsesGantiPassword,
-                    success     : function(data){
-                        $('#NotifikasGantiPassword').html(data);
-                        var NotifikasiUbahPasswordBerhasil=$('#NotifikasiUbahPasswordBerhasil').html();
-                        if(NotifikasiUbahPasswordBerhasil=="Success"){
-                            location.reload();
-                        }
-                    }
-                });
-            });
         }
     });
 });
+
+//Proses Edit Profile
+$('#ProsesGantiPassword').submit(function(){
+    var ProsesGantiPassword = $('#ProsesGantiPassword').serialize();
+    $('#NotifikasGantiPassword').html('Loading...');
+    $.ajax({
+        type 	    : 'POST',
+        url 	    : '_Page/ProfileUser/ProsesGantiPassword.php',
+        data 	    :  ProsesGantiPassword,
+        success     : function(data){
+            $('#NotifikasGantiPassword').html(data);
+            var NotifikasiUbahPasswordBerhasil=$('#NotifikasiUbahPasswordBerhasil').html();
+            if(NotifikasiUbahPasswordBerhasil=="Success"){
+                location.reload();
+            }
+        }
+    });
+});
+
 //Modal Ganti Password
 $('#ModalEditFoto').on('show.bs.modal', function (e) {
     $('#FormGantiFoto').load('_Page/Inventory/ModalLoader.php');
@@ -74,29 +155,30 @@ $('#ModalEditFoto').on('show.bs.modal', function (e) {
         url 	    : '_Page/ProfileUser/FormGantiFoto.php',
         success     : function(data){
             $('#FormGantiFoto').html(data);
-            //Proses Edit Foto
-            $('#ProsesGantiFoto').submit(function(){
-                e.preventDefault();
-                $('#NotifikasiGantiFoto').html('Loading..');
-                var form = $('#ProsesGantiFoto')[0];
-                var data = new FormData(form);
-                $.ajax({
-                    type 	    : 'POST',
-                    url 	    : '_Page/ProfileUser/ProsesGantiFoto.php',
-                    data 	    :  data,
-                    cache       : false,
-                    processData : false,
-                    contentType : false,
-                    enctype     : 'multipart/form-data',
-                    success     : function(data){
-                        $('#NotifikasiGantiFoto').html(data);
-                        var NotifikasiBerhasil=$('#NotifikasiBerhasil').html();
-                        if(NotifikasiBerhasil=="Ganti Foto Berhasil"){
-                            window.location.href='index.php?Page=ProfileUser&Sub=MyProfile';
-                        }
-                    }
-                });
-            });
+        }
+    });
+});
+
+//Proses Edit Foto
+$('#ProsesGantiFoto').submit(function(){
+    e.preventDefault();
+    $('#NotifikasiGantiFoto').html('Loading..');
+    var form = $('#ProsesGantiFoto')[0];
+    var data = new FormData(form);
+    $.ajax({
+        type 	    : 'POST',
+        url 	    : '_Page/ProfileUser/ProsesGantiFoto.php',
+        data 	    :  data,
+        cache       : false,
+        processData : false,
+        contentType : false,
+        enctype     : 'multipart/form-data',
+        success     : function(data){
+            $('#NotifikasiGantiFoto').html(data);
+            var NotifikasiBerhasil=$('#NotifikasiBerhasil').html();
+            if(NotifikasiBerhasil=="Ganti Foto Berhasil"){
+                window.location.href='index.php?Page=ProfileUser&Sub=MyProfile';
+            }
         }
     });
 });

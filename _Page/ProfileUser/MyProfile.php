@@ -1,179 +1,101 @@
 <?php
-    //Jumlah Log
-    $JumlahLogProfile=mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM log WHERE id_akses='$SessionIdAkses'"));
-    $JumlahLogProfileFormat = "" . number_format($JumlahLogProfile,0,',','.');
-    //Jumlah Laporan
-    $JumlahLaporanPengguna=mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM laporan_pengguna WHERE id_akses='$SessionIdAkses'"));
-    $JumlahLaporanPenggunaFormat = "" . number_format($JumlahLaporanPengguna,0,',','.');
+    // Koneksi Dan Session
+    include "../../_Config/Connection.php";
+    include "../../_Config/Session.php";
+    include "../../_Config/SettingGeneral.php";
+
+    // Hitung ringkasan dengan query agregasi agar lebih ringan
+    $JumlahLogProfile = (int) mysqli_fetch_assoc(mysqli_query($Conn, "SELECT COUNT(*) AS total FROM log WHERE id_akses='$SessionIdAkses'"))['total'];
+    $JumlahLogProfileFormat = number_format($JumlahLogProfile, 0, ',', '.');
+    $JumlahLaporanPengguna = (int) mysqli_fetch_assoc(mysqli_query($Conn, "SELECT COUNT(*) AS total FROM laporan_pengguna WHERE id_akses='$SessionIdAkses'"))['total'];
+    $JumlahLaporanPenggunaFormat = number_format($JumlahLaporanPengguna, 0, ',', '.');
+
+    // Menentukan Link Gambar/Foto Profil ($SessionGambar dari Session.php)
+    if(empty($SessionGambar)){
+        $link_foto = "$base_url/assets/images/No-Image.png";
+    }else{
+        $link_foto = "$base_url/assets/images/user/$SessionGambar";
+    }
 ?>
-<div class="row">
-    <div class="col col-md-4">
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <h4><i class="ti-user"></i> My Profile</h4>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12 mb-4 text-center">
-                        <img src="assets/images/<?php echo $LinkGambar;?>" width="150px" height="150px" class="img-radius">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <button type="button" class="btn btn-sm btn-block btn-outline-dark" data-toggle="modal" data-target="#ModalEditFoto">
-                            <i class="ti-gallery"></i> Ubah Foto
-                        </button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 mb-2 table table-responsive">
-                        <table class="table table-hover">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <dt>Daftar</dt>
-                                    </td>
-                                    <td>
-                                        <?php echo "$SessionTanggal"; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <dt>Nama</dt>
-                                    </td>
-                                    <td>
-                                        <?php echo "$SessionNama"; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <dt>Kontak</dt>
-                                    </td>
-                                    <td>
-                                        <?php echo "$SessionKontak"; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <dt>Email</dt>
-                                    </td>
-                                    <td>
-                                        <?php echo "$SessionEmail"; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <dt>Aktivitas</dt>
-                                    </td>
-                                    <td>
-                                        <?php echo "$JumlahLogProfileFormat Record"; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <dt>Laporan User</dt>
-                                    </td>
-                                    <td>
-                                        <?php echo "$JumlahLaporanPenggunaFormat Record"; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <dt>Updatetime</dt>
-                                    </td>
-                                    <td>
-                                        <?php echo "$SessionUpdatetime"; ?>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="row">
-                    <div class="col-md-12 mt-2 text-right">
-                        <btton type="button" class="btn btn-round btn-sm btn-primary ml-2" data-toggle="modal" data-target="#ModalEditProfile">
-                            <i class="ti-user"></i> Edit Profile
-                        </btton>
-                        <btton type="button" class="btn btn-round btn-sm btn-primary ml-2" data-toggle="modal" data-target="#ModalGantiPassword">
-                            <i class="ti-pencil"></i> Ganti Password
-                        </btton>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
+<div class="row mb-3">
+    <div class="col-md-12 mb-4 text-center">
+        <img src="<?php echo $link_foto;?>" width="150px" height="150px" class="img-radius">
     </div>
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h4><i class="ti ti-book"></i> Referensi Fitur</h4>
-                <small class="text-muted">
-                    Berikut ini adalah list fitur yang bisa anda akses
-                </small>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12 table table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" align="center"><dt>NO</dt></th>
-                                    <th><dt>FITUR</dt></th>
-                                </tr>
-                            </thead>
-                            <tbody class="">
-                                <?php
-                                    //Arraykan Kategori
-                                    $no=1;
-                                    $QryRef = mysqli_query($Conn, "SELECT DISTINCT kategori FROM akses_ref ORDER BY kategori ASC");
-                                    while ($DataRef = mysqli_fetch_array($QryRef)) {
-                                        $KategoriFitur= $DataRef['kategori'];
-                                        echo '<tr>';
-                                        echo '  <td align="center"><dt>'.$no.'</dt></td>';
-                                        echo '  <td align="left"><dt>'.$KategoriFitur.'</dt></td>';
-                                        echo '</tr>';
-                                        //Buka Data Fitur Berdasarkan Kategori
-                                        $no2=1;
-                                        $QryRefAcc = mysqli_query($Conn, "SELECT * FROM akses_ref WHERE kategori='$KategoriFitur' ORDER BY id_akses_ref ASC");
-                                        while ($DataRefAcc = mysqli_fetch_array($QryRefAcc)) {
-                                            $id_akses_ref= $DataRefAcc['id_akses_ref'];
-                                            $nama_fitur= $DataRefAcc['nama_fitur'];
-                                            $kode= $DataRefAcc['kode'];
-                                            $keterangan= $DataRefAcc['keterangan'];
-                                            //Buka Data Akses
-                                            $QryAksesAcc = mysqli_query($Conn,"SELECT * FROM akses_acc WHERE id_akses='$SessionIdAkses' AND id_akses_ref='$id_akses_ref'")or die(mysqli_error($Conn));
-                                            $DataAksesAcc = mysqli_fetch_array($QryAksesAcc);
-                                            if(empty($DataAksesAcc['id_akses_acc'])){
-                                                $StatusAcc='<span class="text-danger"><i class="ti ti-close"></i></span>';
-                                            }else{
-                                                $StatusAcc=$DataAksesAcc['status'];
-                                                if($StatusAcc=="Yes"){
-                                                    $StatusAcc='<span class="text-success"><i class="ti ti-check"></i></span>';
-                                                }else{
-                                                    $StatusAcc='<span class="text-danger"><i class="ti ti-close"></i></span>';
-                                                }
-                                            }
-                                            echo '<tr>';
-                                            echo '  <td align="right">'.$StatusAcc.' '.$no.'.'.$no2.'</td>';
-                                            echo '  <td align="left">'.$nama_fitur.'<br><small>'.$keterangan.'</small></td>';
-                                            echo '</tr>';
-                                            $no2++;
-                                        }
-                                        $no++;
-                                    }
-                                ?>
-                                
-                            </tbody>
-                        </table>
+</div>
+<div class="row mb-3">
+    <div class="col-md-12 mb-4">
+        <?php
+            echo '
+                <div class="row mb-2">
+                    <div class="col-5"><small>Nama</small></div>
+                    <div class="col-1"><small>:</small></div>
+                    <div class="col-6">
+                        <small class="text text-muted">'.$SessionNama.'</small>
                     </div>
                 </div>
-            </div>
-        </div>
+                <div class="row mb-2">
+                    <div class="col-5"><small>Kontak</small></div>
+                    <div class="col-1"><small>:</small></div>
+                    <div class="col-6">
+                        <small class="text text-muted">'.$SessionKontak.'</small>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><small>Email</small></div>
+                    <div class="col-1"><small>:</small></div>
+                    <div class="col-6">
+                        <small class="text text-muted">'.$SessionEmail.'</small>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><small>Level/Entitas</small></div>
+                    <div class="col-1"><small>:</small></div>
+                    <div class="col-6">
+                        <small class="text text-muted">'.$SessionAkses.'</small>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><small>Tanggal Daftar</small></div>
+                    <div class="col-1"><small>:</small></div>
+                    <div class="col-6">
+                        <small class="text text-muted">'.date('d/m/Y H:i', strtotime($SessionTanggal)).'</small>
+                    </div>
+                </div>
+                    <div class="row mb-2">
+                    <div class="col-5"><small>Updatetime Terakhir</small></div>
+                    <div class="col-1"><small>:</small></div>
+                    <div class="col-6">
+                        <small class="text text-muted">'.date('d/m/Y H:i', strtotime($SessionUpdatetime)).'</small>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><small>Aktivitas</small></div>
+                    <div class="col-1"><small>:</small></div>
+                    <div class="col-6">
+                        <small class="text text-muted">'.$JumlahLogProfileFormat.' Record</small>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><small>Laporan User</small></div>
+                    <div class="col-1"><small>:</small></div>
+                    <div class="col-6">
+                        <small class="text text-muted">'.$JumlahLaporanPenggunaFormat.' Record</small>
+                    </div>
+                </div>
+            ';
+        ?>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-md-12 icon-btn text-center">
+        <button type="button" class="btn btn-sm btn-icon btn-outline-dark" data-bs-toggle="modal" data-bs-target="#ModalEditFoto" title="Ubah Foto Profile">
+            <i class="bi bi-image"></i>
+        </button>
+        <button type="button" class="btn btn-round btn-sm btn-icon btn-outline-dark" data-bs-toggle="modal" data-bs-target="#ModalEditProfile" title="Edit Profile">
+            <i class="bi bi-pencil"></i>
+        </button>
+        <button type="button" class="btn btn-round btn-sm btn-icon btn-outline-dark" data-bs-toggle="modal" data-bs-target="#ModalGantiPassword" title="Ganti Password">
+            <i class="bi bi-lock"></i>
+        </button>
     </div>
 </div>

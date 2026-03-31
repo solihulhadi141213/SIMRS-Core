@@ -1,69 +1,122 @@
 <?php
-    //koneksi dan session
     date_default_timezone_set('Asia/Jakarta');
+
+    header('Content-Type: application/json');
+
+    // Koneksi, Session, Function
     include "../../_Config/Connection.php";
     include "../../_Config/Session.php";
     include "../../_Config/SimrsFunction.php";
-    $LogJsonFile="../../_Page/Log/Log.json";
-    $WaktuLog=date('Y-m-d H:i:s');
-    if(empty($_POST['nama'])){
-        echo '<span id="NotifikasiBerhasil" class="text-danger">Nama Tidak Boleh Kosong</span>';
-    }else{
-        if(empty($_POST['email'])){
-            echo '<span id="NotifikasiBerhasil" class="text-danger">Email Tidak Boleh Kosong</span>';
-        }else{
-            if(empty($_POST['kontak'])){
-                echo '<span id="NotifikasiBerhasil" class="text-danger">Nomor Kontak Tidak Boleh Kosong</span>';
-            }else{
-                $nama=$_POST['nama'];
-                $JmlhKarNama = strlen($nama);
-                $email=$_POST['email'];
-                $JmlhKarEmail = strlen($email);
-                $kontak=$_POST['kontak'];
-                $JmlhKarKontak = strlen($kontak);
-                //Membuka email lama
-                $QueryAkses = mysqli_query($Conn,"SELECT * FROM akses WHERE id_akses='$SessionIdAkses'")or die(mysqli_error($Conn));
-                $DataAkses = mysqli_fetch_array($QueryAkses);
-                $EmailLama= $DataAkses['email'];
-                //Validasi Email Sama
-                if($email==$EmailLama){
-                    $ValidasiEmailSama="0";
-                }else{
-                    $ValidasiEmailSama=mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM akses WHERE email='$email'"));
-                }
-                if(!empty($ValidasiEmailSama)){
-                    echo '<span id="NotifikasiBerhasil" class="text-danger">Email Tersebut Sudah Digunakan</span>';
-                }else{
-                    if($JmlhKarNama>50){
-                        echo '<span id="NotifikasiBerhasil" class="text-danger">Nama maksimal 50 karakter</span>';
-                    }else{
-                        if($JmlhKarEmail>50){
-                            echo '<span id="NotifikasiBerhasil" class="text-danger">Email maksimal 50 karakter</span>';
-                        }else{
-                            if($JmlhKarKontak>15){
-                                echo '<span id="NotifikasiBerhasil" class="text-danger">Kontak maksimal 15 karakter</span>';
-                            }else{
-                                $UpdateAkses = mysqli_query($Conn,"UPDATE akses SET 
-                                    nama='$nama',
-                                    email='$email',
-                                    kontak='$kontak'
-                                WHERE id_akses='$SessionIdAkses'") or die(mysqli_error($Conn)); 
-                                if($UpdateAkses){
-                                    $MenyimpanLog=getSaveLog($Conn,$WaktuLog,$SessionNama,"Edit Profile","My Profile",$SessionIdAkses,$LogJsonFile);
-                                    if($MenyimpanLog=="Berhasil"){
-                                        $_SESSION['NotifikasiSwal']="Edit Profile Berhasil";
-                                        echo '<span id="NotifikasiBerhasil" class="text-info">Success</span>';
-                                    }else{
-                                        echo '<span class="text-danger">Gagal Menyimpan Log!</span>';
-                                    } 
-                                }else{
-                                    echo '<span id="NotifikasiBerhasil" class="text-danger">Edit Profile Gagal</span>';
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+
+    function respond($status, $message){
+        echo json_encode([
+            'status' => $status,
+            'message' => $message
+        ]);
+        exit;
+    }
+
+    // Validasi method
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        respond('error', 'Invalid request method');
+    }
+
+    // Ambil input
+    $nama   = trim($_POST['nama'] ?? '');
+    $email  = trim($_POST['email'] ?? '');
+    $kontak = trim($_POST['kontak'] ?? '');
+
+    // Validasi
+    if ($nama === '') {
+        respond('error', 'Nama tidak boleh kosong');
+    }
+    if ($email === '') {
+        respond('error', 'Email tidak boleh kosong');
+    }
+    if ($kontak === '') {
+        respond('error', 'Nomor kontak tidak boleh kosong');
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        respond('error', 'Format email tidak valid');
+    }
+
+    if (strlen($nama) > 50) {
+        respond('error', 'Nama maksimal 50 karakter');
+    }
+    if (strlen($email) > 50) {
+        respond('error', 'Email maksimal 50 karakter');
+    }
+    if (strlen($kontak) > 15) {
+        respond('error', 'Kontak maksimal 15 karakter');
+    }
+
+    // Ambil email lama
+    $stmtOld = mysqli_prepare($Conn, "SELECT email FROM akses WHERE id_akses = ?");
+    if (!$stmtOld) {
+        respond('error', 'Query gagal (stmtOld)');
+    }
+
+    mysqli_stmt_bind_param($stmtOld, 's', $SessionIdAkses);
+    mysqli_stmt_execute($stmtOld);
+    mysqli_stmt_bind_result($stmtOld, $EmailLama);
+    mysqli_stmt_fetch($stmtOld);
+    mysqli_stmt_close($stmtOld);
+
+    if (!$EmailLama) {
+        respond('error', 'Data akses tidak ditemukan');
+    }
+
+    // Cek email duplicate
+    if ($email !== $EmailLama) {
+        $stmtCheck = mysqli_prepare($Conn, "SELECT COUNT(*) FROM akses WHERE email = ?");
+        if (!$stmtCheck) {
+            respond('error', 'Query gagal (stmtCheck)');
+        }
+
+        mysqli_stmt_bind_param($stmtCheck, 's', $email);
+        mysqli_stmt_execute($stmtCheck);
+        mysqli_stmt_bind_result($stmtCheck, $countEmail);
+        mysqli_stmt_fetch($stmtCheck);
+        mysqli_stmt_close($stmtCheck);
+
+        if ($countEmail > 0) {
+            respond('error', 'Email sudah digunakan user lain');
         }
     }
-?>
+
+    // Update
+    $stmtUpdate = mysqli_prepare($Conn, "UPDATE akses SET nama = ?, email = ?, kontak = ? WHERE id_akses = ?");
+    if (!$stmtUpdate) {
+        respond('error', 'Query gagal (update)');
+    }
+
+    mysqli_stmt_bind_param($stmtUpdate, 'ssss', $nama, $email, $kontak, $SessionIdAkses);
+
+    if (!mysqli_stmt_execute($stmtUpdate)) {
+        mysqli_stmt_close($stmtUpdate);
+        respond('error', 'Gagal update data');
+    }
+
+    mysqli_stmt_close($stmtUpdate);
+
+    // Simpan log
+    $LogJsonFile = "../../_Page/Log/Log.json";
+    $WaktuLog    = date('Y-m-d H:i:s');
+
+    $MenyimpanLog = getSaveLog(
+        $Conn,
+        $WaktuLog,
+        $SessionNama,
+        "Edit Profile",
+        "My Profile",
+        $SessionIdAkses,
+        $LogJsonFile
+    );
+
+    if ($MenyimpanLog !== "Berhasil") {
+        respond('error', 'Gagal menyimpan log');
+    }
+
+    // Success
+    respond('success', 'Profile berhasil diperbarui');

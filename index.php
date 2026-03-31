@@ -1,10 +1,25 @@
 <?php
+    // Zona Waktu
     date_default_timezone_set('Asia/Jakarta');
+
+    // Koneksi
     include "_Config/Connection.php";
+
+    // Simrs Function
+    include "_Config/SimrsFunction.php";
+
+    // Session
     include "_Config/Session.php";
+
+    // Jika Sesi Akses Belum Ada Maka Redirect
+    if(empty($SessionIdAkses)){
+        header("Location:login.php");
+        exit;
+    }
+
+    // Include Setting
     include "_Config/SettingGeneral.php";
     include "_Config/SettingAkses.php";
-    include "_Config/SettingFaskes.php";
 
     // Routing Page
     if(!empty($_GET['Page'])){
@@ -26,7 +41,7 @@
     <body>
         <?php
             // Untuk menampilkan Pre Loader Disini
-            include "_Partial/PreLoader.php";
+            // include "_Partial/PreLoader.php";
         ?>
         <div id="pcoded" class="pcoded">
             <div class="pcoded-overlay-box"></div>

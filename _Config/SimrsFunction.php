@@ -10,6 +10,7 @@
         }
         return $ListKolom;
     }
+
     //Memanggil Detail Data
     function getDataDetail($Conn,$NamaDb,$NamaParam,$IdParam,$Kolom){
         $QryParam = mysqli_query($Conn,"SELECT * FROM $NamaDb WHERE $NamaParam='$IdParam'")or die(mysqli_error($Conn));
@@ -21,6 +22,8 @@
         }
         return $Response;
     }
+
+    //Memanggil Detail Data Versi Baru
     function getDataDetail_v2($Conn, $NamaDb, $NamaParam, $IdParam, $Kolom) {
         // Sanitize input parameters to prevent injection or other issues
         $NamaDb = mysqli_real_escape_string($Conn, $NamaDb);
@@ -51,7 +54,9 @@
         $Response="$IdParam";
         return $Response;
     }
-    //Membersihkan Variabel
+
+
+    //Membersihkan Dan Sanitasi Variabel
     function validateAndSanitizeInput($input) {
         // Menghapus karakter yang tidak diinginkan
         $input = trim($input);
@@ -104,6 +109,8 @@
         }
         return $Response;
     }
+
+    
     function formatSizeUnits($bytes){
         if ($bytes >= 1073741824)
         {

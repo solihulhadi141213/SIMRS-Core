@@ -140,18 +140,9 @@
     $Nama         = htmlspecialchars($DataAkses["nama"], ENT_QUOTES, 'UTF-8');
     $nama_log     = "Login Berhasil";
     $kategori_log = "Login";
-    $JsonUrl      = "../../_Page/Log/Log.json";
-
-    // Simpan Log
-    $SimpanLog = getSaveLog($Conn, $WaktuLog, $Nama, $nama_log, $kategori_log, $id_akses, $JsonUrl);
-    if ($SimpanLog !== "Berhasil") {
-        echo $SimpanLog;
-        exit;
-    }
 
     // Set Session
     $_SESSION["id_akses"]       = $id_akses;
-    $_SESSION["email"]          = $email;
     $_SESSION["token"]          = $token;
     $_SESSION['NotifikasiSwal'] = "Login Berhasil";
 

@@ -1,5 +1,5 @@
 <head>
-    <title><?php echo "$judul_tab"; ?></title>
+    <title><?php echo "$aplication_name"; ?></title>
 
     <!-- Meta -->
     <meta charset="utf-8">

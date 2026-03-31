@@ -1,10 +1,4 @@
-<?php
-    if(empty($SessionGambar)){
-        $LinkGambar="avatar-blank.jpg";
-    }else{
-        $LinkGambar="user/$SessionGambar";
-    }
-?>
+
     <div class="sidebar_toggle">
         <a href="javascrip:void(0);">
             <i class="icon-close icons"></i>
