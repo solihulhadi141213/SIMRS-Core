@@ -10,6 +10,7 @@
 
 <!-- apexcharts -->
 <?php
+    // Agar aplikasi lebih ringan maka apexcharts hanya dipanggil pada halaman tertentu
     if($Page==""||$Page=="Dashboard"){
         echo '<script src="node_modules/apexcharts/dist/apexcharts.min.js"></script>';
     }
@@ -24,8 +25,15 @@
 <script type="text/javascript" src="assets/js/script.js?v=1"></script>
 
 <!-- Summernote -->
-<link href="vendor\Sumernote\summernote.min.css" rel="stylesheet">
-<script src="vendor\Sumernote\summernote.min.js"></script>
+<?php 
+    // Agar aplikasi lebih ringan maka summernote hanya dipanggil pada halaman tertentu
+    if($Page=="Kunjungan"){
+        echo '
+            <link href="vendor\Sumernote\summernote.min.css" rel="stylesheet">
+            <script src="vendor\Sumernote\summernote.min.js"></script>
+        ';
+    }
+?>
 
 <!-- jQuery-Mask-Plugin -->
 <script src="assets/jQuery-Mask-Plugin/dist/jquery.mask.min.js"></script>

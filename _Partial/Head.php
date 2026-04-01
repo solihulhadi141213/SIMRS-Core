@@ -25,8 +25,13 @@
     <script src="node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
 
     <!-- tinymce -->
-    <script src="node_modules/tinymce/tinymce.min.js"></script>
-
+    <?php
+        // Agar Aplikasi lebih ringan maka tinymce hanya di panggil pada halaman tertentu
+        if($Page=="Kunjungan"){
+            echo ' <script src="node_modules/tinymce/tinymce.min.js"></script>';
+        }
+    ?>
+   
     <!-- themify icon -->
     <link rel="stylesheet" type="text/css" href="assets/icon/themify-icons/themify-icons.css">
 

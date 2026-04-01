@@ -41,37 +41,72 @@
         exit;
     }
 
-    if (empty($_SESSION["code"])) {
+    if (empty($_POST["id_captcha"])) {
         $response = [
             'status' => 'error',
-            'message' => 'Sesi Kode Captcha Telah Berakhir, Silahkan Muat Ulang Halaman Terlebih Dulu!'
+            'message' => 'ID Captcha Tidak Boleh Kosong!'
         ];
         echo json_encode($response);
         exit;
     }
 
+
     // Ambil Input
-    $email    = trim($_POST["email"]);
-    $password = trim($_POST["password"]);
-    $captcha  = trim($_POST["captcha"]);
-    $code     = $_SESSION["code"];
+    $email      = trim($_POST["email"]);
+    $password   = trim($_POST["password"]);
+    $captcha    = trim($_POST["captcha"]);
+    $id_captcha = trim($_POST["id_captcha"]);
+
+    // Proses Validasi Captcha
+    $utc = new DateTime('now', new DateTimeZone('UTC'));
+    $current_utc = $utc->format('Y-m-d H:i:s');
+
+    // Cari captcha berdasarkan id dan pastikan belum expired
+    $queryCaptcha = $Conn->prepare("
+        SELECT code_captcha 
+        FROM captcha 
+        WHERE id_captcha = ? 
+        AND expired_at >= ?
+        LIMIT 1
+    ");
+    $queryCaptcha->bind_param("ss", $id_captcha, $current_utc);
+    $queryCaptcha->execute();
+    $resultCaptcha = $queryCaptcha->get_result();
+    $DataCaptcha = $resultCaptcha->fetch_assoc();
+
+    // Jika captcha tidak ditemukan / sudah expired
+    if (!$DataCaptcha) {
+        $response = [
+            'status' => 'error',
+            'message' => 'Captcha tidak valid atau sudah kedaluwarsa!'
+        ];
+        echo json_encode($response);
+        exit;
+    }
+
+    // Verifikasi captcha dengan hash
+    if (!password_verify($captcha, $DataCaptcha['code_captcha'])) {
+        $response = [
+            'status' => 'error',
+            'message' => 'Kode captcha yang Anda masukkan salah!'
+        ];
+        echo json_encode($response);
+        exit;
+    }
+
+    // Hapus captcha setelah berhasil diverifikasi (sekali pakai)
+    $deleteCaptcha = $Conn->prepare("
+        DELETE FROM captcha 
+        WHERE id_captcha = ?
+    ");
+    $deleteCaptcha->bind_param("s", $id_captcha);
+    $deleteCaptcha->execute();
 
     // Validasi Format Email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $response = [
             'status' => 'error',
             'message' => 'Format Email Tidak Valid!'
-        ];
-        echo json_encode($response);
-        exit;
-    }
-
-    // Enkripsi Captcha untuk Validasi
-    $captchaHash = md5($captcha);
-    if ($captchaHash !== $code) {
-        $response = [
-            'status' => 'error',
-            'message' => 'Kode Captcha Yang Anda Masukan Tidak Valid!'
         ];
         echo json_encode($response);
         exit;
@@ -116,9 +151,9 @@
     $deleteTokenStmt->bind_param("i", $id_akses);
     $deleteTokenStmt->execute();
 
-    // Buat token baru
+    // Buat token baru dengan durasi 1 jam
     $timestamp_now   = date('Y-m-d H:i:s');
-    $expired_seconds = 60 * 60;                                                                                                              // 1 hour
+    $expired_seconds = 60 * 60;
     $date_expired    = date('Y-m-d H:i:s', strtotime($timestamp_now) + $expired_seconds);
     $token           = generateStrongCode(36);
     $insertTokenStmt = $Conn->prepare("INSERT INTO akses_login (id_akses, login_token, creat_at, expired_at) VALUES (?, ?, ?, ?)");

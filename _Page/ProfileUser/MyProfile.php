@@ -1,6 +1,7 @@
 <?php
     // Koneksi Dan Session
     include "../../_Config/Connection.php";
+     include "../../_Config/SimrsFunction.php";
     include "../../_Config/Session.php";
     include "../../_Config/SettingGeneral.php";
 

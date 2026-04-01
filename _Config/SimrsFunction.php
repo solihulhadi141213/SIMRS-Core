@@ -1,4 +1,94 @@
 <?php
+    // Generate Captcha
+    function GenerateCaptcha($Conn, $feature_name, $id_captcha){
+        // Zona Waktu UTC
+        $utc = new DateTime('now', new DateTimeZone('UTC'));
+
+        // Menentukan Waktu Sekarang ($created_at)
+        $created_at = $utc->format('Y-m-d H:i:s');
+
+        // Expired AT adalah waktu 10 menit setelah $created_at
+        $expired = clone $utc;
+        $expired->modify('+10 minutes');
+        $expired_at = $expired->format('Y-m-d H:i:s');
+
+        // Karakter yang tidak membingungkan
+        $allowed_chars = '234578ACDEFHJKMNPQRTUVWXYZabcdefghjkmnpqrtuvwxyz';
+
+        // Generate captcha asli 6 karakter
+        $captcha_plain = '';
+        $max_index = strlen($allowed_chars) - 1;
+
+        for($i = 0; $i < 6; $i++){
+            $captcha_plain .= $allowed_chars[random_int(0, $max_index)];
+        }
+
+        // Hash captcha
+        $captcha_hash = password_hash($captcha_plain, PASSWORD_DEFAULT);
+
+        // Generate UID 32 karakter
+         // 32 char
+
+        // Escape input
+        $feature_name = mysqli_real_escape_string($Conn, $feature_name);
+        $id_captcha   = mysqli_real_escape_string($Conn, $id_captcha);
+        $captcha_hash = mysqli_real_escape_string($Conn, $captcha_hash);
+
+        // Simpan ke database
+        $query = "
+            INSERT INTO captcha (
+                id_captcha,
+                feature_name,
+                code_captcha,
+                creat_at,
+                expired_at
+            ) VALUES (
+                '$id_captcha',
+                '$feature_name',
+                '$captcha_hash',
+                '$created_at',
+                '$expired_at'
+            )
+        ";
+
+        $result = mysqli_query($Conn, $query);
+
+        if(!$result){
+            return false;
+        }
+
+        // Return data penting
+        return [
+            'id_captcha' => $id_captcha,
+            'captcha'    => $captcha_plain,
+            'created_at' => $created_at,
+            'expired_at' => $expired_at
+        ];
+    }
+
+    // Menghapus Captcha Yang Sudah Expired
+    function DeleteExpiredCaptcha($Conn){
+        // Waktu sekarang UTC
+        $utc = new DateTime('now', new DateTimeZone('UTC'));
+        $current_utc = $utc->format('Y-m-d H:i:s');
+
+        // Query hapus captcha expired
+        $query = "
+            DELETE FROM captcha
+            WHERE expired_at < '$current_utc'
+        ";
+
+        $result = mysqli_query($Conn, $query);
+
+        // Hanya cek query berhasil atau gagal
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    // Menampilkan List Kolom
     function getColomList($Conn,$NamaKolom){
         $ListKolom = array();
         $QryKolom ="SHOW COLUMNS FROM $NamaKolom";
@@ -9,6 +99,27 @@
             array_push($ListKolom, $h);
         }
         return $ListKolom;
+    }
+
+    // Fungsi Referensi Akses
+    function GetStatusAccess($Conn,$id_akses,$kode_fitur){
+        //Cari id_akses_ref
+        $QryRef= mysqli_query($Conn,"SELECT * FROM akses_ref WHERE kode='$kode_fitur'")or die(mysqli_error($Conn));
+        $DataRef = mysqli_fetch_array($QryRef);
+        if(empty($DataRef['id_akses_ref'])){
+            $Response="";
+        }else{
+            $id_akses_ref=$DataRef['id_akses_ref'];
+            //Buka Akses ACC
+            $QryAcc= mysqli_query($Conn,"SELECT * FROM akses_acc WHERE id_akses_ref='$id_akses_ref' AND id_akses='$id_akses'")or die(mysqli_error($Conn));
+            $DataAcc = mysqli_fetch_array($QryAcc);
+            if(empty($DataAcc['status'])){
+                $Response="";
+            }else{
+                $Response=$DataAcc['status'];
+            }
+        }
+        return $Response;
     }
 
     //Memanggil Detail Data
@@ -26,10 +137,10 @@
     //Memanggil Detail Data Versi Baru
     function getDataDetail_v2($Conn, $NamaDb, $NamaParam, $IdParam, $Kolom) {
         // Sanitize input parameters to prevent injection or other issues
-        $NamaDb = mysqli_real_escape_string($Conn, $NamaDb);
+        $NamaDb    = mysqli_real_escape_string($Conn, $NamaDb);
         $NamaParam = mysqli_real_escape_string($Conn, $NamaParam);
-        $IdParam = mysqli_real_escape_string($Conn, $IdParam);
-        $Kolom = mysqli_real_escape_string($Conn, $Kolom);
+        $IdParam   = mysqli_real_escape_string($Conn, $IdParam);
+        $Kolom     = mysqli_real_escape_string($Conn, $Kolom);
     
         // Prepare the SQL query using a prepared statement
         $stmt = $Conn->prepare("SELECT $Kolom FROM $NamaDb WHERE $NamaParam = ?");
@@ -54,7 +165,6 @@
         $Response="$IdParam";
         return $Response;
     }
-
 
     //Membersihkan Dan Sanitasi Variabel
     function validateAndSanitizeInput($input) {
@@ -3160,5 +3270,22 @@
         $nama_hari_indonesia = $nama_hari[$hari_english];
         // Menampilkan nama hari
         return $nama_hari_indonesia; // Output: Sabtu
+    }
+
+    // Mencari Data Pasien Berdasarkan Kolom
+    function getDataPasien($SearchBy,$Keyword){
+        include "Connection.php";
+        if(empty($SearchBy)){
+            $response="";
+        }else{
+            if(empty($Keyword)){
+                $response="";
+            }else{
+                //Membuka Membuka Data Pasien
+                $QryPasien = mysqli_query($Conn,"SELECT * FROM pasien WHERE $SearchBy='$Keyword'")or die(mysqli_error($Conn));
+                $response = mysqli_fetch_array($QryPasien);
+                return $response;
+            }
+        }
     }
 ?>

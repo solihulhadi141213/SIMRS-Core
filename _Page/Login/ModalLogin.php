@@ -89,10 +89,10 @@
                         </div>
                         <div class="col-md-9">
                             <span id="GambarCaptchaDisini">
-                                <img src="_Page/Akses/Captcha.php" alt="captcha" width="100%" id="ViewCaptcha" />
+                                <img src="" alt="captcha" width="100%" id="CaptchaPengajuanAkses" />
                             </span>
                             <small id="GetDigitHere"></small>
-                            <a href="javascript:void(0);" id="ReloadGambarCaptcha" class="text text-decoration-none">
+                            <a href="javascript:void(0);" id="ReloadCaptchaPengajuanAkses" class="text text-decoration-none">
                                 <i class="ti ti-reload"></i> Reload Gambar
                             </a>
                         </div>

@@ -14,6 +14,7 @@
     $SessionGambar           = "";
     $SessionUpdatetime       = "";
     $SessionDateExpired      = "";
+    $SessionToken            = "";
 
     // Jika Session id_akses & token Ada
     if(!empty($_SESSION['id_akses']) && !empty($_SESSION['token'])){
@@ -51,7 +52,7 @@
                 if($UpdateToken){
 
                     //Buka Data User Dari Tabel akses
-                    $stmtSessionAkses = mysqli_prepare($Conn, "SELECT id_akses, id_akses_pengajuan, tanggal, nama, email, kontak, password, akses, gambar, updatetime FROM akses WHERE id_akses=?");
+                    $stmtSessionAkses = mysqli_prepare($Conn, "SELECT * FROM akses WHERE id_akses=?");
                     mysqli_stmt_bind_param($stmtSessionAkses, "s", $SessionIdAkses);
                     mysqli_stmt_execute($stmtSessionAkses);
                     $resultSessionAkses = mysqli_stmt_get_result($stmtSessionAkses);

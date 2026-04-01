@@ -77,6 +77,7 @@
                                 <p class="text-muted mb-0">Gunakan email resmi dan password Anda untuk masuk.</p>
                             </div>
                             <form id="ProsesLogin" class="login-form" autocomplete="off" onsubmit="return false;">
+                                <input type="hidden" name="id_captcha" id="id_captcha" value="">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Alamat Email</label>
                                     <div class="input-group input-group-lg">
