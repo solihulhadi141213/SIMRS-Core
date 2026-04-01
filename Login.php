@@ -56,7 +56,7 @@
                             <h1 class="brand-title mb-3"><?php echo $aplication_name; ?></h1>
                             <p class="brand-desc mb-0"><?php echo $aplication_description; ?></p>
                             <div class="mb-3 mt-3 text-center">
-                                <img src="assets\images\gambar-depan.png" alt="tema" width="100%">
+                                <img src="assets\images\login-ilustration.png" alt="tema" width="100%">
                             </div>
                             <button type="button" class="btn btn-soft-light btn-lg mt-3 w-100" id="modal_pengajuan_akses">
                                 <i class="fa fa-paper-plane"></i> Kirim Pengajuan Akses

@@ -4,6 +4,7 @@
     header('Content-Type: application/json');
 
     include "../../_Config/Connection.php";
+    include "../../_Config/SimrsFunction.php";
 
     function respond($status, $message){
         echo json_encode([
@@ -17,21 +18,18 @@
         respond('error', 'Metode tidak diizinkan.');
     }
 
-    if (empty($_SESSION['code'])) {
-        respond('error', 'Captcha expired.');
-    }
-
     // Ambil & sanitasi
-    $nama      = trim($_POST['nama'] ?? '');
-    $email     = trim($_POST['email'] ?? '');
-    $kontak    = trim($_POST['kontak'] ?? '');
-    $nik       = trim($_POST['nik'] ?? '');
-    $alamat    = trim($_POST['alamat'] ?? '');
-    $deskripsi = trim($_POST['deskripsi'] ?? '');
-    $captcha   = trim($_POST['captcha'] ?? '');
+    $nama       = trim($_POST['nama'] ?? '');
+    $email      = trim($_POST['email'] ?? '');
+    $kontak     = trim($_POST['kontak'] ?? '');
+    $nik        = trim($_POST['nik'] ?? '');
+    $alamat     = trim($_POST['alamat'] ?? '');
+    $deskripsi  = trim($_POST['deskripsi'] ?? '');
+    $id_captcha = trim($_POST['id_captcha'] ?? '');
+    $captcha    = trim($_POST['captcha'] ?? '');
 
     // Validasi
-    if (!$nama || !$email || !$kontak || !$nik || !$alamat || !$deskripsi || !$captcha) {
+    if (!$nama || !$email || !$kontak || !$nik || !$alamat || !$deskripsi || !$id_captcha || !$captcha) {
         respond('error', 'Semua field wajib diisi.');
     }
 
@@ -51,10 +49,50 @@
         respond('error', 'Maksimal 200 karakter.');
     }
 
-    // Captcha
-    if (md5($captcha) !== $_SESSION['code']) {
-        respond('error', 'Captcha salah.');
+    // Validasi Captcha
+    $utc = new DateTime('now', new DateTimeZone('UTC'));
+    $current_utc = $utc->format('Y-m-d H:i:s');
+
+    // Cari captcha berdasarkan id dan pastikan belum expired
+    $stmtCaptcha = $Conn->prepare("
+        SELECT code_captcha
+        FROM captcha
+        WHERE id_captcha = ?
+        AND expired_at >= ?
+        LIMIT 1
+    ");
+
+    if (!$stmtCaptcha) {
+        respond('error', 'Gagal memproses captcha.');
     }
+
+    $stmtCaptcha->bind_param('ss', $id_captcha, $current_utc);
+    $stmtCaptcha->execute();
+
+    $resCaptcha = $stmtCaptcha->get_result();
+    $dataCaptcha = $resCaptcha->fetch_assoc();
+
+    // Jika captcha tidak ditemukan / expired
+    if (!$dataCaptcha) {
+        respond('error', 'Captcha tidak valid atau sudah kedaluwarsa.');
+    }
+
+    // Verifikasi captcha dengan hash
+    if (!password_verify($captcha, $dataCaptcha['code_captcha'])) {
+        respond('error', 'Kode captcha salah.');
+    }
+
+    // Hapus captcha setelah berhasil diverifikasi (sekali pakai)
+    $stmtDeleteCaptcha = $Conn->prepare("
+        DELETE FROM captcha
+        WHERE id_captcha = ?
+    ");
+
+    if ($stmtDeleteCaptcha) {
+        $stmtDeleteCaptcha->bind_param('s', $id_captcha);
+        $stmtDeleteCaptcha->execute();
+    }
+   
 
     // FILE VALIDATION
     if (!isset($_FILES['foto']) || $_FILES['foto']['error'] !== 0) {

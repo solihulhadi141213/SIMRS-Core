@@ -8,6 +8,16 @@ function GenerateCaptchaLogin(FeatureName, id_captcha) {
     $("#GetUrlCaptcha").attr("src", url);
 }
 
+// Fungsi Untuk Memuat Gambar Captcha Pada #GetUrlCaptcha
+function GenerateCaptchaPengajuanAkses(FeatureName, id_captcha) {
+    let url = '_Page/Login/GenerateCaptcha.php?id_captcha='+ encodeURIComponent(id_captcha) 
+              +'&feature_name=' 
+              + encodeURIComponent(FeatureName) 
+              + '&t=' + new Date().getTime();
+
+    $("#CaptchaPengajuanAkses").attr("src", url);
+}
+
 function GenerateCaptchaId(length = 32){
     let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -21,17 +31,25 @@ function GenerateCaptchaId(length = 32){
 
 $(document).ready(function() {
 
-    // Inisialisasi FeatureName dan id_captcha
-    let FeatureName = "Login";
-    let id_captcha  = GenerateCaptchaId(length = 32);
+    // Inisialisasi FeatureName dan id_captcha untuk Halaman Login
+    let FeatureName                = "Login";
+    let id_captcha                 = GenerateCaptchaId(length = 32);
+
+    // Inisialisasi FeatureName dan id_captcha untuk Halaman Pengajuan Akses
+    let FeatureNamePengajuanAkses  = "Pengajuan Akses";
+    let id_captcha_pengajuan_akses = GenerateCaptchaId(length = 32);
 
     // Menempelkan id_captcha pada form id_captcha untuk pertama kali
     $('#id_captcha').val(id_captcha);
+    $('#id_captcha_pengajuan_akses').val(id_captcha_pengajuan_akses);
 
-    // Tampilkan pertama kali
+    // Generate Captha Login pertama kali
     GenerateCaptchaLogin(FeatureName, id_captcha);
 
-    // Reload manual
+    // Generate Captha Pengajuan Akses pertama kali
+    GenerateCaptchaPengajuanAkses(FeatureNamePengajuanAkses, id_captcha_pengajuan_akses);
+
+    // Reload Captcha
     $('#ReloadCaptcha').click(function(){
         // Buat id_captcha
         var id_captcha  = GenerateCaptchaId(length = 32);
@@ -43,16 +61,31 @@ $(document).ready(function() {
         GenerateCaptchaLogin(FeatureName, id_captcha);
     });
 
+    // Reload Captcha Pengajuan Akses
+    $('#ReloadCaptchaPengajuanAkses').click(function(){
+        // Buat id_captcha
+        var id_captcha_pengajuan_akses  = GenerateCaptchaId(length = 32);
+
+        // Tempelkan Ulang ke form
+        $('#id_captcha_pengajuan_akses').val(id_captcha_pengajuan_akses);
+
+        // Generate Captcha
+        GenerateCaptchaPengajuanAkses(FeatureNamePengajuanAkses, id_captcha_pengajuan_akses);
+    });
+
     // Reload otomatis setiap 10 menit
     setInterval(function(){
-        // Buat id_captcha
-        var id_captcha  = GenerateCaptchaId(length = 32);
+        // Buat id_captcha dan id_captcha_pengajuan_akses
+        var id_captcha                 = GenerateCaptchaId(length = 32);
+        var id_captcha_pengajuan_akses = GenerateCaptchaId(length = 32);
 
         // Tempelkan Ulang ke form
         $('#id_captcha').val(id_captcha);
+        $('#id_captcha_pengajuan_akses').val(id_captcha_pengajuan_akses);
 
         // Generate Ulang Captcha
         GenerateCaptchaLogin(FeatureName, id_captcha);
+        GenerateCaptchaPengajuanAkses(FeatureNamePengajuanAkses, id_captcha_pengajuan_akses);
     }, 600000);
 
     //Kondisi saat tampilkan password

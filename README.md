@@ -1,9 +1,10 @@
 # SIMRS CORE V 3.0.0 (Beta) #
 
-SIMRS Core V3 merupakan penyempurnaan dari versi sebelumnya, yaitu SIMRS V2.
-Pada versi ini, terdapat perubahan yang cukup besar dan cara kerja yang berbeda dari versi sebelumnya. 
+SIMRS Core V3 is an improvement over the previous version, SIMRS V2.
+This version features significant changes and a different way of working.
+SIMRS Core V3 is a hospital management information system integrated with electronic medical records. The application is built on a microservice basis, enabling other applications to communicate with the central SIMRS database. Patient medical information is written using FHIR. An API service is available for easier application development.
 
-### Spesifikasi Sistem ###
+### System Specifications ###
 
 * PHP 8.x
 * MySql 9.1.0
@@ -32,7 +33,20 @@ Pada versi ini, terdapat perubahan yang cukup besar dan cara kerja yang berbeda 
 * Referensi
 
 ### Database ###
-
+```json
+[
+    {
+        "table_name" : "akses",
+        "column" : [
+            {
+                "column_name" : "id_akses",
+                "type" : "",
+                "column_name" : "",
+            }
+        ]
+    }
+]
+```
 * akses
 * akses_acc
 * akses_entitas
@@ -41,7 +55,7 @@ Pada versi ini, terdapat perubahan yang cukup besar dan cara kerja yang berbeda 
 * akses_ref
 * akun_perkiraan
 
-### Integrasi ###
+### InteSystem Integration ###
 
 * BPJS
 * SATUSEHAT
@@ -50,8 +64,12 @@ Pada versi ini, terdapat perubahan yang cukup besar dan cara kerja yang berbeda 
 * Radix
 * Analyza
 
+### Documentation Link ###
 
+* Git Book : https://rsu-el-syifa.gitbook.io/rsu-el-syifa-docs
 
-### Dokumentasi ###
+### What's Changed In This Version? ###
+* Generate captcha and save on database
+* Login system, validation from login token
+* There is a relationship between tables in the access module
 
-* https://rsu-el-syifa.gitbook.io/rsu-el-syifa-docs
