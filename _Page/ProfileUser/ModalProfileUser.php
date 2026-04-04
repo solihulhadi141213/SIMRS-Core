@@ -1,3 +1,60 @@
+<!--- Modal Filter Ijin Akses --->
+<div class="modal fade" id="ModalFilterIjinAkses" tabindex="-1" aria-labelledby="ModalFilterIjinAkses" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form action="javascript:void(0);" method="POST" id="ProsesFilterIjinAkses" autocomplete="off">
+                <input type="hidden" name="page" id="page_ijin_akses" value="1">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-filter"></i> Cari Kategori Fitur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-12" id="form_filter_ijin_akses">
+                            <label for="keyword_ijin_akses">Kata Kunci (<i>Keyword</i>)</label>
+                            <input type="text" name="keyword" id="keyword_ijin_akses" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        <i class="ti-search"></i> Cari
+                    </button>
+                    <button type="button" class="btn btn-sm btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ti-close"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--- Modal List Ijin Akses --->
+<div class="modal fade" id="ModalListIjinAkses" tabindex="-1" aria-labelledby="ModalListIjinAkses" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">
+                    <i class="bi bi-list-check"></i> List Ijin Akses
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-12" id="FormListIjinAkses">
+                        <!-- Form List Ijin Akses -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-sm btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti-close"></i> Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--- Modal Edit Profile --->
 <div class="modal fade" id="ModalEditProfile" tabindex="-1" aria-labelledby="ModalEditProfileLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-md" role="document">
@@ -20,10 +77,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-sm btn-primary">
+                    <button type="submit" class="btn btn-md btn-primary">
                         <i class="ti-save"></i> Simpan
                     </button>
-                    <button type="button" class="btn btn-sm btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <i class="ti-close"></i> Tutup
                     </button>
                 </div>

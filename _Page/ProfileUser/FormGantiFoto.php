@@ -1,30 +1,41 @@
 <?php
-    //Inclde Koneksi dan akses 
+    //Zona Waktu
+    date_default_timezone_set('Asia/Jakarta');
+
+    // Connection
     include "../../_Config/Connection.php";
+    
+    // Simrs Function
+    include "../../_Config/SimrsFunction.php";
+
+    // Session
     include "../../_Config/Session.php";
-    if(empty($SessionIdAkses)){
+
+    // Cek hasil validasi session
+    if (empty($SessionIdAkses)) {
         echo '
-            <div class="row">
-                <div class="col-12">
-                    <div class="alert alert-danger text-center">
-                        Sesi Akses Sudah Berakhir. Silahkan Login Ulang!
-                    </div>
-                </div>
+            <div class="alert alert-danger">
+                Sesi Akses Sudah Berakhir! Silahkan Login Ulang!
             </div>
         ';
-    }else{
+    } else {
         echo '
-            <div class="row"> 
+            <div class="row">
                 <div class="col-md-12 mb-3">
-                    <div>
-                        <label for="password1">Pilih Foto Baru</label>
-                        <input type="file" class="form-control" id="foto" name="foto" autocomplete="false" required>
-                        <small class="text text-muted">
-                            File Foto Maksimal 2 Mb (Filetype : JPG, JPEG, PNG, GIF)
-                        </small>
-                    </div>
+                    <label class="upload-area" for="file_foto">
+                        <div class="upload-content">
+                            <i class="bi bi-cloud-arrow-up fs-1"></i>
+                            <h6 class="mt-2 mb-1">Drop / Upload Here</h6>
+                            <small class="text-muted">
+                                JPG, JPEG, PNG, GIF (Max 2 MB)
+                            </small>
+                        </div>
+                        <input type="file" id="file_foto" name="foto" hidden required>
+                    </label>
                 </div>
             </div>
+
+            <div id="preview_foto" class="text-center mt-3"></div>
         ';
     }
 ?>

@@ -8,7 +8,7 @@
 
     // Peta halaman -> file modal; gunakan satu sumber kebenaran agar mudah ditambah.
     $modalRoutes = [
-        'ProfileUser'               => '_Page/ProfileUser/ModalProfileUser.php',
+        'Profile'               => '_Page/ProfileUser/ModalProfileUser.php',
         'Bantuan'                   => '_Page/Bantuan/ModalBantuan.php',
         'Help'                      => '_Page/Bantuan/ModalBantuan.php',
         'Akses'                     => '_Page/Akses/ModalAkses.php',

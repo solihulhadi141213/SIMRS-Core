@@ -75,10 +75,10 @@
         }
         echo '
             <tr>
-                <td class="text-center">'.$no.'</td>
-                <td class="text-left">'.$noRm.'</td>
-                <td class="text-left">'.$nama.'</td>
-                <td class="text-left">'.date('d/m/Y', strtotime($tanggal)).'</td>
+                <td class="text-center"><small>'.$no.'</small></td>
+                <td class="text-left"><small>'.$noRm.'</small></td>
+                <td class="text-left"><small>'.$nama.'</small></td>
+                <td class="text-left"><small>'.date('d/m/Y', strtotime($tanggal)).'</small></td>
                 <td class="text-center">'.$label_tujuan.'</td>
             </tr>
         ';

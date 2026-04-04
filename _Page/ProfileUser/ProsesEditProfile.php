@@ -22,14 +22,10 @@
     }
 
     // Ambil input
-    $nama   = trim($_POST['nama'] ?? '');
     $email  = trim($_POST['email'] ?? '');
     $kontak = trim($_POST['kontak'] ?? '');
 
     // Validasi
-    if ($nama === '') {
-        respond('error', 'Nama tidak boleh kosong');
-    }
     if ($email === '') {
         respond('error', 'Email tidak boleh kosong');
     }
@@ -41,14 +37,11 @@
         respond('error', 'Format email tidak valid');
     }
 
-    if (strlen($nama) > 50) {
-        respond('error', 'Nama maksimal 50 karakter');
+    if (strlen($email) > 200) {
+        respond('error', 'Email maksimal 200 karakter');
     }
-    if (strlen($email) > 50) {
-        respond('error', 'Email maksimal 50 karakter');
-    }
-    if (strlen($kontak) > 15) {
-        respond('error', 'Kontak maksimal 15 karakter');
+    if (strlen($kontak) > 20) {
+        respond('error', 'Kontak maksimal 20 karakter');
     }
 
     // Ambil email lama
@@ -86,12 +79,12 @@
     }
 
     // Update
-    $stmtUpdate = mysqli_prepare($Conn, "UPDATE akses SET nama = ?, email = ?, kontak = ? WHERE id_akses = ?");
+    $stmtUpdate = mysqli_prepare($Conn, "UPDATE akses SET email = ?, kontak = ? WHERE id_akses = ?");
     if (!$stmtUpdate) {
         respond('error', 'Query gagal (update)');
     }
 
-    mysqli_stmt_bind_param($stmtUpdate, 'ssss', $nama, $email, $kontak, $SessionIdAkses);
+    mysqli_stmt_bind_param($stmtUpdate, 'sss', $email, $kontak, $SessionIdAkses);
 
     if (!mysqli_stmt_execute($stmtUpdate)) {
         mysqli_stmt_close($stmtUpdate);
@@ -99,24 +92,6 @@
     }
 
     mysqli_stmt_close($stmtUpdate);
-
-    // Simpan log
-    $LogJsonFile = "../../_Page/Log/Log.json";
-    $WaktuLog    = date('Y-m-d H:i:s');
-
-    $MenyimpanLog = getSaveLog(
-        $Conn,
-        $WaktuLog,
-        $SessionNama,
-        "Edit Profile",
-        "My Profile",
-        $SessionIdAkses,
-        $LogJsonFile
-    );
-
-    if ($MenyimpanLog !== "Berhasil") {
-        respond('error', 'Gagal menyimpan log');
-    }
 
     // Success
     respond('success', 'Profile berhasil diperbarui');

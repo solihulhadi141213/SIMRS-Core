@@ -12,15 +12,15 @@
     include "_Config/Session.php";
 
     // Jika Sesi Akses Belum Ada Maka Redirect
-    if(empty($SessionIdAkses)){
+    if(empty($SessionIdAkses)||empty($SessionNama)){
         header("Location:login.php");
         exit;
     }
 
     if(empty($SessionGambar)){
-        $LinkGambar="avatar-blank.jpg";
+        $LinkFotoProfile="avatar-blank.jpg";
     }else{
-        $LinkGambar="user/$SessionGambar";
+        $LinkFotoProfile="user/$SessionGambar";
     }
 
     // Include Setting
@@ -84,13 +84,13 @@
                                 <!-- Menampilkan Dropdown Profil -->
                                 <li class="user-profile header-notification">
                                     <a href="javascript:void(0);" class="waves-effect waves-light">
-                                        <img src="assets/images/<?php echo $LinkGambar;?>" class="img-radius" alt="User-Profile-Image">
+                                        <img src="assets/images/<?php echo $LinkFotoProfile;?>" class="img-radius" width="45px" alt="User-Profile-Image">
                                         <span><?php echo $SessionNama;?></span>
                                         <i class="ti-angle-down"></i>
                                     </a>
                                     <ul class="show-notification profile-notification">
                                         <li class="waves-effect waves-light border-bottom border-1 border-bottom-default">
-                                            <a href="index.php?Page=ProfileUser&Sub=MyProfile" class="p-2 is-hover">
+                                            <a href="index.php?Page=Profile" class="p-2 is-hover">
                                                 <i class="ti-user"></i> Profile
                                             </a>
                                         </li>
@@ -145,6 +145,9 @@
 
             //Routing Modal
             include "_Partial/Modal.php";
+
+            // Include Toast
+            include "_Partial/Toast.php";
 
             //Routing Page JS
             include "_Partial/RoutingJs.php";

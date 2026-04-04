@@ -1,15 +1,29 @@
 <?php
+    // Zona Waktu
+    date_default_timezone_set('Asia/Jakarta');
+
     // Koneksi Dan Session
     include "../../_Config/Connection.php";
-     include "../../_Config/SimrsFunction.php";
+    include "../../_Config/SimrsFunction.php";
     include "../../_Config/Session.php";
     include "../../_Config/SettingGeneral.php";
 
-    // Hitung ringkasan dengan query agregasi agar lebih ringan
-    $JumlahLogProfile = (int) mysqli_fetch_assoc(mysqli_query($Conn, "SELECT COUNT(*) AS total FROM log WHERE id_akses='$SessionIdAkses'"))['total'];
-    $JumlahLogProfileFormat = number_format($JumlahLogProfile, 0, ',', '.');
-    $JumlahLaporanPengguna = (int) mysqli_fetch_assoc(mysqli_query($Conn, "SELECT COUNT(*) AS total FROM laporan_pengguna WHERE id_akses='$SessionIdAkses'"))['total'];
-    $JumlahLaporanPenggunaFormat = number_format($JumlahLaporanPengguna, 0, ',', '.');
+    // Validasi Sesi Login
+    if(empty($SessionIdAkses)){
+        echo '
+            <div class="alert alert-danger">Sesi Akses Sudah Berakhir! Silahkan Login Ulang</div>
+        ';
+        exit;
+    }
+
+    // Routing IHS dan NIK
+    if(empty($SessionNik)){
+        $SessionNik = "-";
+    }
+
+    if(empty($SessionIhs)){
+        $SessionIhs = "-";
+    }
 
     // Menentukan Link Gambar/Foto Profil ($SessionGambar dari Session.php)
     if(empty($SessionGambar)){
@@ -42,6 +56,20 @@
                     </div>
                 </div>
                 <div class="row mb-2">
+                    <div class="col-5"><small>NIK/KTP</small></div>
+                    <div class="col-1"><small>:</small></div>
+                    <div class="col-6">
+                        <small class="text text-muted">'.$SessionNik.'</small>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><small>IHS - SATUSEHAT</small></div>
+                    <div class="col-1"><small>:</small></div>
+                    <div class="col-6">
+                        <small class="text text-muted">'.$SessionIhs.'</small>
+                    </div>
+                </div>
+                <div class="row mb-2">
                     <div class="col-5"><small>Email</small></div>
                     <div class="col-1"><small>:</small></div>
                     <div class="col-6">
@@ -67,20 +95,6 @@
                     <div class="col-1"><small>:</small></div>
                     <div class="col-6">
                         <small class="text text-muted">'.date('d/m/Y H:i', strtotime($SessionUpdatetime)).'</small>
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-5"><small>Aktivitas</small></div>
-                    <div class="col-1"><small>:</small></div>
-                    <div class="col-6">
-                        <small class="text text-muted">'.$JumlahLogProfileFormat.' Record</small>
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-5"><small>Laporan User</small></div>
-                    <div class="col-1"><small>:</small></div>
-                    <div class="col-6">
-                        <small class="text text-muted">'.$JumlahLaporanPenggunaFormat.' Record</small>
                     </div>
                 </div>
             ';

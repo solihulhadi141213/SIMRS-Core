@@ -1,114 +1,16 @@
 <?php
     $routes = [
-        'ProfileUser'               => '_Page/ProfileUser/ProfileUser.php',
-        'Dashboard'                 => '_Page/Dashboard/Dashboard.php',
-        'Bantuan'                   => '_Page/Bantuan/Bantuan.php',
-        'Help'                      => '_Page/Bantuan/Help.php',
-        'Akses'                     => '_Page/Akses/Akses.php',
-        'Aksesibilitas'             => '_Page/Aksesibilitas/Aksesibilitas.php',
-        'SettingProfile'            => '_Page/ProfileFaskes/SettingFaskes.php',
-        'Referensi'                 => '_Page/Referensi/Referensi.php',
-        'SettingBridging'           => '_Page/SettingBridging/SettingBridging.php',
-        'Log'                       => '_Page/Log/Log.php',
-        'Database'                  => '_Page/Database/Database.php',
-        'Poliklinik'                => '_Page/Poliklinik/Poliklinik.php',
-        'Dokter'                    => '_Page/Dokter/Dokter.php',
-        'JadwalDokter'              => '_Page/JadwalDokter/JadwalDokter.php',
-        'Wilayah'                   => '_Page/Wilayah/Wilayah.php',
-        'KelasRuangan'              => '_Page/KelasRuangan/KelasRuangan.php',
-        'Pasien'                    => '_Page/Pasien/Pasien.php',
-        'RawatJalan'                => '_Page/RawatJalan/RawatJalan.php',
-        'Approval'                  => '_Page/Approval/Approval.php',
-        'SuratKontrol'              => '_Page/SuratKontrol/SuratKontrol.php',
-        'Rujukan'                   => '_Page/Rujukan/Rujukan.php',
-        'Fingerprint'               => '_Page/Fingerprint/Fingerprint.php',
-        'Monitoring'                => '_Page/Monitoring/Monitoring.php',
-        'MonitoringBaru'            => '_Page/MonitoringBaru/MonitoringBaru.php',
-        'Signature'                 => '_Page/Signature/Signature.php',
-        'Antrian'                   => '_Page/Antrian/Antrian.php',
-        'MonitorAntrian'            => '_Page/MonitorAntrian/MonitorAntrian.php',
-        'AntrianPanggil'            => '_Page/AntrianPanggil/AntrianPanggil.php',
-        'MonitorRuangan'            => '_Page/MonitorRuangan/MonitorRuangan.php',
-        'JadwalOperasi'             => '_Page/JadwalOperasi/JadwalOperasi.php',
-        'Diagnosa'                  => '_Page/Diagnosa/Diagnosa.php',
-        'DashboardAntrol'           => '_Page/DashboardAntrol/DashboardAntrol.php',
-        'SettingPercetakan'         => '_Page/SettingPercetakan/SettingPercetakan.php',
-        'Obat'                      => '_Page/Obat/Obat.php',
-        'ObatStorage'               => '_Page/ObatStorage/ObatStorage.php',
-        'WebSetting'                => '_Page/WebSetting/WebSetting.php',
-        'WebTentang'                => '_Page/WebTentang/WebTentang.php',
-        'WebMetaTag'                => '_Page/WebMetaTag/WebMetaTag.php',
-        'WebSlider'                 => '_Page/WebSlider/WebSlider.php',
-        'WebFAQ'                    => '_Page/WebFAQ/WebFAQ.php',
-        'WebMedsos'                 => '_Page/WebMedsos/WebMedsos.php',
-        'WebSo'                     => '_Page/WebSo/WebSo.php',
-        'WebArtikel'                => '_Page/WebArtikel/WebArtikel.php',
-        'WebEvent'                  => '_Page/WebEvent/WebEvent.php',
-        'WebArsip'                  => '_Page/WebArsip/WebArsip.php',
-        'WebDokter'                 => '_Page/WebDokter/WebDokter.php',
-        'WebPoliklinik'             => '_Page/WebPoliklinik/WebPoliklinik.php',
-        'WebSambutan'               => '_Page/WebSambutan/WebSambutan.php',
-        'WebRuangRawat'             => '_Page/WebRuangRawat/WebRuangRawat.php',
-        'WebUnit'                   => '_Page/WebUnit/WebUnit.php',
-        'WebTestimoni'              => '_Page/WebTestimoni/WebTestimoni.php',
-        'WebEmailGateway'           => '_Page/WebEmailGateway/WebEmailGateway.php',
-        'WebLoker'                  => '_Page/WebLoker/WebLoker.php',
-        'WebBantuan'                => '_Page/WebBantuan/WebBantuan.php',
-        'WebHubungiAdmin'           => '_Page/WebHubungiAdmin/WebHubungiAdmin.php',
-        'WebSiteMap'                => '_Page/WebSiteMap/WebSiteMap.php',
-        'WebMonitoring'             => '_Page/WebMonitoring/WebMonitoring.php',
-        'WebFooter'                 => '_Page/WebFooter/WebFooter.php',
-        'WebLaman'                  => '_Page/WebLaman/WebLaman.php',
-        'WebAksesPasien'            => '_Page/WebAksesPasien/WebAksesPasien.php',
-        'WebKunjungan'              => '_Page/WebKunjungan/WebKunjungan.php',
-        'Radiologi'                 => '_Page/Radiologi/Radiologi.php',
-        'Laboratorium'              => '_Page/Laboratorium/Laboratorium.php',
-        'Setting'                   => '_Page/Setting/Setting.php',
-        'sep'                       => '_Page/sep/sep.php',
-        'LaporanPengguna'           => '_Page/LaporanPengguna/LaporanPengguna.php',
-        'StokOpename'               => '_Page/StokOpename/StokOpename.php',
-        'Resep'                     => '_Page/Resep/Resep.php',
-        'ExpiredLimit'              => '_Page/ExpiredLimit/ExpiredLimit.php',
-        'TarifTindakan'             => '_Page/TarifTindakan/TarifTindakan.php',
-        'Supplier'                  => '_Page/Supplier/Supplier.php',
-        'AkunPerkiraan'             => '_Page/AkunPerkiraan/AkunPerkiraan.php',
-        'Transaksi'                 => '_Page/Transaksi/Transaksi.php',
-        'SirsOnline'                => '_Page/SirsOnline/SirsOnline.php',
-        'SirsOnlineAntrian'         => '_Page/SirsOnlineAntrian/SirsOnlineAntrian.php',
-        'PasienShk'                 => '_Page/PasienShk/PasienShk.php',
-        'SirsOnlineOksigen'         => '_Page/SirsOnlineOksigen/SirsOnlineOksigen.php',
-        'SirsOnlineTempatTidur'     => '_Page/SirsOnlineTempatTidur/SirsOnlineTempatTidur.php',
-        'SirsOnlineAlkes'           => '_Page/SirsOnlineAlkes/SirsOnlineAlkes.php',
-        'SirsOnlineNakesTerinfeksi' => '_Page/SirsOnlineNakesTerinfeksi/SirsOnlineNakesTerinfeksi.php',
-        'Alergi'                    => '_Page/Alergi/Alergi.php',
-        'Kfa'                       => '_Page/Kfa/Kfa.php',
-        'Medication'                => '_Page/Medication/Medication.php',
-        'Api'                       => '_Page/Api/Api.php',
-        'TopDiagnosa'               => '_Page/TopDiagnosa/TopDiagnosa.php',
-        'KelasRuangan2'             => '_Page/KelasRuangan2/KelasRuangan2.php',
-        'Radix'                     => '_Page/Radix/Radix.php',
-        'Jurnal'                    => '_Page/Jurnal/Jurnal.php',
-        'BukuBesar'                 => '_Page/BukuBesar/BukuBesar.php',
-        'NeracaSaldo'               => '_Page/NeracaSaldo/NeracaSaldo.php',
-        'Anggaran'                  => '_Page/Anggaran/Anggaran.php',
-        'Persediaan'                => '_Page/Persediaan/Persediaan.php',
-        'Kas'                       => '_Page/Kas/Kas.php',
-        'PersediaanFarmasi'         => '_Page/PersediaanFarmasi/PersediaanFarmasi.php',
-        'Analyza'                   => '_Page/Analyza/Analyza.php',
-        'Laboratorium2'             => '_Page/Laboratorium2/Laboratorium2.php',
+        'Dashboard' => '_Page/Dashboard/Dashboard.php',
+        'Profile'   => '_Page/ProfileUser/ProfileUser.php',
     ];
 
-    $defaultPage = 'Dashboard';
-    $page = $_GET['Page'] ?? '';
-    $page = is_string($page) ? trim($page) : '';
+    $page = trim($_GET['Page'] ?? '');
 
-    // Only allow routes defined in the whitelist to prevent arbitrary file includes.
-    $targetFile = $routes[$page] ?? $routes[$defaultPage];
-
-    if (!is_file($targetFile)) {
-        // Fallback defensively to dashboard if the mapped file is missing.
-        $targetFile = $routes[$defaultPage];
+    if ($page === '') {
+        include $routes['Dashboard'];
+    } elseif (isset($routes[$page])) {
+        include $routes[$page];
+    } else {
+        include '_Page/Error/PageNotFound.php';
     }
-
-    include $targetFile;
 ?>

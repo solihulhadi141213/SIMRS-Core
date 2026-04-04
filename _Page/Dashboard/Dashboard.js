@@ -1,3 +1,30 @@
+// Dashboard.js Bersifat Global
+function tampilkanToast(pesan, tipe = 'success') {
+    const toastEl = document.getElementById('liveToast');
+
+    // ubah isi pesan
+    toastEl.querySelector('.toast-body').innerHTML = pesan;
+
+    // ubah warna berdasarkan tipe
+    toastEl.className = 'toast align-items-center border-0';
+
+    if (tipe === 'success') {
+        toastEl.classList.add('text-bg-success');
+    } else if (tipe === 'danger') {
+        toastEl.classList.add('text-bg-danger');
+    } else if (tipe === 'warning') {
+        toastEl.classList.add('text-bg-warning');
+    } else {
+        toastEl.classList.add('text-bg-primary');
+    }
+
+    const toast = new bootstrap.Toast(toastEl, {
+        delay: 1000
+    });
+
+    toast.show();
+}
+
 //Fungsi Menampilkan Data
 function ShowGrafik() {
 
@@ -269,8 +296,14 @@ $(document).ready(function() {
     });
 
     // Menampilkan Filter Pasien Exiting
-     $('.filter_pasien_existing').click(function(){
+    $('.filter_pasien_existing').click(function(){
         $('#ModalPasienExisting').modal('show');
+    });
+
+    // Proses Filter Pasien Existing
+    $('#ProsesFilterPasienExisting').click(function(){
+        ShowPasienExisting(0);
+        $('#ModalPasienExisting').modal('hide');
     });
 
     // Pagging pasien Existing
@@ -287,6 +320,18 @@ $(document).ready(function() {
         ShowPasienExisting(0);
     });
     
+    // Cleanup untuk semua modal saat ditutup
+    $(document).on('hidden.bs.modal', '.modal', function () {
+        setTimeout(function () {
+            if (!$('.modal.show').length) {
+                $('body').removeClass('modal-open').css({
+                    'overflow': 'auto',
+                    'padding-right': ''
+                });
 
+                $('.modal-backdrop').remove();
+            }
+        }, 100);
+    });
 
 });
