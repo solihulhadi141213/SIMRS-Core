@@ -27,16 +27,19 @@
                 <input type="password" class="form-control" id="password2" name="password2" autocomplete="false" required>
                 <small>
                     <input type="checkbox" id="TampilkanPasswordProfile" name="TampilkanPasswordProfile"> 
-                    <label for="TampilkanPasswordProfile">Tampilkan Password</label>
+                    <label for="TampilkanPasswordProfile" class="text text-muted">Tampilkan Password</label>
                 </small>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 mb-3">
-            <small class="text-muted">
-                Gunakan password aman dan yang mudah diingat.
-            </small>
+            <div class="alert alert-info text-center">
+                <small class="text-muted">
+                    Password terdiri dari karakter huruf dan angka sebanyak 6-20 digit.<br>
+                    Gunakan password aman dan yang mudah diingat.
+                </small>
+            </div>
         </div>
     </div>
 <?php } ?>

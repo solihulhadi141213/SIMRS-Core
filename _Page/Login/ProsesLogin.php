@@ -7,7 +7,7 @@
     header('X-Frame-Options: DENY');
     header('X-XSS-Protection: 1; mode=block');
 
-    // Start session jika masih dipakai untuk notifikasi swal
+    // Start session
     session_start();
 
     // Zona waktu
@@ -17,7 +17,9 @@
     include "../../_Config/Connection.php";
     include "../../_Config/SimrsFunction.php";
 
-    // Validasi input wajib
+    // ==========================
+    // VALIDASI INPUT
+    // ==========================
     if (empty($_POST["email"])) {
         echo json_encode([
             'status' => 'error',
@@ -50,13 +52,14 @@
         exit;
     }
 
-    // Ambil input
     $email      = trim($_POST["email"]);
     $password   = trim($_POST["password"]);
     $captcha    = trim($_POST["captcha"]);
     $id_captcha = trim($_POST["id_captcha"]);
 
-    // Validasi captcha
+    // ==========================
+    // VALIDASI CAPTCHA
+    // ==========================
     $utc = new DateTime('now', new DateTimeZone('UTC'));
     $current_utc = $utc->format('Y-m-d H:i:s');
 
@@ -67,6 +70,7 @@
         AND expired_at >= ?
         LIMIT 1
     ");
+
     $queryCaptcha->bind_param("ss", $id_captcha, $current_utc);
     $queryCaptcha->execute();
 
@@ -84,20 +88,14 @@
     if (!password_verify($captcha, $DataCaptcha['code_captcha'])) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Kode captcha yang Anda masukkan salah!'
+            'message' => 'Kode captcha salah!'
         ]);
         exit;
     }
 
-    // Hapus captcha sekali pakai
-    $deleteCaptcha = $Conn->prepare("
-        DELETE FROM captcha 
-        WHERE id_captcha = ?
-    ");
-    $deleteCaptcha->bind_param("s", $id_captcha);
-    $deleteCaptcha->execute();
-
-    // Validasi email
+    // ==========================
+    // VALIDASI FORMAT EMAIL
+    // ==========================
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo json_encode([
             'status' => 'error',
@@ -106,17 +104,17 @@
         exit;
     }
 
-    // Validasi user
-    $passwordHash = md5($password);
-
+    // ==========================
+    // AMBIL USER BERDASARKAN EMAIL
+    // ==========================
     $queryAkses = $Conn->prepare("
         SELECT * 
         FROM akses 
-        WHERE email = ? 
-        AND password = ?
+        WHERE email = ?
         LIMIT 1
     ");
-    $queryAkses->bind_param("ss", $email, $passwordHash);
+
+    $queryAkses->bind_param("s", $email);
     $queryAkses->execute();
 
     $resultAkses = $queryAkses->get_result();
@@ -125,14 +123,33 @@
     if (!$DataAkses) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Email Dan Password Yang Anda Gunakan Tidak Valid!'
+            'message' => 'Email tidak ditemukan!'
+        ]);
+        exit;
+    }
+
+    // ==========================
+    // VERIFIKASI PASSWORD HASH
+    // ==========================
+    if (!password_verify($password, $DataAkses['password'])) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Password yang Anda gunakan salah!'
         ]);
         exit;
     }
 
     $id_akses = $DataAkses['id_akses'];
 
-    // Hapus token lama
+    // Hapus captcha sekali pakai
+    $deleteCaptcha = $Conn->prepare("DELETE FROM captcha WHERE id_captcha = ?");
+    $deleteCaptcha->bind_param("s", $id_captcha);
+    $deleteCaptcha->execute();
+
+
+    // ==========================
+    // HAPUS TOKEN LAMA
+    // ==========================
     $deleteTokenStmt = $Conn->prepare("
         DELETE FROM akses_login 
         WHERE id_akses = ?
@@ -140,21 +157,26 @@
     $deleteTokenStmt->bind_param("i", $id_akses);
     $deleteTokenStmt->execute();
 
-    // Generate token baru
-    $timestamp_now   = date('Y-m-d H:i:s');
+    // ==========================
+    // GENERATE TOKEN BARU
+    // ==========================
     $expired_seconds = 60 * 60; // 1 jam
-    $date_expired    = date('Y-m-d H:i:s', strtotime($current_utc) + $expired_seconds);
-    $token           = generateStrongCode(36);
+    $date_expired = date(
+        'Y-m-d H:i:s',
+        strtotime($current_utc) + $expired_seconds
+    );
 
-    // Simpan token ke database
+    $token = generateStrongCode(36);
+
     $insertTokenStmt = $Conn->prepare("
         INSERT INTO akses_login (
-            id_akses, 
-            login_token, 
-            creat_at, 
+            id_akses,
+            login_token,
+            creat_at,
             expired_at
         ) VALUES (?, ?, ?, ?)
     ");
+
     $insertTokenStmt->bind_param(
         "isss",
         $id_akses,
@@ -166,12 +188,14 @@
     if (!$insertTokenStmt->execute()) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Terjadi Kesalahan Pada Saat Menyimpan Token!'
+            'message' => 'Gagal menyimpan token login!'
         ]);
         exit;
     }
 
-    // Simpan ke cookie
+    // ==========================
+    // COOKIE LOGIN
+    // ==========================
     $cookieOptions = [
         'expires'  => time() + $expired_seconds,
         'path'     => '/',
@@ -183,10 +207,8 @@
     setcookie("id_akses", $id_akses, $cookieOptions);
     setcookie("login_token", $token, $cookieOptions);
 
-    // Optional session notifikasi
     $_SESSION['NotifikasiSwal'] = "Login Berhasil";
 
-    // Response berhasil
     echo json_encode([
         'status' => 'success',
         'message' => 'Login Berhasil'

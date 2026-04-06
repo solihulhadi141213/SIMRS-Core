@@ -72,6 +72,7 @@
 
     // Tampilkan Data
     echo '
+        <input type="hidden" name="id_akses_laporan" value="'.$id_akses_laporan.'">
         <div class="row mb-3">
             <div class="col-4"><small>Tanggal</small></div>
             <div class="col-1"><small>:</small></div>
@@ -87,24 +88,18 @@
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col-4"><small>Laporan</small></div>
-            <div class="col-1"><small>:</small></div>
-            <div class="col-7">
-                <small class="text text-muted">'.$laporan.'</small>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-4"><small>Respon</small></div>
-            <div class="col-1"><small>:</small></div>
-            <div class="col-7">
-                <small class="text text-muted">'.$response.'</small>
-            </div>
-        </div>
-        <div class="row mb-3">
             <div class="col-4"><small>Status</small></div>
             <div class="col-1"><small>:</small></div>
             <div class="col-7">
                 <small class="text text-muted">'.$label_status.'</small>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="alert alert-warning text-center">
+                    <h4>PENTING!</h4>
+                    <small>Apakah anda benar-benar yakin ingin menghapus laporan tersebut?</small>
+                </div>
             </div>
         </div>
     ';

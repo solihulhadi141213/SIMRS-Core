@@ -1,8 +1,3 @@
-<?php
-    session_start();
-    include "_Config/Connection.php";
-    include "_Config/SettingGeneral.php";
-?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -37,6 +32,9 @@
 
         <!-- sweetalert2 -->
         <link rel="stylesheet" href="node_modules/sweetalert2/dist/sweetalert2.min.css">
+
+        <!-- bootstrap-icons -->
+        <link href="node_modules/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" crossorigin="anonymous">
 
     </head> 
     <body class="login-body">
@@ -114,7 +112,7 @@
                                         <i class="ti ti-key"></i> Masuk
                                     </button>
                                     <button type="button" class="btn btn-outline-danger btn-lg btn-google">
-                                        <i class="ti ti-google"></i> Login Dengan Google
+                                        <i class="bi bi-google"></i> Login Dengan Google
                                     </button>
                                 </div>
                             </form>

@@ -72,4 +72,5 @@ SIMRS Core V3 is a hospital management information system integrated with electr
 * Generate captcha and save on database
 * Login system, validation from login token
 * There is a relationship between tables in the access module
+* Activity history is not recorded partially, but is recorded based on data that has been created.
 

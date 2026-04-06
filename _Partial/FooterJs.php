@@ -5,7 +5,6 @@
 <script src="assets/jquery-ui-1.14.2/jquery-ui.min.js"></script>
 
 <!-- bootstrap -->
-<script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 <!-- apexcharts -->
@@ -45,4 +44,4 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <!-- popper -->
-<script src="node_modules\@popperjs\core\dist\umd\popper.min.js" crossorigin="anonymous"></script>
+<!-- <script src="node_modules\@popperjs\core\dist\umd\popper.min.js" crossorigin="anonymous"></script> -->

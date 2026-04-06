@@ -102,17 +102,16 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="alert alert-warning d-flex align-items-center">
-                                            <i class="bi bi-info-circle flex-shrink-0 me-2 h4"></i>
-                                            <div>
-                                                Anda bisa mengirim laporan apabila ditemukan kesalahan pada aplikasi ini!
-                                            </div>
+                                            <small>
+                                                Apabila anda menemukan kesalahan pada aplikasi dan memerlukan tindak lanjut cepat dari admin, silahkan isi form berikut ini.
+                                            </small>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-12">
-                                        <button type="button" class="btn btn-md btn-primary w-100 btn-round">
-                                            <i class="bi bi-plus"></i> Buat Laporan
+                                        <button type="button" class="btn btn-md btn-primary w-100 btn-round kirim_laporan_pengguna">
+                                            <i class="bi bi-plus"></i> Kirim Laporan Kesalahan
                                         </button>
                                     </div>
                                 </div>
@@ -126,7 +125,7 @@
                             <div class="card-footer">
                                 <div class="row">
                                     <div class="col-6">
-                                        <small class="text-secondary" id="page_laporan_kesalahan">0 / 0</small>
+                                        <small class="text-secondary" id="page_info_laporan_kesalahan">0 / 0</small>
                                     </div>
                                     <div class="col-6 text-right icon-btn">
                                         <button type="button" class="btn btn-sm btn-icon btn-outline-secondary" id="prev_btn_laporan_kesalahan">

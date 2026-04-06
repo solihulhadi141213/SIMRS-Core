@@ -26,98 +26,104 @@ function tampilkanToast(pesan, tipe = 'success') {
 }
 
 //Fungsi Menampilkan Data
+// Deklarasikan variabel chart di luar fungsi agar bisa diakses untuk dihancurkan/update
+let kunjunganChart = null;
+
 function ShowGrafik() {
+    // 1. Cek apakah elemen kontainer grafik ada di halaman ini
+    if ($('#GrafikPasien').length === 0) {
+        return; // Berhenti jika elemen tidak ditemukan
+    }
 
     // Ambil data filter
     let formData = $('#ProsesFilterPeriodeGrafik').serialize();
 
-    // Loading
-    $('#GrafikPasien').html('<div class="text-center">Loading...</div>');
+    // Tampilkan Loading (Gunakan spinner agar lebih manis)
+    $('#GrafikPasien').html(`
+        <div class="text-center p-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <div class="mt-2">Memuat Grafik...</div>
+        </div>
+    `);
 
-    // AJAX ambil data
     $.ajax({
-        url     : '_Page/Dashboard/GrafikDashboard.php',
-        type    : 'POST',
-        data    : formData,
+        url: '_Page/Dashboard/GrafikDashboard.php',
+        type: 'POST',
+        data: formData,
         dataType: 'json',
         success: function (res) {
-
-            // Validasi data
+            // 2. Validasi respon dari server
             if (res.status !== 'success') {
-                $('#GrafikPasien').html('<div class="text-danger text-center">' + res.message + '</div>');
+                $('#GrafikPasien').html(`<div class="alert alert-danger text-center">${res.message}</div>`);
                 return;
             }
 
-            // 🔥 BUAT JUDUL DINAMIS
+            // 3. Logika Judul Dinamis
             let judul = '';
-
             if (res.periode === 'Tahunan') {
                 judul = `Grafik Kunjungan Tahun ${res.tahun}`;
             } else if (res.periode === 'Bulanan') {
-
-                const namaBulan = [
-                    "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-                    "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
-                ];
-
-                let bulanIndex = parseInt(res.bulan) - 1;
-                let bulanText = namaBulan[bulanIndex];
-
+                const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+                let bulanText = namaBulan[parseInt(res.bulan) - 1] || '';
                 judul = `Grafik Kunjungan ${bulanText} ${res.tahun}`;
             }
 
-            // 🔥 TAMPILKAN JUDUL + CHART
+            // 4. Siapkan Wadah Chart
             $('#GrafikPasien').html(`
                 <div class="mb-3 text-center">
                     <h5 class="fw-bold">${judul}</h5>
                 </div>
-                <div id="ChartKunjungan"></div>
+                <div id="ChartKunjungan" style="min-height: 450px;"></div>
             `);
 
-            // 🔥 CONFIG CHART
+            // 5. Konfigurasi ApexCharts
             var options = {
                 chart: {
                     type: 'bar',
                     height: 450,
-                    background: 'transparent', // 🔥 transparan
-                    toolbar: { show: false }
+                    animations: { enabled: true },
+                    toolbar: { show: true } // Disarankan aktif untuk fitur download grafik
                 },
                 series: [{
                     name: 'Jumlah Kunjungan',
-                    data: res.data
+                    data: res.data || []
                 }],
                 xaxis: {
-                    categories: res.kategori
+                    categories: res.kategori || []
                 },
                 colors: ['#0d6efd'],
-                dataLabels: {
-                    enabled: true
-                },
-                stroke: {
-                    curve: 'smooth'
-                },
+                dataLabels: { enabled: true },
                 grid: {
                     borderColor: '#e0e0e0',
                     strokeDashArray: 4
                 },
                 tooltip: {
                     y: {
-                        formatter: function (val) {
-                            return val + " kunjungan";
-                        }
+                        formatter: (val) => val + " kunjungan"
                     }
                 },
                 noData: {
-                    text: 'Tidak ada data'
+                    text: 'Data tidak tersedia',
+                    align: 'center',
+                    verticalAlign: 'middle'
                 }
             };
 
-           // 🔥 RENDER CHART
-            var chart = new ApexCharts(document.querySelector("#ChartKunjungan"), options);
-            chart.render();
+            // 6. Cegah Penumpukan Objek (Destroy chart lama jika ada)
+            if (kunjunganChart !== null) {
+                kunjunganChart.destroy();
+            }
+
+            // Render Chart Baru
+            kunjunganChart = new ApexCharts(document.querySelector("#ChartKunjungan"), options);
+            kunjunganChart.render();
         },
-        error: function () {
-            $('#GrafikPasien').html('<div class="text-danger text-center">Gagal mengambil data</div>');
+        error: function (xhr) {
+            $('#GrafikPasien').html(`
+                <div class="alert alert-danger text-center">
+                    Gagal mengambil data: ${xhr.statusText}
+                </div>
+            `);
         }
     });
 }

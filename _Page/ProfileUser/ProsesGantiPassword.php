@@ -1,49 +1,97 @@
 <?php
-    //koneksi dan session
+    // Header JSON
+    header('Content-Type: application/json');
+
+    // Zona waktu
     date_default_timezone_set('Asia/Jakarta');
+
+    // Include file
     include "../../_Config/Connection.php";
     include "../../_Config/Session.php";
     include "../../_Config/SimrsFunction.php";
-    $LogJsonFile="../../_Page/Log/Log.json";
-    $WaktuLog=date('Y-m-d H:i:s');
-    //Validasi Form Data
-    if(empty($_POST['password1'])){
-        echo '<span class="text-danger">Password Tidak Boleh Kosong</span>';
-    }else{
-        if(empty($_POST['password2'])){
-            echo '<span class="text-danger">Password Tidak Boleh Kosong</span>';
-        }else{
-            $password1=$_POST['password1'];
-            $JmlhKarPassword = strlen($password1);
-            $password2=$_POST['password2'];
-            if($JmlhKarPassword<6){
-                echo '<span class="text-danger" id="NotifikasiBerhasil">Password Harus 6-20 karakter</span>';
-            }else{
-                if($JmlhKarPassword>20){
-                    echo '<span class="text-danger" id="NotifikasiBerhasil">Password Harus 6-20 karakter</span>';
-                }else{
-                    if($password1!==$password2){
-                        echo '<span class="text-danger" id="NotifikasiBerhasil">Password harus sama</span>';
-                    }else{
-                        //Proses Enkripsi MD5
-                        $PasswordEnkripsi=MD5($password1);
-                        $UpdateAkses = mysqli_query($Conn,"UPDATE akses SET 
-                            password='$PasswordEnkripsi'
-                        WHERE id_akses='$SessionIdAkses'") or die(mysqli_error($Conn)); 
-                        if($UpdateAkses){
-                            $MenyimpanLog=getSaveLog($Conn,$WaktuLog,$SessionNama,"Ubah Password","My Profile",$SessionIdAkses,$LogJsonFile);
-                            if($MenyimpanLog=="Berhasil"){
-                                $_SESSION['NotifikasiSwal']="Ubah Password Berhasil";
-                                echo '<span id="NotifikasiUbahPasswordBerhasil" class="text-success">Success</span>';
-                            }else{
-                                echo '<span class="text-danger">Gagal Menyimpan Log!</span>';
-                            }
-                        }else{
-                            echo '<span class="text-danger">Ubah password Gagal</span>';
-                        }
-                    }
-                }
-            }
-        }
+
+    // Validasi session login
+    if (empty($SessionIdAkses)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Sesi login telah berakhir. Silakan login ulang.'
+        ]);
+        exit;
+    }
+
+    // Validasi input
+    if (empty($_POST['password1'])) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Password baru tidak boleh kosong.'
+        ]);
+        exit;
+    }
+
+    if (empty($_POST['password2'])) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Ulangi password tidak boleh kosong.'
+        ]);
+        exit;
+    }
+
+    $password1 = trim($_POST['password1']);
+    $password2 = trim($_POST['password2']);
+
+    $panjangPassword = strlen($password1);
+
+    // Validasi panjang password
+    if ($panjangPassword < 6 || $panjangPassword > 20) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Password harus 6–20 karakter.'
+        ]);
+        exit;
+    }
+
+    // Validasi kesamaan password
+    if ($password1 !== $password2) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Password yang anda masukan tidak sama.'
+        ]);
+        exit;
+    }
+
+    // Hash password baru (AMAN)
+    $passwordHash = password_hash($password1, PASSWORD_DEFAULT);
+
+    // Update database dengan prepared statement
+    $stmt = mysqli_prepare(
+        $Conn,
+        "UPDATE akses 
+         SET password = ?
+         WHERE id_akses = ?"
+    );
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "si",
+        $passwordHash,
+        $SessionIdAkses
+    );
+
+    $update = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+
+    if ($update) {
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Password berhasil diperbarui.'
+        ]);
+        exit;
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Gagal memperbarui password.'
+        ]);
+        exit;
     }
 ?>

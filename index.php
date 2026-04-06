@@ -5,6 +5,9 @@
     // Koneksi
     include "_Config/Connection.php";
 
+    // Include Setting
+    include "_Config/SettingGeneral.php";
+
     // Simrs Function
     include "_Config/SimrsFunction.php";
 
@@ -13,7 +16,7 @@
 
     // Jika Sesi Akses Belum Ada Maka Redirect
     if(empty($SessionIdAkses)||empty($SessionNama)){
-        header("Location:login.php");
+        include "_Page/Login/login.php";
         exit;
     }
 
@@ -22,9 +25,6 @@
     }else{
         $LinkFotoProfile="user/$SessionGambar";
     }
-
-    // Include Setting
-    include "_Config/SettingGeneral.php";
 
     // Routing Page
     if(!empty($_GET['Page'])){
@@ -92,16 +92,6 @@
                                         <li class="waves-effect waves-light border-bottom border-1 border-bottom-default">
                                             <a href="index.php?Page=Profile" class="p-2 is-hover">
                                                 <i class="ti-user"></i> Profile
-                                            </a>
-                                        </li>
-                                        <li class="waves-effect waves-light border-bottom border-1 border-bottom-default">
-                                            <a href="index.php?Page=ProfileUser&Sub=LaporanPengguna" class="p-2 is-hover">
-                                                <i class="ti-email"></i> Laporan Pengguna
-                                            </a>
-                                        </li>
-                                        <li class="waves-effect waves-light border-bottom border-1 border-bottom-default">
-                                            <a href="index.php?Page=ProfileUser&Sub=MyLog" class="p-2 is-hover">
-                                                <i class="ti-time"></i> Log Aktivitas
                                             </a>
                                         </li>
                                         <li class="waves-effect waves-light border-bottom border-1 border-bottom-default">

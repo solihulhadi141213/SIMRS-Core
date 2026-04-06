@@ -31,6 +31,17 @@
             echo ' <script src="node_modules/tinymce/tinymce.min.js"></script>';
         }
     ?>
+
+    <!-- Quill -->
+    <?php
+        // Agar Aplikasi lebih ringan maka tinymce hanya di panggil pada halaman tertentu
+        if($Page=="Profile"){
+            echo '
+                <link href="node_modules/quill/dist/quill.snow.css" rel="stylesheet">
+                <script src="node_modules/quill/dist/quill.js"></script>
+            ';
+        }
+    ?>
    
     <!-- themify icon -->
     <link rel="stylesheet" type="text/css" href="assets/icon/themify-icons/themify-icons.css">

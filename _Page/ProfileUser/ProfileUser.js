@@ -50,7 +50,6 @@ $(document).ready(function() {
     // ============================================================
     // GANTI FOTO PROFILE - START
     // ============================================================
-    //Modal Ganti Foto
     $('#ModalEditFoto').on('show.bs.modal', function (e) {
 
         // Loading Form 'FormGantiFoto'
@@ -176,68 +175,10 @@ $(document).ready(function() {
             }
         });
     });
-
+    
     // ============================================================
-    // GANTI FOTO PROFILE - END
+    // EDIT PROFILE - START
     // ============================================================
-
-    // Ketika Click Filter Ijin Akses
-    $('.modal_filter_ijin_akses').click(function(){
-        // Tampilkan Modal
-        $('#ModalFilterIjinAkses').modal('show');
-    });
-
-    // Ketyika Submit ProsesFilterIjinAkses
-    $(document).on('submit', '#ProsesFilterIjinAkses', function (e) {
-        e.preventDefault();
-        // Kembalikan ke halaman 1
-        $('#page_ijin_akses').val(1);
-
-        // Tutup Modal
-        $('#ModalFilterIjinAkses').modal('hide');
-
-        // Muat Ulang TabelIjinAkses
-        TabelIjinAkses();
-    });
-
-    // pagging TabelIjinAkses
-     $(document).on('click', '#next_btn_ijin_akses', function() {
-        var page_now = parseInt($('#page_ijin_akses').val(), 10); // Pastikan nilai diambil sebagai angka
-        var next_page = page_now + 1;
-        $('#page_ijin_akses').val(next_page);
-        TabelIjinAkses(0);
-    });
-    $(document).on('click', '#prev_btn_ijin_akses', function() {
-        var page_now = parseInt($('#page_ijin_akses').val(), 10); // Pastikan nilai diambil sebagai angka
-        var next_page = page_now - 1;
-        $('#page_ijin_akses').val(next_page);
-        TabelIjinAkses(0);
-    });
-
-    // Menampilkan Modal List Ijin Akses
-    $(document).on('click', '.show_own_fiture', function () {
-        // Tangkap kategori
-        var kategori = $(this).data('kategori');
-
-        // Tampilkan modal
-        $('#ModalListIjinAkses').modal('show');
-
-        // Loading form
-        $('#FormListIjinAkses').html('Loading...');
-
-        $.ajax({
-            type: 'POST',
-            url: '_Page/ProfileUser/FormListIjinAkses.php',
-            data: {
-                kategori: kategori
-            },
-            success: function (data) {
-                $('#FormListIjinAkses').html(data);
-            }
-        });
-    });
-
-    //Modal Edit Profile
     $('#ModalEditProfile').on('show.bs.modal', function (e) {
         // Loading
         $('#FormEditProfile').html('Loading...');
@@ -313,91 +254,504 @@ $(document).ready(function() {
         });
     });
 
-});
+    // ============================================================
+    // GANTI PASSWORD - START
+    // ============================================================
+    $('#ModalGantiPassword').on('show.bs.modal', function (e) {
+        
+        // Loading
+        $('#FormGantiPassword').html('Loading...');
 
+        // Kosongkan Notifikasi
+        $('#NotifikasiGantiPassword').html('');
 
+        // Tampilkan Form Dengan Ajax
+        $.ajax({
+            type 	    : 'POST',
+            url 	    : '_Page/ProfileUser/FormGantiPassword.php',
+            success     : function(data){
+                $('#FormGantiPassword').html(data);
+            }
+        });
+    });
 
+    $(document).on('click', '#TampilkanPasswordProfile', function () {
+        if($(this).is(':checked')){
+            $('#password1').attr('type','text');
+            $('#password2').attr('type','text');
+        }else{
+            $('#password1').attr('type','password');
+            $('#password2').attr('type','password');
+        }
+    });
 
+    //Proses Edit Profile
+    $(document).on('submit', '#ProsesGantiPassword', function (e) {
+        e.preventDefault();
 
-//Modal Ganti Password
-$('#ModalGantiPassword').on('show.bs.modal', function (e) {
-    
-    // Loading
-    $('#FormGantiPassword').html('Loading...');
+        // Tangkap Data Dari Form
+        var ProsesGantiPassword = $('#ProsesGantiPassword').serialize();
 
-    // Kosongkan Notifikasi
-    $('#NotifikasiGantiPassword').html('Loading...');
+        // Ambil Element Tombol
+        var button_ganti_password = $('#button_ganti_password').html();
 
-    // Tampilkan Form Dengan Ajax
-    $.ajax({
-        type 	    : 'POST',
-        url 	    : '_Page/ProfileUser/FormGantiPassword.php',
-        success     : function(data){
-            $('#FormGantiPassword').html(data);
-            
-            //Event saat tampilkan password
-            $('#TampilkanPasswordProfile').click(function(){
-                if($(this).is(':checked')){
-                    $('#password1').attr('type','text');
-                    $('#password2').attr('type','text');
+        // Loading Button
+        $('#button_ganti_password').html('...');
+
+        // Kirim Data Dengan Ajax
+        $.ajax({
+            type    : 'POST',
+            url     : '_Page/ProfileUser/ProsesGantiPassword.php',
+            data    : ProsesGantiPassword,
+            dataType: 'JSON',
+            success     : function(response){
+                
+                // Tangkap Status Dan Message
+                var status = response.status;
+                var message = response.message;
+
+                // Jika Proses Berhasil
+                if(status=='success'){
+                    // Kosongkan Notifikasi
+                    $('#NotifikasiGantiPassword').html('');
+
+                    // Tutup Modal
+                    $('#ModalGantiPassword').modal('hide');
+
+                    // Tampilkan toast
+                    tampilkanToast('Password berhasil diperbarui', 'success');
                 }else{
-                    $('#password1').attr('type','password');
-                    $('#password2').attr('type','password');
+
+                    // Jika Proses Gagal
+                    $('#NotifikasiGantiPassword').html('<div class="alert alert-danger text-center">'+message+'</div>');
+                }
+            },
+            error: function (xhr) {
+                console.error('AJAX Error:', xhr.responseText);
+                $('#NotifikasiGantiPassword').html('<div class="alert alert-danger">Server error / response tidak valid</div>');
+            },
+        });
+        
+        // Kembalikan Tombol
+        $('#button_ganti_password').html(button_ganti_password);
+    });
+
+    // ============================================================
+    // IJIN AKSES PENGGUNA - START
+    // ============================================================
+
+    // Ketika Click Filter Ijin Akses
+    $('.modal_filter_ijin_akses').click(function(){
+        // Tampilkan Modal
+        $('#ModalFilterIjinAkses').modal('show');
+    });
+
+    // Ketyika Submit ProsesFilterIjinAkses
+    $(document).on('submit', '#ProsesFilterIjinAkses', function (e) {
+        e.preventDefault();
+        // Kembalikan ke halaman 1
+        $('#page_ijin_akses').val(1);
+
+        // Tutup Modal
+        $('#ModalFilterIjinAkses').modal('hide');
+
+        // Muat Ulang TabelIjinAkses
+        TabelIjinAkses();
+    });
+
+    // pagging TabelIjinAkses
+     $(document).on('click', '#next_btn_ijin_akses', function() {
+        var page_now = parseInt($('#page_ijin_akses').val(), 10); // Pastikan nilai diambil sebagai angka
+        var next_page = page_now + 1;
+        $('#page_ijin_akses').val(next_page);
+        TabelIjinAkses(0);
+    });
+    $(document).on('click', '#prev_btn_ijin_akses', function() {
+        var page_now = parseInt($('#page_ijin_akses').val(), 10); // Pastikan nilai diambil sebagai angka
+        var next_page = page_now - 1;
+        $('#page_ijin_akses').val(next_page);
+        TabelIjinAkses(0);
+    });
+
+    // Menampilkan Modal List Ijin Akses
+    $(document).on('click', '.show_own_fiture', function () {
+        // Tangkap kategori
+        var kategori = $(this).data('kategori');
+
+        // Tampilkan modal
+        $('#ModalListIjinAkses').modal('show');
+
+        // Loading form
+        $('#FormListIjinAkses').html('Loading...');
+
+        $.ajax({
+            type: 'POST',
+            url: '_Page/ProfileUser/FormListIjinAkses.php',
+            data: {
+                kategori: kategori
+            },
+            success: function (data) {
+                $('#FormListIjinAkses').html(data);
+            }
+        });
+    });
+
+    // ============================================================
+    // LAPORAN PENGGUNA - START
+    // ============================================================
+    // Pagging Laporan Pengguna
+    // Navigasi Ke Halaman Selanjutnya
+    $(document).on('click', '#next_btn_laporan_kesalahan', function() {
+        // Ambil nilai dari input hidden (pastikan ID ini ada di HTML Anda)
+        var page_now = parseInt($('#page_laporan_kesalahan').val()) || 1; 
+        var next_page = page_now + 1;
+        
+        // Update nilai input hidden
+        $('#page_laporan_kesalahan').val(next_page);
+        
+        // Jalankan fungsi tampilkan tabel
+        TabelLaporanKesalahan(); 
+    });
+
+    // Navigasi Ke Halaman Sebelumnya
+    $(document).on('click', '#prev_btn_laporan_kesalahan', function() {
+        var page_now = parseInt($('#page_laporan_kesalahan').val()) || 1;
+        
+        // PROTEKSI: Jangan biarkan halaman kurang dari 1
+        if (page_now > 1) {
+            var prev_page = page_now - 1;
+            $('#page_laporan_kesalahan').val(prev_page);
+            TabelLaporanKesalahan();
+        }
+    });
+    // 1. Deklarasi variabel global agar bisa diakses di semua event
+    let quillEditor = null;
+
+    // 2. Fungsi Inisialisasi Quill (Hanya dijalankan sekali)
+    function initQuill() {
+        if (quillEditor === null) {
+            quillEditor = new Quill('#isi_laporan_editor', {
+                theme: 'snow',
+                placeholder: 'Tuliskan laporan Anda...',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        ['link'],
+                        ['clean']
+                    ]
                 }
             });
         }
-    });
-});
+    }
 
-//Proses Edit Profile
-$('#ProsesGantiPassword').submit(function(){
-    var ProsesGantiPassword = $('#ProsesGantiPassword').serialize();
-    $('#NotifikasGantiPassword').html('Loading...');
-    $.ajax({
-        type 	    : 'POST',
-        url 	    : '_Page/ProfileUser/ProsesGantiPassword.php',
-        data 	    :  ProsesGantiPassword,
-        success     : function(data){
-            $('#NotifikasGantiPassword').html(data);
-            var NotifikasiUbahPasswordBerhasil=$('#NotifikasiUbahPasswordBerhasil').html();
-            if(NotifikasiUbahPasswordBerhasil=="Success"){
-                location.reload();
+    // 3. Tampilkan modal
+    $(document).on('click', '.kirim_laporan_pengguna', function () {
+        $('#ModalLaporanPengguna').modal('show');
+    });
+
+    // 4. Saat modal tampil
+    $('#ModalLaporanPengguna').on('shown.bs.modal', function () {
+        // Jalankan inisialisasi jika belum ada
+        initQuill();
+        
+        // Fokus ke judul laporan
+        $('#judul_laporan').focus();
+    });
+
+    // 5. Submit form
+    $(document).on('submit', '#ProsesLaporanPengguna', function (e) {
+        e.preventDefault();
+
+        // Validasi editor
+        if (!quillEditor) {
+            $('#NotifikasiLaporanPengguna').html(
+                '<div class="alert alert-danger">Editor belum siap.</div>'
+            );
+            return;
+        }
+
+        // Ambil isi editor (HTML)
+        let isiHtml = quillEditor.root.innerHTML;
+
+        // Validasi isi editor kosong
+        // Quill .getText() mengembalikan "\n" jika kosong, jadi kita trim
+        if (quillEditor.getText().trim().length === 0) {
+            $('#NotifikasiLaporanPengguna').html(
+                '<div class="alert alert-danger">Isi laporan tidak boleh kosong.</div>'
+            );
+            return;
+        }
+
+        // Masukkan ke hidden input
+        $('#isi_laporan').val(isiHtml);
+
+        let formData = $(this).serialize();
+        let $btn = $('#ButtonLaporanPengguna');
+        let buttonText = $btn.html();
+
+        $btn.prop('disabled', true)
+            .html('<span class="spinner-border spinner-border-sm"></span> Menyimpan...');
+
+        $('#NotifikasiLaporanPengguna').html('');
+
+        $.ajax({
+            type: 'POST',
+            url: '_Page/ProfileUser/ProsesLaporanPengguna.php',
+            data: formData,
+            dataType: 'json',
+            success: function (response) {
+                $btn.prop('disabled', false).html(buttonText);
+
+                let alertClass = response.status === 'success' ? 'alert-success' : 'alert-danger';
+
+                $('#NotifikasiLaporanPengguna').html(
+                    '<div class="alert ' + alertClass + '">' + response.message + '</div>'
+                );
+
+                if (response.status === 'success') {
+                    // RESET HANYA JIKA BERHASIL
+                    quillEditor.setContents([]); // Kosongkan editor
+                    $('#ProsesLaporanPengguna')[0].reset(); // Reset form lainnya
+                    $('#isi_laporan').val('');
+
+                    setTimeout(function () {
+                        $('#ModalLaporanPengguna').modal('hide');
+                        // Pastikan fungsi ini tersedia di scope global Anda
+                        if (typeof TabelLaporanKesalahan === "function") {
+                            TabelLaporanKesalahan();
+                        }
+                    }, 500);
+                }
+            },
+            error: function (xhr) {
+                $btn.prop('disabled', false).html(buttonText);
+                $('#NotifikasiLaporanPengguna').html(
+                    '<div class="alert alert-danger">Server Error: ' + xhr.statusText + '</div>'
+                );
             }
-        }
+        });
     });
-});
 
+    // 6. Reset Notifikasi saja saat ditutup (Data teks tetap ada jika belum sukses)
+    $('#ModalLaporanPengguna').on('hidden.bs.modal', function () {
+        $('#NotifikasiLaporanPengguna').html('');
+        // Kita TIDAK mereset form atau quill di sini sesuai permintaan Anda
+    });
 
-//Proses Kirim Laporan Pengguna
-$('#ProsesKirimLaporanPengguna').submit(function(){
-    var ProsesKirimLaporanPengguna = $('#ProsesKirimLaporanPengguna').serialize();
-    $('#NotifikasiKirimLaporanPengguna').html('Loading...');
-    $.ajax({
-        type 	    : 'POST',
-        url 	    : '_Page/ProfileUser/ProsesKirimLaporanPengguna.php',
-        data 	    :  ProsesKirimLaporanPengguna,
-        success     : function(data){
-            $('#NotifikasiKirimLaporanPengguna').html(data);
-            var NotifikasiKirimLaporanPenggunaBerhasil=$('#NotifikasiKirimLaporanPenggunaBerhasil').html();
-            if(NotifikasiKirimLaporanPenggunaBerhasil=="Success"){
-                location.reload();
+    // Modal Detail Laporan Kesalahan
+    $(document).on('click', '.modal_detail_laporan_kesalahan', function () {
+
+        // Tangkap id_akses_laporan
+        var id_akses_laporan = $(this).data('id');
+
+        // Tampilkann Modal
+        $('#ModalDetailLaporanKesalahan').modal('show');
+
+        // Loading Form
+        $('#FormDetailLaporanKesalahan').html('Loading...');
+
+        // Buka Dengan AJAX
+        $.ajax({
+            type 	    : 'POST',
+            url 	    : '_Page/ProfileUser/FormDetailLaporanPengguna.php',
+            data 	    :  {id_akses_laporan: id_akses_laporan},
+            success     : function(data){
+                $('#FormDetailLaporanKesalahan').html(data);
             }
-        }
+        });
     });
-});
-//Modal Detail Laporan Pengguna
-$('#ModalDetailLaporanPengguna').on('show.bs.modal', function (e) {
-    var id_laporan_pengguna = $(e.relatedTarget).data('id');
-    var Loading='<div class="modal-body"><div class="row"><div class="col col-md-12">Loading..</div></div></div>';
-    $('#FormDetailLaporanPengguna').html(Loading);
-    $.ajax({
-        type 	    : 'POST',
-        url 	    : '_Page/ProfileUser/FormDetailLaporanPengguna.php',
-        data 	    :  {id_laporan_pengguna: id_laporan_pengguna},
-        success     : function(data){
-            $('#FormDetailLaporanPengguna').html(data);
-        }
+
+    let quillEditorEdit = null;
+    // EDIT LAPORAN PENGGUNA
+    $(document).on('click', '.modal_edit_laporan_pengguna', function () {
+
+        var id_akses_laporan = $(this).data('id');
+
+        $('#ModalEditLaporanPengguna').modal('show');
+
+        $('#NotifikasiEditLaporanPengguna').html('');
+        $('#FormEditLaporanPengguna').html('Loading...');
+
+        $.ajax({
+            type: 'POST',
+            url: '_Page/ProfileUser/FormEditLaporanPengguna.php',
+            data: { id_akses_laporan: id_akses_laporan },
+            success: function (data) {
+                $('#FormEditLaporanPengguna').html(data);
+
+                // Hapus editor lama jika ada
+                if (quillEditorEdit !== null) {
+                    quillEditorEdit = null;
+                }
+
+                // Inisialisasi Quill setelah form tampil
+                quillEditorEdit = new Quill('#isi_laporan_editor_edit', {
+                    theme: 'snow',
+                    placeholder: 'Tuliskan isi laporan...',
+                    modules: {
+                        toolbar: [
+                            [{ header: [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline'],
+                            ['blockquote', 'code-block'],
+                            [{ list: 'ordered' }, { list: 'bullet' }],
+                            ['link'],
+                            ['clean']
+                        ]
+                    }
+                });
+
+                // Sinkronkan ke hidden input
+                quillEditorEdit.on('text-change', function () {
+                    $('#isi_laporan_edit').val(quillEditorEdit.root.innerHTML);
+                });
+
+                // Isi data awal dari hidden input
+                let isiAwal = $('#isi_laporan_edit').val();
+                quillEditorEdit.root.innerHTML = isiAwal;
+            }
+        });
     });
+
+    // SUBMIT EDIT LAPORAN
+    $(document).on('submit', '#ProsesEditLaporanPengguna', function (e) {
+        e.preventDefault();
+
+        // Sinkronkan isi Quill ke hidden input
+        if (quillEditorEdit !== null) {
+            $('#isi_laporan_edit').val(quillEditorEdit.root.innerHTML);
+        }
+
+        let formData = $(this).serialize();
+
+        $('#ButtonEditLaporanPengguna')
+            .prop('disabled', true)
+            .html('<i class="spinner-border spinner-border-sm"></i> Menyimpan...');
+
+        $('#NotifikasiEditLaporanPengguna').html('');
+
+        $.ajax({
+            type: 'POST',
+            url: '_Page/ProfileUser/ProsesEditLaporanPengguna.php',
+            data: formData,
+            success: function (response) {
+                $('#NotifikasiEditLaporanPengguna').html(response);
+
+                $('#ButtonEditLaporanPengguna')
+                    .prop('disabled', false)
+                    .html('<i class="ti-save"></i> Simpan');
+
+                // Tutup modal jika sukses
+                if (response.includes('success')) {
+                    setTimeout(function () {
+                        $('#ModalEditLaporanPengguna').modal('hide');
+
+                        // Reset notifikasi modal
+                        $('#NotifikasiEditLaporanPengguna').html('');
+
+                        // Tampilkan toast sukses
+                        tampilkanToast('Laporan berhasil diperbarui!', 'success');
+
+                        // Optional: refresh list via AJAX
+                        TabelLaporanKesalahan();
+                    }, 700);
+                }
+            },
+            error: function () {
+                $('#NotifikasiEditLaporanPengguna').html(`
+                    <div class="alert alert-danger">
+                        Terjadi kesalahan saat mengirim data.
+                    </div>
+                `);
+
+                $('#ButtonEditLaporanPengguna')
+                    .prop('disabled', false)
+                    .html('<i class="ti-save"></i> Simpan');
+            }
+        });
+    });
+
+    // HAPUS LAPORAN PENGGUNA
+    $(document).on('click', '.modal_hapus_laporan_pengguna', function () {
+
+        // Tangkap id_akses_laporan
+        var id_akses_laporan = $(this).data('id');
+
+        // Tampilkan Modal
+        $('#ModalHapusLaporanPengguna').modal('show');
+
+        // Clean Notification
+        $('#NotifikasiHapusLaporanPengguna').html('');
+
+        // Loading Form
+        $('#FormHapusLaporanPengguna').html('Loading...');
+
+        // Tampilkan Form Dengan AJAX
+        $.ajax({
+            type 	    : 'POST',
+            url 	    : '_Page/ProfileUser/FormHapusLaporanPengguna.php',
+            data 	    :  {id_akses_laporan: id_akses_laporan},
+            success     : function(data){
+                $('#FormHapusLaporanPengguna').html(data);
+            }
+        });
+    });
+
+    //Proses Hapus Laporan
+    $(document).on('submit', '#ProsesHapusLaporanPengguna', function (e) {
+        e.preventDefault();
+
+        // Tangkap Data Dari Form
+        var ProsesHapusLaporanPengguna = $('#ProsesHapusLaporanPengguna').serialize();
+
+        // Ambil Element Tombol
+        var button_hapus_laporan_pengguna = $('#button_hapus_laporan_pengguna').html();
+
+        // Loading Button
+        $('#button_hapus_laporan_pengguna').html('...');
+
+        // Kirim Data Dengan Ajax
+        $.ajax({
+            type    : 'POST',
+            url     : '_Page/ProfileUser/ProsesHapusLaporanPengguna.php',
+            data    : ProsesHapusLaporanPengguna,
+            dataType: 'JSON',
+            success     : function(response){
+                
+                // Tangkap Status Dan Message
+                var status = response.status;
+                var message = response.message;
+
+                // Jika Proses Berhasil
+                if(status=='success'){
+                    // Kosongkan Notifikasi
+                    $('#NotifikasiHapusLaporanPengguna').html('');
+
+                    // Tutup Modal
+                    $('#ModalHapusLaporanPengguna').modal('hide');
+
+                    // Load Data
+                    TabelLaporanKesalahan();
+
+                    // Tampilkan toast
+                    tampilkanToast('Laporan Pengguna Berhasil Dihapus!', 'success');
+                }else{
+
+                    // Jika Proses Gagal
+                    $('#NotifikasiHapusLaporanPengguna').html('<div class="alert alert-danger text-center">'+message+'</div>');
+                }
+            },
+            error: function (xhr) {
+                console.error('AJAX Error:', xhr.responseText);
+                $('#NotifikasiHapusLaporanPengguna').html('<div class="alert alert-danger">Server error / response tidak valid</div>');
+            },
+        });
+        
+        // Kembalikan Tombol
+        $('#button_hapus_laporan_pengguna').html(button_hapus_laporan_pengguna);
+    });
+
+
 });
 
 
