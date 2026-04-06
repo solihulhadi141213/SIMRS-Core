@@ -146,11 +146,11 @@
             include "_Partial/RoutingSwal.php";
         ?>
 
-        
+        <footer class="text-right">
+            <?php
+                include "_Partial/Copyright.php";
+            ?>
+        </footer>
     </body>
-    <footer class="text-right">
-        <?php
-            include "_Partial/Copyright.php";
-        ?>
-    </footer>
+    
 </html>

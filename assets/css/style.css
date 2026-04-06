@@ -26,6 +26,10 @@ File: style.css
 /**  =====================
       Custom css start
 ==========================  **/
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100%;
+}
 body {
   background-color: #f3f3f3;
   overflow-x: hidden;
@@ -68,6 +72,15 @@ p {
 
 .media-left {
   padding-right: 20px; }
+
+.pcoded,
+.pcoded-container,
+.pcoded-content,
+.pcoded-main-container,
+.pcoded-wrapper {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 
 /**====== Custom css end ======**/
 /**  =====================

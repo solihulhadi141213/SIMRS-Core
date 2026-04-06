@@ -111,9 +111,9 @@
                                     <button type="submit" class="btn btn-primary btn-lg" id="button_login">
                                         <i class="ti ti-key"></i> Masuk
                                     </button>
-                                    <button type="button" class="btn btn-outline-danger btn-lg btn-google">
+                                    <a href="_Page/Login/LoginGoogle.php" class="btn btn-outline-danger btn-lg btn-google">
                                         <i class="bi bi-google"></i> Login Dengan Google
-                                    </button>
+                                    </a>
                                 </div>
                             </form>
                         </div>

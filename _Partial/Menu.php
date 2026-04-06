@@ -25,80 +25,8 @@
                     <span class="pcoded-mcaret"></span>
                 </a>
             </li>
-            <li class="pcoded-hasmenu <?php if($Page=="Akses"){echo 'active pcoded-trigger';} ?>">
-                <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="ti ti-user"></i></span>
-                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Aksesibilitas</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-                <ul class="pcoded-submenu">
-                    <li class="<?php if($Sub=="ReferensiFitur"){echo 'active';} ?>">
-                        <a href="index.php?Page=Akses&Sub=ReferensiFitur" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Referensi Fitur</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Sub=="EntitasAkses"||$Sub=="TambahEntitasAkses"||$Sub=="DetailEntitas"||$Sub=="EditEntitas"){echo 'active';} ?>">
-                        <a href="index.php?Page=Akses&Sub=EntitasAkses" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Entitas Akses</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Sub=="PengajuanAkses"||$Sub=="DetailPengajuanAkses"){echo 'active';} ?>">
-                        <a href="index.php?Page=Akses&Sub=PengajuanAkses" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Pengajuan Akses</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Sub=="AksesUser"||$Sub=="DetailAkses"){echo 'active';} ?>">
-                        <a href="index.php?Page=Akses&Sub=AksesUser" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Akses User</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="pcoded-hasmenu <?php if($Page=="MonitorAntrian"||$Page=="MonitorRuangan"||$Page=="Log"||$Page=="LaporanPengguna"){echo 'active pcoded-trigger';} ?>">
-                <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="icofont-monitor"></i></span>
-                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Monitoring</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-                <ul class="pcoded-submenu">
-                    <li class="<?php if($Page=="MonitorAntrian"){echo 'active';} ?>">
-                        <a href="index.php?Page=MonitorAntrian" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Monitor Antrian</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="MonitorRuangan"){echo 'active';} ?>">
-                        <a href="index.php?Page=MonitorRuangan" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Monitor Ruangan</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Log"){echo 'active';} ?>">
-                        <a href="index.php?Page=Log" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Log Aktivitas</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="LaporanPengguna"){echo 'active';} ?>">
-                        <a href="index.php?Page=LaporanPengguna" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Laporan Pengguna</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            
+            
             <li class="pcoded-hasmenu <?php if($Page=="Radix"||$Page=="Analyza"||$Page=="Setting"||$Page=="SettingBridging"||$Sub=="Email"||$Page=="SettingProfile"||$Page=="Personalisasi"||$Page=="SettingPercetakan"||$Page=="Api"){echo 'active pcoded-trigger';} ?>">
                 <a href="javascript:void(0)" class="waves-effect waves-dark">
                     <span class="pcoded-micon"><i class="icofont-settings-alt"></i></span>
@@ -110,113 +38,136 @@
                         <a href="index.php?Page=Setting&Sub=SettingProfile" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">
-                                Profile Faskes 
-                                <span class="text text-success">
-                                    <i class="icofont-check-circled"></i>
-                                </span>
+                                Pengaturan Umum 
                             </span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Page=="SettingPercetakan"){echo 'active';} ?>">
-                        <a href="index.php?Page=SettingPercetakan" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Percetakan</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Sub=="SettingBridging"){echo 'active';} ?>">
-                        <a href="index.php?Page=Setting&Sub=SettingBridging" class="waves-effect waves-dark">
+
+                    <li class="<?php if($Page=="Api"){echo 'active';} ?>">
+                        <a href="index.php?Page=Api" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">
-                                Bridging BPJS 
-                                <span class="text text-success">
-                                    <i class="icofont-check-circled"></i>
-                                </span>
+                                API Key
                             </span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Page=="SettingBridging"){echo 'active';} ?>">
-                        <a href="index.php?Page=SettingBridging" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Bridging</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Sub=="SatuSehat"){echo 'active';} ?>">
-                        <a href="index.php?Page=Setting&Sub=SatuSehat" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">
-                                Satu Sehat 
-                                <span class="text text-success">
-                                    <i class="icofont-check-circled"></i>
-                                </span>
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Sub=="SirsOnline"){echo 'active';} ?>">
-                        <a href="index.php?Page=Setting&Sub=SirsOnline" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">
-                                SIRS Online 
-                                <span class="text text-success">
-                                    <i class="icofont-check-circled"></i>
-                                </span>
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Sub=="Sisrute"){echo 'active';} ?>">
-                        <a href="index.php?Page=Setting&Sub=Sisrute" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">
-                                SISRUTE 
-                                <span class="text text-danger">
-                                    <i class="ti ti-close"></i>
-                                </span>
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Sub=="Email"){echo 'active';} ?>">
-                        <a href="index.php?Page=Setting&Sub=Email" class="waves-effect waves-dark">
+
+                    <li class="<?php if($Page=="EmailGateway"){echo 'active';} ?>">
+                        <a href="index.php?Page=EmailGateway" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Email Gateway</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Page=="Api"){echo 'active';} ?>">
-                        <a href="index.php?Page=Api" class="waves-effect waves-dark">
+
+
+                    <li class="pcoded-hasmenu 
+                        <?php 
+                            if($Sub=="Aksesibilitas" || $Sub=="Tema" || $Sub=="Font" || $Sub=="ModeKontras"){
+                                echo 'active pcoded-trigger';
+                            } 
+                        ?>"
+                    >
+                        <a href="javascript:void(0)" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">API Key</span>
-                            <span class="text text-success">
-                                <i class="icofont-check-circled"></i>
+                            <span class="pcoded-mtext">
+                                Aksesibilitas
                             </span>
                             <span class="pcoded-mcaret"></span>
                         </a>
+
+                        <ul class="pcoded-submenu">
+                            <li class="<?php if($Page=="AksesFitur"){echo 'active';} ?>">
+                                <a href="index.php?Page=AksesFitur" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">Fitur Aplikasi</span>
+                                </a>
+                            </li>
+
+                            <li class="<?php if($Page=="AksesEntitas"){echo 'active';} ?>">
+                                <a href="index.php?Page=AksesEntitas" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">Entitas Akses</span>
+                                </a>
+                            </li>
+
+                            <li class="<?php if($Page=="Akses"){echo 'active';} ?>">
+                                <a href="index.php?Page=Akses" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">Akses Pengguna</span>
+                                </a>
+                            </li>
+
+                            <li class="<?php if($Page=="AksesPengajuan"){echo 'active';} ?>">
+                                <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">Pengajuan Akses</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="<?php if($Page=="Radix"){echo 'active';} ?>">
-                        <a href="index.php?Page=Radix" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Radix</span>
-                            <span class="text text-success">
-                                <i class="icofont-check-circled"></i>
+                    <li class="pcoded-hasmenu 
+                        <?php 
+                            if($Sub=="Aksesibilitas" || $Sub=="Tema" || $Sub=="Font" || $Sub=="ModeKontras"){
+                                echo 'active pcoded-trigger';
+                            } 
+                        ?>"
+                    >
+                        <a href="javascript:void(0)" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="bi bi-share"></i></span>
+                            <span class="pcoded-mtext">
+                                Integrasi
                             </span>
                             <span class="pcoded-mcaret"></span>
                         </a>
+
+                        <ul class="pcoded-submenu">
+                            <li class="<?php if($Page=="AksesFitur"){echo 'active';} ?>">
+                                <a href="index.php?Page=AksesFitur" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">Bridging BPJS </span>
+                                </a>
+                            </li>
+
+                            <li class="<?php if($Page=="AksesEntitas"){echo 'active';} ?>">
+                                <a href="index.php?Page=AksesEntitas" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">SATUSEHAT</span>
+                                </a>
+                            </li>
+
+                            <li class="<?php if($Page=="Akses"){echo 'active';} ?>">
+                                <a href="index.php?Page=Akses" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">SIRS Online</span>
+                                </a>
+                            </li>
+
+                            <li class="<?php if($Page=="AksesPengajuan"){echo 'active';} ?>">
+                                <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">Radix</span>
+                                </a>
+                            </li>
+
+                            <li class="<?php if($Page=="Analyza"){echo 'active';} ?>">
+                                <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">Analyza</span>
+                                </a>
+                            </li>
+
+                            <li class="<?php if($Page=="AksesPengajuan"){echo 'active';} ?>">
+                                <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">Radix</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="<?php if($Page=="Analyza"){echo 'active';} ?>">
-                        <a href="index.php?Page=Analyza" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Analyza </span>
-                            <span class="text text-success">
-                                <i class="icofont-check-circled"></i>
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
+
                 </ul>
             </li>
             <li class="pcoded-hasmenu <?php if($Page=="Referensi"||$Page=="Poliklinik"||$Page=="Dokter"||$Page=="JadwalDokter"||$Page=="Wilayah"||$Page=="KelasRuangan"||$Page=="KelasRuangan2"||$Page=="Diagnosa"||$Page=="Alergi"||$Page=="Kfa"){echo 'active pcoded-trigger';} ?>">
