@@ -307,7 +307,7 @@ $(document).ready(function() {
     });
 
     // Proses Filter Pasien Existing
-    $('#ProsesFilterPasienExisting').click(function(){
+    $('#ProsesFilterPasienExisting').submit(function(){
         ShowPasienExisting(0);
         $('#ModalPasienExisting').modal('hide');
     });

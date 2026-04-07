@@ -22,7 +22,7 @@
 
             <!-- DASHBOARD CARD -->
             <div class="row mb-3">
-                <div class="col-md-3 mb-3">
+                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
                     <div class="card stat-card">
                         <div class="card-body d-flex align-items-center">
                             
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
                     <div class="card stat-card">
                         <div class="card-body d-flex align-items-center">
                             
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
                     <div class="card stat-card">
                         <div class="card-body d-flex align-items-center">
                             
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
                     <div class="card stat-card">
                         <div class="card-body d-flex align-items-center">
                             
@@ -98,28 +98,8 @@
             
             <div class="row d-flex align-items-stretch">
 
-                <!-- GRAFIK -->
-                <div class="col-md-9 mb-3">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <div class="row">
-                                <div class="col-md-12 text-end">
-                                    <div class="icon icon-btn">
-                                        <button type="button" class="btn btn-md btn-outline-secondary btn-icon ganti_periode_grafik">
-                                            <i class="bi bi-filter"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body" id="GrafikPasien">
-                            <!-- Menampilkan Grafik -->
-                        </div>
-                    </div>
-                </div>
-
                 <!-- PROFIL FASKES -->
-                <div class="col-md-3 mb-3">
+                <div class="col-xl-4 col-lg-12 col-md-12 mb-3">
                     <div class="card h-100">
                         <div class="card-body">
                             <div class="row mb-3">
@@ -191,10 +171,31 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- GRAFIK -->
+                <div class="col-xl-8 col-lg-12 col-md-12 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 text-end">
+                                    <div class="icon icon-btn">
+                                        <button type="button" class="btn btn-md btn-outline-secondary btn-icon ganti_periode_grafik">
+                                            <i class="bi bi-filter"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" id="GrafikPasien">
+                            <!-- Menampilkan Grafik -->
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="row d-flex align-items-stretch">
-                <div class="col-md-9">
+                <div class="col-xl-8">
                     <div class="card h-100">
                         <div class="card-header">
                             <div class="row">
@@ -247,7 +248,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-xl-4">
                     <div class="card h-100">
                         <div class="card-header">
                             <b class="card-title"># Aplikasi Terhubung Lainnya</b>

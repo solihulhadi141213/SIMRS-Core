@@ -42,7 +42,7 @@
             <div class="aurora"></div>
             <div class="container py-5">
                 <div class="row justify-content-center align-items-stretch g-4">
-                    <div class="col-lg-5 col-md-10 d-flex">
+                    <div class="col-xl-5 col-lg-10 col-md-10 d-flex">
                         <div class="brand-panel shadow-sm h-100 text-center">
                             <div class="text-center mb-3">
                                 <img src="assets/images/<?php echo $favicon; ?>" alt="logo" class="brand-logo">
@@ -67,7 +67,7 @@
                             ?>
                         </div>
                     </div>
-                    <div class="col-lg-5 col-md-10 d-flex">
+                    <div class="col-xl-5 col-lg-10 col-md-10 d-flex">
                         <div class="login-card shadow-lg h-100">
                             <div class="card-head text-center mb-4">
                                 <div class="badge-soft">Secure Access</div>
