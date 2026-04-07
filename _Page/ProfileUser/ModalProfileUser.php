@@ -307,3 +307,107 @@
         </div>
     </div>
 </div>
+
+<!--- Modal Filter Aktivitas--->
+<div class="modal fade" id="ModalFilterAktivitas" tabindex="-1" aria-labelledby="ModalFilterAktivitas" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form action="javascript:void(0);" id="ProsesFilterAktivitas">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-calendar"></i> Filter Aktivitas
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="tahun"><small>Tahun</small></label>
+                            <input type="number" required name="tahun" id="tahun" class="form-control" value="<?php echo date('Y'); ?>">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="bulan"><small>Bulan</small></label>
+                            <select name="bulan" required id="bulan" class="form-control">
+                                <?php
+                                    $bulan_list = [
+                                        "01" => "Januari",
+                                        "02" => "Februari",
+                                        "03" => "Maret",
+                                        "04" => "April",
+                                        "05" => "Mei",
+                                        "06" => "Juni",
+                                        "07" => "Juli",
+                                        "08" => "Agustus",
+                                        "09" => "September",
+                                        "10" => "Oktober",
+                                        "11" => "November",
+                                        "12" => "Desember"
+                                    ];
+                                    $bulan_sekarang = date('m');
+                                    foreach ($bulan_list as $kode => $nama) {
+                                        $selected = ($kode == $bulan_sekarang) ? 'selected' : '';
+                                        echo '<option value="'.$kode.'" '.$selected.'>'.$nama.'</option>';
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-md btn-primary">
+                        <i class="ti-check"></i> Tampilkan
+                    </button>
+                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ti-close"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--- Modal Detail Aktivitas--->
+<div class="modal fade" id="ModalDetailAktivitas" tabindex="-1" aria-labelledby="ModalDetailAktivitas" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-calendar"></i> Detail/Rincian Aktivitas
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="table table-responsive" id="TableDetailAktivitas">
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr>
+                                        <td class="text-center"><small><b>No</b></small></td>
+                                        <td class="text-center"><small><b>ID Pasien</b></small></td>
+                                        <td class="text-center"><small><b>Tanggal Data</b></small></td>
+                                        <td class="text-center"><small><b>Nama pasien</b></small></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center" colspan="4">
+                                            <small class="text text-muted">NO Data</small>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti-close"></i> Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

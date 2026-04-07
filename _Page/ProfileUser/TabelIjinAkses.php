@@ -15,7 +15,7 @@
     if(empty($SessionIdAkses)){
         echo '
             <tr>
-                <td align="center" colspan="3">
+                <td align="center" colspan="5">
                     <small class="text text-danger">Sesi Akses Berakhir! Silahkan Login Ulang!</small>
                 </td>
             </tr>
@@ -60,7 +60,7 @@
     if(empty($jml_data)){
         echo '
             <tr>
-                <td align="center" colspan="3">
+                <td align="center" colspan="5">
                     <small class="text text-danger">Tidak Ada Data Yang Ditemukan!</small>
                 </td>
             </tr>
@@ -96,14 +96,11 @@
         $jumlah_own_fitur = (int)$data['jumlah_own_fitur'];
 
         echo '
-            <tr>
+            <tr class="show_own_fiture" data-kategori="'.$kategori.'" style="cursor:pointer;">
                 <td align="center"><small class="text text-muted">'.$no.'</small></td>
                 <td align="left"><small class="text text-muted">'.$kategori.'</small></td>
-                <td align="center">
-                    <a href="javascript:void(0);" class="show_own_fiture" data-kategori="'.$kategori.'">
-                        <small class="text text-primary">'.$jumlah_own_fitur.' / '.$jumlah_fitur.'</small>
-                    </a>
-                </td>
+                <td align="left"><small class="text text-muted">'.$jumlah_fitur.' Fitur</small></td>
+                <td align="left"><small class="text text-muted">'.$jumlah_own_fitur.' Access</small></td>
             </tr>
         ';
         $no++;

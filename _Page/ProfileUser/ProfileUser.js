@@ -39,6 +39,19 @@ function TabelLaporanKesalahan() {
     });
 }
 
+// Tabel Aktivitas
+function TabelAktivitas() {
+    var ProsesFilterAktivitas = $('#ProsesFilterAktivitas').serialize();
+    $.ajax({
+        type   : 'POST',
+        url    : '_Page/ProfileUser/TabelAktivitas.php',
+        data   : ProsesFilterAktivitas,
+        success: function(data) {
+            $('#content_ringkasan_aktivitas').html(data);
+        }
+    });
+}
+
 //Menampilkan Data Pertama Kali
 $(document).ready(function() {
 
@@ -46,6 +59,7 @@ $(document).ready(function() {
     ProfilSaya();
     TabelIjinAkses();
     TabelLaporanKesalahan();
+    TabelAktivitas();
 
     // ============================================================
     // GANTI FOTO PROFILE - START
@@ -749,6 +763,46 @@ $(document).ready(function() {
         
         // Kembalikan Tombol
         $('#button_hapus_laporan_pengguna').html(button_hapus_laporan_pengguna);
+    });
+
+    // ============================================================
+    // MODAL FILTER AKTIVITAS PENGGUNA
+    // ============================================================
+    $(document).on('click', '.show_modal_filter_aktivitas', function () {
+        $('#ModalFilterAktivitas').modal('show');
+    });
+
+    // Ketika Submit Filter
+    $(document).on('submit', '#ProsesFilterAktivitas', function (e) {
+        e.preventDefault();
+        TabelAktivitas();
+
+        // Tutup Modal
+        $('#ModalFilterAktivitas').modal('hide');
+    });
+
+    // Detail Rincian Aktivitas
+    $(document).on('click', '.modal_detail_aktivitas', function () {
+
+        // Tangkap id_akses_laporan
+        var kategori = $(this).data('kategori');
+        var periode = $(this).data('periode');
+
+        // Tampilkan Modal
+        $('#ModalDetailAktivitas').modal('show');
+
+        // Loading Form
+        $('#TableDetailAktivitas').html('Loading...');
+
+        // Tampilkan Form Dengan AJAX
+        $.ajax({
+            type 	    : 'POST',
+            url 	    : '_Page/ProfileUser/TableDetailAktivitas.php',
+            data 	    :  {kategori: kategori, periode: periode},
+            success     : function(data){
+                $('#TableDetailAktivitas').html(data);
+            }
+        });
     });
 
 

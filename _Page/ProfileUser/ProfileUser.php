@@ -19,7 +19,7 @@
         <div class="page-wrapper">
             <div class="page-body">
                 <div class="row">
-                    <div class="col-md-4 mb-3 d-flex">
+                    <div class="col-xl-4 mb-3 d-flex">
                         <div class="card w-100">
                             <div class="card-header">
                                 <div class="row">
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-3 d-flex">
+                    <div class="col-xl-8 mb-3 d-flex">
                         <div class="card w-100">
                             <div class="card-header">
                                 <div class="row">
@@ -54,15 +54,16 @@
                                     <table class="table table-hover table-sm">
                                         <thead>
                                             <tr>
-                                                <td align="center">No</td>
-                                                <td align="center">Kategori Fitur</td>
-                                                <td align="center">Rules</td>
+                                                <td align="center"><small><b>No</b></small></td>
+                                                <td align="left"><small><b>Kategori Fitur</b></small></td>
+                                                <td align="left"><small><b>Jumlah Fitur</b></small></td>
+                                                <td align="left"><small><b><i>Access</i></b></small></td>
                                             </tr>
                                         </thead>
                                         <tbody id="tabel_ijin_akses">
                                             <!-- Konten Ijin Akses Akan Tampil Disini -->
                                             <tr>
-                                                <td align="center" colspan="3">
+                                                <td align="center" colspan="5">
                                                     <small class="text text-muted">No Data</small>
                                                 </td>
                                             </tr>
@@ -87,7 +88,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-3 d-flex">
+                </div>
+                <div class="row">
+                    <div class="col-xl-4 mb-3 d-flex">
                         <div class="card w-100">
                             <div class="card-header border-0">
                                 <div class="row">
@@ -139,37 +142,43 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 mb-3 d-flex">
+                    <div class="col-xl-8 mb-3 d-flex">
                         <div class="card w-100">
                             <div class="card-header">
                                 <div class="row">
-                                    <div class="col-12 text-center">
+                                    <div class="col-8">
                                         <h4 class="card-title">
                                             <i class="bi bi-graph-up"></i> Ringkasan Aktivitas
                                         </h4>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="card-body" id="content_ringkasan_aktivitas">
-                                <!-- Konten Ringkasan Aktivitas Akan Tampil Disini -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-8 mb-3 d-flex">
-                        <div class="card w-100">
-                            <div class="card-header">
-                                <div class="row">
-                                    <div class="col-12 text-center">
-                                        <h4 class="card-title">
-                                            <i class="bi bi-graph-up"></i> Grafik Aktivitas
-                                        </h4>
+                                    <div class="col-4 text-end">
+                                        <button type="button" class="btn btn-sm btn-outline-primary btn-rounded show_modal_filter_aktivitas">
+                                            <i class="bi bi-calendar"></i> -, -
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body" id="grafik_aktivitas">
-                                <!-- Grafik Aktivitas Akan Tampil Disini -->
+                            <div class="card-body">
+                                <div class="table table-responsive table-sm">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <td class="text-center"><small><b>No</b></small></td>
+                                                <td class="text-left"><small><b>Kategori</b></small></td>
+                                                <td class="text-left"><small><b>Data / Informasi</b></small></td>
+                                                <td class="text-center"><small><b>Jumlah</b></small></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="content_ringkasan_aktivitas">
+                                            <tr>
+                                                <td class="text-center" colspan="4">
+                                                    <small class="text text-muted">No Data</small>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Konten Ringkasan Aktivitas Akan Tampil Disini -->
                             </div>
                         </div>
                     </div>
