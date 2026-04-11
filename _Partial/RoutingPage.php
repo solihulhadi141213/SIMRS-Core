@@ -2,6 +2,7 @@
     $routes = [
         'Dashboard' => '_Page/Dashboard/Dashboard.php',
         'Profile'   => '_Page/ProfileUser/ProfileUser.php',
+        'Setting'   => '_Page/Setting/Setting.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

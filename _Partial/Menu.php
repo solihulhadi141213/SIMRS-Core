@@ -148,7 +148,7 @@
                     </li>
                     <li class="pcoded-hasmenu 
                         <?php 
-                            if($Sub=="Aksesibilitas" || $Sub=="Tema" || $Sub=="Font" || $Sub=="ModeKontras"){
+                            if($Page=="Aksesibilitas" || $Page=="Tema" || $Page=="Font" || $Page=="ModeKontras"){
                                 echo 'active pcoded-trigger';
                             } 
                         ?>"
@@ -246,7 +246,7 @@
                     
                     <li class="pcoded-hasmenu 
                         <?php 
-                            if($Sub=="Aksesibilitas" || $Sub=="Tema" || $Sub=="Font" || $Sub=="ModeKontras"){
+                            if($Page=="Aksesibilitas" || $Page=="Tema" || $Page=="Font" || $Page=="ModeKontras"){
                                 echo 'active pcoded-trigger';
                             } 
                         ?>"
@@ -306,7 +306,7 @@
 
                     <li class="pcoded-hasmenu 
                         <?php 
-                            if($Sub=="Aksesibilitas" || $Sub=="Tema" || $Sub=="Font" || $Sub=="ModeKontras"){
+                            if($Page=="Aksesibilitas" || $Page=="Tema" || $Page=="Font" || $Page=="ModeKontras"){
                                 echo 'active pcoded-trigger';
                             } 
                         ?>"
@@ -338,7 +338,7 @@
 
                     <li class="pcoded-hasmenu 
                         <?php 
-                            if($Sub=="Aksesibilitas" || $Sub=="Tema" || $Sub=="Font" || $Sub=="ModeKontras"){
+                            if($Page=="Aksesibilitas" || $Page=="Tema" || $Page=="Font" || $Page=="ModeKontras"){
                                 echo 'active pcoded-trigger';
                             } 
                         ?>"
@@ -541,14 +541,14 @@
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Sub=="Rujukan"){echo 'active bg-default';} ?>">
+                    <li class="<?php if($Page=="Rujukan"){echo 'active bg-default';} ?>">
                         <a href="index.php?Page=Rujukan" class="waves-effect waves-dark">
                             <span class="pcoded-micon"></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Rujukan</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                     <li class="<?php if($Sub=="SpriSkdp"){echo 'active bg-default';} ?>">
+                     <li class="<?php if($Page=="SpriSkdp"){echo 'active bg-default';} ?>">
                         <a href="index.php?Page=SpriSkdp" class="waves-effect waves-dark">
                             <span class="pcoded-micon"></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">SPRI / SKDP</span>
@@ -571,14 +571,14 @@
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Sub=="DataSdm"){echo 'active bg-default';} ?>">
+                    <li class="<?php if($Page=="DataSdm"){echo 'active bg-default';} ?>">
                         <a href="index.php?Page=SirsOnline&Sub=DataSdm" class="waves-effect waves-dark">
                             <span class="pcoded-micon"></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Nakes/SDM</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Sub=="PcrNakes"){echo 'active bg-default';} ?>">
+                    <li class="<?php if($Page=="PcrNakes"){echo 'active bg-default';} ?>">
                         <a href="index.php?Page=SirsOnline&Sub=PcrNakes" class="waves-effect waves-dark">
                             <span class="pcoded-micon"></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">PCR Nakes</span>

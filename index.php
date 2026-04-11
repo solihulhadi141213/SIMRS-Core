@@ -32,11 +32,19 @@
     }else{
         $Page="";
     }
-    if(!empty($_GET['Sub'])){
-        $Sub=$_GET['Sub'];
-    }else{
-        $Sub="";
-    }
+
+    // List Halaman
+    $list_halaman = [
+        "Profile"      => "Profile",
+        "Setting"      => "Setting",
+        "ApiKey"       => "API Key",
+        "EmailGateway" => "Email Gateway",
+    ];
+    
+    // Menentukan Judul Halaman
+    $judul_halaman = isset($list_halaman[$Page]) 
+    ? $list_halaman[$Page] 
+    : "Dashboard";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -146,11 +154,12 @@
             include "_Partial/RoutingSwal.php";
         ?>
 
-        <footer class="text-right">
-            <?php
-                include "_Partial/Copyright.php";
-            ?>
-        </footer>
+        
     </body>
+    <footer class="text-right">
+        <?php
+            include "_Partial/Copyright.php";
+        ?>
+    </footer>
     
 </html>

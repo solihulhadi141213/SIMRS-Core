@@ -108,40 +108,20 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-md-12 text-center">
+                                <div class="col-md-12 text-center border-1 border-bottom border-bottom-default p-4">
                                     <h3>
                                         <?php echo "$hospital_name";?>
                                     </h3>
-                                    <span><?php echo "$hospital_address";?></span>
+                                    <span><?php echo "$hospital_address";?></span><br>
+                                    <small class="text text-muted">
+                                        <i class="bi bi-envelope"></i> <?php echo "$hospital_email";?>
+                                    </small>
                                 </div>
                             </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-12 text-center mb-3 icon-btn">
-                                    <a href="<?php echo "$medsos_instagram";?>" target="_blank" class="btn btn-icon btn-sm btn-outline-dark m-1">
-                                        <i class="bi bi-instagram"></i>
-                                    </a>
-                                    <a href="<?php echo "$medsos_facebook";?>" target="_blank" class="btn btn-icon btn-sm btn-outline-dark m-1">
-                                        <i class="bi bi-facebook"></i>
-                                    </a>
-                                    <a href="<?php echo "$medsos_tiktok";?>" target="_blank" class="btn btn-icon btn-sm btn-outline-dark m-1">
-                                        <i class="bi bi-tiktok"></i>
-                                    </a>
-                                    <a href="<?php echo "$medsos_whatsapp";?>" target="_blank" class="btn btn-icon btn-sm btn-outline-dark m-1">
-                                        <i class="bi bi-whatsapp"></i>
-                                    </a>
-                                </div>
-                            </div>
-
                             <div class="row mb-2 mt-3">
                                 <div class="col-5"><small>Kontak</small></div>
                                 <div class="col-1"><small>:</small></div>
                                 <div class="col-6"><small class="text text-muted"><?php echo "$hospital_contact";?></small></div>
-                            </div>
-                            <div class="row mb-2">
-                                <div class="col-5"><small>Email</small></div>
-                                <div class="col-1"><small>:</small></div>
-                                <div class="col-6"><small class="text text-muted"><?php echo "$hospital_email";?></small></div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-5"><small>Kode Faskes</small></div>

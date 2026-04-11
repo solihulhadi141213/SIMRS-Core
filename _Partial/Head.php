@@ -1,5 +1,5 @@
 <head>
-    <title><?php echo "$aplication_name"; ?></title>
+    <title><?php echo "$judul_halaman | $aplication_name"; ?></title>
 
     <!-- Meta -->
     <meta charset="utf-8">

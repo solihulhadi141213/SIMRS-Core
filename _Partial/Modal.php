@@ -9,7 +9,7 @@
     // Peta halaman -> file modal; gunakan satu sumber kebenaran agar mudah ditambah.
     $modalRoutes = [
         'Profile'               => '_Page/ProfileUser/ModalProfileUser.php',
-        'Bantuan'                   => '_Page/Bantuan/ModalBantuan.php',
+        'Setting'                   => '_Page/Setting/ModalSetting.php',
         'Help'                      => '_Page/Bantuan/ModalBantuan.php',
         'Akses'                     => '_Page/Akses/ModalAkses.php',
         'Aksesibilitas'             => '_Page/Aksesibilitas/ModalAksesibilitas.php',
@@ -66,7 +66,6 @@
         'WebKunjungan'              => '_Page/WebKunjungan/ModalWebKunjungan.php',
         'Radiologi'                 => '_Page/Radiologi/ModalRadiologi.php',
         'Laboratorium'              => '_Page/Laboratorium/ModalLaboratorium.php',
-        'Setting'                   => '_Page/Setting/ModalSetting.php',
         'sep'                       => '_Page/sep/ModalSep.php',
         'LaporanPengguna'           => '_Page/LaporanPengguna/ModalLaporanPengguna.php',
         'DashboardAntrol'           => '_Page/DashboardAntrol/ModalDashboardAntrol.php',
