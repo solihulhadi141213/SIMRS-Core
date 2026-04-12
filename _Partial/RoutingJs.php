@@ -6,9 +6,10 @@
     
     // Daftar halaman dan lokasi file JS-nya
     $pages = [
-        "Profile" => "_Page/ProfileUser/ProfileUser.js?v='.$version.'",
-        "Setting" => "_Page/Setting/Setting.js?v='.$version.'",
-        "ApiKey"  => "_Page/ApiKey/ApiKey.js?v='.$version.'",
+        "Profile"      => "_Page/ProfileUser/ProfileUser.js?v='.$version.'",
+        "Setting"      => "_Page/Setting/Setting.js?v='.$version.'",
+        "ApiKey"       => "_Page/ApiKey/ApiKey.js?v='.$version.'",
+        "EmailGateway" => "_Page/EmailGateway/EmailGateway.js?v='.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif

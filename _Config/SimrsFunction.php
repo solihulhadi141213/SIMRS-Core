@@ -3288,4 +3288,65 @@
             }
         }
     }
+
+    // Kirim Email
+    function SendEmail($Conn, $id_setting_email_gateway, $subjek, $email_tujuan, $nama_tujuan, $pesan){
+        // Buka Data Dengan Prepared Statment
+        $sql  = "SELECT * FROM  setting_email_gateway WHERE id_setting_email_gateway = ?";
+        $stmt = $Conn->prepare($sql);
+
+        // Bind parameter (tipe data integer "i")
+        $stmt->bind_param("i", $id_setting_email_gateway);
+
+        // Eksekusi statement
+        $stmt->execute();
+
+        // Ambil hasil query
+        $result = $stmt->get_result();
+        $SettingEmail = $result->fetch_assoc();
+
+        // Simpan hasil ke variabel
+        $email_gateway    = $SettingEmail['email_gateway'] ?? null;
+        $password_gateway = $SettingEmail['password_gateway'] ?? null;
+        $url_provider     = $SettingEmail['url_provider'] ?? null;
+        $port_gateway     = $SettingEmail['port_gateway'] ?? null;
+        $nama_pengirim    = $SettingEmail['nama_pengirim'] ?? null;
+        $url_service      = $SettingEmail['url_service'] ?? null;
+        $status           = $SettingEmail['status'] ?? null;
+        
+        //Kirim email
+        $ch = curl_init();
+        $headers = array(
+            'Content-Type: Application/JSON',          
+            'Accept: Application/JSON'     
+        );
+
+        // Payload
+        $payload = array(
+            "subjek"              => "$subjek",
+            "email_asal"          => "$email_gateway",
+            "password_email_asal" => "$password_gateway",
+            "url_provider"        => "$url_provider",
+            "nama_pengirim"       => "$nama_pengirim",
+            "email_tujuan"        => "$email_tujuan",
+            "nama_tujuan"         => "$nama_tujuan",
+            "pesan"               => "$pesan",
+            "port"                => "$port_gateway"
+        );
+
+
+        $json = json_encode($payload);
+        curl_setopt($ch, CURLOPT_URL, "$url_service/index.php");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1000); 
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $content = curl_exec($ch);
+        $err = curl_error($ch);
+        curl_close($ch);
+        $get =json_decode($content, true);
+        return $content;
+    }
 ?>

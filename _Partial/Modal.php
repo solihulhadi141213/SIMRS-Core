@@ -8,9 +8,10 @@
 
     // Peta halaman -> file modal; gunakan satu sumber kebenaran agar mudah ditambah.
     $modalRoutes = [
-        'Profile' => '_Page/ProfileUser/ModalProfileUser.php',
-        'Setting' => '_Page/Setting/ModalSetting.php',
-        'ApiKey'  => '_Page/ApiKey/ModalApiKey.php',
+        'Profile'      => '_Page/ProfileUser/ModalProfileUser.php',
+        'Setting'      => '_Page/Setting/ModalSetting.php',
+        'ApiKey'       => '_Page/ApiKey/ModalApiKey.php',
+        'EmailGateway' => '_Page/EmailGateway/ModalEmailGateway.php',
     ];
 
     /**

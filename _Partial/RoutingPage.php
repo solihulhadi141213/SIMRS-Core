@@ -1,9 +1,10 @@
 <?php
     $routes = [
-        'Dashboard' => '_Page/Dashboard/Dashboard.php',
-        'Profile'   => '_Page/ProfileUser/ProfileUser.php',
-        'Setting'   => '_Page/Setting/Setting.php',
-        'ApiKey'    => '_Page/ApiKey/ApiKey.php',
+        'Dashboard'    => '_Page/Dashboard/Dashboard.php',
+        'Profile'      => '_Page/ProfileUser/ProfileUser.php',
+        'Setting'      => '_Page/Setting/Setting.php',
+        'ApiKey'       => '_Page/ApiKey/ApiKey.php',
+        'EmailGateway' => '_Page/EmailGateway/EmailGateway.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

@@ -1,5 +1,5 @@
 <?php
-    // Inisiasai $JumlahSetting
+    // Inisiasai $JumlahApiKey
     $JumlahApiKey = 0;
 
     //Zona Waktu
