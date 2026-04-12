@@ -1,5 +1,5 @@
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
-    <div id="liveToast" class="toast align-items-center text-bg-success border-0" role="alert">
+    <div id="liveToast" class="toast align-items-center text-success bg-success-subtle border-success border-1" role="alert">
         <div class="d-flex">
             <div class="toast-body" id="toast_message">
                 Pesan Toast Akan Muncul Disini
