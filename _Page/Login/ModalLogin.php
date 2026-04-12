@@ -119,3 +119,50 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Reset Password -->
+<div class="modal fade" id="ModalResetPassword" tabindex="-1" aria-labelledby="ModalResetPassword" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <form action="javascript:void(0);" id="ProsesResetPassword" autocomplete="off" enctype="multipart/form-data">
+                
+            <!-- Header -->
+                <div class="modal-header text-dark">
+                    <h5 class="modal-title">
+                        <i class="bi bi-shield-lock"></i> Reset Password
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body p-4">
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="email_anda">Masukan Email Anda</label>
+                            <input type="email" class="form-control" id="email_anda" name="email" required>
+                            <small>
+                                Setelah tautan dikirim, silahkan periksa <i>Inbox</i> pada email anda.
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12" id="NotifikasiResetPassword">
+                            <!-- Notifikasi Pengajuan Akses -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-md btn-round" id="button_kirim_tautan">
+                        <i class="bi bi-send"></i> Kirim Tautan
+                    </button>
+                    <button type="button" class="btn btn-dark btn-md btn-round" data-bs-dismiss="modal">
+                        <i class="ti-close"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

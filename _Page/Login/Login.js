@@ -168,7 +168,7 @@ $(document).ready(function() {
 
     let isSubmitting = false;
 
-    // Submit
+    // Submit Pengajuan Akses
     $('#ProsesPengajuanAkses').submit(function(e){
         e.preventDefault();
 
@@ -225,6 +225,76 @@ $(document).ready(function() {
             complete: function(){
                 isSubmitting = false;
                 btn.prop("disabled", false).html('<i class="icofont icofont-paper-plane"></i> Kirim Pengajuan');
+            }
+        });
+    });
+
+    //Click 'modal_reset_password'
+    $(document).on('click', '#modal_reset_password', function(){
+        // Tampilkan Modal
+        $("#ModalResetPassword").modal('show');
+    });
+
+    // Submit Kirim Tauran Reset Password
+    $('#ProsesResetPassword').submit(function(e){
+        e.preventDefault();
+
+        if(isSubmitting) return false;
+        isSubmitting = true;
+
+        var form = $(this)[0];
+        var data = new FormData(form); // ✅ WAJIB untuk file
+        var btn  = $("#button_kirim_tautan");
+
+        $('#NotifikasiResetPassword').html('Loading...');
+
+        btn.prop("disabled", true).html('<i class="spinner-border spinner-border-sm"></i> Processing...');
+
+        $.ajax({
+            type: 'POST',
+            url: '_Page/Login/ProsesResetPassword.php',
+            data: data,
+            dataType: 'json',
+
+            processData: false, // ❗ penting
+            contentType: false, // ❗ penting
+
+            success: function(response){
+                if(response.status == "success"){
+                    
+                    $('#NotifikasiResetPassword').html('');
+
+                    $('#ModalResetPassword').modal('hide');
+
+                    Swal.fire({
+                        toast            : true,
+                        position         : 'top-end',
+                        icon             : 'success',
+                        title            : 'Tautan Telah Dikirim Ke Email Anda',
+                        showConfirmButton: false,
+                        timer            : 3000,
+                        timerProgressBar : true
+                    });
+
+                    // reset form + captcha
+                    $('#ProsesResetPassword')[0].reset();
+
+                }else{
+                    $('#NotifikasiResetPassword').html(
+                        '<div class="alert alert-danger"><b>Error!</b><br>'+response.message+'</div>'
+                    );
+                }
+            },
+
+            error: function(){
+                $('#NotifikasiResetPassword').html(
+                    '<div class="alert alert-danger">Terjadi kesalahan server!</div>'
+                );
+            },
+
+            complete: function(){
+                isSubmitting = false;
+                btn.prop("disabled", false).html('<i class="bi bi-send"></i> Kirim Tautan');
             }
         });
     });

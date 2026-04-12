@@ -1,4 +1,14 @@
 <?php
+    //Generate UID dengan sparator
+    function GenerateRandomeToken($length) {
+        $characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Menghindari karakter ambigu
+        $captcha = '';
+        for ($i = 0; $i < $length; $i++) {
+            $captcha .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $captcha;
+    }
+
     // Generate Captcha
     function GenerateCaptcha($Conn, $feature_name, $id_captcha){
         // Zona Waktu UTC

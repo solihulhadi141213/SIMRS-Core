@@ -59,7 +59,7 @@
                             <button type="button" class="btn btn-soft-light btn-lg mt-3 w-100" id="modal_pengajuan_akses">
                                 <i class="fa fa-paper-plane"></i> Kirim Pengajuan Akses
                             </button>
-                            <button type="button" class="btn btn-link p-0 text-white text-decoration-none mt-3 mb-3">
+                            <button type="button" class="btn btn-link p-0 text-white text-decoration-none mt-3 mb-3" id="modal_reset_password">
                                 Lupa Password
                             </button>
                             <?php
