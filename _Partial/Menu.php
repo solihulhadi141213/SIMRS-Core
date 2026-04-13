@@ -33,7 +33,7 @@
                     $Page=="Setting"||
                     $Page=="ApiKey"||
                     $Page=="EmailGateway"||
-                    $Page=="SettingGoogle"||
+                    $Page=="GoogleCredential"||
                     $Page=="AksesFitur"||
                     $Page=="AksesEntitas"||
                     $Page=="Akses"||
@@ -82,8 +82,8 @@
                         </a>
                     </li>
 
-                    <li class="<?php if($Page=="SettingGoogle"){echo 'active';} ?>">
-                        <a href="index.php?Page=SettingGoogle" class="waves-effect waves-dark">
+                    <li class="<?php if($Page=="GoogleCredential"){echo 'active';} ?>">
+                        <a href="index.php?Page=GoogleCredential" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">
                                 Google Credential
@@ -679,6 +679,13 @@
                     </li>
                     
                 </ul>
+            </li>
+            <li class="<?php if($Page=="Migrasi"){echo 'active';} ?>">
+                <a href="index.php?Page=Migrasi" class="waves-effect waves-dark">
+                    <span class="pcoded-micon"><i class="bi bi-database"></i><b>D</b></span>
+                    <span class="pcoded-mtext" data-i18n="nav.dash.main">Migrasi</span>
+                    <span class="pcoded-mcaret"></span>
+                </a>
             </li>
             <li class="<?php if($Page=="Bantuan"){echo 'active';} ?>">
                 <a href="index.php?Page=Bantuan" class="waves-effect waves-dark">

@@ -107,7 +107,7 @@
         <div class="modal-content">
             <form action="javascript:void(0);" method="POST" id="ProsesEditEmailGateway" autocomplete="off">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-trash"></i> Edit Email Gateway</h5>
+                    <h5 class="modal-title"><i class="bi bi-pencil"></i> Edit Email Gateway</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

@@ -1,10 +1,11 @@
 <?php
     $routes = [
-        'Dashboard'    => '_Page/Dashboard/Dashboard.php',
-        'Profile'      => '_Page/ProfileUser/ProfileUser.php',
-        'Setting'      => '_Page/Setting/Setting.php',
-        'ApiKey'       => '_Page/ApiKey/ApiKey.php',
-        'EmailGateway' => '_Page/EmailGateway/EmailGateway.php',
+        'Dashboard'        => '_Page/Dashboard/Dashboard.php',
+        'Profile'          => '_Page/ProfileUser/ProfileUser.php',
+        'Setting'          => '_Page/Setting/Setting.php',
+        'ApiKey'           => '_Page/ApiKey/ApiKey.php',
+        'EmailGateway'     => '_Page/EmailGateway/EmailGateway.php',
+        'GoogleCredential' => '_Page/GoogleCredential/GoogleCredential.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');
