@@ -39,6 +39,7 @@
         "Setting"      => "Setting",
         "ApiKey"       => "API Key",
         "EmailGateway" => "Email Gateway",
+        "AksesFitur"   => "Fitur Aplikasi",
     ];
     
     // Menentukan Judul Halaman

@@ -15873,3 +15873,52 @@ canvas
 /* ------------------------------------------------------ */
 /* BLURR -END */
 /* ------------------------------------------------------ */
+
+/* tombol Opsi */
+.btn-floating {
+  width           : 32px;        /* Ukuran standar btn-sm */
+  height          : 32px;       /* Harus sama dengan width agar bulat sempurna */
+  padding         : 0;         /* Hapus padding agar ikon benar-benar di tengah */
+  display         : inline-flex;
+  align-items     : center;
+  justify-content : center;
+  border-radius   : 50% !important; /* Gunakan 50% untuk lingkaran sempurna */
+  transition      : all 0.2s;
+  background-color: #ffffff;
+  border          : 1px solid #e0e0e0;
+}
+
+/* Efek saat kursor diarahkan ke tombol */
+.btn-floating:hover {
+    background-color: #f8f9fa;
+    border-color: #ccc;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    color: #000;
+}
+
+/* Menghilangkan border biru bawaan bootstrap saat diklik (optional) */
+.btn-floating:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    outline: none;
+}
+
+/* Menghilangkan tanda panah dropdown */
+.dropdown-toggle-no-caret::after {
+    display: none !important;
+}
+
+/* Form Pencarian */
+.search-custom-group {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+}
+.search-custom-group:focus-within {
+    background: #fff;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+    border-color: #0d6efd;
+}
+.search-custom-group input {
+    background: transparent;
+}

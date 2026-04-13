@@ -6,6 +6,7 @@
         'ApiKey'           => '_Page/ApiKey/ApiKey.php',
         'EmailGateway'     => '_Page/EmailGateway/EmailGateway.php',
         'GoogleCredential' => '_Page/GoogleCredential/GoogleCredential.php',
+        'AksesFitur'       => '_Page/AksesFitur/AksesFitur.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

@@ -11,6 +11,7 @@
         "ApiKey"           => "_Page/ApiKey/ApiKey.js?v='.$version.'",
         "EmailGateway"     => "_Page/EmailGateway/EmailGateway.js?v='.$version.'",
         "GoogleCredential" => "_Page/GoogleCredential/GoogleCredential.js?v='.$version.'",
+        "AksesFitur"       => "_Page/AksesFitur/AksesFitur.js?v='.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif

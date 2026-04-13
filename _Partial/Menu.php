@@ -131,7 +131,7 @@
                                 <a href="index.php?Page=Akses" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
                                     <span class="pcoded-mtext">
-                                        Akses Pengguna
+                                        Akun Pengguna
                                     </span>
                                 </a>
                             </li>

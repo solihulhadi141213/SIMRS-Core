@@ -27,7 +27,24 @@ SIMRS Core V3 is a hospital management information system integrated with electr
 ### Module ###
 
 * Dashboard
-* Aksesibilitas
+* Pengaturan
+  - Pengaturan Umum
+  - API Key
+  - Email Gateway
+  - Google Credential
+  - Aksesibilitas
+    - Fitur Aplikasi
+    - Entitas Akses
+    - Akun Pengguna
+    - Pengajuan Akses
+  - Integrasi
+    - Bridging BPJS
+    - SATUSEHAT
+    - SIRS Online
+    - Radix
+    - Analyza
+    - Sifarma
+  - Laporan Kesalahan
 * Monitoring
 * Pengaturan
 * Referensi
