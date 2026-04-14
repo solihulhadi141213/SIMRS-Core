@@ -7,6 +7,7 @@
         'EmailGateway'     => '_Page/EmailGateway/EmailGateway.php',
         'GoogleCredential' => '_Page/GoogleCredential/GoogleCredential.php',
         'AksesFitur'       => '_Page/AksesFitur/AksesFitur.php',
+        'AksesEntitas'     => '_Page/AksesEntitas/AksesEntitas.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

@@ -40,6 +40,7 @@
         "ApiKey"       => "API Key",
         "EmailGateway" => "Email Gateway",
         "AksesFitur"   => "Fitur Aplikasi",
+        "AksesEntitas" => "Entitas Akses",
     ];
     
     // Menentukan Judul Halaman
