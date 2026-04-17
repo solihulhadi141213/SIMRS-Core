@@ -14,6 +14,7 @@
         "AksesFitur"       => "_Page/AksesFitur/AksesFitur.js?v='.$version.'",
         "AksesEntitas"     => "_Page/AksesEntitas/AksesEntitas.js?v='.$version.'",
         "Akses"            => "_Page/Akses/Akses.js?v='.$version.'",
+        "SettingSatuSehat" => "_Page/SettingSatuSehat/SettingSatuSehat.js?v='.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif

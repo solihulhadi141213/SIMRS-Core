@@ -35,13 +35,14 @@
 
     // List Halaman
     $list_halaman = [
-        "Profile"      => "Profile",
-        "Setting"      => "Setting",
-        "ApiKey"       => "API Key",
-        "EmailGateway" => "Email Gateway",
-        "AksesFitur"   => "Fitur Aplikasi",
-        "AksesEntitas" => "Entitas Akses",
-        "Akses"        => "Akses Pengguna",
+        "Profile"          => "Profile",
+        "Setting"          => "Setting",
+        "ApiKey"           => "API Key",
+        "EmailGateway"     => "Email Gateway",
+        "AksesFitur"       => "Fitur Aplikasi",
+        "AksesEntitas"     => "Entitas Akses",
+        "Akses"            => "Akses Pengguna",
+        "SettingSatuSehat" => "Setting SATUSEHAT",
     ];
     
     // Menentukan Judul Halaman

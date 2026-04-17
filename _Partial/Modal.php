@@ -16,6 +16,7 @@
         'AksesFitur'       => '_Page/AksesFitur/ModalAksesFitur.php',
         'AksesEntitas'     => '_Page/AksesEntitas/ModalAksesEntitas.php',
         'Akses'            => '_Page/Akses/ModalAkses.php',
+        'SettingSatuSehat' => '_Page/SettingSatuSehat/ModalSettingSatuSehat.php',
     ];
 
     /**
