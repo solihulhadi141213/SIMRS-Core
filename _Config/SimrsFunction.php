@@ -185,6 +185,7 @@
         $input = addslashes($input);
         return $input;
     }
+    
     //Fungsi Untuk Menyimpan Log
     function getSaveLog($Conn,$waktu,$nama,$nama_log,$kategori,$id_akses,$JsonUrl){
         date_default_timezone_set('Asia/Jakarta');
@@ -258,50 +259,186 @@
         }
         return $bytes;
     }
-     //Memanggil Setting Dinamis
-    function getDinamicSetting($Conn,$IdAkses,$FiturName,$SettingName){
-        $QryParam = mysqli_query($Conn,"SELECT * FROM setting_dinamis WHERE id_akses='$IdAkses' AND nama_fitur='$FiturName' AND nama_setting='$SettingName'")or die(mysqli_error($Conn));
-        $DataParam = mysqli_fetch_array($QryParam);
-        if(empty($DataParam['value_setting'])){
-            $value_setting="";
-        }else{
-            $value_setting=$DataParam['value_setting'];
+
+    // =========================================
+    // Fungsi Untuk Generate Token Satu Sehat
+    // =========================================
+    function generateTokenSatuSehat($Conn) {
+
+        // Validasi koneksi database
+        if (!$Conn || $Conn->connect_error) {
+            return [
+                'status' => 'error',
+                'message' => 'Koneksi database tidak valid!'
+            ];
         }
-        return $value_setting;
-    }
-    function saveSettingDinamis($Conn,$IdAkses,$FiturName,$SettingName,$ValueSetting){
-        //Cek apakah data sudah ada?
-        $CekData = mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM setting_dinamis WHERE id_akses='$IdAkses' AND nama_fitur='$FiturName' AND nama_setting='$SettingName'"));
-        if(empty($CekData)){
-            $entry="INSERT INTO setting_dinamis (
-                id_akses,
-                nama_fitur,
-                nama_setting,
-                value_setting
-            )VALUES (
-                '$IdAkses',
-                '$FiturName',
-                '$SettingName',
-                '$ValueSetting'
-            )";
-            $hasil=mysqli_query($Conn, $entry);
-            if($hasil){
-                $response=$ValueSetting;
-            }else{
-                $response="Gagal";
-            }
-        }else{
-            $Update= mysqli_query($Conn,"UPDATE setting_dinamis SET 
-                value_setting='$ValueSetting'
-            WHERE id_akses='$IdAkses' AND nama_fitur='$FiturName' AND nama_setting='$SettingName'") or die(mysqli_error($Conn));
-            if($Update){
-                $response=$ValueSetting;
-            }else{
-                $response="Gagal";
+
+        // Ambil koneksi SATUSEHAT yang aktif
+        $Qry = $Conn->prepare("
+            SELECT 
+                id_setting_satusehat,
+                nama_setting_satusehat,
+                url_satusehat,
+                client_key,
+                secret_key,
+                token,
+                datetime_expired
+            FROM setting_satusehat
+            WHERE status_setting_satusehat = 1
+            LIMIT 1
+        ");
+
+        if (!$Qry->execute()) {
+            return [
+                'status' => 'error',
+                'message' => 'Error Database: ' . $Conn->error
+            ];
+        }
+
+        $Result = $Qry->get_result();
+        $Data   = $Result->fetch_assoc();
+        $Qry->close();
+
+        if (!$Data) {
+            return [
+                'status' => 'error',
+                'message' => 'Tidak ada koneksi Satu Sehat yang aktif!'
+            ];
+        }
+
+        // Ambil data
+        $id_setting_satusehat = $Data['id_setting_satusehat'];
+        $url_satusehat        = rtrim($Data['url_satusehat'], '/');
+        $client_key           = $Data['client_key'];
+        $secret_key           = $Data['secret_key'];
+        $token_db             = $Data['token'];
+        $expired_db           = $Data['datetime_expired'];
+
+        // Validasi Kelengkapan Pengaturan Koneksi Satu sehat
+        if (empty($client_key) || empty($secret_key) || empty($url_satusehat)) {
+            return [
+                'status' => 'error',
+                'message' => 'Konfigurasi SATUSEHAT tidak lengkap!'
+            ];
+        }
+
+        // =====================================================
+        // 1️⃣ JIKA TOKEN MASIH ADA & BELUM EXPIRED → PAKAI
+        // =====================================================
+        if (!empty($token_db) && !empty($expired_db)) {
+            if (strtotime($expired_db) > (time() + 60)) {
+                return [
+                    'status'  => 'success',
+                    'message' => 'Token masih valid (cache)',
+                    'token'   => $token_db
+                ];
             }
         }
-        return $response;
+
+        // =====================================================
+        // 2️⃣ TOKEN KOSONG / EXPIRED → REQUEST TOKEN BARU
+        // =====================================================
+        $ch = curl_init();
+
+        curl_setopt_array($ch, [
+            CURLOPT_URL            => $url_satusehat . '/oauth2/v1/accesstoken?grant_type=client_credentials',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS => http_build_query([
+                'client_id'     => $client_key,
+                'client_secret' => $secret_key
+            ]),
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/x-www-form-urlencoded'
+            ],
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_TIMEOUT        => 20,
+
+            // APABILA DALAM MODE PRODUCTION AKTIFKAN INI
+            // CURLOPT_SSL_VERIFYPEER => true,
+            // CURLOPT_SSL_VERIFYHOST => 2
+
+            // DEV ONLY
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false
+        ]);
+
+        $response   = curl_exec($ch);
+        $http_code  = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch);
+        curl_close($ch);
+
+        if ($response === false) {
+            return [
+                'status' => 'error',
+                'message' => 'Gagal menghubungi API Satu Sehat: ' . $curl_error
+            ];
+        }
+
+        if ($http_code !== 200) {
+            return [
+                'status' => 'error',
+                'message' => 'HTTP Error ' . $http_code . ' | ' . substr($response, 0, 200)
+            ];
+        }
+
+        $result = json_decode($response, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return [
+                'status' => 'error',
+                'message' => 'Response API bukan JSON valid: ' . json_last_error_msg()
+            ];
+        }
+        if (isset($result['error'])) {
+            return [
+                'status' => 'error',
+                'message' => 'API Error: ' . $result['error']
+            ];
+        }
+
+        if (empty($result['access_token'])) {
+            return [
+                'status' => 'error',
+                'message' => 'Token tidak ditemukan pada response SATUSEHAT'
+            ];
+        }
+
+        // =====================================================
+        // 3️⃣ SIMPAN TOKEN BARU KE DATABASE
+        // =====================================================
+        $access_token = $result['access_token'];
+        $expires_in   = isset($result['expires_in']) ? intval($result['expires_in']) : 3600;
+
+        // Buffer 5 menit
+        $buffer           = 300;
+        $datetime_expired = date('Y-m-d H:i:s', time() + $expires_in - $buffer);
+
+        $Update = $Conn->prepare("
+            UPDATE setting_satusehat 
+            SET token = ?, datetime_expired = ?
+            WHERE id_setting_satusehat = ?
+        ");
+
+        $Update->bind_param("ssi", $access_token, $datetime_expired, $id_setting_satusehat);
+
+        if (!$Update->execute()) {
+            return [
+                'status' => 'error',
+                'message' => 'Gagal menyimpan token: ' . $Conn->error
+            ];
+        }
+
+        $Update->close();
+
+        return [
+            'status'  => 'success',
+            'message' => 'Token baru berhasil dibuat',
+            'token'   => $access_token
+        ];
     }
+
+    
     function getNamaBulan($GetTahun, $GetBulan){
         $namaBulan = date("F", mktime(0, 0, 0, $GetBulan, 1, $GetTahun));
         return $namaBulan;
@@ -408,266 +545,7 @@
         }
         return $response;
     }
-    function GenerateTokenSatuSehat($Conn){
-        $QrySettingSatuSehat = mysqli_query($Conn,"SELECT * FROM setting_satusehat WHERE status='Active'")or die(mysqli_error($Conn));
-        $DataSettingSatuSehat = mysqli_fetch_array($QrySettingSatuSehat);
-        if(empty($DataSettingSatuSehat['id_setting_satusehat'])){
-            $response="";
-        }else{
-            $oauth_baseurl=$DataSettingSatuSehat['oauth_baseurl'];
-            $organization_id=$DataSettingSatuSehat['organization_id'];
-            $client_key=$DataSettingSatuSehat['client_key'];
-            $secret_key=$DataSettingSatuSehat['secret_key'];
-            //Kirim CURL
-            $UrlKirim="$oauth_baseurl/accesstoken?grant_type=client_credentials";
-            //Start CURL
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$UrlKirim.'',
-            //For New Version
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => 'client_id='.$client_key.'&client_secret='.$secret_key.'',
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/x-www-form-urlencoded'
-            ),
-            ));
-            $GetResponse = curl_exec($curl);
-            curl_close($curl);
-            //Ekstract Token
-            $JsonData =json_decode($GetResponse, true);
-            if(empty($JsonData['status'])){
-                $response=$GetResponse;
-            }else{
-                $response=$JsonData['access_token'];
-            }
-        }
-        return $response;
-    }
-    function GenerateTokenSatuSehat2($Conn){
-        $QrySettingSatuSehat = mysqli_query($Conn,"SELECT * FROM setting_satusehat WHERE status='Active'")or die(mysqli_error($Conn));
-        $DataSettingSatuSehat = mysqli_fetch_array($QrySettingSatuSehat);
-        if(empty($DataSettingSatuSehat['id_setting_satusehat'])){
-            $response="";
-        }else{
-            $oauth_baseurl=$DataSettingSatuSehat['oauth_baseurl'];
-            $organization_id=$DataSettingSatuSehat['organization_id'];
-            $client_key=$DataSettingSatuSehat['client_key'];
-            $secret_key=$DataSettingSatuSehat['secret_key'];
-            //Kirim CURL
-            $UrlKirim="$oauth_baseurl/accesstoken?grant_type=client_credentials";
-            //Start CURL
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$UrlKirim.'',
-            //For New Version
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => 'client_id='.$client_key.'&client_secret='.$secret_key.'',
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/x-www-form-urlencoded'
-            ),
-            ));
-            $GetResponse = curl_exec($curl);
-            curl_close($curl);
-            //Ekstract Token
-            $JsonData =json_decode($GetResponse, true);
-            if(empty($JsonData['status'])){
-                $response=$GetResponse;
-            }else{
-                $response=$JsonData['access_token'];
-            }
-        }
-        return $response;
-    }
-    function CreatOrganization($baseurl_satusehat,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Organization',
-            //For New Version
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return $response;
-    }
-    function UpdateOrganization($baseurl_satusehat,$ID_Org,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Organization/'.$ID_Org.'',
-           //For New Version
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return $response;
-    }
-    function organizationById($baseurl_satusehat,$Token,$ID_Org){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Organization/'.$ID_Org.'',
-        //For Version 7.4 New
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-
-        //For Version 7.3 Old
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return $response;
-    }
-    function organizationSearchBy($baseurl_satusehat,$Token,$SearchBy,$KywordOrganization){
-        $KywordOrganization = str_replace(" ", "%20", $KywordOrganization);
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Organization?'.$SearchBy.'='.$KywordOrganization.'',
-        //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return $response;
-    }
-    function PatchOrganization($baseurl_satusehat,$ID_Org,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Organization/'.$ID_Org.'',
-            //For New Version
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'PATCH',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json-patch+json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return $response;
-    }
+    
     function referensiAplicare($url_aplicare,$kode_ppk,$consid,$secret_key,$user_key){
         $url ="$url_aplicare/rest/bed/read/$kode_ppk/0/100";
         //KONFIGURASI

@@ -207,18 +207,18 @@
     </div>
 </div>
 
-<!--- Modal Detail Akses Akses --->
-<div class="modal fade" id="ModalDetailAksesAkses" tabindex="-1" aria-labelledby="ModalDetailAksesAkses" aria-hidden="true">
+<!--- Modal Detail Akses --->
+<div class="modal fade" id="ModalDetailAkses" tabindex="-1" aria-labelledby="ModalDetailAkses" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-info-circle"></i> Detail Akses Akses</h5>
+                <h5 class="modal-title"><i class="bi bi-info-circle"></i> Detail Akses</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 
                 <div class="row">
-                    <div class="col-12" id="FormDetailAksesAkses">
+                    <div class="col-12" id="FormDetailAkses">
                         <!-- Form Detail Akan Muncul Disini -->
                     </div>
                 </div>
@@ -233,85 +233,11 @@
     </div>
 </div>
 
-<!--- Modal Pengguna Akses Akses --->
-<div class="modal fade" id="ModalAksesPengguna" tabindex="-1" aria-labelledby="ModalAksesPengguna" aria-hidden="true">
-    <div class="modal-dialog modal-dialog modal-fullscreen" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title"><i class="bi bi-info-circle"></i> Daftar Pengguna</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-               
-                <form action="javascript:void(0);" id="FilterDaftarPengguna" autocomplete="off">
-                    <div class="row mb-3">
-                        <div class="col-12 mb-3">
-                            <div class="search-custom-group d-flex align-items-center border">
-                                <input type="text" name="keyword" class="form-control border-0 shadow-none" placeholder="Cari Nama / Email...">
-                                <input type="hidden" name="page" id="page_pengguna" value="1">
-                                <input type="hidden" name="id_akses_fitur" id="put_id_akses_fitur">
-                                <button class="btn btn-sm btn-icon">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table table-responsive">
-                            <table class="table table-bordered table-sm table-hover">
-                                <thead>
-                                    <tr>
-                                        <td class="text-center"><small><b>No</b></small></td>
-                                        <td><small><b>Nama</b></small></td>
-                                        <td><small><b>Email</b></small></td>
-                                        <td class="text-center"><small><b>Entitas</b></small></td>
-                                        <td class="text-center"><small><b>Opsi</b></small></td>
-                                    </tr>
-                                </thead>
-                                <tbody id="tabel_pengguna">
-                                    <tr>
-                                        <!-- Form Detail Akan Muncul Disini -->
-                                        <td colspan="5" class="text-center"><small>No Data</small></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-6">
-                        <small id="page_info_pengguna">0 / 0</small>
-                    </div>
-                    <div class="col-6 text-end">
-                        <button type="button" class="btn-floating btn-sm" id="previous_page_pengguna">
-                            <i class="bi bi-chevron-left"></i>
-                        </button>
-                        <button type="button" class="btn-floating btn-sm" id="next_page_pengguna">
-                            <i class="bi bi-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer bg-primary">
-                <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti-close"></i> Tutup
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!--- Modal Edit Akses Akses --->
-<div class="modal fade" id="ModalEditAksesAkses" tabindex="-1" aria-labelledby="ModalEditAksesAkses" aria-hidden="true">
+<!--- Modal Edit Akses --->
+<div class="modal fade" id="ModalEditAkses" tabindex="-1" aria-labelledby="ModalEditAkses" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form action="javascript:void(0);" method="POST" id="ProsesEditAksesAkses" autocomplete="off">
+            <form action="javascript:void(0);" method="POST" id="ProsesEditAkses" autocomplete="off">
                 <div class="modal-header">
                     <h5 class="modal-title"><i class="bi bi-pencil"></i> Edit Akses</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -319,18 +245,18 @@
                 <div class="modal-body">
                     
                     <div class="row">
-                        <div class="col-12" id="FormEditAksesAkses">
-                           <!-- Form Edit Akses Akses Akan Muncul Disini -->
+                        <div class="col-12" id="FormEditAkses">
+                           <!-- Form Edit Akses Akan Muncul Disini -->
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12" id="NotifikasiEditAksesAkses">
-                           <!-- Notifikasi Edit Akses Akses Akan Muncul Disini -->
+                        <div class="col-12" id="NotifikasiEditAkses">
+                           <!-- Notifikasi Edit Akses Akan Muncul Disini -->
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-md btn-primary" id="ButtonEditAksesAkses">
+                    <button type="submit" class="btn btn-md btn-primary" id="ButtonEditAkses">
                         <i class="ti-save"></i> Simpan
                     </button>
                     <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -342,31 +268,67 @@
     </div>
 </div>
 
-<!--- Modal Hapus Akses --->
-<div class="modal fade" id="ModalHapusAksesAkses" tabindex="-1" aria-labelledby="ModalHapusAksesAkses" aria-hidden="true">
+<!--- Modal Ijin Akses --->
+<div class="modal fade" id="ModalIjinAkses" tabindex="-1" aria-labelledby="ModalIjinAkses" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form action="javascript:void(0);" method="POST" id="ProsesHapusAksesAkses" autocomplete="off">
+            <form action="javascript:void(0);" method="POST" id="ProsesIjinAkses" autocomplete="off">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-clock-history"></i> Hapus Akses Akses</h5>
+                    <h5 class="modal-title"><i class="bi bi-check-circle"></i> Ijin Akses</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     
                     <div class="row">
-                        <div class="col-12" id="FormHapusAksesAkses">
-                            <!-- Form Hapus Akses Akses Akan Muncul Disini -->
+                        <div class="col-12" id="FormIjinAkses">
+                            <!-- Form Ijin Akses Akan Muncul Disini -->
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12" id="NotifikasiHapusAksesAkses">
+                        <div class="col-12" id="NotifikasiIjinAkses">
+                            <!-- Notifikasi Ijin Akses Akan Muncul Disini -->
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-md btn-primary" id="ButtonIjinAkses">
+                        <i class="bi bi-save"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ti-close"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--- Modal Hapus Akses --->
+<div class="modal fade" id="ModalHapusAkses" tabindex="-1" aria-labelledby="ModalHapusAkses" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="javascript:void(0);" method="POST" id="ProsesHapusAkses" autocomplete="off">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-clock-history"></i> Hapus Akses</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="row">
+                        <div class="col-12" id="FormHapusAkses">
+                            <!-- Form Hapus Akses Akan Muncul Disini -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" id="NotifikasiHapusAkses">
                             <!-- Notifikasi Hapus Akses fitur Akan Muncul Disini -->
                         </div>
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-md btn-primary" id="ButtonHapusAksesAkses">
+                    <button type="submit" class="btn btn-md btn-primary" id="ButtonHapusAkses">
                         <i class="bi bi-check"></i> Ya, Hapus
                     </button>
                     <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">

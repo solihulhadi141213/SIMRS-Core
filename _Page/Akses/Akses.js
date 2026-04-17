@@ -91,21 +91,21 @@ $(document).ready(function() {
     });
 
     $('#SearchByNik').click(function () {
-    let nik = $('#nik').val().trim();
+        let nik = $('#nik').val().trim();
 
-    // Reset validasi
-    $('#nik').removeClass('is-invalid');
-    $('#nik').next('.invalid-feedback').remove();
+        // Reset validasi
+        $('#nik').removeClass('is-invalid');
+        $('#nik').next('.invalid-feedback').remove();
 
-    // Validasi kosong
-    if (nik === '') {
-        $('#nik').addClass('is-invalid');
-        $('#nik').after('<div class="invalid-feedback">NIK wajib diisi terlebih dahulu</div>');
-        return;
-    }
+        // Validasi kosong
+        if (nik === '') {
+            $('#nik').addClass('is-invalid');
+            $('#nik').after('<div class="invalid-feedback">NIK wajib diisi terlebih dahulu</div>');
+            return;
+        }
 
-    // Disable button sementara
-    $('#SearchByNik').prop('disabled', true).html('<i class="bi bi-hourglass"></i> Proses...');
+        // Disable button sementara
+        $('#SearchByNik').prop('disabled', true).html('<i class="bi bi-hourglass"></i> Proses...');
 
         $.ajax({
             type: 'POST',
@@ -182,16 +182,14 @@ $(document).ready(function() {
     $(document).on('submit', '#ProsesTambahAkses', function (e) {
         e.preventDefault();
 
-        let form       = $(this);
+        let form       = this;
+        let formData   = new FormData(form); // ✅ BENAR (untuk upload file)
         let button     = $('#ButtonTambahAkses');
         let modal      = $('#ModalTambahAkses');
         let notifikasi = $('#NotifikasiTambahAkses');
 
         // Simpan isi tombol awal
         let buttonText = button.html();
-
-        // Ambil data form
-        let formData = form.serialize();
 
         // Kosongkan notifikasi
         notifikasi.html('');
@@ -202,23 +200,25 @@ $(document).ready(function() {
         `);
 
         $.ajax({
-            url      : '_Page/Akses/ProsesTambahAkses.php',
-            type     : 'POST',
-            data     : formData,
-            dataType : 'json',
+            url: '_Page/Akses/ProsesTambahAkses.php',
+            type: 'POST',
+            data: formData,
+            processData: false, // ✅ wajib untuk FormData
+            contentType: false, // ✅ wajib untuk FormData
+            dataType: 'json',
 
             success: function (response) {
 
-                // Kembalikan tombol seperti semula
+                // Kembalikan tombol
                 button.prop('disabled', false).html(buttonText);
 
                 if (response.status === 'success') {
 
                     // Reset form
-                    form[0].reset();
+                    form.reset();
 
-                    // Reset select2 kategori
-                    $('#kategori').val(null).trigger('change');
+                    // Kosongkan file input (important)
+                    $('#gambar').val('');
 
                     // Kosongkan notifikasi
                     notifikasi.html('');
@@ -228,41 +228,20 @@ $(document).ready(function() {
 
                     // Toast sukses
                     Swal.fire({
-                        toast            : true,
-                        position         : 'top-end',
-                        icon             : 'success',
-                        title            : 'Tambah akses akses berhasil',
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Tambah akses berhasil',
                         showConfirmButton: false,
-                        timer            : 1000,
-                        timerProgressBar : true
+                        timer: 1500,
+                        timerProgressBar: true
                     });
 
-                    // Reset Filter
-                    let filterForm = $('#ProsesFilter');
-
-                    if (filterForm.length) {
-                        filterForm[0].reset();
-
-                        // reset page ke halaman pertama
-                        $('#page').val('1');
-
-                        // reset field keyword dinamis
-                        $('#FormFilter').html(`
-                            <input type="text" name="keyword" id="keyword" class="form-control">
-                        `);
-
-                        // reset select field
-                        $('#keyword_by').val('');
-                        $('#OrderBy').val('');
-                        $('#ShortBy').val('DESC');
-                        $('#batas').val('10');
-                    }
-                    // Tampilkan Ulang (Refresh Tabel)
+                    // Refresh tabel
                     TabelAkses();
 
                 } else {
 
-                    // Tampilkan error
                     notifikasi.html(`
                         <div class="alert alert-danger">
                             <small>${response.message}</small>
@@ -273,10 +252,8 @@ $(document).ready(function() {
 
             error: function () {
 
-                // Kembalikan tombol
                 button.prop('disabled', false).html(buttonText);
 
-                // Error server
                 notifikasi.html(`
                     <div class="alert alert-danger">
                         <small>Terjadi kesalahan pada server.</small>
@@ -287,26 +264,26 @@ $(document).ready(function() {
     });
 
     // ========================
-    // MODAL DAFTAR FITUR
+    // DETAIL AKSES
     // ========================
-    $(document).on('click', '.modal_daftar_fitur', function () {
+    $(document).on('click', '.modal_detail', function () {
 
         // Tangkap ID Google Credential
         var id_akses = $(this).data('id');
 
         // Munculkan Modal
-        $('#ModalDaftarFitur').modal('show');
+        $('#ModalDetailAkses').modal('show');
 
         // Loading Form
-        $('#FormDaftarFitur').html('Loading...');
+        $('#FormDetailAkses').html('Loading...');
 
         // Tampilkan Dengan AJAX
         $.ajax({
             type 	    : 'POST',
-            url 	    : '_Page/Akses/FormDaftarFitur.php',
+            url 	    : '_Page/Akses/FormDetailAkses.php',
             data        : {id_akses: id_akses},
             success     : function(data){
-                $('#FormDaftarFitur').html(data);
+                $('#FormDetailAkses').html(data);
             }
         });
     });
@@ -339,7 +316,7 @@ $(document).ready(function() {
     // ========================
     // MODAL EDIT AKSES
     // ========================
-    $(document).on('click', '.modal_edit_akses', function () {
+    $(document).on('click', '.modal_edit', function () {
 
         // Tangkap ID Google Credential
         var id_akses = $(this).data('id');
@@ -364,23 +341,198 @@ $(document).ready(function() {
         });
     });
 
+    // Search IHS Edit
+    $(document).on('click', '#SearchByNikEdit', function () {
+        let nikInput = $('#nik_edit');
+        let nik = nikInput.val().trim();
+        
+        // Reset validasi
+        nikInput.removeClass('is-invalid');
+        nikInput.next('.invalid-feedback').remove();
+
+        // Validasi kosong
+        if (nik === '') {
+            nikInput.addClass('is-invalid');
+            nikInput.after('<div class="invalid-feedback">NIK wajib diisi terlebih dahulu</div>');
+            return;
+        }
+
+        let button = $('#SearchByNikEdit');
+
+        // Disable tombol
+        button.prop('disabled', true).html('<i class="bi bi-hourglass"></i> Proses...');
+
+        $.ajax({
+            type: 'POST',
+            url: '_Page/Akses/IhsByNik.php',
+            data: { nik: nik },
+            dataType: 'json',
+
+            success: function (response) {
+
+                // Reset validasi
+                nikInput.removeClass('is-invalid');
+                nikInput.next('.invalid-feedback').remove();
+
+                if (response.status === 'success') {
+
+                    $('#ihs_edit').val(response.ihs);
+
+                    nikInput.addClass('is-valid');
+                    nikInput.after('<div class="valid-feedback">IHS Ditemukan</div>');
+
+                } else {
+
+                    nikInput.addClass('is-invalid');
+                    nikInput.after('<div class="invalid-feedback">' + response.message + '</div>');
+                }
+            },
+
+            error: function () {
+
+                nikInput.addClass('is-invalid');
+                nikInput.after('<div class="invalid-feedback">Terjadi kesalahan server</div>');
+            },
+
+            complete: function () {
+
+                button.prop('disabled', false).html('<i class="bi bi-search"></i> Cari');
+            }
+        });
+    });
+
+    // Generate Password Ediit
+    $(document).on('click', '#GeneratePasswordEdit', function () {
+        let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let pass = "";
+
+        for (let i = 0; i < 10; i++) {
+            pass += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+
+        $('#password_edit').val(pass);
+    });
+
     // Submit Edit Akses
     $(document).on('submit', '#ProsesEditAkses', function (e) {
         e.preventDefault();
 
-        let form       = $(this);
+        let form       = this;
+        let formData   = new FormData(form); // ✅ WAJIB
         let button     = $('#ButtonEditAkses');
         let modal      = $('#ModalEditAkses');
         let notifikasi = $('#NotifikasiEditAkses');
 
-        // Simpan isi tombol awal
         let buttonText = button.html();
 
-        // Ambil data form
+        notifikasi.html('');
+
+        button.prop('disabled', true).html(`
+            <span class="spinner-border spinner-border-sm me-1"></span> Loading...
+        `);
+
+        $.ajax({
+            url: '_Page/Akses/ProsesEditAkses.php',
+            type: 'POST',
+            data: formData,
+            processData: false,   // ✅ penting
+            contentType: false,   // ✅ penting
+            dataType: 'json',
+
+            success: function (response) {
+
+                button.prop('disabled', false).html(buttonText);
+
+                if (response.status === 'success') {
+
+                    modal.modal('hide');
+
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Data berhasil diperbarui',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    TabelAkses();
+
+                } else {
+                    notifikasi.html(`
+                        <div class="alert alert-danger">
+                            ${response.message}
+                        </div>
+                    `);
+                }
+            },
+
+            error: function () {
+                button.prop('disabled', false).html(buttonText);
+
+                notifikasi.html(`
+                    <div class="alert alert-danger">
+                        Terjadi kesalahan server
+                    </div>
+                `);
+            }
+        });
+    });
+
+    // ========================
+    // MODAL IJIN AKSES
+    // ========================
+    $(document).on('click', '.modal_ijin_akses', function () {
+
+        // Tangkap ID Google Credential
+        var id_akses = $(this).data('id');
+
+        // Munculkan Modal
+        $('#ModalIjinAkses').modal('show');
+
+        // Kosongkan Notifikasi
+        $('#NotifikasiIjinAkses').html('');
+
+        // Loading Form
+        $('#FormIjinAkses').html('Loading...');
+
+        // Tampilkan Dengan AJAX
+        $.ajax({
+            type 	    : 'POST',
+            url 	    : '_Page/Akses/FormIjinAkses.php',
+            data        : {id_akses: id_akses},
+            success     : function(data){
+                $('#FormIjinAkses').html(data);
+            }
+        });
+    });
+    
+    // Submit Ijin Akses
+    $(document).on('submit', '#ProsesIjinAkses', function (e) {
+        e.preventDefault();
+
+        let form       = $(this);
+        let button     = $('#ButtonIjinAkses');
+        let modal      = $('#ModalIjinAkses');
+        let notifikasi = $('#NotifikasiIjinAkses');
+
+        let buttonText = button.html();
+
+        // Ambil data form (checkbox ikut otomatis)
         let formData = form.serialize();
 
-        // Kosongkan notifikasi
+        // Reset notifikasi
         notifikasi.html('');
+
+        // Validasi minimal (opsional tapi bagus)
+        if ($('input[name="id_akses_fitur[]"]:checked').length === 0) {
+            notifikasi.html(`
+                <div class="alert alert-danger">
+                    <small>Pilih minimal 1 fitur akses</small>
+                </div>
+            `);
+            return;
+        }
 
         // Loading tombol
         button.prop('disabled', true).html(`
@@ -388,23 +540,20 @@ $(document).ready(function() {
         `);
 
         $.ajax({
-            url      : '_Page/Akses/ProsesEditAkses.php',
+            url      : '_Page/Akses/ProsesIjinAkses.php',
             type     : 'POST',
             data     : formData,
             dataType : 'json',
 
             success: function (response) {
 
-                // Kembalikan tombol seperti semula
+                // Restore tombol
                 button.prop('disabled', false).html(buttonText);
 
                 if (response.status === 'success') {
 
                     // Reset form
                     form[0].reset();
-
-                    // Reset select2 kategori
-                    $('#kategori').val(null).trigger('change');
 
                     // Kosongkan notifikasi
                     notifikasi.html('');
@@ -417,18 +566,17 @@ $(document).ready(function() {
                         toast            : true,
                         position         : 'top-end',
                         icon             : 'success',
-                        title            : 'Edit akses akses berhasil',
+                        title            : 'Ijin akses berhasil diperbarui',
                         showConfirmButton: false,
-                        timer            : 1000,
+                        timer            : 1200,
                         timerProgressBar : true
                     });
 
-                    // Tampilkan Ulang Tabel Tanpa Reset Filter
+                    // Reload tabel
                     TabelAkses();
 
                 } else {
 
-                    // Tampilkan error
                     notifikasi.html(`
                         <div class="alert alert-danger">
                             <small>${response.message}</small>
@@ -439,13 +587,12 @@ $(document).ready(function() {
 
             error: function () {
 
-                // Kembalikan tombol
+                // Restore tombol
                 button.prop('disabled', false).html(buttonText);
 
-                // Error server
                 notifikasi.html(`
                     <div class="alert alert-danger">
-                        <small>Terjadi kesalahan pada server.</small>
+                        <small>Terjadi kesalahan pada server</small>
                     </div>
                 `);
             }
@@ -455,39 +602,39 @@ $(document).ready(function() {
     // ========================
     // MODAL HAPUS AKSES
     // ========================
-    $(document).on('click', '.modal_hapus_akses', function () {
+    $(document).on('click', '.modal_hapus', function () {
 
         // Tangkap ID Google Credential
         var id_akses = $(this).data('id');
 
         // Munculkan Modal
-        $('#ModalHapusEntitiasAkses').modal('show');
+        $('#ModalHapusAkses').modal('show');
 
         // Kosongkan Notifikasi
-        $('#NotifikasiHapusEntitiasAkses').html('');
+        $('#NotifikasiHapusAkses').html('');
 
         // Loading Form
-        $('#FormHapusEntitiasAkses').html('Loading...');
+        $('#FormHapusAkses').html('Loading...');
 
         // Tampilkan Dengan AJAX
         $.ajax({
             type 	    : 'POST',
-            url 	    : '_Page/Akses/FormHapusEntitiasAkses.php',
+            url 	    : '_Page/Akses/FormHapusAkses.php',
             data        : {id_akses: id_akses},
             success     : function(data){
-                $('#FormHapusEntitiasAkses').html(data);
+                $('#FormHapusAkses').html(data);
             }
         });
     });
 
     // Submit Hapus Akses
-    $(document).on('submit', '#ProsesHapusEntitiasAkses', function (e) {
+    $(document).on('submit', '#ProsesHapusAkses', function (e) {
         e.preventDefault();
 
         let form       = $(this);
-        let button     = $('#ButtonHapusEntitiasAkses');
-        let modal      = $('#ModalHapusEntitiasAkses');
-        let notifikasi = $('#NotifikasiHapusEntitiasAkses');
+        let button     = $('#ButtonHapusAkses');
+        let modal      = $('#ModalHapusAkses');
+        let notifikasi = $('#NotifikasiHapusAkses');
 
         // Simpan isi tombol awal
         let buttonText = button.html();
@@ -504,7 +651,7 @@ $(document).ready(function() {
         `);
 
         $.ajax({
-            url      : '_Page/Akses/ProsesHapusEntitiasAkses.php',
+            url      : '_Page/Akses/ProsesHapusAkses.php',
             type     : 'POST',
             data     : formData,
             dataType : 'json',
@@ -533,7 +680,7 @@ $(document).ready(function() {
                         toast            : true,
                         position         : 'top-end',
                         icon             : 'success',
-                        title            : 'Hapus akses akses berhasil',
+                        title            : 'Hapus data akses berhasil',
                         showConfirmButton: false,
                         timer            : 1000,
                         timerProgressBar : true

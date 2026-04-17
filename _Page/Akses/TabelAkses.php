@@ -216,6 +216,11 @@
                         </a>
                     </li>
                     <li>
+                        <a href='javascript:void(0);' class='dropdown-item modal_ijin_akses' data-id='{$id_akses}'>
+                            <i class='bi bi-list-check'></i> Ijin Akses
+                        </a>
+                    </li>
+                    <li>
                         <a href='javascript:void(0);' class='dropdown-item modal_hapus' data-id='{$id_akses}'>
                             <i class='bi bi-trash'></i> Hapus
                         </a>
