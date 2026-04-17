@@ -8,6 +8,7 @@
         'GoogleCredential' => '_Page/GoogleCredential/GoogleCredential.php',
         'AksesFitur'       => '_Page/AksesFitur/AksesFitur.php',
         'AksesEntitas'     => '_Page/AksesEntitas/AksesEntitas.php',
+        'Akses'            => '_Page/Akses/Akses.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

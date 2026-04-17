@@ -41,6 +41,7 @@
         "EmailGateway" => "Email Gateway",
         "AksesFitur"   => "Fitur Aplikasi",
         "AksesEntitas" => "Entitas Akses",
+        "Akses"        => "Akses Pengguna",
     ];
     
     // Menentukan Judul Halaman

@@ -13,6 +13,7 @@
         "GoogleCredential" => "_Page/GoogleCredential/GoogleCredential.js?v='.$version.'",
         "AksesFitur"       => "_Page/AksesFitur/AksesFitur.js?v='.$version.'",
         "AksesEntitas"     => "_Page/AksesEntitas/AksesEntitas.js?v='.$version.'",
+        "Akses"            => "_Page/Akses/Akses.js?v='.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif
