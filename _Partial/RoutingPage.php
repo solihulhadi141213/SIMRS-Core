@@ -11,6 +11,7 @@
         'Akses'            => '_Page/Akses/Akses.php',
         'AksesPengajuan'   => '_Page/AksesPengajuan/AksesPengajuan.php',
         'SettingSatuSehat' => '_Page/SettingSatuSehat/SettingSatuSehat.php',
+        'SettingBpjs'      => '_Page/SettingBpjs/SettingBpjs.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

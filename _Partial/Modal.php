@@ -18,6 +18,7 @@
         'Akses'            => '_Page/Akses/ModalAkses.php',
         'AksesPengajuan'   => '_Page/AksesPengajuan/ModalAksesPengajuan.php',
         'SettingSatuSehat' => '_Page/SettingSatuSehat/ModalSettingSatuSehat.php',
+        'SettingBpjs'      => '_Page/SettingBpjs/ModalSettingBpjs.php',
     ];
 
     /**

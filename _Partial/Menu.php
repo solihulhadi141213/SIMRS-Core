@@ -39,6 +39,7 @@
                     $Page=="Akses"||
                     $Page=="AksesPengajuan"||
                     $Page=="Api" || 
+                    $Page=="SettingBpjs" || 
                     $Page=="SettingSatuSehat" || 
                     $Page=="LaporanKesalahan"
                 )
@@ -149,7 +150,7 @@
                     </li>
                     <li class="pcoded-hasmenu 
                         <?php 
-                            if($Page=="Aksesibilitas" || $Page=="SettingSatuSehat" || $Page=="Font" || $Page=="ModeKontras"){
+                            if($Page=="SettingBpjs" || $Page=="SettingSatuSehat" || $Page=="Font" || $Page=="ModeKontras"){
                                 echo 'active pcoded-trigger';
                             } 
                         ?>"

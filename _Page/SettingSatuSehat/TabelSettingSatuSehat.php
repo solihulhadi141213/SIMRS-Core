@@ -40,7 +40,7 @@
         exit;
     }
     $no = 1;
-    $query = mysqli_query($Conn, "SELECT * FROM setting_satusehat");
+    $query = mysqli_query($Conn, "SELECT * FROM setting_satusehat ORDER BY id_setting_satusehat DESC");
     while ($data = mysqli_fetch_array($query)) {
         $id_setting_satusehat = $data['id_setting_satusehat'];
         $status               = $data['status_setting_satusehat'];
