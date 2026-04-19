@@ -42,6 +42,7 @@
         "AksesFitur"       => "Fitur Aplikasi",
         "AksesEntitas"     => "Entitas Akses",
         "Akses"            => "Akses Pengguna",
+        "AksesPengajuan"   => "Pengajuan Akses",
         "SettingSatuSehat" => "Setting SATUSEHAT",
     ];
     

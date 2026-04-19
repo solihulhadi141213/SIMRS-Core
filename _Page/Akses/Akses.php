@@ -18,6 +18,14 @@
     <div class="main-body">
         <div class="page-wrapper">
             <div class="page-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-warning">
+                            <b>PENTING!</b>
+                            <small>Hindari menambahkan data akses secara langsung pada halaman ini. Utamakan prosedur pengajuan akses oleh pengguna!</small>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Tabel Setting -->
                 <div class="row mb-3">
