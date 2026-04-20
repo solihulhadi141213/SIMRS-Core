@@ -1,7 +1,8 @@
 <?php
-    $JumlahPengajuanAksesbaru = mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM akses_pengajuan WHERE status='Pending'"));
-    //Kalkulasi Jumlah Notifikasi
-    $JumlahNotifikasi=$JumlahPengajuanAksesbaru;
+    $JumlahPengajuanAksesbaru = mysqli_num_rows(mysqli_query($Conn, "SELECT id_akses_pengajuan FROM akses_pengajuan WHERE status='Pending'"));
+    $JumlahLaporanKesalahan   = mysqli_num_rows(mysqli_query($Conn, "SELECT id_akses_laporan FROM akses_laporan WHERE status='Terkirim'"));
+      //Kalkulasi Jumlah Notifikasi
+    $JumlahNotifikasi = $JumlahPengajuanAksesbaru + $JumlahLaporanKesalahan;
 ?>
 <li class="header-notification">
     <a href="javascript:void(0);" class="waves-effect waves-light">
@@ -31,7 +32,7 @@
             if(!empty($JumlahNotifikasi)){
                 if(!empty($JumlahPengajuanAksesbaru)){
                     //Notifikasi Jumlah Pengajuan Akses (Pending)newmessege.jpg
-                    echo '<a href="index.php?Page=Akses&Sub=PengajuanAkses">';
+                    echo '<a href="index.php?Page=AksesPengajuan">';
                     echo '  <li class="waves-effect waves-light">';
                     echo '      <div class="media">';
                     echo '          <div class="media-body">';
@@ -42,16 +43,31 @@
                     echo '  </li>';
                     echo '</a>';
                 }
+                if(!empty($JumlahLaporanKesalahan)){
+                    echo '
+                        <a href="index.php?Page=LaporanKesalahan">
+                            <li class="waves-effect waves-light">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h5 class="notification-user text-dark"><dt>Laporan Kesalahan</dt></h5>
+                                        <small class="text-dark">Ada '.$JumlahLaporanKesalahan.' Laporan Kesalahan Dari user</small>
+                                    </div>
+                                </div>
+                            </li>
+                        </a>
+                    ';
+                }
             }else{
-                echo '  <li class="waves-effect waves-light">';
-                echo '      <div class="media">';
-                echo '          <img class="d-flex align-self-center img-radius" src="assets/images/CheckNotification.png">';
-                echo '          <div class="media-body">';
-                echo '              <h5 class="notification-user text-dark"><dt>Tidak Ada Pemberitahuan</dt></h5>';
-                echo '              <small class="text-dark">Sepertinya sudah tidak ada yang harus dikerjakan</small>';
-                echo '          </div>';
-                echo '      </div>';
-                echo '  </li>';
+                echo '
+                    <li class="waves-effect waves-light">
+                        <div class="media">
+                            <div class="media-body">
+                                <h5 class="notification-user text-dark"><dt>Tidak Ada Pemberitahuan</dt></h5>
+                                <small class="text-dark">Sepertinya sudah tidak ada yang harus dikerjakan</small>
+                            </div>
+                        </div>
+                    </li>
+                ';
             }
             //Apabila ada pemberitahuan yang belum di tampilkan
             echo '<li class="text-center">';

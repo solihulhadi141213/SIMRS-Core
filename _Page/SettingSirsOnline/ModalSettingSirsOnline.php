@@ -1,42 +1,36 @@
-<!--- Modal Tambah Satu Sehat --->
-<div class="modal fade" id="ModalTambahSettingSatuSehat" tabindex="-1" aria-labelledby="ModalTambahSettingSatuSehat" aria-hidden="true">
+<!--- Modal Tambah SIRS Online --->
+<div class="modal fade" id="ModalTambahSettingSirsOnline" tabindex="-1" aria-labelledby="ModalTambahSettingSirsOnline" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form action="javascript:void(0);" method="POST" id="ProsesTambahSettingSatuSehat" autocomplete="off">
+            <form action="javascript:void(0);" method="POST" id="ProsesTambahSettingSirsOnline" autocomplete="off">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-plus"></i> Profil Pengaturan SATUSEHAT</h5>
+                    <h5 class="modal-title"><i class="bi bi-plus"></i> Profil Pengaturan SIRS Online</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="nama_setting_satusehat"><small>Profil Pengaturan</small></label>
-                            <input type="text" name="nama_setting_satusehat" id="nama_setting_satusehat" class="form-control" placeholder="Contoh : Development" required>
+                            <label for="nama_setting_sirs_online"><small>Profil Pengaturan</small></label>
+                            <input type="text" name="nama_setting_sirs_online" id="nama_setting_sirs_online" class="form-control" placeholder="Contoh : Development" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="url_satusehat"><small><i>URL (ENDPOINT)</i></small></label>
-                            <input type="url" name="url_satusehat" id="url_satusehat" class="form-control" required>
+                            <label for="url_sirs_online"><small><i>URL (ENDPOINT)</i></small></label>
+                            <input type="url" name="url_sirs_online" id="url_sirs_online" class="form-control" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="organization_id"><small><i>Organization ID</i></small></label>
-                            <input type="text" name="organization_id" id="organization_id" class="form-control" required>
+                            <label for="id_rs"><small>ID Rumah Sakit</small></label>
+                            <input type="text" name="id_rs" id="id_rs" class="form-control" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="client_key"><small><i>Client Key</i></small></label>
-                            <input type="text" name="client_key" id="client_key" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <label for="secret_key"><small><i>Secret Key</i></small></label>
-                            <input type="text" name="secret_key" id="secret_key" class="form-control" required>
+                            <label for="password_sirs_online"><small><i>Password</i></small></label>
+                            <input type="text" name="password_sirs_online" id="password_sirs_online" class="form-control" required>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -51,13 +45,13 @@
                     </div>
                     
                     <div class="row">
-                        <div class="col-12" id="NotifikasiTambahSettingSatuSehat">
-                           <!-- Notifikasi Tambah Satu Sehat Akan Muncul Disini -->
+                        <div class="col-12" id="NotifikasiTambahSettingSirsOnline">
+                           <!-- Notifikasi Tambah SIRS Online Akan Muncul Disini -->
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-md btn-primary" id="ButtonTambahSettingSatuSehat">
+                    <button type="submit" class="btn btn-md btn-primary" id="ButtonTambahSettingSirsOnline">
                         <i class="ti-save"></i> Simpan
                     </button>
                     <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -69,18 +63,18 @@
     </div>
 </div>
 
-<!--- Modal Detail Satu Sehat --->
-<div class="modal fade" id="ModalDetailSatuSehat" tabindex="-1" aria-labelledby="ModalDetailSatuSehat" aria-hidden="true">
+<!--- Modal Detail SIRS Online --->
+<div class="modal fade" id="ModalDetailSirsOnline" tabindex="-1" aria-labelledby="ModalDetailSirsOnline" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-info-circle"></i> Detail Satu Sehat</h5>
+                <h5 class="modal-title"><i class="bi bi-info-circle"></i> Detail SIRS Online</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 
                 <div class="row">
-                    <div class="col-12" id="FormDetailSatuSehat">
+                    <div class="col-12" id="FormDetailSirsOnline">
                         <!-- Form Detail Akan Muncul Disini -->
                     </div>
                 </div>
@@ -95,18 +89,18 @@
     </div>
 </div>
 
-<!--- Modal Koneksi Satu Sehat --->
-<div class="modal fade" id="ModalKoneksiSatuSehat" tabindex="-1" aria-labelledby="ModalKoneksiSatuSehat" aria-hidden="true">
+<!--- Modal Koneksi SIRS Online --->
+<div class="modal fade" id="ModalKoneksiSirsOnline" tabindex="-1" aria-labelledby="ModalKoneksiSirsOnline" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-arrow-left-right"></i> Koneksi Satu Sehat</h5>
+                <h5 class="modal-title"><i class="bi bi-arrow-left-right"></i> Koneksi SIRS Online</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 
                 <div class="row">
-                    <div class="col-12" id="FormKoneksiSatuSehat">
+                    <div class="col-12" id="FormKoneksiSirsOnline">
                         <!-- Form Uji Coba Koneksi Akan Muncul Disini -->
                     </div>
                 </div>
@@ -121,30 +115,30 @@
     </div>
 </div>
 
-<!--- Modal Edit Satu Sehat --->
-<div class="modal fade" id="ModalEditSettingSatuSehat" tabindex="-1" aria-labelledby="ModalEditSettingSatuSehat" aria-hidden="true">
+<!--- Modal Edit SIRS Online --->
+<div class="modal fade" id="ModalEditSettingSirsOnline" tabindex="-1" aria-labelledby="ModalEditSettingSirsOnline" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form action="javascript:void(0);" method="POST" id="ProsesEditSettingSatuSehat" autocomplete="off">
+            <form action="javascript:void(0);" method="POST" id="ProsesEditSettingSirsOnline" autocomplete="off">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-pencil"></i> Edit Setting Satu Sehat</h5>
+                    <h5 class="modal-title"><i class="bi bi-pencil"></i> Edit Setting SIRS Online</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     
                     <div class="row">
-                        <div class="col-12" id="FormEditSettingSatuSehat">
-                           <!-- Form Edit Satu Sehat Akan Muncul Disini -->
+                        <div class="col-12" id="FormEditSettingSirsOnline">
+                           <!-- Form Edit SIRS Online Akan Muncul Disini -->
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12" id="NotifikasiEditSettingSatuSehat">
-                           <!-- Notifikasi Edit Satu Sehat Akan Muncul Disini -->
+                        <div class="col-12" id="NotifikasiEditSettingSirsOnline">
+                           <!-- Notifikasi Edit SIRS Online Akan Muncul Disini -->
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-md btn-primary" id="ButtonEditSatuSehat">
+                    <button type="submit" class="btn btn-md btn-primary" id="ButtonEditSirsOnline">
                         <i class="ti-save"></i> Simpan
                     </button>
                     <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -156,31 +150,31 @@
     </div>
 </div>
 
-<!--- Modal Hapus Satu Sehat --->
-<div class="modal fade" id="ModalHapusSettingSatuSehat" tabindex="-1" aria-labelledby="ModalHapusSettingSatuSehat" aria-hidden="true">
+<!--- Modal Hapus SIRS Online --->
+<div class="modal fade" id="ModalHapusSettingSirsOnline" tabindex="-1" aria-labelledby="ModalHapusSettingSirsOnline" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form action="javascript:void(0);" method="POST" id="ProsesHapusSettingSatuSehat" autocomplete="off">
+            <form action="javascript:void(0);" method="POST" id="ProsesHapusSettingSirsOnline" autocomplete="off">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-clock-history"></i> Hapus Setting Satu Sehat</h5>
+                    <h5 class="modal-title"><i class="bi bi-clock-history"></i> Hapus Setting SIRS Online</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     
                     <div class="row">
-                        <div class="col-12" id="FormHapusSettingSatuSehat">
+                        <div class="col-12" id="FormHapusSettingSirsOnline">
                             <!-- Form Hapus Akan Muncul Disini -->
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12" id="NotifikasiHapusSettingSatuSehat">
+                        <div class="col-12" id="NotifikasiHapusSettingSirsOnline">
                             <!-- Notifikasi Hapus Setting Akan Muncul Disini -->
                         </div>
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-md btn-primary" id="ButtonHapusSettingSatuSehat">
+                    <button type="submit" class="btn btn-md btn-primary" id="ButtonHapusSettingSirsOnline">
                         <i class="bi bi-check"></i> Ya, Hapus
                     </button>
                     <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">

@@ -8,18 +8,19 @@
 
     // Peta halaman -> file modal; gunakan satu sumber kebenaran agar mudah ditambah.
     $modalRoutes = [
-        'Profile'          => '_Page/ProfileUser/ModalProfileUser.php',
-        'Setting'          => '_Page/Setting/ModalSetting.php',
-        'ApiKey'           => '_Page/ApiKey/ModalApiKey.php',
-        'EmailGateway'     => '_Page/EmailGateway/ModalEmailGateway.php',
-        'GoogleCredential' => '_Page/GoogleCredential/ModalGoogleCredential.php',
-        'AksesFitur'       => '_Page/AksesFitur/ModalAksesFitur.php',
-        'AksesEntitas'     => '_Page/AksesEntitas/ModalAksesEntitas.php',
-        'Akses'            => '_Page/Akses/ModalAkses.php',
-        'AksesPengajuan'   => '_Page/AksesPengajuan/ModalAksesPengajuan.php',
-        'SettingSatuSehat' => '_Page/SettingSatuSehat/ModalSettingSatuSehat.php',
-        'SettingBpjs'      => '_Page/SettingBpjs/ModalSettingBpjs.php',
-        'LaporanKesalahan' => '_Page/LaporanKesalahan/ModalLaporanKesalahan.php',
+        'Profile'           => '_Page/ProfileUser/ModalProfileUser.php',
+        'Setting'           => '_Page/Setting/ModalSetting.php',
+        'ApiKey'            => '_Page/ApiKey/ModalApiKey.php',
+        'EmailGateway'      => '_Page/EmailGateway/ModalEmailGateway.php',
+        'GoogleCredential'  => '_Page/GoogleCredential/ModalGoogleCredential.php',
+        'AksesFitur'        => '_Page/AksesFitur/ModalAksesFitur.php',
+        'AksesEntitas'      => '_Page/AksesEntitas/ModalAksesEntitas.php',
+        'Akses'             => '_Page/Akses/ModalAkses.php',
+        'AksesPengajuan'    => '_Page/AksesPengajuan/ModalAksesPengajuan.php',
+        'SettingSatuSehat'  => '_Page/SettingSatuSehat/ModalSettingSatuSehat.php',
+        'SettingBpjs'       => '_Page/SettingBpjs/ModalSettingBpjs.php',
+        'SettingSirsOnline' => '_Page/SettingSirsOnline/ModalSettingSirsOnline.php',
+        'LaporanKesalahan'  => '_Page/LaporanKesalahan/ModalLaporanKesalahan.php',
     ];
 
     /**

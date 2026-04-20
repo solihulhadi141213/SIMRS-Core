@@ -41,6 +41,7 @@
                     $Page=="Api" || 
                     $Page=="SettingBpjs" || 
                     $Page=="SettingSatuSehat" || 
+                    $Page=="SettingSirsOnline" || 
                     $Page=="LaporanKesalahan"
                 )
                 {
@@ -150,7 +151,7 @@
                     </li>
                     <li class="pcoded-hasmenu 
                         <?php 
-                            if($Page=="SettingBpjs" || $Page=="SettingSatuSehat" || $Page=="Font" || $Page=="ModeKontras"){
+                            if($Page=="SettingBpjs" || $Page=="SettingSatuSehat" || $Page=="SettingSirsOnline" || $Page=="ModeKontras"){
                                 echo 'active pcoded-trigger';
                             } 
                         ?>"
