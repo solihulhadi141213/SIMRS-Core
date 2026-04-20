@@ -45,6 +45,7 @@
         "AksesPengajuan"   => "Pengajuan Akses",
         "SettingSatuSehat" => "Setting SATUSEHAT",
         "SettingBpjs"      => "Setting BPJS",
+        "LaporanKesalahan" => "Laporan Kesalahan",
     ];
     
     // Menentukan Judul Halaman

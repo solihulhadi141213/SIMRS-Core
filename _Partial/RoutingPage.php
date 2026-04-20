@@ -12,6 +12,7 @@
         'AksesPengajuan'   => '_Page/AksesPengajuan/AksesPengajuan.php',
         'SettingSatuSehat' => '_Page/SettingSatuSehat/SettingSatuSehat.php',
         'SettingBpjs'      => '_Page/SettingBpjs/SettingBpjs.php',
+        'LaporanKesalahan' => '_Page/LaporanKesalahan/LaporanKesalahan.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

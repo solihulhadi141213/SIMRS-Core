@@ -17,6 +17,7 @@
         "AksesPengajuan"   => "_Page/AksesPengajuan/AksesPengajuan.js?v='.$version.'",
         "SettingSatuSehat" => "_Page/SettingSatuSehat/SettingSatuSehat.js?v='.$version.'",
         "SettingBpjs"      => "_Page/SettingBpjs/SettingBpjs.js?v='.$version.'",
+        "LaporanKesalahan" => "_Page/LaporanKesalahan/LaporanKesalahan.js?v='.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif

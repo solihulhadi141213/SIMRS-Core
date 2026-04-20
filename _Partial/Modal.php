@@ -19,6 +19,7 @@
         'AksesPengajuan'   => '_Page/AksesPengajuan/ModalAksesPengajuan.php',
         'SettingSatuSehat' => '_Page/SettingSatuSehat/ModalSettingSatuSehat.php',
         'SettingBpjs'      => '_Page/SettingBpjs/ModalSettingBpjs.php',
+        'LaporanKesalahan' => '_Page/LaporanKesalahan/ModalLaporanKesalahan.php',
     ];
 
     /**
