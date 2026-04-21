@@ -14,6 +14,7 @@
         'SettingBpjs'       => '_Page/SettingBpjs/SettingBpjs.php',
         'SettingSirsOnline' => '_Page/SettingSirsOnline/SettingSirsOnline.php',
         'SettingRadix'      => '_Page/SettingRadix/SettingRadix.php',
+        'SettingAnalyza'    => '_Page/SettingAnalyza/SettingAnalyza.php',
         'LaporanKesalahan'  => '_Page/LaporanKesalahan/LaporanKesalahan.php',
     ];
 

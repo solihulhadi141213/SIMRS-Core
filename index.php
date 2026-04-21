@@ -46,6 +46,7 @@
         "SettingSatuSehat" => "Setting SATUSEHAT",
         "SettingBpjs"      => "Setting BPJS",
         "SettingRadix"     => "Setting Radix",
+        "SettingAnalyza"   => "Setting Analyza",
         "LaporanKesalahan" => "Laporan Kesalahan",
     ];
     

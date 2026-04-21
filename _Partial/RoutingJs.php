@@ -19,6 +19,7 @@
         "SettingBpjs"       => "_Page/SettingBpjs/SettingBpjs.js?v='.$version.'",
         "SettingSirsOnline" => "_Page/SettingSirsOnline/SettingSirsOnline.js?v='.$version.'",
         "SettingRadix"      => "_Page/SettingRadix/SettingRadix.js?v='.$version.'",
+        "SettingAnalyza"    => "_Page/SettingAnalyza/SettingAnalyza.js?v='.$version.'",
         "LaporanKesalahan"  => "_Page/LaporanKesalahan/LaporanKesalahan.js?v='.$version.'",
     ];
 
