@@ -44,6 +44,7 @@
                     $Page=="SettingSirsOnline" || 
                     $Page=="SettingRadix" || 
                     $Page=="SettingAnalyza" || 
+                    $Page=="SettingSifarma" || 
                     $Page=="LaporanKesalahan"
                 )
                 {
@@ -159,6 +160,7 @@
                                 $Page=="SettingSirsOnline" || 
                                 $Page=="SettingRadix" || 
                                 $Page=="SettingAnalyza" || 
+                                $Page=="SettingSifarma" || 
                                 $Page=="ModeKontras"
                             ){
                                 echo 'active pcoded-trigger';

@@ -20,6 +20,7 @@
         "SettingSirsOnline" => "_Page/SettingSirsOnline/SettingSirsOnline.js?v='.$version.'",
         "SettingRadix"      => "_Page/SettingRadix/SettingRadix.js?v='.$version.'",
         "SettingAnalyza"    => "_Page/SettingAnalyza/SettingAnalyza.js?v='.$version.'",
+        "SettingSifarma"    => "_Page/SettingSifarma/SettingSifarma.js?v='.$version.'",
         "LaporanKesalahan"  => "_Page/LaporanKesalahan/LaporanKesalahan.js?v='.$version.'",
     ];
 

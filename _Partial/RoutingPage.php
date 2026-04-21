@@ -15,6 +15,7 @@
         'SettingSirsOnline' => '_Page/SettingSirsOnline/SettingSirsOnline.php',
         'SettingRadix'      => '_Page/SettingRadix/SettingRadix.php',
         'SettingAnalyza'    => '_Page/SettingAnalyza/SettingAnalyza.php',
+        'SettingSifarma'    => '_Page/SettingSifarma/SettingSifarma.php',
         'LaporanKesalahan'  => '_Page/LaporanKesalahan/LaporanKesalahan.php',
     ];
 
