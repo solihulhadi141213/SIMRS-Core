@@ -49,6 +49,7 @@
         "SettingAnalyza"   => "Setting Analyza",
         "SettingSifarma"   => "Setting Sifarma",
         "LaporanKesalahan" => "Laporan Kesalahan",
+        "ReferensiPoliklinik" => "Poliklinik",
     ];
     
     // Menentukan Judul Halaman

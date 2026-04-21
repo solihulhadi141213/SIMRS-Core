@@ -235,11 +235,10 @@
             <li class="pcoded-hasmenu 
                 <?php 
                     if(
-                        $Page=="Referensi"||
-                        $Page=="Poliklinik"||
-                        $Page=="Dokter"||
-                        $Page=="JadwalDokter"||
-                        $Page=="Wilayah"||
+                        $Page=="ReferensiPoliklinik"||
+                        $Page=="ReferensiDokter"||
+                        $Page=="ReferensiJadwalDokter"||
+                        $Page=="ReferensiRuangRawat"||
                         $Page=="KelasRuangan"||
                         $Page=="KelasRuangan2"||
                         $Page=="Diagnosa"||
@@ -257,65 +256,46 @@
                     <span class="pcoded-mcaret"></span>
                 </a>
                 <ul class="pcoded-submenu">
-                    
-                    <li class="pcoded-hasmenu 
-                        <?php 
-                            if($Page=="Aksesibilitas" || $Page=="Tema" || $Page=="Font" || $Page=="ModeKontras"){
-                                echo 'active pcoded-trigger';
-                            } 
-                        ?>"
-                    >
-                        <a href="javascript:void(0)" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-share"></i></span>
-                            <span class="pcoded-mtext">
-                                Referensi Lokal
-                            </span>
-                            <span class="pcoded-mcaret"></span>
+                    <li class="<?php if($Page=="ReferensiPoliklinik"){echo 'active';} ?>">
+                        <a href="index.php?Page=ReferensiPoliklinik" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                            <span class="pcoded-mtext">Poliklinik</span>
                         </a>
+                    </li>
 
-                        <ul class="pcoded-submenu">
-                            <li class="<?php if($Page=="AksesFitur"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesFitur" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
-                                    <span class="pcoded-mtext">Poliklinik</span>
-                                </a>
-                            </li>
+                    <li class="<?php if($Page=="ReferensiDokter"){echo 'active';} ?>">
+                        <a href="index.php?Page=ReferensiDokter" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                            <span class="pcoded-mtext">Dokter</span>
+                        </a>
+                    </li>
 
-                            <li class="<?php if($Page=="AksesEntitas"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesEntitas" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
-                                    <span class="pcoded-mtext">Dokter</span>
-                                </a>
-                            </li>
+                    <li class="<?php if($Page=="ReferensiJadwalDokter"){echo 'active';} ?>">
+                        <a href="index.php?Page=ReferensiJadwalDokter" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                            <span class="pcoded-mtext">Jadwal Praktek</span>
+                        </a>
+                    </li>
 
-                            <li class="<?php if($Page=="Akses"){echo 'active';} ?>">
-                                <a href="index.php?Page=Akses" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
-                                    <span class="pcoded-mtext">Jadwal Praktek</span>
-                                </a>
-                            </li>
+                    <li class="<?php if($Page=="ReferensiRuangRawat"){echo 'active';} ?>">
+                        <a href="index.php?Page=ReferensiRuangRawat" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                            <span class="pcoded-mtext">Ruang Rawat</span>
+                        </a>
+                    </li>
 
-                            <li class="<?php if($Page=="AksesPengajuan"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
-                                    <span class="pcoded-mtext">Ruang Rawat</span>
-                                </a>
-                            </li>
+                    <li class="<?php if($Page=="Analyza"){echo 'active';} ?>">
+                        <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                            <span class="pcoded-mtext">ICD</span>
+                        </a>
+                    </li>
 
-                            <li class="<?php if($Page=="Analyza"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
-                                    <span class="pcoded-mtext">ICD</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="AksesPengajuan"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
-                                    <span class="pcoded-mtext">Wilayah</span>
-                                </a>
-                            </li>
-                        </ul>
+                    <li class="<?php if($Page=="AksesPengajuan"){echo 'active';} ?>">
+                        <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                            <span class="pcoded-mtext">Wilayah</span>
+                        </a>
                     </li>
 
                     <li class="pcoded-hasmenu 

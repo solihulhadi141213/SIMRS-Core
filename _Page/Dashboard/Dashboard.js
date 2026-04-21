@@ -378,18 +378,6 @@ $(document).ready(function() {
         ShowPasienExisting(0);
     });
     
-    // Cleanup untuk semua modal saat ditutup
-    $(document).on('hidden.bs.modal', '.modal', function () {
-        setTimeout(function () {
-            if (!$('.modal.show').length) {
-                $('body').removeClass('modal-open').css({
-                    'overflow': 'auto',
-                    'padding-right': ''
-                });
-
-                $('.modal-backdrop').remove();
-            }
-        }, 100);
-    });
+    
 
 });
