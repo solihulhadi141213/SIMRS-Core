@@ -20,81 +20,260 @@
     <div class="main-body">
         <div class="page-wrapper">
 
-            <!-- DASHBOARD CARD -->
+            <!-- DASHBOARD PELAYANAN -->
             <div class="row mb-3">
-                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
-                    <div class="card stat-card">
-                        <div class="card-body d-flex align-items-center">
-                            
-                            <!-- ICON -->
-                            <div class="stat-icon bg-primary">
-                                <i class="bi bi-people"></i>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-12 mb-3">
+                    <div class="card bg-primary-subtle border-primary">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8">
+                                    <small class="text text-primary"># Kategori Pelayanan</small>
+                                </div>
+                                <div class="col-4 text-right icon-btn">
+                                    <button type="button" class="btn btn-md btn-icon btn-outline-primary">
+                                        <i class="bi bi-filter"></i>
+                                    </button>
+                                </div>
                             </div>
-
-                            <!-- TEXT -->
-                            <div class="ms-3">
-                                <h4 class="mb-0 fw-bold" id="jumlah_pasien">0</h4>
-                                <small class="text-muted">Jumlah Pasien</small>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 text-center">
+                                    <div class="mt-3 mb-3">
+                                        <h4 class="mb-0 fw-bold" id="rawat_jalan">12 K</h4>
+                                        <small class="text-muted">Rawat Jalan</small>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-center border-left border-1">
+                                    <div class="mt-3 mb-3">
+                                        <h4 class="mb-0 fw-bold" id="rawat_jalan">15 K</h4>
+                                        <small class="text-muted">Rawat Inap</small>
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
-                    <div class="card stat-card">
-                        <div class="card-body d-flex align-items-center">
-                            
-                            <!-- ICON -->
-                            <div class="stat-icon bg-info">
-                                <i class="bi bi-people"></i>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-12 mb-3">
+                    <div class="card bg-danger-subtle border-primary">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8">
+                                    <small class="text text-danger"># Pembiayaan</small>
+                                </div>
+                                <div class="col-4 text-right icon-btn">
+                                    <button type="button" class="btn btn-md btn-icon btn-outline-danger">
+                                        <i class="bi bi-filter"></i>
+                                    </button>
+                                </div>
                             </div>
-
-                            <!-- TEXT -->
-                            <div class="ms-3">
-                                <h4 class="mb-0 fw-bold" id="jumlah_kunjungan">0</h4>
-                                <small class="text-muted">Jumlah Kunjungan</small>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 text-center">
+                                    <div class="mt-3 mb-3">
+                                        <h4 class="mb-0 fw-bold" id="rawat_jalan">12 K</h4>
+                                        <small class="text-muted">UMUM</small>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-center border-left border-1">
+                                    <div class="mt-3 mb-3">
+                                        <h4 class="mb-0 fw-bold" id="rawat_jalan">15 K</h4>
+                                        <small class="text-muted">BPJS</small>
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
-                    <div class="card stat-card">
-                        <div class="card-body d-flex align-items-center">
-                            
-                            <!-- ICON -->
-                            <div class="stat-icon bg-dark">
-                                <i class="bi bi-people"></i>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-12 mb-3">
+                    <div class="card bg-success-subtle border-primary">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8">
+                                    <small class="text text-success"># Gender</small>
+                                </div>
+                                <div class="col-4 text-right icon-btn">
+                                    <button type="button" class="btn btn-md btn-icon btn-outline-success">
+                                        <i class="bi bi-filter"></i>
+                                    </button>
+                                </div>
                             </div>
-
-                            <!-- TEXT -->
-                            <div class="ms-3">
-                                <h4 class="mb-0 fw-bold" id="jumlah_poliklinik">0</h4>
-                                <small class="text-muted">Poliklinik</small>
-                            </div>
-
                         </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
-                    <div class="card stat-card">
-                        <div class="card-body d-flex align-items-center">
-                            
-                            <!-- ICON -->
-                            <div class="stat-icon bg-success">
-                                <i class="bi bi-people"></i>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 text-center">
+                                    <div class="mt-3 mb-3">
+                                        <h4 class="mb-0 fw-bold" id="rawat_jalan">12 K</h4>
+                                        <small class="text-muted">Laki-laki</small>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-center border-left border-1">
+                                    <div class="mt-3 mb-3">
+                                        <h4 class="mb-0 fw-bold" id="rawat_jalan">15 K</h4>
+                                        <small class="text-muted">Perempuan</small>
+                                    </div>
+                                </div>
                             </div>
-
-                            <!-- TEXT -->
-                            <div class="ms-3">
-                                <h4 class="mb-0 fw-bold" id="jumlah_bed">0</h4>
-                                <small class="text-muted">Tempat Tidur</small>
-                            </div>
-
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="container-fluid">
+                <div class="row align-items-stretch">
+
+                    <!-- ================= LEFT ================= -->
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-12 mb-3 d-flex">
+                        <div class="card w-100 d-flex flex-column h-100">
+
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="card-title">
+                                            # Mortalitas Pasien
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-end icon-btn">
+                                        <button type="button" class="btn btn-md btn-icon btn-outline-success">
+                                            <i class="bi bi-filter"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body d-flex flex-grow-1 align-items-center justify-content-center">
+                                <div class="pie_mortalitas w-100"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- ================= RIGHT ================= -->
+                    <div class="col-xl-8 col-lg-8 col-md-8 col-12 mb-3 d-flex flex-column">
+
+                        <div class="row flex-grow-1">
+
+                            <!-- CARD -->
+                            <div class="col-xl-3 col-lg-6 col-md-6 mb-3 d-flex">
+                                <div class="card stat-card w-100 h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="stat-icon bg-primary">
+                                            <i class="bi bi-people"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h4 class="mb-0 fw-bold" id="jumlah_pasien">0</h4>
+                                            <small class="text-muted">Pasien</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DUPLIKASI CARD -->
+                            <div class="col-xl-3 col-lg-6 col-md-6 mb-3 d-flex">
+                                <div class="card stat-card w-100 h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="stat-icon bg-info">
+                                            <i class="bi bi-file-medical"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h4 class="mb-0 fw-bold" id="jumlah_kunjungan">0</h4>
+                                            <small class="text-muted">Kunjungan</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6 col-md-6 mb-3 d-flex">
+                                <div class="card stat-card w-100 h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="stat-icon bg-warning">
+                                            <i class="icofont-doctor"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h4 class="mb-0 fw-bold">0</h4>
+                                            <small class="text-muted">Dokter</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6 col-md-6 mb-3 d-flex">
+                                <div class="card stat-card w-100 h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="stat-icon bg-danger">
+                                            <i class="bi bi-hospital"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h4 class="mb-0 fw-bold">0</h4>
+                                            <small class="text-muted">Poliklinik</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BARIS 2 -->
+                            <div class="col-xl-3 col-lg-6 col-md-6 mb-3 d-flex">
+                                <div class="card stat-card w-100 h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="stat-icon bg-success">
+                                            <i class="icofont-patient-bed"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h4 class="mb-0 fw-bold">0,3 K</h4>
+                                            <small class="text-muted">Tempat Tidur</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6 col-md-6 mb-3 d-flex">
+                                <div class="card stat-card w-100 h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="stat-icon bg-primary-subtle">
+                                            <i class="icofont-prescription"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h4 class="mb-0 fw-bold">1,2 K</h4>
+                                            <small class="text-muted">Farmasi</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6 col-md-6 mb-3 d-flex">
+                                <div class="card stat-card w-100 h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="stat-icon bg-info-subtle">
+                                            <i class="icofont-xray"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h4 class="mb-0 fw-bold">4,5 K</h4>
+                                            <small class="text-muted">Radiologi</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6 col-md-6 mb-3 d-flex">
+                                <div class="card stat-card w-100 h-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="stat-icon bg-success-subtle">
+                                            <i class="icofont-xray"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h4 class="mb-0 fw-bold">4,5 K</h4>
+                                            <small class="text-muted">Laboratorium</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
             
             <div class="row d-flex align-items-stretch">
 
@@ -102,9 +281,9 @@
                 <div class="col-xl-4 col-lg-12 col-md-12 mb-3">
                     <div class="card h-100">
                         <div class="card-body">
-                            <div class="row mb-3">
+                            <div class="row mb-2">
                                 <div class="col-md-12 text-center">
-                                    <img class="img-80 img-radius" src="assets/images/<?php echo "$logo"; ?>" alt="User-Profile-Image">
+                                    <img class="img-80" src="assets/images/<?php echo "$logo"; ?>" alt="Logo">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -194,11 +373,21 @@
                                 <table class="table table-striped table-hover">
                                     <thead>
                                         <tr>
-                                            <td class="text-center"><b>No</b></td>
-                                            <td class="text-center"><b>RM</b></td>
-                                            <td class="text-center"><b>Nama</b></td>
-                                            <td class="text-center"><b>Tanggal</b></td>
-                                            <td class="text-center"><b>Kujungan</b></td>
+                                            <td class="text-center">
+                                                <small><b>No</b></small>
+                                            </td>
+                                            <td class="text-left">
+                                                <small><b>No.RM</b></small>
+                                            </td>
+                                            <td class="text-left">
+                                                <small><b>Nama Pasien</b></small>
+                                            </td>
+                                            <td class="text-left">
+                                                <small><b>Tanggal Kunjungan</b></small>
+                                            </td>
+                                            <td class="text-center">
+                                                <small><b>Kategori</b></small>
+                                            </td>
                                         </tr>
                                     </thead>
                                     <tbody id="TabelPasienExisting">

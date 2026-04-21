@@ -65,20 +65,40 @@
 
         // Routing Kunjungan
         if($tujuan=="Rajal"){
-            $label_tujuan = '<span class="badge bg-success">RAJAL</span>';
+            $label_tujuan = '
+                <span class="py-1 px-2 bg-success-subtle text-success rounded-1">
+                    <small>Rajal</small>
+                </span>
+            ';
         }else{
             if($tujuan=="Ranap"){
-                $label_tujuan = '<span class="badge bg-primary">RANAP</span>';
+                $label_tujuan = '
+                    <span class="py-1 px-2 bg-danger-subtle text-danger rounded-1">
+                        <small>Ranap</small>
+                    </span>
+                ';
             }else{
-                $label_tujuan = '<span class="badge bg-dark">NONE</span>';
+                $label_tujuan = '
+                    <span class="py-1 px-2 bg-secondary-subtle text-secondary rounded-1">
+                        <small>None</small>
+                    </span>
+                ';
             }
         }
         echo '
             <tr>
-                <td class="text-center"><small>'.$no.'</small></td>
-                <td class="text-left"><small>'.$noRm.'</small></td>
-                <td class="text-left"><small>'.$nama.'</small></td>
-                <td class="text-left"><small>'.date('d/m/Y', strtotime($tanggal)).'</small></td>
+                <td class="text-center">
+                    <small class="text text-muted">'.$no.'</small>
+                </td>
+                <td class="text-left">
+                    <small class="text text-muted">'.$noRm.'</small>
+                </td>
+                <td class="text-left">
+                    <small class="text text-muted">'.$nama.'</small>
+                </td>
+                <td class="text-left">
+                    <small class="text text-muted">'.date('d/m/Y', strtotime($tanggal)).'</small>
+                </td>
                 <td class="text-center">'.$label_tujuan.'</td>
             </tr>
         ';

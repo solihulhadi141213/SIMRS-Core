@@ -1,3 +1,54 @@
+function renderPieMortalitas(selector, meninggal, sembuh) {
+    var options = {
+        series: [meninggal, sembuh],
+        chart: {
+            type: 'donut',
+            height: 250
+        },
+        labels: ['Meninggal', 'Sembuh'],
+        colors: ['#dc3545', '#28a745'],
+        legend: {
+            position: 'bottom'
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                return val.toFixed(1) + "%";
+            }
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return val + " pasien";
+                }
+            }
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    size: '65%',
+                    labels: {
+                        show: true,
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            formatter: function (w) {
+                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    // Hapus chart lama kalau ada (biar tidak double render)
+    $(selector).html("");
+
+    var chart = new ApexCharts(document.querySelector(selector), options);
+    chart.render();
+}
+
 // Dashboard.js Bersifat Global
 function tampilkanToast(pesan, tipe = 'success') {
     const toastEl = document.getElementById('liveToast');
@@ -79,8 +130,8 @@ function ShowGrafik() {
             // 5. Konfigurasi ApexCharts
             var options = {
                 chart: {
-                    type: 'bar',
-                    height: 450,
+                    type: 'area',
+                    height: 350,
                     animations: { enabled: true },
                     toolbar: { show: true } // Disarankan aktif untuk fitur download grafik
                 },
@@ -259,6 +310,7 @@ $(document).ready(function() {
     ShowGrafik();
     ShowDashboard();
     ShowPasienExisting();
+    renderPieMortalitas('.pie_mortalitas', 25, 75);
 
     //Tombol Fiolter Grafik Di Pilih
     $('.ganti_periode_grafik').click(function(){
