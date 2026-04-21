@@ -13,6 +13,7 @@
         'SettingSatuSehat'  => '_Page/SettingSatuSehat/SettingSatuSehat.php',
         'SettingBpjs'       => '_Page/SettingBpjs/SettingBpjs.php',
         'SettingSirsOnline' => '_Page/SettingSirsOnline/SettingSirsOnline.php',
+        'SettingRadix'      => '_Page/SettingRadix/SettingRadix.php',
         'LaporanKesalahan'  => '_Page/LaporanKesalahan/LaporanKesalahan.php',
     ];
 

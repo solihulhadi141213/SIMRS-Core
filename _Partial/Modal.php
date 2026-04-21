@@ -20,6 +20,7 @@
         'SettingSatuSehat'  => '_Page/SettingSatuSehat/ModalSettingSatuSehat.php',
         'SettingBpjs'       => '_Page/SettingBpjs/ModalSettingBpjs.php',
         'SettingSirsOnline' => '_Page/SettingSirsOnline/ModalSettingSirsOnline.php',
+        'SettingRadix'      => '_Page/SettingRadix/ModalSettingRadix.php',
         'LaporanKesalahan'  => '_Page/LaporanKesalahan/ModalLaporanKesalahan.php',
     ];
 

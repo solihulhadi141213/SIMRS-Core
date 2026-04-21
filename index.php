@@ -45,6 +45,7 @@
         "AksesPengajuan"   => "Pengajuan Akses",
         "SettingSatuSehat" => "Setting SATUSEHAT",
         "SettingBpjs"      => "Setting BPJS",
+        "SettingRadix"     => "Setting Radix",
         "LaporanKesalahan" => "Laporan Kesalahan",
     ];
     
