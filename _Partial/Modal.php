@@ -25,6 +25,7 @@
         'SettingSifarma'      => '_Page/SettingSifarma/ModalSettingSifarma.php',
         'LaporanKesalahan'    => '_Page/LaporanKesalahan/ModalLaporanKesalahan.php',
         'ReferensiPoliklinik' => '_Page/ReferensiPoliklinik/ModalReferensiPoliklinik.php',
+        'ReferensiDokter'     => '_Page/ReferensiDokter/ModalReferensiDokter.php',
     ];
 
     /**

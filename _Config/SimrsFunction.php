@@ -621,6 +621,7 @@
         $ambil_json =json_decode($content, true);
         return $content;
     }
+    
     function referensiDokterPcare($url_vclaim,$kode_ppk,$consid,$secret_key,$user_key){
         date_default_timezone_set('UTC');
         $timestamp = strval(time()-strtotime('1970-01-01 00:00:00'));

@@ -18,6 +18,7 @@
         'SettingSifarma'      => '_Page/SettingSifarma/SettingSifarma.php',
         'LaporanKesalahan'    => '_Page/LaporanKesalahan/LaporanKesalahan.php',
         'ReferensiPoliklinik' => '_Page/ReferensiPoliklinik/ReferensiPoliklinik.php',
+        'ReferensiDokter'     => '_Page/ReferensiDokter/ReferensiDokter.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

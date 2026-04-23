@@ -91,3 +91,6 @@ SIMRS Core V3 is a hospital management information system integrated with electr
 * There is a relationship between tables in the access module
 * Activity history is not recorded partially, but is recorded based on data that has been created.
 
+### Referance
+* Bridging BPJS : https://dvlp.bpjs-kesehatan.go.id:8888/trust-mark/portal.html
+

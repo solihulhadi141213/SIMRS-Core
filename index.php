@@ -35,21 +35,22 @@
 
     // List Halaman
     $list_halaman = [
-        "Profile"          => "Profile",
-        "Setting"          => "Setting",
-        "ApiKey"           => "API Key",
-        "EmailGateway"     => "Email Gateway",
-        "AksesFitur"       => "Fitur Aplikasi",
-        "AksesEntitas"     => "Entitas Akses",
-        "Akses"            => "Akses Pengguna",
-        "AksesPengajuan"   => "Pengajuan Akses",
-        "SettingSatuSehat" => "Setting SATUSEHAT",
-        "SettingBpjs"      => "Setting BPJS",
-        "SettingRadix"     => "Setting Radix",
-        "SettingAnalyza"   => "Setting Analyza",
-        "SettingSifarma"   => "Setting Sifarma",
-        "LaporanKesalahan" => "Laporan Kesalahan",
+        "Profile"             => "Profile",
+        "Setting"             => "Setting",
+        "ApiKey"              => "API Key",
+        "EmailGateway"        => "Email Gateway",
+        "AksesFitur"          => "Fitur Aplikasi",
+        "AksesEntitas"        => "Entitas Akses",
+        "Akses"               => "Akses Pengguna",
+        "AksesPengajuan"      => "Pengajuan Akses",
+        "SettingSatuSehat"    => "Setting SATUSEHAT",
+        "SettingBpjs"         => "Setting BPJS",
+        "SettingRadix"        => "Setting Radix",
+        "SettingAnalyza"      => "Setting Analyza",
+        "SettingSifarma"      => "Setting Sifarma",
+        "LaporanKesalahan"    => "Laporan Kesalahan",
         "ReferensiPoliklinik" => "Poliklinik",
+        "ReferensiDokter"     => "Dokter",
     ];
     
     // Menentukan Judul Halaman

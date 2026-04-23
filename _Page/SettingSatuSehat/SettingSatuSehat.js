@@ -222,7 +222,15 @@ $(document).ready(function() {
                     TabelSettingSatuSehat();
 
                     // Toast sukses
-                    tampilkanToast('Satu Sehat berhasil diperbarui', 'success');
+                    Swal.fire({
+                        toast            : true,
+                        position         : 'top-end',
+                        icon             : 'success',
+                        title            : 'Edit Satu Sehat Berhasil',
+                        showConfirmButton: false,
+                        timer            : 3000,
+                        timerProgressBar : true
+                    });
 
                 } else {
                     $('#NotifikasiEditSettingSatuSehat').html(`

@@ -8,7 +8,7 @@
     if (empty($SessionIdAkses)) {
         echo '
             <tr data-page-count="0" data-current-page="0">
-                <td align="center" colspan="8">
+                <td align="center" colspan="7">
                     <small class="text-danger">Sesi akses berakhir! Silakan login ulang!</small>
                 </td>
             </tr>
@@ -21,17 +21,17 @@
     $batas      = (int) ($_POST['batas'] ?? 10);
     $page       = (int) ($_POST['page'] ?? 1);
     $ShortBy    = strtoupper(trim($_POST['ShortBy'] ?? 'DESC'));
-    $OrderBy    = trim($_POST['OrderBy'] ?? 'id_poliklinik');
+    $OrderBy    = trim($_POST['OrderBy'] ?? 'id_dokter');
 
     $batas = in_array($batas, [5, 10, 25, 50, 100, 250, 500]) ? $batas : 10;
     $page  = max(1, $page);
     $posisi = ($page - 1) * $batas;
 
-    $allowed_order = ['id_poliklinik', 'poliklinik', 'kode', 'status', 'updatetime'];
-    $allowed_sort  = ['ASC', 'DESC'];
-    $allowed_search = ['poliklinik', 'kode', 'status', 'updatetime'];
+    $allowed_order = ['id_dokter', 'nama', 'kode', 'id_ihs_practitioner', 'status'];
+    $allowed_sort = ['ASC', 'DESC'];
+    $allowed_search = ['nama', 'kode', 'id_ihs_practitioner', 'status'];
 
-    $OrderBy = in_array($OrderBy, $allowed_order) ? $OrderBy : 'id_poliklinik';
+    $OrderBy = in_array($OrderBy, $allowed_order) ? $OrderBy : 'id_dokter';
     $ShortBy = in_array($ShortBy, $allowed_sort) ? $ShortBy : 'DESC';
 
     $where = "";
@@ -45,30 +45,30 @@
             if ($keyword_by === 'status') {
                 $keyword_lower = strtolower($keyword);
                 if (in_array($keyword_lower, ['1', 'aktif', 'active', 'ya', 'yes'])) {
-                    $where = " WHERE p.status = ?";
+                    $where = " WHERE d.status = ?";
                     $params[] = 1;
                     $types .= "i";
                 } elseif (in_array($keyword_lower, ['0', 'tidak aktif', 'nonaktif', 'inactive', 'tidak', 'no'])) {
-                    $where = " WHERE p.status = ?";
+                    $where = " WHERE d.status = ?";
                     $params[] = 0;
                     $types .= "i";
                 } else {
-                    $where = " WHERE p.status LIKE ?";
+                    $where = " WHERE d.status LIKE ?";
                     $params[] = $keyword_like;
                     $types .= "s";
                 }
             } else {
-                $where = " WHERE p.$keyword_by LIKE ?";
+                $where = " WHERE d.$keyword_by LIKE ?";
                 $params[] = $keyword_like;
                 $types .= "s";
             }
         } else {
             $where = " WHERE (
-                p.poliklinik LIKE ?
-                OR p.kode LIKE ?
-                OR p.updatetime LIKE ?
+                d.nama LIKE ?
+                OR d.kode LIKE ?
+                OR d.id_ihs_practitioner LIKE ?
                 OR CASE
-                    WHEN p.status = 1 THEN 'Aktif'
+                    WHEN d.status = 1 THEN 'Aktif'
                     ELSE 'Tidak Aktif'
                   END LIKE ?
             )";
@@ -82,7 +82,7 @@
 
     $sql_count = "
         SELECT COUNT(*) AS total
-        FROM poliklinik p
+        FROM dokter d
         $where
     ";
 
@@ -91,7 +91,7 @@
     if (!$stmt_count) {
         echo '
             <tr data-page-count="0" data-current-page="0">
-                <td align="center" colspan="8">
+                <td align="center" colspan="7">
                     <small class="text-danger">Gagal menyiapkan query hitung data.</small>
                 </td>
             </tr>
@@ -112,8 +112,8 @@
     if ($jml_data === 0) {
         echo '
             <tr data-page-count="0" data-current-page="0">
-                <td align="center" colspan="8">
-                    <small class="text-danger">Data poliklinik tidak ditemukan</small>
+                <td align="center" colspan="7">
+                    <small class="text-danger">Data dokter tidak ditemukan</small>
                 </td>
             </tr>
         ';
@@ -130,26 +130,18 @@
 
     $sql = "
         SELECT
-            p.*,
-            COALESCE(dokter.jumlah_dokter, 0) AS jumlah_dokter,
-            COALESCE(layanan.jumlah_layanan, 0) AS jumlah_layanan
-        FROM poliklinik p
+            d.*,
+            COALESCE(layanan.jumlah_jadwal, 0) AS jumlah_jadwal
+        FROM dokter d
         LEFT JOIN (
             SELECT
-                id_poliklinik,
-                COUNT(DISTINCT id_dokter) AS jumlah_dokter
+                id_dokter,
+                COUNT(DISTINCT id_poliklinik) AS jumlah_jadwal
             FROM jadwal_dokter
-            GROUP BY id_poliklinik
-        ) dokter ON p.id_poliklinik = dokter.id_poliklinik
-        LEFT JOIN (
-            SELECT
-                id_poliklinik,
-                COUNT(*) AS jumlah_layanan
-            FROM jadwal_dokter
-            GROUP BY id_poliklinik
-        ) layanan ON p.id_poliklinik = layanan.id_poliklinik
+            GROUP BY id_dokter
+        ) layanan ON d.id_dokter = layanan.id_dokter
         $where
-        ORDER BY p.$OrderBy $ShortBy
+        ORDER BY d.$OrderBy $ShortBy
         LIMIT ?, ?
     ";
 
@@ -158,7 +150,7 @@
     if (!$stmt) {
         echo '
             <tr data-page-count="0" data-current-page="0">
-                <td align="center" colspan="8">
+                <td align="center" colspan="7">
                     <small class="text-danger">Gagal menyiapkan query data.</small>
                 </td>
             </tr>
@@ -180,13 +172,12 @@
     $result = mysqli_stmt_get_result($stmt);
 
     while ($data = mysqli_fetch_assoc($result)) {
-        $id_poliklinik   = (int) $data['id_poliklinik'];
-        $nama_poliklinik = htmlspecialchars($data['poliklinik'] ?? '');
-        $kode            = htmlspecialchars($data['kode'] ?? '-');
-        $jumlah_dokter   = (int) ($data['jumlah_dokter'] ?? 0);
-        $jumlah_layanan  = (int) ($data['jumlah_layanan'] ?? 0);
-        $updatetime      = !empty($data['updatetime']) ? date('d/m/Y H:i', strtotime($data['updatetime'])) : '-';
-        $status          = (int) ($data['status'] ?? 0);
+        $id_dokter = (int) $data['id_dokter'];
+        $nama = htmlspecialchars($data['nama'] ?? '');
+        $kode = htmlspecialchars($data['kode'] ?? '-');
+        $id_ihs_practitioner = htmlspecialchars($data['id_ihs_practitioner'] ?? '-');
+        $jumlah_jadwal = (int) ($data['jumlah_jadwal'] ?? 0);
+        $status = (int) ($data['status'] ?? 0);
 
         if ($status === 1) {
             $label_status = '
@@ -202,6 +193,36 @@
             ';
         }
 
+        // Routing ID Practitioner
+        if(empty($data['id_ihs_practitioner'])){
+            $label_practitioner = '
+                <small class="py-1 px-2 bg-secondary-subtle rounded-1"><small>None</small></small>
+            ';
+        }else{
+            $label_practitioner = '
+                <a href="javascript:void(0);" class="py-1 px-2 bg-info-subtle rounded-1 modal_detail_ihs" data-id="' . $id_ihs_practitioner . '">
+                    <small>' . $id_ihs_practitioner . '</small>
+                </a>
+            ';
+        }
+
+        // Routing Jadwal
+        if(empty($jumlah_jadwal)){
+            $label_jadwal = '
+                <a href="javascript:void(0);" class="py-1 px-2 bg-secondary-subtle modal_jadwal" data-id="' . $id_dokter . '">
+                    <small>None</small>
+                </a>
+            ';
+        }else{
+            $label_jadwal = '
+                <a href="javascript:void(0);" class="py-1 px-2 bg-success-subtle modal_jadwal" data-id="' . $id_dokter . '">
+                    <small>'.$jumlah_jadwal.' Sesi</small>
+                </a>
+            ';
+        }
+        // Menghitung Jumlah Layanan DPJP
+        $jumlah_layanan_dpjp =  mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama WHERE id_dokter='$id_dokter'"));
+
         echo '
             <tr data-page-count="' . $JmlHalaman . '" data-current-page="' . $page . '">
                 <td class="text-center">
@@ -209,23 +230,18 @@
                 </td>
                 <td>
                     <small>
-                        <a href="javascript:void(0);" class="text-primary modal_detail" data-id="' . $id_poliklinik . '">
-                            ' . $nama_poliklinik . '
+                        <a href="javascript:void(0);" class="text-primary modal_detail" data-id="' . $id_dokter . '">
+                            ' . $nama . '
                         </a>
                     </small>
-                    
                 </td>
                 <td>
                     <small class="text-muted">' . $kode . '</small>
                 </td>
+                <td>' . $label_practitioner . '</td>
+                <td>' . $label_jadwal . '</td>
                 <td>
-                    <small class="text-muted">' . $jumlah_dokter . ' Dokter</small>
-                </td>
-                <td>
-                    <small class="text-muted">' . $jumlah_layanan . ' Jadwal</small>
-                </td>
-                <td>
-                    <small class="text-muted">' . $updatetime . '</small>
+                    <small class="text-muted">' . $jumlah_layanan_dpjp . '</small>
                 </td>
                 <td class="text-center">
                     <small>' . $label_status . '</small>
@@ -236,17 +252,17 @@
                     </a>
                     <ul class="dropdown-menu shadow">
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item modal_detail" data-id="' . $id_poliklinik . '">
+                            <a href="javascript:void(0);" class="dropdown-item modal_detail" data-id="' . $id_dokter . '">
                                 <i class="bi bi-info-circle"></i> Detail
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item modal_edit" data-id="' . $id_poliklinik . '">
+                            <a href="javascript:void(0);" class="dropdown-item modal_edit" data-id="' . $id_dokter . '">
                                 <i class="bi bi-pencil"></i> Edit
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item modal_hapus" data-id="' . $id_poliklinik . '">
+                            <a href="javascript:void(0);" class="dropdown-item modal_hapus" data-id="' . $id_dokter . '">
                                 <i class="bi bi-trash"></i> Hapus
                             </a>
                         </li>

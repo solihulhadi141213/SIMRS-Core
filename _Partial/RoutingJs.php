@@ -2,7 +2,7 @@
     $version = date('YmdHis');
 
     // Tambahan default script (selalu dimuat)
-    if(empty($pages)){
+    if(empty($Page)){
         echo '<script type="text/javascript" src="_Page/Dashboard/Dashboard.js?v='.$version.'"></script>' . PHP_EOL;
     }
     
@@ -26,6 +26,7 @@
         "SettingSifarma"      => "_Page/SettingSifarma/SettingSifarma.js?v='.$version.'",
         "LaporanKesalahan"    => "_Page/LaporanKesalahan/LaporanKesalahan.js?v='.$version.'",
         "ReferensiPoliklinik" => "_Page/ReferensiPoliklinik/ReferensiPoliklinik.js?v='.$version.'",
+        "ReferensiDokter"     => "_Page/ReferensiDokter/ReferensiDokter.js?v='.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif
