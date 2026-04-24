@@ -1,37 +1,43 @@
 <?php
-date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('Asia/Jakarta');
 
-include "../../_Config/Connection.php";
-include "../../_Config/SimrsFunction.php";
-include "../../_Config/Session.php";
+    include "../../_Config/Connection.php";
+    include "../../_Config/SimrsFunction.php";
+    include "../../_Config/Session.php";
 
-if (empty($SessionIdAkses)) {
-    echo '<div class="alert alert-danger">Sesi habis</div>';
-    exit;
-}
+    if (empty($SessionIdAkses)) {
+        echo '<div class="alert alert-danger">Sesi habis</div>';
+        exit;
+    }
 
-if (empty($_POST['id_jadwal'])) {
-    echo '<div class="alert alert-danger">ID tidak valid</div>';
-    exit;
-}
+    if (empty($_POST['id_jadwal'])) {
+        echo '<div class="alert alert-danger">ID tidak valid</div>';
+        exit;
+    }
 
-$id_jadwal = (int) $_POST['id_jadwal'];
+    $id_jadwal = (int) $_POST['id_jadwal'];
 
-$query = "SELECT * FROM jadwal_dokter WHERE id_jadwal=?";
-$stmt  = mysqli_prepare($Conn, $query);
-mysqli_stmt_bind_param($stmt, "i", $id_jadwal);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+    $query = "SELECT * FROM jadwal_dokter WHERE id_jadwal=?";
+    $stmt  = mysqli_prepare($Conn, $query);
+    mysqli_stmt_bind_param($stmt, "i", $id_jadwal);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
-if (mysqli_num_rows($result) == 0) {
-    echo '<div class="alert alert-danger">Data tidak ditemukan</div>';
-    exit;
-}
+    if (mysqli_num_rows($result) == 0) {
+        echo '<div class="alert alert-danger">Data tidak ditemukan</div>';
+        exit;
+    }
 
-$data = mysqli_fetch_assoc($result);
+    $data = mysqli_fetch_assoc($result);
 
-$nama_dokter = getDataDetail_v2($Conn,'dokter','id_dokter',$data['id_dokter'],'nama');
-$poliklinik  = getDataDetail_v2($Conn,'poliklinik','id_poliklinik',$data['id_poliklinik'],'poliklinik');
+    $nama_dokter = getDataDetail_v2($Conn,'dokter','id_dokter',$data['id_dokter'],'nama');
+    $poliklinik  = getDataDetail_v2($Conn,'poliklinik','id_poliklinik',$data['id_poliklinik'],'poliklinik');
+
+    if(empty($data['status'])){
+        $label_status ="";
+    }else{
+        $label_status ="checked";
+    }
 ?>
 
 <input type="hidden" name="id_jadwal" value="<?= $id_jadwal ?>">
@@ -101,5 +107,13 @@ $poliklinik  = getDataDetail_v2($Conn,'poliklinik','id_poliklinik',$data['id_pol
             <option value="1440" <?= $data['time_max']==1440?'selected':'' ?>>24 Jam</option>
             <option value="2880" <?= $data['time_max']==2880?'selected':'' ?>>2 Hari</option>
         </select>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="status_edit" name="status" value="1" <?php echo $label_status; ?>>
+            <label class="form-check-label" for="status_edit">Jadwal Aktif</label>
+        </div>
     </div>
 </div>

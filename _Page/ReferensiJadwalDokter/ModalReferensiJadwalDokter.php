@@ -66,6 +66,14 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="status" name="status" value="1">
+                                <label class="form-check-label" for="status">Jadwal Aktif</label>
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="row">
                         <div class="col-12" id="NotifikasiTambahJadwal">

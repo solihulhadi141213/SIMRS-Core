@@ -41,6 +41,7 @@
     $kuota_jkn      = $_POST['kuota_jkn'] ?? 0;
     $kuota_non_jkn  = $_POST['kuota_non_jkn'] ?? 0;
     $time_max       = $_POST['time_max'] ?? '';
+    $status       = $_POST['time_max'] ?? 0;
 
     // ==========================
     // VALIDASI INPUT
@@ -125,8 +126,8 @@
     // ==========================
     $query = "
         INSERT INTO jadwal_dokter 
-        (id_dokter, id_poliklinik, hari, jam_mulai, jam_selesai, kuota_non_jkn, kuota_jkn, time_max)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        (id_dokter, id_poliklinik, hari, jam_mulai, jam_selesai, kuota_non_jkn, kuota_jkn, time_max, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ";
 
     $stmt = mysqli_prepare($Conn, $query);
@@ -139,7 +140,7 @@
 
     mysqli_stmt_bind_param(
         $stmt,
-        "iisssiii",
+        "iisssiiii",
         $id_dokter,
         $id_poliklinik,
         $hari,
@@ -147,7 +148,8 @@
         $jam_selesai,
         $kuota_non_jkn,
         $kuota_jkn,
-        $time_max
+        $time_max,
+        $status
     );
 
     if (mysqli_stmt_execute($stmt)) {

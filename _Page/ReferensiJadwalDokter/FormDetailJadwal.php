@@ -47,6 +47,13 @@
     $kuota_jkn     = $data['kuota_jkn'];
     $kuota_non_jkn = $data['kuota_non_jkn'];
     $time_max      = $data['time_max'];
+    $status        = $data['status'];
+
+    if(empty($status)){
+        $label_status = '<span class="px-1 py-1 bg-secondary-subtle text-secondary rounded-1" title="No Active"><small>No Active</small></span>';
+    }else{
+        $label_status = '<span class="px-1 py-1 bg-success-subtle text-success rounded-1" title="Active"><small>Active</small></span>';
+    }
 
     // Ambil relasi
     $nama_dokter = getDataDetail_v2($Conn, 'dokter', 'id_dokter', $id_dokter, 'nama');
@@ -101,4 +108,9 @@
             ?>
         </small>
     </div>
+</div>
+<div class="row mb-2">
+    <div class="col-4"><small>Status</small></div>
+    <div class="col-1"><small>:</small></div>
+    <div class="col-7"><?php echo $label_status; ?></div>
 </div>

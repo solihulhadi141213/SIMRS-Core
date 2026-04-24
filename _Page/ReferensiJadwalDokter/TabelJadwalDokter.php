@@ -11,7 +11,7 @@
     if (empty($SessionIdAkses)) {
         echo '
             <tr>
-                <td align="center" colspan="8">
+                <td align="center" colspan="9">
                     <small class="text-danger">Sesi akses berakhir! Silakan login ulang!</small>
                 </td>
             </tr>
@@ -31,7 +31,7 @@
     if(empty($jumlah_data)){
         echo '
             <tr>
-                <td align="center" colspan="8">
+                <td align="center" colspan="9">
                     <small class="text-danger">Data Tidak Ditemukan!</small>
                 </td>
             </tr>
@@ -46,7 +46,7 @@
     if (!$stmt) {
         echo '
             <tr>
-                <td align="center" colspan="8">
+                <td align="center" colspan="9">
                     <small class="text-danger">Data Tidak Ditemukan</small>
                 </td>
             </tr>
@@ -65,12 +65,19 @@
         $kuota_non_jkn = $data['kuota_non_jkn'];
         $kuota_jkn     = $data['kuota_jkn'];
         $time_max      = $data['time_max'];
+        $status        = $data['status'];
         
         // Buka Nama Dokter Dari Tabel 'dokter'
         $nama_dokter = getDataDetail_v2($Conn, 'dokter', 'id_dokter', $id_dokter, 'nama');
 
         // Buka Nama Poli dari tabel 'poliklinik'
         $poliklinik = getDataDetail_v2($Conn, 'poliklinik', 'id_poliklinik', $id_poliklinik, 'poliklinik');
+
+        if(empty($status)){
+            $label_status = '<span class="px-2 py-2 bg-secondary-subtle text-secondary rounded-1" title="No Active"><i class="bi bi-check"></i></span>';
+        }else{
+            $label_status = '<span class="px-2 py-2 bg-success-subtle text-success rounded-1" title="Active"><i class="bi bi-check"></i></span>';
+        }
 
         // Tampilkan Data
         echo '
@@ -79,7 +86,9 @@
                     <small class="text-muted">' . $no . '</small>
                 </td>
                 <td class="text-left">
-                    <small class="text-muted">' . $nama_dokter . '</small>
+                    <small>
+                        <a href="javascript:void(0);" class="text-primary modal_detail" data-id="' . $id_jadwal . '">' . $nama_dokter . '</a>
+                    </small>
                 </td>
                 <td class="text-left">
                     <small class="text-muted">' . $poliklinik . '</small>
@@ -96,6 +105,7 @@
                 <td class="text-left">
                     <small class="text-muted">' . $kuota_jkn . '</small>
                 </td>
+                <td class="text-center">' . $label_status . '</td>
                 <td class="text-center">
                     <a href="javascript:void(0);" class="btn-sm btn-floating" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical"></i>

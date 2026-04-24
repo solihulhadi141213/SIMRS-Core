@@ -42,6 +42,7 @@
     $kuota_jkn     = $_POST['kuota_jkn'] ?? 0;
     $kuota_non_jkn = $_POST['kuota_non_jkn'] ?? 0;
     $time_max      = $_POST['time_max'] ?? '';
+    $status        = $_POST['status'] ?? 0;
 
     // ==========================
     // VALIDASI INPUT
@@ -142,7 +143,8 @@
             jam_selesai = ?,
             kuota_non_jkn = ?,
             kuota_jkn = ?,
-            time_max = ?
+            time_max = ?,
+            status = ?
         WHERE id_jadwal = ?
     ";
 
@@ -156,7 +158,7 @@
 
     mysqli_stmt_bind_param(
         $stmt,
-        "iisssiiii",
+        "iisssiiiii",
         $id_dokter,
         $id_poliklinik,
         $hari,
@@ -165,6 +167,7 @@
         $kuota_non_jkn,
         $kuota_jkn,
         $time_max,
+        $status,
         $id_jadwal
     );
 

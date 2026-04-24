@@ -99,6 +99,7 @@
                                                 <td align="left"><small><b>Selesai</b></small></td>
                                                 <td align="left"><small><b>BPJS</b></small></td>
                                                 <td align="left"><small><b>Umum</b></small></td>
+                                                <td align="center"><small><b>Status</b></small></td>
                                                 <td align="center"><small><b>Opsi</b></small></td>
                                             </tr>
                                         </thead>
