@@ -493,57 +493,21 @@
         }
         return $response;
     }
-    function tipeDisplay($tipe){
-        if($tipe=="prov"){
-            $response="Healthcare Provider";
-        }else{
-            if($tipe=="dept"){
-                $response="Hospital Department";
-            }else{
-                if($tipe=="team"){
-                    $response="Organizational team";
-                }else{
-                    if($tipe=="govt"){
-                        $response="Government";
-                    }else{
-                        if($tipe=="ins"){
-                            $response="Insurance Company";
-                        }else{
-                            if($tipe=="pay"){
-                                $response="Payer";
-                            }else{
-                                if($tipe=="edu"){
-                                    $response="Educational Institute";
-                                }else{
-                                    if($tipe=="reli"){
-                                        $response="Religious Institution";
-                                    }else{
-                                        if($tipe=="crs"){
-                                            $response="Clinical Research Sponsor";
-                                        }else{
-                                            if($tipe=="cg"){
-                                                $response="Community Group";
-                                            }else{
-                                                if($tipe=="bus"){
-                                                    $response="Non-Healthcare Business or Corporation";
-                                                }else{
-                                                    if($tipe=="other"){
-                                                        $response="Other";
-                                                    }else{
-                                                        $response="";
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return $response;
+    
+    //FUNGSI ENCRYPT DAN DECRYPT BRIDGING BPJS
+    function stringDecrypt($key, $string){
+        $encrypt_method = 'AES-256-CBC';
+        // hash
+        $key_hash = hex2bin(hash('sha256', $key));
+        // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+        $iv = substr(hex2bin(hash('sha256', $key)), 0, 16);
+        $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key_hash, OPENSSL_RAW_DATA, $iv);
+        return $output;
+    }
+    
+    // function lzstring decompress 
+    function decompress($string){
+        return \LZCompressor\LZString::decompressFromEncodedURIComponent($string);
     }
     
     function referensiAplicare($url_aplicare,$kode_ppk,$consid,$secret_key,$user_key){
@@ -1338,20 +1302,7 @@
         curl_close($ch);
         return $content;
     }
-    function stringDecrypt($key, $string){
-        $encrypt_method = 'AES-256-CBC';
-        // hash
-        $key_hash = hex2bin(hash('sha256', $key));
-        // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
-        $iv = substr(hex2bin(hash('sha256', $key)), 0, 16);
-        $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key_hash, OPENSSL_RAW_DATA, $iv);
-        return $output;
-    }
-    // function lzstring decompress 
-    // download libraries lzstring : https://github.com/nullpunkt/lz-string-php
-    function decompress($string){
-        return \LZCompressor\LZString::decompressFromEncodedURIComponent($string);
-    }
+    
     function CreatLocation($baseurl_satusehat,$Json,$Token){
         $curl = curl_init();
         curl_setopt_array($curl, array(

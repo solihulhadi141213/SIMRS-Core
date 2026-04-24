@@ -273,7 +273,7 @@
                     <li class="<?php if($Page=="ReferensiJadwalDokter"){echo 'active';} ?>">
                         <a href="index.php?Page=ReferensiJadwalDokter" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
-                            <span class="pcoded-mtext">Jadwal Praktek</span>
+                            <span class="pcoded-mtext">Jadwal Dokter</span>
                         </a>
                     </li>
 
