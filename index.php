@@ -33,7 +33,7 @@
         $Page="";
     }
 
-    // List Halaman
+    // List Halaman : Berfungsi Untuk Menentukan Title Halaman Yang Sesuai
     $list_halaman = [
         "Profile"               => "Profile",
         "Setting"               => "Setting",
@@ -52,6 +52,7 @@
         "ReferensiPoliklinik"   => "Poliklinik",
         "ReferensiDokter"       => "Dokter",
         "ReferensiJadwalDokter" => "Jadwal Praktek",
+        "ReferensiRuangRawat"   => "Ruang Rawat",
     ];
     
     // Menentukan Judul Halaman

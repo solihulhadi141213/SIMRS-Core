@@ -20,6 +20,7 @@
         'ReferensiPoliklinik'   => '_Page/ReferensiPoliklinik/ReferensiPoliklinik.php',
         'ReferensiDokter'       => '_Page/ReferensiDokter/ReferensiDokter.php',
         'ReferensiJadwalDokter' => '_Page/ReferensiJadwalDokter/ReferensiJadwalDokter.php',
+        'ReferensiRuangRawat'   => '_Page/ReferensiRuangRawat/ReferensiRuangRawat.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');
