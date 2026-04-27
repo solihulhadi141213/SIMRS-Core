@@ -1,7 +1,8 @@
 <?php
     $JumlahPengajuanAksesbaru = mysqli_num_rows(mysqli_query($Conn, "SELECT id_akses_pengajuan FROM akses_pengajuan WHERE status='Pending'"));
     $JumlahLaporanKesalahan   = mysqli_num_rows(mysqli_query($Conn, "SELECT id_akses_laporan FROM akses_laporan WHERE status='Terkirim'"));
-      //Kalkulasi Jumlah Notifikasi
+    
+    //Kalkulasi Jumlah Notifikasi
     $JumlahNotifikasi = $JumlahPengajuanAksesbaru + $JumlahLaporanKesalahan;
 ?>
 <li class="header-notification">

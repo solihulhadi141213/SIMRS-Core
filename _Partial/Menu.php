@@ -235,14 +235,14 @@
             <li class="pcoded-hasmenu 
                 <?php 
                     if(
-                        $Page=="ReferensiPoliklinik"||
-                        $Page=="ReferensiDokter"||
-                        $Page=="ReferensiJadwalDokter"||
-                        $Page=="ReferensiRuangRawat"||
-                        $Page=="KelasRuangan"||
-                        $Page=="KelasRuangan2"||
+                        $Page=="ReferensiPoliklinik" ||
+                        $Page=="ReferensiDokter" ||
+                        $Page=="ReferensiJadwalDokter" ||
+                        $Page=="ReferensiRuangRawat" ||
+                        $Page=="ReferensiIcd" ||
+                        $Page=="ReferensiWilayah" ||
                         $Page=="Diagnosa"||
-                        $Page=="Alergi"||
+                        $Page=="Alergi" ||
                         $Page=="Kfa"
                     )
                     {
@@ -284,15 +284,15 @@
                         </a>
                     </li>
 
-                    <li class="<?php if($Page=="Analyza"){echo 'active';} ?>">
-                        <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
+                    <li class="<?php if($Page=="ReferensiIcd"){echo 'active';} ?>">
+                        <a href="index.php?Page=ReferensiIcd" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
                             <span class="pcoded-mtext">ICD</span>
                         </a>
                     </li>
 
-                    <li class="<?php if($Page=="AksesPengajuan"){echo 'active';} ?>">
-                        <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
+                    <li class="<?php if($Page=="ReferensiWilayah"){echo 'active';} ?>">
+                        <a href="index.php?Page=ReferensiWilayah" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
                             <span class="pcoded-mtext">Wilayah</span>
                         </a>
@@ -300,7 +300,7 @@
 
                     <li class="pcoded-hasmenu 
                         <?php 
-                            if($Page=="Aksesibilitas" || $Page=="Tema" || $Page=="Font" || $Page=="ModeKontras"){
+                            if($Page=="ReferensiWilayahBpjs" || $Page=="ReferensiWilayahIcd"){
                                 echo 'active pcoded-trigger';
                             } 
                         ?>"
@@ -314,8 +314,8 @@
                         </a>
 
                         <ul class="pcoded-submenu">
-                            <li class="<?php if($Page=="AksesFitur"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesFitur" class="waves-effect waves-dark">
+                            <li class="<?php if($Page=="ReferensiWilayahBpjs"){echo 'active';} ?>">
+                                <a href="index.php?Page=ReferensiWilayahBpjs" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
                                     <span class="pcoded-mtext">Wilayah</span>
                                 </a>

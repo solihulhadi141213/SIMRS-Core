@@ -53,6 +53,7 @@
         "ReferensiDokter"       => "Dokter",
         "ReferensiJadwalDokter" => "Jadwal Praktek",
         "ReferensiRuangRawat"   => "Ruang Rawat",
+        "ReferensiIcd"          => "ICD",
     ];
     
     // Menentukan Judul Halaman
