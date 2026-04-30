@@ -29,6 +29,7 @@
         'ReferensiJadwalDokter' => '_Page/ReferensiJadwalDokter/ModalReferensiJadwalDokter.php',
         'ReferensiRuangRawat'   => '_Page/ReferensiRuangRawat/ModalReferensiRuangRawat.php',
         'ReferensiIcd'          => '_Page/ReferensiIcd/ModalReferensiIcd.php',
+        'ReferensiWilayah'      => '_Page/ReferensiWilayah/ModalReferensiWilayah.php',
     ];
 
     /**

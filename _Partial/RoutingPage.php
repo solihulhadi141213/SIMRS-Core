@@ -22,6 +22,7 @@
         'ReferensiJadwalDokter' => '_Page/ReferensiJadwalDokter/ReferensiJadwalDokter.php',
         'ReferensiRuangRawat'   => '_Page/ReferensiRuangRawat/ReferensiRuangRawat.php',
         'ReferensiIcd'          => '_Page/ReferensiIcd/ReferensiIcd.php',
+        'ReferensiWilayah'      => '_Page/ReferensiWilayah/ReferensiWilayah.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

@@ -321,8 +321,8 @@
                         <small>
                             <b>PENTING :</b>
                             Download template
-                            <a href="_Page/ReferensiIcd/icd_tmp.xlsx" target="_blank">
-                                disini
+                            <a href="_Page/ReferensiIcd/icd_tmp.xlsx" target="_blank" class="text-primary">
+                                <b>disini</b>
                             </a>
                         </small>
                     </div>

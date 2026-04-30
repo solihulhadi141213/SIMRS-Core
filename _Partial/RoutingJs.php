@@ -30,6 +30,7 @@
         "ReferensiJadwalDokter" => "_Page/ReferensiJadwalDokter/ReferensiJadwalDokter.js?v=A'.$version.'",
         "ReferensiRuangRawat"   => "_Page/ReferensiRuangRawat/ReferensiRuangRawat.js?v=A'.$version.'",
         "ReferensiIcd"          => "_Page/ReferensiIcd/ReferensiIcd.js?v=A'.$version.'",
+        "ReferensiWilayah"      => "_Page/ReferensiWilayah/ReferensiWilayah.js?v=A'.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif

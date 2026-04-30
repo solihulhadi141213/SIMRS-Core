@@ -33,4 +33,7 @@
 
 #Pages
 /assets/pages/
-_FileUpload/
+
+#_FileUpload
+_FileUpload/*
+!_FileUpload/readme.text
