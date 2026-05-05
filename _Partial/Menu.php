@@ -242,6 +242,7 @@
                         $Page=="ReferensiIcd" ||
                         $Page=="ReferensiWilayah" ||
                         $Page=="ReferensiWilayahBpjs" ||
+                        $Page=="ReferensiIcdBpjs" ||
                         $Page=="Diagnosa"||
                         $Page=="Alergi" ||
                         $Page=="Kfa"
@@ -301,7 +302,12 @@
 
                     <li class="pcoded-hasmenu 
                         <?php 
-                            if($Page=="ReferensiWilayahBpjs" || $Page=="ReferensiWilayahIcd"){
+                            if(
+                                $Page=="ReferensiWilayahBpjs" || 
+                                $Page=="ReferensiWilayahIcd" || 
+                                $Page=="ReferensiIcdBpjs" || 
+                                $Page=="ReferensiDpho"
+                            ){
                                 echo 'active pcoded-trigger';
                             } 
                         ?>"

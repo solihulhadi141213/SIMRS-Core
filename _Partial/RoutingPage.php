@@ -24,6 +24,7 @@
         'ReferensiIcd'          => '_Page/ReferensiIcd/ReferensiIcd.php',
         'ReferensiWilayah'      => '_Page/ReferensiWilayah/ReferensiWilayah.php',
         'ReferensiWilayahBpjs'  => '_Page/ReferensiWilayahBpjs/ReferensiWilayahBpjs.php',
+        'ReferensiIcdBpjs'      => '_Page/ReferensiIcdBpjs/ReferensiIcdBpjs.php',
         'ReferensiDpho'         => '_Page/ReferensiDpho/ReferensiDpho.php',
     ];
 
