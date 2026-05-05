@@ -30,6 +30,7 @@
         'ReferensiRuangRawat'   => '_Page/ReferensiRuangRawat/ModalReferensiRuangRawat.php',
         'ReferensiIcd'          => '_Page/ReferensiIcd/ModalReferensiIcd.php',
         'ReferensiWilayah'      => '_Page/ReferensiWilayah/ModalReferensiWilayah.php',
+        'ReferensiWilayahBpjs'  => '_Page/ReferensiWilayahBpjs/ModalReferensiWilayahBpjs.php',
     ];
 
     /**

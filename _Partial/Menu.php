@@ -241,6 +241,7 @@
                         $Page=="ReferensiRuangRawat" ||
                         $Page=="ReferensiIcd" ||
                         $Page=="ReferensiWilayah" ||
+                        $Page=="ReferensiWilayahBpjs" ||
                         $Page=="Diagnosa"||
                         $Page=="Alergi" ||
                         $Page=="Kfa"
@@ -321,10 +322,17 @@
                                 </a>
                             </li>
 
-                            <li class="<?php if($Page=="AksesEntitas"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesEntitas" class="waves-effect waves-dark">
+                            <li class="<?php if($Page=="ReferensiIcdBpjs"){echo 'active';} ?>">
+                                <a href="index.php?Page=ReferensiIcdBpjs" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
                                     <span class="pcoded-mtext">ICD</span>
+                                </a>
+                            </li>
+
+                            <li class="<?php if($Page=="ReferensiDpho"){echo 'active';} ?>">
+                                <a href="index.php?Page=ReferensiDpho" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">DPHO</span>
                                 </a>
                             </li>
                         </ul>
@@ -381,10 +389,17 @@
                                 </a>
                             </li>
 
-                            <li class="<?php if($Page=="AksesEntitas"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesEntitas" class="waves-effect waves-dark">
+                            <li class="<?php if($Page=="ReferensiKfa"){echo 'active';} ?>">
+                                <a href="index.php?Page=ReferensiKfa" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
                                     <span class="pcoded-mtext">KFA</span>
+                                </a>
+                            </li>
+
+                            <li class="<?php if($Page=="ReferensiWilayah"){echo 'active';} ?>">
+                                <a href="index.php?Page=ReferensiWilayah" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                                    <span class="pcoded-mtext">Wilayah</span>
                                 </a>
                             </li>
 

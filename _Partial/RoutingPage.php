@@ -23,6 +23,8 @@
         'ReferensiRuangRawat'   => '_Page/ReferensiRuangRawat/ReferensiRuangRawat.php',
         'ReferensiIcd'          => '_Page/ReferensiIcd/ReferensiIcd.php',
         'ReferensiWilayah'      => '_Page/ReferensiWilayah/ReferensiWilayah.php',
+        'ReferensiWilayahBpjs'  => '_Page/ReferensiWilayahBpjs/ReferensiWilayahBpjs.php',
+        'ReferensiDpho'         => '_Page/ReferensiDpho/ReferensiDpho.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

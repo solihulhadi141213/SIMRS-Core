@@ -80,7 +80,11 @@
                             <td>'.$nama_province.'</td>
                             <td>'.$kode_kab.'</td>
                             <td>Kabupaten</td>
-                            <td>'.$nama_kab.'</td>
+                            <td>
+                                <a href="generate_wilayah.php?kategori_data=Kelurahan_by_kab&kode_province='.$kode_province.'&kode_kab='.$kode_kab.'">
+                                    '.$nama_kab.'
+                                </a>
+                            </td>
                             <td>
                                 <a href="generate_wilayah.php?kategori_data=Kecamatan&kode_province='.$kode_province.'&kode_kab='.$kode_kab.'">
                                     Lihat Kecamatan
@@ -133,7 +137,11 @@
                                 <td>'.$nama_province.'</td>
                                 <td>'.$kode_kab.'</td>
                                 <td>Kabupaten</td>
-                                <td>'.$nama_kab.'</td>
+                                <td>
+                                    <a href="generate_wilayah.php?kategori_data=Kelurahan_by_kab&kode_province='.$kode_province.'&kode_kab='.$kode_kab.'">
+                                        '.$nama_kab.'
+                                    </a>
+                                </td>
                                 <td>'.$kode_kec.'</td>
                                 <td>'.$nama_kec.'</td>
                                 <td>
@@ -186,7 +194,7 @@
                         $nama_kec = $Data['nama'];
 
                         $no = 1;
-                        $query_desa = mysqli_query($Conn, "SELECT DISTINCT kode, nama FROM wilayah_mendagri WHERE kategori='Kelurahan' AND kode like '$kode_kab%'");
+                        $query_desa = mysqli_query($Conn, "SELECT DISTINCT kode, nama FROM wilayah_mendagri WHERE kategori='Kelurahan' AND kode like '$kode_kec%'");
                         while ($data_desa = mysqli_fetch_array($query_desa)) {
                             $kode_desa = $data_desa['kode'];
                             $nama_desa = $data_desa['nama'];
@@ -209,6 +217,62 @@
                             $no++;
                         }
 
+                    }
+                }
+            }
+        }
+
+        if($kategori_data=="Kelurahan_by_kab"){
+            if(!empty($_GET['kode_province'])){
+                if(!empty($_GET['kode_kab'])){
+                    $kode_province = $_GET['kode_province'];
+                    $kode_kab      = $_GET['kode_kab'];
+
+                    //Buka Data Nama Provinsi
+                    $Qry = $Conn->prepare("SELECT kode, nama FROM wilayah_mendagri WHERE kode = ?");
+                    $Qry->bind_param("s", $kode_province);
+                    $Qry->execute();
+                    $Result = $Qry->get_result();
+                    $Data = $Result->fetch_assoc();
+                    $Qry->close();
+                    $nama_province = $Data['nama'];
+
+                    //Buka Data Nama Kabupaten
+                    $Qry = $Conn->prepare("SELECT kode, nama FROM wilayah_mendagri WHERE kode = ?");
+                    $Qry->bind_param("s", $kode_kab);
+                    $Qry->execute();
+                    $Result = $Qry->get_result();
+                    $Data = $Result->fetch_assoc();
+                    $Qry->close();
+                    $nama_kab = $Data['nama'];
+
+                    $no = 1;
+                    $query_kec = mysqli_query($Conn, "SELECT DISTINCT kode, nama FROM wilayah_mendagri WHERE kategori='Kecamatan' AND kode like '$kode_kab%'");
+                    while ($data_kec = mysqli_fetch_array($query_kec)) {
+                        $kode_kec = $data_kec['kode'];
+                        $nama_kec = $data_kec['nama'];
+                        
+                        $query_desa = mysqli_query($Conn, "SELECT DISTINCT kode, nama FROM wilayah_mendagri WHERE kategori='Kelurahan' AND kode like '$kode_kec%'");
+                        while ($data_desa = mysqli_fetch_array($query_desa)) {
+                            $kode_desa = $data_desa['kode'];
+                            $nama_desa = $data_desa['nama'];
+                            echo '
+                                <tr>
+                                    <td>'.$no.'</td>
+                                    <td>'.$kode_province.'</td>
+                                    <td>'.$nama_province.'</td>
+                                    <td>'.$kode_kab.'</td>
+                                    <td>Kabupaten</td>
+                                    <td>'.$nama_kab.'</td>
+                                    <td>'.$kode_kec.'</td>
+                                    <td>'.$nama_kec.'</td>
+                                    <td>'.$kode_desa.'</td>
+                                    <td>Kelurahan</td>
+                                    <td>'.$nama_desa.'</td>
+                                </tr>
+                            ';
+                            $no++;
+                        }
                     }
                 }
             }
