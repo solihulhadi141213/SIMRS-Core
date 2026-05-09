@@ -16,7 +16,7 @@
     $data = [];
 
     // Karena tanggal = VARCHAR → pakai STR_TO_DATE
-    $colTanggal = "STR_TO_DATE(tanggal, '%Y-%m-%d')";
+    $colTanggal = "STR_TO_DATE(tanggal_kunjungan, '%Y-%m-%d')";
 
     // ================= BULANAN =================
     if ($periode == "Bulanan") {
@@ -25,7 +25,7 @@
             SELECT 
                 DAY($colTanggal) as hari,
                 COUNT(*) as jumlah
-            FROM kunjungan_utama
+            FROM kunjungan
             WHERE YEAR($colTanggal) = '$tahun'
             AND MONTH($colTanggal) = '$bulan'
             GROUP BY DAY($colTanggal)
@@ -53,7 +53,7 @@
             SELECT 
                 MONTH($colTanggal) as bulan,
                 COUNT(*) as jumlah
-            FROM kunjungan_utama
+            FROM kunjungan
             WHERE YEAR($colTanggal) = '$tahun'
             GROUP BY MONTH($colTanggal)
             ORDER BY MONTH($colTanggal)

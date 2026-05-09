@@ -33,6 +33,7 @@
         "ReferensiWilayah"      => "_Page/ReferensiWilayah/ReferensiWilayah.js?v=A'.$version.'",
         "ReferensiWilayahBpjs"  => "_Page/ReferensiWilayahBpjs/ReferensiWilayahBpjs.js?v=A'.$version.'",
         "ReferensiIcdBpjs"      => "_Page/ReferensiIcdBpjs/ReferensiIcdBpjs.js?v=A'.$version.'",
+        "Pasien"                => "_Page/Pasien/Pasien.js?v=A'.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif

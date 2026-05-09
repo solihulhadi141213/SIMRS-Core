@@ -111,25 +111,54 @@
         return $ListKolom;
     }
 
-    // Fungsi Referensi Akses
-    function GetStatusAccess($Conn,$id_akses,$kode_fitur){
-        //Cari id_akses_ref
-        $QryRef= mysqli_query($Conn,"SELECT * FROM akses_ref WHERE kode='$kode_fitur'")or die(mysqli_error($Conn));
-        $DataRef = mysqli_fetch_array($QryRef);
-        if(empty($DataRef['id_akses_ref'])){
-            $Response="";
-        }else{
-            $id_akses_ref=$DataRef['id_akses_ref'];
-            //Buka Akses ACC
-            $QryAcc= mysqli_query($Conn,"SELECT * FROM akses_acc WHERE id_akses_ref='$id_akses_ref' AND id_akses='$id_akses'")or die(mysqli_error($Conn));
-            $DataAcc = mysqli_fetch_array($QryAcc);
-            if(empty($DataAcc['status'])){
-                $Response="";
-            }else{
-                $Response=$DataAcc['status'];
-            }
+    // =========================================================
+    // FUNCTION CEK HAK AKSES FITUR
+    // =========================================================
+    function GetStatusAccess($Conn, $id_akses, $kode_fitur){
+
+        // Validasi Parameter
+        if (empty($id_akses) || empty($kode_fitur)) {
+            return false;
         }
-        return $Response;
+
+        // Query Join Sekaligus
+        $query = "
+            SELECT akses_acc.id_akses_acc
+            FROM akses_acc
+            INNER JOIN akses_fitur 
+                ON akses_acc.id_akses_fitur = akses_fitur.id_akses_fitur
+            WHERE akses_acc.id_akses = ?
+            AND akses_fitur.kode = ?
+            LIMIT 1
+        ";
+
+        $stmt = mysqli_prepare($Conn, $query);
+
+        // Debug Prepare
+        if (!$stmt) {
+            error_log('Prepare Failed : '.mysqli_error($Conn));
+            return false;
+        }
+
+        mysqli_stmt_bind_param($stmt, "is", $id_akses, $kode_fitur);
+
+        // Execute
+        if (!mysqli_stmt_execute($stmt)) {
+            error_log('Execute Failed : '.mysqli_stmt_error($stmt));
+            return false;
+        }
+
+        $result = mysqli_stmt_get_result($stmt);
+
+        // Jika Ada Akses
+        if (mysqli_num_rows($result) > 0) {
+            mysqli_stmt_close($stmt);
+            return true;
+        }
+
+        mysqli_stmt_close($stmt);
+
+        return false;
     }
 
     //Memanggil Detail Data

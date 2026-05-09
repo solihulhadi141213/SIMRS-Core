@@ -449,7 +449,16 @@
                     </li>
                 </ul>
             </li>
-            <li class="pcoded-hasmenu <?php if($Page=="Pasien"||$Page=="Rujukan"||$Page=="RawatJalan"||$Page=="SuratKontrol"||$Page=="Approval"||$Page=="RujukBalik"||$Page=="Fingerprint"||$Page=="Monitoring"||$Page=="MonitoringBaru"||$Page=="JadwalOperasi"||$Page=="Signature"||$Page=="sep"){echo 'active pcoded-trigger';} ?>">
+            <li class="pcoded-hasmenu 
+                <?php 
+                    if(
+                        $Page=="Pasien"||
+                        $Page=="Kunjungan"
+                    ){
+                        echo 'active pcoded-trigger';
+                    } 
+                ?>
+            ">
                 <a href="javascript:void(0)" class="waves-effect waves-dark">
                     <span class="pcoded-micon"><i class="ti-id-badge"></i></span>
                     <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Rekam Medis</span>

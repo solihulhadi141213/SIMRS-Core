@@ -10,7 +10,7 @@
     $JumlahPasien     = mysqli_num_rows(mysqli_query($Conn, "SELECT id_pasien FROM pasien"));
 
     // Hitung Jumlah Kunjungan
-    $JumlahKunjungan  = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama"));
+    $JumlahKunjungan  = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan"));
 
     // Hitung Jumlah Poliklinik
     $JumlahPoliklinik = mysqli_num_rows(mysqli_query($Conn, "SELECT id_poliklinik FROM poliklinik WHERE status='Aktif'"));

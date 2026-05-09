@@ -1,126 +1,173 @@
 <?php
-    //Koneksi Database
+    // Koneksi Database
     include "../../_Config/Connection.php";
 
-    // Inisialisasi Jumlah Halaman
-    $JmlHalaman = 0;
+    // =========================
+    // PARAMETER
+    // =========================
+    $keyword = !empty($_POST['keyword']) ? trim($_POST['keyword']) : '';
+    $limit   = !empty($_POST['limit']) ? (int) $_POST['limit'] : 10;
+    $page    = !empty($_POST['page']) ? (int) $_POST['page'] : 1;
 
-    //keyword
-    if(!empty($_POST['keyword'])){
-        $keyword=$_POST['keyword'];
-    }else{
-        $keyword="";
+    // Validasi minimum
+    if($limit <= 0){
+        $limit = 10;
     }
 
-    //page
-    if(!empty($_POST['limit'])){
-        $limit=$_POST['limit'];
-    }else{
-        $limit="1";
-    }
-    
-    //Atur Page
-    if(!empty($_POST['page'])){
-        $page=$_POST['page'];
-        $posisi = ( $page - 1 ) * $limit;
-    }else{
-        $page="1";
-        $posisi = 0;
+    if($page <= 0){
+        $page = 1;
     }
 
-    // Menghitung Jumlah Data
-    if(empty($keyword)){
-        $jml_data = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama WHERE status!='Pulang' AND status!='Batal'"));
-    }else{
-        $jml_data = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama WHERE (id_pasien like '%$keyword%' OR nama like '%$keyword%' OR tujuan like '%$keyword%' OR poliklinik like '%$keyword%' OR ruangan like '%$keyword%') AND status!='Pulang' AND status!='Batal'"));
+    $posisi = ($page - 1) * $limit;
+
+    // =========================
+    // WHERE CONDITION
+    // =========================
+    $where = "WHERE k.status!='Selesai' AND k.status!='Batal'";
+
+    if(!empty($keyword)){
+        $keyword = mysqli_real_escape_string($Conn, $keyword);
+
+        $where .= " AND (
+            p.nama LIKE '%$keyword%' OR
+            k.id_pasien LIKE '%$keyword%' OR
+            k.tujuan LIKE '%$keyword%' OR
+            k.poliklinik LIKE '%$keyword%' OR
+            k.ruang_rawat LIKE '%$keyword%'
+        )";
     }
 
-    // Jika Tidak Ada Data
+    // =========================
+    // HITUNG TOTAL DATA
+    // =========================
+    $query_count = "
+        SELECT COUNT(*) as total
+        FROM kunjungan k
+        LEFT JOIN pasien p ON k.id_pasien = p.id_pasien
+        $where
+    ";
+
+    $result_count = mysqli_query($Conn, $query_count);
+    $data_count   = mysqli_fetch_assoc($result_count);
+
+    $jml_data = $data_count['total'];
+
+    // =========================
+    // JIKA DATA KOSONG
+    // =========================
     if(empty($jml_data)){
-       echo '
+        echo '
             <tr>
                 <td colspan="7" class="text-center">
                     <small>Data Tidak Ditemukan</small>
                 </td>
             </tr>
-       ';
+        ';
     }
-    $JmlHalaman = ceil($jml_data/$limit); 
 
-    $no = 1+$posisi;
-    //KONDISI PENGATURAN MASING FILTER
-    if(empty($keyword)){
-        $query = mysqli_query($Conn, "SELECT*FROM kunjungan_utama ORDER BY id_kunjungan DESC LIMIT $posisi, $limit");
-    }else{
-        $query = mysqli_query($Conn, "SELECT*FROM kunjungan_utama WHERE (id_pasien like '%$keyword%' OR nama like '%$keyword%' OR tujuan like '%$keyword%' OR poliklinik like '%$keyword%' OR ruangan like '%$keyword%') AND status!='Pulang' AND status!='Batal' ORDER BY id_kunjungan DESC LIMIT $posisi, $limit");
-    }
-    while ($data = mysqli_fetch_array($query)) {
-        $id_pasien  = $data['id_pasien'];
-        $noRm       = sprintf("%07d", $id_pasien);
-        $tanggal    = $data['tanggal'];
-        $nama       = $data['nama'];
-        $tujuan     = $data['tujuan'];
-        $poliklinik = $data['poliklinik'];
-        $ruangan    = $data['ruangan'];
+    // =========================
+    // PAGINATION
+    // =========================
+    $JmlHalaman = ceil($jml_data / $limit);
 
-        // Routing Kunjungan
-        if($tujuan=="Rajal"){
+    // =========================
+    // QUERY DATA
+    // =========================
+    $query = "
+        SELECT
+            k.id_kunjungan,
+            k.id_pasien,
+            k.tanggal_kunjungan,
+            k.tujuan,
+            k.poliklinik,
+            k.ruang_rawat,
+            p.nama
+        FROM kunjungan k
+        LEFT JOIN pasien p ON k.id_pasien = p.id_pasien
+        $where
+        ORDER BY k.id_kunjungan DESC
+        LIMIT $posisi, $limit
+    ";
+
+    $result = mysqli_query($Conn, $query);
+
+    $no = 1 + $posisi;
+
+    while($data = mysqli_fetch_assoc($result)){
+
+        $id_pasien         = $data['id_pasien'];
+        $noRm              = sprintf("%07d", $id_pasien);
+        $tanggal_kunjungan = $data['tanggal_kunjungan'];
+        $nama              = $data['nama'];
+        $tujuan            = $data['tujuan'];
+        $poliklinik        = $data['poliklinik'];
+        $ruang_rawat       = $data['ruang_rawat'];
+
+        // Label Tujuan
+        if($tujuan == "Rajal"){
             $label_tujuan = '
                 <span class="py-1 px-2 bg-success-subtle text-success rounded-1">
                     <small>Rajal</small>
                 </span>
             ';
+        }elseif($tujuan == "Ranap"){
+            $label_tujuan = '
+                <span class="py-1 px-2 bg-danger-subtle text-danger rounded-1">
+                    <small>Ranap</small>
+                </span>
+            ';
         }else{
-            if($tujuan=="Ranap"){
-                $label_tujuan = '
-                    <span class="py-1 px-2 bg-danger-subtle text-danger rounded-1">
-                        <small>Ranap</small>
-                    </span>
-                ';
-            }else{
-                $label_tujuan = '
-                    <span class="py-1 px-2 bg-secondary-subtle text-secondary rounded-1">
-                        <small>None</small>
-                    </span>
-                ';
-            }
+            $label_tujuan = '
+                <span class="py-1 px-2 bg-secondary-subtle text-secondary rounded-1">
+                    <small>None</small>
+                </span>
+            ';
         }
+
         echo '
             <tr>
                 <td class="text-center">
-                    <small class="text text-muted">'.$no.'</small>
+                    <small class="text-muted">'.$no.'</small>
                 </td>
-                <td class="text-left">
-                    <small class="text text-muted">'.$noRm.'</small>
+
+                <td class="text-start">
+                    <small class="text-muted">'.$noRm.'</small>
                 </td>
-                <td class="text-left">
-                    <small class="text text-muted">'.$nama.'</small>
+
+                <td class="text-start">
+                    <small class="text-muted">'.$nama.'</small>
                 </td>
-                <td class="text-left">
-                    <small class="text text-muted">'.date('d/m/Y', strtotime($tanggal)).'</small>
+
+                <td class="text-start">
+                    <small class="text-muted">'.date('d/m/Y', strtotime($tanggal_kunjungan)).'</small>
                 </td>
-                <td class="text-center">'.$label_tujuan.'</td>
+
+                <td class="text-center">
+                    '.$label_tujuan.'
+                </td>
             </tr>
         ';
-        $no++; 
+
+        $no++;
     }
 ?>
 
 <script>
-    //Creat Javascript Variabel
-    var page_count=<?php echo $JmlHalaman; ?>;
-    var curent_page=<?php echo $page; ?>;
-    
-    //Put Into Pagging Element
-    $('#page_info').html('Page '+curent_page+' Of '+page_count+'');
-    
-    //Set Pagging Button
-    if(curent_page==1){
+    // Creat Javascript Variabel
+    var page_count = <?php echo $JmlHalaman; ?>;
+    var curent_page = <?php echo $page; ?>;
+
+    // Put Into Pagging Element
+    $('#page_info').html('Page ' + curent_page + ' Of ' + page_count);
+
+    // Set Pagging Button
+    if(curent_page == 1){
         $('#previous_page').prop('disabled', true);
     }else{
         $('#previous_page').prop('disabled', false);
     }
-    if(page_count<=curent_page){
+
+    if(page_count <= curent_page){
         $('#next_page').prop('disabled', true);
     }else{
         $('#next_page').prop('disabled', false);

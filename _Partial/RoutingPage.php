@@ -26,6 +26,7 @@
         'ReferensiWilayahBpjs'  => '_Page/ReferensiWilayahBpjs/ReferensiWilayahBpjs.php',
         'ReferensiIcdBpjs'      => '_Page/ReferensiIcdBpjs/ReferensiIcdBpjs.php',
         'ReferensiDpho'         => '_Page/ReferensiDpho/ReferensiDpho.php',
+        'Pasien'                => '_Page/Pasien/Pasien.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');
