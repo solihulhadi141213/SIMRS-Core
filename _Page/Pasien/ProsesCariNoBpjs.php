@@ -102,22 +102,24 @@
     $json_decode  = json_decode($decompressed, true);
 
     // Buat Variabel Informasi Pasien
-    $noKartu   = $json_decode['peserta']['noKartu'];
-    $nama      = $json_decode['peserta']['nama'];
-    $nik_bpjs  = $json_decode['peserta']['nik'];
-    $tglLahir  = $json_decode['peserta']['tglLahir'];
-    $sex       = $json_decode['peserta']['sex'];
-    $noTelepon = $json_decode['peserta']['mr']['noTelepon'];
+    $noKartu      = $json_decode['peserta']['noKartu'];
+    $nama         = $json_decode['peserta']['nama'];
+    $nik_bpjs     = $json_decode['peserta']['nik'];
+    $tglLahir     = $json_decode['peserta']['tglLahir'];
+    $sex          = $json_decode['peserta']['sex'];
+    $noTelepon    = $json_decode['peserta']['mr']['noTelepon'];
+    $jenisPeserta = $json_decode['peserta']['jenisPeserta']['keterangan'];
 
     // Metadata Response
     $metadata = [
-        "noKartu"   => $noKartu,
-        "nama"      => $nama,
-        "nik_bpjs"  => $nik_bpjs,
-        "tglLahir"  => $tglLahir,
-        "sex"       => $sex,
-        "noTelepon" => $noTelepon,
-        "raw"       => "$decompressed",
+        "noKartu"      => $noKartu,
+        "nama"         => $nama,
+        "nik_bpjs"     => $nik_bpjs,
+        "tglLahir"     => $tglLahir,
+        "sex"          => $sex,
+        "noTelepon"    => $noTelepon,
+        "jenisPeserta" => $jenisPeserta,
+        "raw"          => "$decompressed",
     ];
 
     // Response Success

@@ -30,6 +30,7 @@
         echo '
             <link href="vendor\Sumernote\summernote.min.css" rel="stylesheet">
             <script src="vendor\Sumernote\summernote.min.js"></script>
+            <script src="node_modules\qrcodejs\qrcode.min.js"></script>
         ';
     }
 ?>

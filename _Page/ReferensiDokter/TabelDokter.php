@@ -221,7 +221,7 @@
             ';
         }
         // Menghitung Jumlah Layanan DPJP
-        $jumlah_layanan_dpjp =  mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama WHERE id_dokter='$id_dokter'"));
+        $jumlah_layanan_dpjp =  mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan WHERE id_dokter='$id_dokter'"));
 
         echo '
             <tr data-page-count="' . $JmlHalaman . '" data-current-page="' . $page . '">

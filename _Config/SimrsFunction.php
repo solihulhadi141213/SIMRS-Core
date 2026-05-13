@@ -2586,4 +2586,46 @@
         $get =json_decode($content, true);
         return $content;
     }
+
+    function hitungUsia($tanggal_lahir, $tanggal_pembanding = null){
+        if (empty($tanggal_lahir)) {
+            return null;
+        }
+
+        try {
+            $lahir = new DateTime($tanggal_lahir);
+
+            // Jika tanggal pembanding kosong gunakan sekarang
+            $compare = !empty($tanggal_pembanding)
+                ? new DateTime($tanggal_pembanding)
+                : new DateTime();
+
+            // Validasi jika tanggal lahir lebih besar
+            if ($lahir > $compare) {
+                return null;
+            }
+
+            $diff = $lahir->diff($compare);
+
+            // ==================================================
+            // LOGIKA FORMAT USIA
+            // ==================================================
+
+            // Kurang dari 1 bulan => hari
+            if ($diff->y == 0 && $diff->m == 0) {
+                return $diff->d . ' Hari';
+            }
+
+            // Kurang dari 1 tahun => bulan
+            if ($diff->y == 0) {
+                return $diff->m . ' Bulan';
+            }
+
+            // 1 tahun ke atas => tahun
+            return $diff->y . ' Tahun';
+
+        } catch (Exception $e) {
+            return null;
+        }
+    }
 ?>

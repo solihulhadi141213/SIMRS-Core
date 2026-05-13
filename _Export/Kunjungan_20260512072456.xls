@@ -1,0 +1,120 @@
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>ID Kunjungan</th>
+                <th>No RM</th>
+                <th>Nama Pasien</th>
+                <th>Gender</th>
+                <th>Tanggal Lahir</th>
+                <th>Jenis Kunjungan</th>
+                <th>Poliklinik</th>
+                <th>Dokter</th>
+                <th>Status</th>
+                <th>Tanggal Daftar</th>
+            </tr>
+        </thead>
+        <tbody>
+    
+            <tr>
+                <td>1</td>
+                <td>30353</td>
+                <td>56686</td>
+                <td>WARSIH, NY / SURYADI, TN</td>
+                <td>Perempuan</td>
+                <td>1953-07-01</td>
+                <td>Ranap</td>
+                <td>SARAF</td>
+                <td>dr. Raihana Haifa Sopa</td>
+                <td>Selesai</td>
+                <td>2026-05-12 02:16:00</td>
+            </tr>
+        
+            <tr>
+                <td>2</td>
+                <td>30352</td>
+                <td>56670</td>
+                <td>KAFRAWI, TN</td>
+                <td>Laki-laki</td>
+                <td>1939-04-08</td>
+                <td>Rajal</td>
+                <td>PDP</td>
+                <td>dr. Raihana Haifa Sopa</td>
+                <td>Meninggal</td>
+                <td>2026-05-12 01:48:00</td>
+            </tr>
+        
+            <tr>
+                <td>3</td>
+                <td>30350</td>
+                <td>56720</td>
+                <td>NURYANAH, NY / RESTA MA, TN</td>
+                <td>Perempuan</td>
+                <td>1996-10-12</td>
+                <td>Rajal</td>
+                <td>INSTALASI GAWAT DARURAT</td>
+                <td>dr. Ihsan Harismunandar</td>
+                <td>Terdaftar</td>
+                <td>2026-05-11 18:46:00</td>
+            </tr>
+        
+            <tr>
+                <td>4</td>
+                <td>30349</td>
+                <td>56712</td>
+                <td>DAYAT SYAMSUL HIDAYAT, TN / DARYONO, TN (AYAH)</td>
+                <td>Laki-laki</td>
+                <td>1992-06-18</td>
+                <td>Ranap</td>
+                <td>INSTALASI GAWAT DARURAT</td>
+                <td>dr. Eha julaeha</td>
+                <td>Terdaftar</td>
+                <td>2026-05-10 20:03:00</td>
+            </tr>
+        
+            <tr>
+                <td>5</td>
+                <td>30348</td>
+                <td>56716</td>
+                <td>E HERMAN RUGANDI, TN / RATNA MINTARSIH, NY</td>
+                <td>Laki-laki</td>
+                <td>1951-06-24</td>
+                <td>Rajal</td>
+                <td>INSTALASI GAWAT DARURAT</td>
+                <td>dr. AGGY HAFIZ RAHMADITA</td>
+                <td>Terdaftar</td>
+                <td>2026-05-10 19:58:00</td>
+            </tr>
+        
+            <tr>
+                <td>6</td>
+                <td>30347</td>
+                <td>56726</td>
+                <td>WATIAH, NY / KARMA, TN (ALM)</td>
+                <td>Perempuan</td>
+                <td>1965-06-01</td>
+                <td>Rajal</td>
+                <td></td>
+                <td>dr. AGGY HAFIZ RAHMADITA</td>
+                <td>Terdaftar</td>
+                <td>2026-05-10 15:39:00</td>
+            </tr>
+        
+            <tr>
+                <td>7</td>
+                <td>30346</td>
+                <td>56727</td>
+                <td>MAYA MARYANTI, NY, BY / IRWAN SUSANTO, TN</td>
+                <td>Perempuan</td>
+                <td>2025-03-19</td>
+                <td>Rajal</td>
+                <td>PENYAKIT DALAM</td>
+                <td>dr. ALLIN MARLINA RIVAI, Sp.DV</td>
+                <td>Terdaftar</td>
+                <td>2026-05-10 15:32:00</td>
+            </tr>
+        
+        </tbody>
+    </table>
+    

@@ -22,6 +22,7 @@
 
     if (!empty($keyword)) {
         $where .= " AND (
+            id_pasien LIKE '%$keyword%' OR
             nama LIKE '%$keyword%' OR
             nik LIKE '%$keyword%' OR
             no_bpjs LIKE '%$keyword%' OR
@@ -163,7 +164,11 @@
                         </a>
                     </small>
                 </td>
-                <td><small class="text-dark">'.$id_pasien.'</small></td>
+                <td>
+                    <small class="text-dark">
+                        '.$id_pasien.'
+                    </small>
+                </td>
                 <td>'.$nik_label.'</td>
                 <td>'.$no_bpjs_label.'</td>
                 <td>'.$id_ihs_label.'</td>

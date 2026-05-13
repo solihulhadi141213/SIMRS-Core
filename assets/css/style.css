@@ -15935,3 +15935,104 @@ pre {
     border-radius: 6px;
     font-size: 13px;
 }
+
+/* ------------------------------------------------------ */
+/* RECENT ACTIVITY */
+/* ------------------------------------------------------ */
+.activity-card{
+  background:#fff;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.timeline{
+  position:relative;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+.timeline-item{
+  position:relative;
+  padding-left:70px;
+  padding-bottom:35px;
+}
+
+.timeline-item:last-child{
+  padding-bottom:0;
+}
+
+/* garis vertikal */
+.timeline-item::before{
+  content:'';
+  position:absolute;
+  left:18px;
+  top:40px;
+  width:2px;
+  height:100%;
+  background:#dfe6ee;
+}
+
+.timeline-item:last-child::before{
+  display:none;
+}
+
+/* icon bulat */
+.timeline-icon{
+  position:absolute;
+  left:0;
+  top:0;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+}
+
+.bg-soft-primary{
+  background:#dff4ff;
+  color:#0d6efd;
+}
+
+.bg-soft-success{
+  background:#dff7e8;
+  color:#198754;
+}
+
+.bg-soft-warning{
+  background:#fff2db;
+  color:#fd7e14;
+}
+
+.bg-soft-danger{
+  background:#ffe2e2;
+  color:#dc3545;
+}
+
+.activity-title{
+  font-weight:600;
+  margin-bottom:4px;
+}
+
+.activity-desc{
+  color:#6c757d;
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.activity-time{
+  font-size:13px;
+  color:#94a3b8;
+}
+
+.activity-link{
+  color:#00bcd4;
+  text-decoration:none;
+}
+
+.activity-link:hover{
+    text-decoration:underline;
+}

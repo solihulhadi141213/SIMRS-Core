@@ -56,6 +56,7 @@
         "ReferensiIcd"          => "ICD",
         "ReferensiWilayah"      => "Wilayah",
         "Pasien"                => "Pasien",
+        "Kunjungan"             => "Kunjungan",
     ];
     
     // Menentukan Judul Halaman

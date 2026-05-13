@@ -33,6 +33,7 @@
         'ReferensiWilayahBpjs'  => '_Page/ReferensiWilayahBpjs/ModalReferensiWilayahBpjs.php',
         'ReferensiIcdBpjs'      => '_Page/ReferensiIcdBpjs/ModalReferensiIcdBpjs.php',
         'Pasien'                => '_Page/Pasien/ModalPasien.php',
+        'Kunjungan'             => '_Page/Kunjungan/ModalKunjungan.php',
     ];
 
     /**

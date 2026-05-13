@@ -453,7 +453,8 @@
                 <?php 
                     if(
                         $Page=="Pasien"||
-                        $Page=="Kunjungan"
+                        $Page=="Kunjungan" ||
+                        $Page=="Antrian"
                     ){
                         echo 'active pcoded-trigger';
                     } 
@@ -472,17 +473,17 @@
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Page=="RawatJalan"){echo 'active';} ?>">
-                        <a href="index.php?Page=RawatJalan" class="waves-effect waves-dark">
+                    <li class="<?php if($Page=="Kunjungan"){echo 'active';} ?>">
+                        <a href="index.php?Page=Kunjungan" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Kunjungan</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Page=="Antrian"){echo 'active';} ?>">
-                        <a href="index.php?Page=RawatJalan" class="waves-effect waves-dark">
+                    <li class="<?php if($Page=="Diagnosis"){echo 'active';} ?>">
+                        <a href="index.php?Page=Diagnosis" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Antrian</span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Diagnosis</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
