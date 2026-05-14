@@ -57,6 +57,7 @@
         "ReferensiWilayah"      => "Wilayah",
         "Pasien"                => "Pasien",
         "Kunjungan"             => "Kunjungan",
+        "Diagnosis"             => "Diagnosis",
     ];
     
     // Menentukan Judul Halaman

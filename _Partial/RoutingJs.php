@@ -35,6 +35,7 @@
         "ReferensiIcdBpjs"      => "_Page/ReferensiIcdBpjs/ReferensiIcdBpjs.js?v=A'.$version.'",
         "Pasien"                => "_Page/Pasien/Pasien.js?v=A'.$version.'",
         "Kunjungan"             => "_Page/Kunjungan/Kunjungan.js?v=A'.$version.'",
+        "Diagnosis"             => "_Page/Diagnosis/Diagnosis.js?v=A'.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif

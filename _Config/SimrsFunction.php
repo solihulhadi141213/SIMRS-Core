@@ -1910,7 +1910,7 @@
     function CreatCondition($baseurl_satusehat,$Json,$Token){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Condition',
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Condition',
             //For New Version 7.4
             // CURLOPT_RETURNTRANSFER => true,
             // CURLOPT_ENCODING => '',
@@ -1942,7 +1942,7 @@
     function EditCondition($baseurl_satusehat,$Json,$Token,$id){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Condition/'.$id.'',
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Condition/'.$id.'',
             //For New Version 7.4
             // CURLOPT_RETURNTRANSFER => true,
             // CURLOPT_ENCODING => '',
@@ -1974,7 +1974,7 @@
     function ConditionById($baseurl_satusehat,$Token,$id){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Condition/'.$id.'',
+        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Condition/'.$id.'',
         //For New Version 7.4
         // CURLOPT_RETURNTRANSFER => true,
         // CURLOPT_ENCODING => '',

@@ -454,6 +454,7 @@
                     if(
                         $Page=="Pasien"||
                         $Page=="Kunjungan" ||
+                        $Page=="Diagnosis" ||
                         $Page=="Antrian"
                     ){
                         echo 'active pcoded-trigger';
@@ -480,10 +481,24 @@
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
+                    <li class="<?php if($Page=="GeneralConsent"){echo 'active';} ?>">
+                        <a href="index.php?Page=GeneralConsent" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">General Consent</span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
                     <li class="<?php if($Page=="Diagnosis"){echo 'active';} ?>">
                         <a href="index.php?Page=Diagnosis" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Diagnosis</span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    <li class="<?php if($Page=="Tindakan"){echo 'active';} ?>">
+                        <a href="index.php?Page=Tindakan" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Tindakan</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
@@ -645,6 +660,68 @@
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
+                </ul>
+            </li>
+
+            <li class="pcoded-hasmenu 
+                <?php 
+                    if(
+                        $Page == "Encounter"||
+                        $Page == "Condition"||
+                        $Page == "Observation"||
+                        $Page == "Procedure"||
+                        $Page == "Service Request"||
+                        $Page == "Medication Request"||
+                        $Page == "Immunization"
+                    )
+                    {
+                        echo 'active pcoded-trigger';
+                    } 
+                ?>
+            ">
+                <a href="javascript:void(0)" class="waves-effect waves-dark">
+                    <span class="pcoded-micon"><i class="bi bi-file-medical"></i></span>
+                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">SATUSEHAT</span>
+                    <span class="pcoded-mcaret"></span>
+                </a>
+                <ul class="pcoded-submenu">
+                    <li class="<?php if($Page=="Encounter"){echo 'active bg-default';} ?>">
+                        <a href="index.php?Page=Encounter" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
+                                <i>Encounter</i>
+                            </span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    <li class="<?php if($Page=="Condition"){echo 'active bg-default';} ?>">
+                        <a href="index.php?Page=Condition" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
+                                <i>Condition</i>
+                            </span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    <li class="<?php if($Page=="Observation"){echo 'active bg-default';} ?>">
+                        <a href="index.php?Page=Observation" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
+                                <i>Observation</i>
+                            </span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    <li class="<?php if($Page=="Procedure"){echo 'active bg-default';} ?>">
+                        <a href="index.php?Page=Procedure" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
+                                <i>Procedure</i>
+                            </span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </li>
 

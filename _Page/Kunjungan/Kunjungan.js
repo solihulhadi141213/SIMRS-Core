@@ -1186,7 +1186,7 @@ $(document).ready(function() {
     });
 
     //=========================================================
-    // DETAIL KUNJUNGAN
+    // DETAIL PASIEN
     //=========================================================
     $(document).on('click', '.modal_detail_pasien', function () {
         

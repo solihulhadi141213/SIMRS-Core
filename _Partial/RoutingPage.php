@@ -28,6 +28,7 @@
         'ReferensiDpho'         => '_Page/ReferensiDpho/ReferensiDpho.php',
         'Pasien'                => '_Page/Pasien/Pasien.php',
         'Kunjungan'             => '_Page/Kunjungan/Kunjungan.php',
+        'Diagnosis'             => '_Page/Diagnosis/Diagnosis.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');
