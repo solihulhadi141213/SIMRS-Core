@@ -421,6 +421,19 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_1_2" aria-expanded="false" aria-controls="flush-collapse_1_2">
+                                Observasi
+                            </button>
+                        </h2>
+                        <div id="flush-collapse_1_2" class="accordion-collapse collapse" data-bs-parent="#accordionFlush" style="">
+                            <div class="accordion-body">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_1_2" aria-expanded="false" aria-controls="flush-collapse_1_2">
                                 Diagnosis
                             </button>
                         </h2>
@@ -435,6 +448,33 @@
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_1_2" aria-expanded="false" aria-controls="flush-collapse_1_2">
                                 Tindakan Medis
+                            </button>
+                        </h2>
+                        <div id="flush-collapse_1_2" class="accordion-collapse collapse" data-bs-parent="#accordionFlush" style="">
+                            <div class="accordion-body">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_1_2" aria-expanded="false" aria-controls="flush-collapse_1_2">
+                                Penunjang
+                            </button>
+                        </h2>
+                        <div id="flush-collapse_1_2" class="accordion-collapse collapse" data-bs-parent="#accordionFlush" style="">
+                            <div class="accordion-body">
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_1_2" aria-expanded="false" aria-controls="flush-collapse_1_2">
+                                Peresepan
                             </button>
                         </h2>
                         <div id="flush-collapse_1_2" class="accordion-collapse collapse" data-bs-parent="#accordionFlush" style="">

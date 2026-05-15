@@ -30,7 +30,26 @@
         echo '
             <link href="vendor\Sumernote\summernote.min.css" rel="stylesheet">
             <script src="vendor\Sumernote\summernote.min.js"></script>
+        ';
+    }
+?>
+
+<!-- qrcodejs -->
+<?php 
+    // Agar aplikasi lebih ringan maka qrcodejs hanya dipanggil pada halaman tertentu
+    if($Page=="Kunjungan"){
+        echo '
             <script src="node_modules\qrcodejs\qrcode.min.js"></script>
+        ';
+    }
+?>
+
+<!-- Signature Pad -->
+<?php 
+    // Agar aplikasi lebih ringan maka Signature Pad hanya dipanggil pada halaman tertentu
+    if($Page=="GeneralConsent"){
+        echo '
+            <script src="node_modules\signature_pad\dist\signature_pad.umd.min.js"></script>
         ';
     }
 ?>

@@ -57,6 +57,7 @@
         "ReferensiWilayah"      => "Wilayah",
         "Pasien"                => "Pasien",
         "Kunjungan"             => "Kunjungan",
+        "GeneralConsent"        => "General Consent",
         "Diagnosis"             => "Diagnosis",
     ];
     

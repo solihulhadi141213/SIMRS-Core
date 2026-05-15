@@ -16036,3 +16036,10 @@ pre {
 .activity-link:hover{
     text-decoration:underline;
 }
+
+/* Agar touchscreen Lebih Stabil */
+canvas{
+    width:100%;
+    height:100%;
+    touch-action:none;
+}

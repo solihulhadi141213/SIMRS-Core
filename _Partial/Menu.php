@@ -452,10 +452,11 @@
             <li class="pcoded-hasmenu 
                 <?php 
                     if(
-                        $Page=="Pasien"||
-                        $Page=="Kunjungan" ||
-                        $Page=="Diagnosis" ||
-                        $Page=="Antrian"
+                        $Page == "Pasien"||
+                        $Page == "Kunjungan" ||
+                        $Page == "GeneralConsent" ||
+                        $Page == "Diagnosis" ||
+                        $Page == "Antrian"
                     ){
                         echo 'active pcoded-trigger';
                     } 
@@ -477,14 +478,21 @@
                     <li class="<?php if($Page=="Kunjungan"){echo 'active';} ?>">
                         <a href="index.php?Page=Kunjungan" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Kunjungan</span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Kunjungan (<i>Encounter</i>)</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
                     <li class="<?php if($Page=="GeneralConsent"){echo 'active';} ?>">
                         <a href="index.php?Page=GeneralConsent" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">General Consent</span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs"><i>General Consent</i></span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    <li class="<?php if($Page=="Observasi"){echo 'active';} ?>">
+                        <a href="index.php?Page=Observasi" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Observasi</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
@@ -499,6 +507,20 @@
                         <a href="index.php?Page=Tindakan" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Tindakan</span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    <li class="<?php if($Page=="Peresepan"){echo 'active';} ?>">
+                        <a href="index.php?Page=Peresepan" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Peresepan</span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    <li class="<?php if($Page=="Resume"){echo 'active';} ?>">
+                        <a href="index.php?Page=Resume" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Resume</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>

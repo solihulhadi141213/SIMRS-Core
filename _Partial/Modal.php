@@ -34,6 +34,7 @@
         'ReferensiIcdBpjs'      => '_Page/ReferensiIcdBpjs/ModalReferensiIcdBpjs.php',
         'Pasien'                => '_Page/Pasien/ModalPasien.php',
         'Kunjungan'             => '_Page/Kunjungan/ModalKunjungan.php',
+        'GeneralConsent'        => '_Page/GeneralConsent/ModalGeneralConsent.php',
         'Diagnosis'             => '_Page/Diagnosis/ModalDiagnosis.php',
     ];
 

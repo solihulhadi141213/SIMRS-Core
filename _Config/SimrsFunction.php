@@ -2348,7 +2348,7 @@
     function GetConsent($baseurl,$Token,$id){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl.'/Consent?patient_id='.$id.'',
+            CURLOPT_URL => ''.$baseurl.'/consent/v1/Consent?patient_id='.$id.'',
             // CURLOPT_RETURNTRANSFER => true,
             // CURLOPT_ENCODING => '',
             // CURLOPT_MAXREDIRS => 10,
@@ -2377,7 +2377,7 @@
     function UpdateConsent($baseurl_consent_satusehat,$JsonEncode,$Token){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_consent_satusehat.'/Consent',
+            CURLOPT_URL => ''.$baseurl_consent_satusehat.'/consent/v1/Consent',
             // CURLOPT_RETURNTRANSFER => true,
             // CURLOPT_ENCODING => '',
             // CURLOPT_MAXREDIRS => 10,
@@ -2395,6 +2395,36 @@
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS =>''.$JsonEncode.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+        
+        return $response;
+    }
+    function DetailConsent($baseurl_consent_satusehat,$Token,$id_consent){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_consent_satusehat.'/consent/v1/Consent?id='.$id_consent.'',
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
                 'Authorization: Bearer '.$Token.'',
                 'Content-Type: application/json'
