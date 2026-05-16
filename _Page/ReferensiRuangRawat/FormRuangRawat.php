@@ -113,24 +113,24 @@
         $types = str_repeat('s', count($ruangan_names));
 
         // Total pasien (semua status)
-        $sql_total = "SELECT ruangan, COUNT(*) AS jml FROM kunjungan_utama WHERE ruangan IN ($placeholders) GROUP BY ruangan";
+        $sql_total = "SELECT ruang_rawat, COUNT(*) AS jml FROM kunjungan WHERE ruang_rawat IN ($placeholders) GROUP BY ruang_rawat";
         $stmt_total = $Conn->prepare($sql_total);
         $stmt_total->bind_param($types, ...$ruangan_names);
         $stmt_total->execute();
         $res_total = $stmt_total->get_result();
         while ($row = $res_total->fetch_assoc()) {
-            $total_pasien_per_ruangan[$row['ruangan']] = (int)$row['jml'];
+            $total_pasien_per_ruangan[$row['ruang_rawat']] = (int)$row['jml'];
         }
         $stmt_total->close();
 
         // Pasien dengan status 'Pending'
-        $sql_eksis = "SELECT ruangan, COUNT(*) AS jml FROM kunjungan_utama WHERE ruangan IN ($placeholders) AND status = 'Pending' GROUP BY ruangan";
+        $sql_eksis = "SELECT ruang_rawat, COUNT(*) AS jml FROM kunjungan WHERE ruang_rawat IN ($placeholders) AND status = 'Pending' GROUP BY ruang_rawat";
         $stmt_eksis = $Conn->prepare($sql_eksis);
         $stmt_eksis->bind_param($types, ...$ruangan_names);
         $stmt_eksis->execute();
         $res_eksis = $stmt_eksis->get_result();
         while ($row = $res_eksis->fetch_assoc()) {
-            $eksis_pasien_per_ruangan[$row['ruangan']] = (int)$row['jml'];
+            $eksis_pasien_per_ruangan[$row['ruang_rawat']] = (int)$row['jml'];
         }
         $stmt_eksis->close();
     }

@@ -16,7 +16,7 @@
     $data = [];
 
     // Karena tanggal = VARCHAR → pakai STR_TO_DATE
-    $colTanggal = "STR_TO_DATE(tanggal_kunjungan, '%Y-%m-%d')";
+    $colTanggal = "STR_TO_DATE(datetime_daftar, '%Y-%m-%d')";
 
     // ================= BULANAN =================
     if ($periode == "Bulanan") {

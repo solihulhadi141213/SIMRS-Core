@@ -2,8 +2,8 @@
     include "../../_Config/Connection.php";
 
     $query = mysqli_query($Conn, "
-        SELECT DISTINCT YEAR(tanggal) as tahun 
-        FROM kunjungan_utama 
+        SELECT DISTINCT YEAR(datetime_daftar) as tahun 
+        FROM kunjungan 
         WHERE tanggal IS NOT NULL 
         ORDER BY tahun ASC
     ");

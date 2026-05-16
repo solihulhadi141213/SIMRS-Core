@@ -54,6 +54,7 @@
         "ReferensiJadwalDokter" => "Jadwal Praktek",
         "ReferensiRuangRawat"   => "Ruang Rawat",
         "ReferensiIcd"          => "ICD",
+        "ReferensiTindakan"     => "Referensi Tindakan",
         "ReferensiWilayah"      => "Wilayah",
         "Pasien"                => "Pasien",
         "Kunjungan"             => "Kunjungan",

@@ -240,6 +240,7 @@
                         $Page=="ReferensiJadwalDokter" ||
                         $Page=="ReferensiRuangRawat" ||
                         $Page=="ReferensiIcd" ||
+                        $Page=="ReferensiTindakan" ||
                         $Page=="ReferensiWilayah" ||
                         $Page=="ReferensiWilayahBpjs" ||
                         $Page=="ReferensiIcdBpjs" ||
@@ -290,6 +291,13 @@
                         <a href="index.php?Page=ReferensiIcd" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
                             <span class="pcoded-mtext">ICD</span>
+                        </a>
+                    </li>
+
+                    <li class="<?php if($Page=="ReferensiTindakan"){echo 'active';} ?>">
+                        <a href="index.php?Page=ReferensiTindakan" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                            <span class="pcoded-mtext">Tindakan (Procedure)</span>
                         </a>
                     </li>
 
@@ -507,6 +515,13 @@
                         <a href="index.php?Page=Tindakan" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Tindakan</span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    <li class="<?php if($Page=="Alergi"){echo 'active';} ?>">
+                        <a href="index.php?Page=Alergi" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Alergi</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>

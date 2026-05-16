@@ -31,7 +31,7 @@
         $where .= " AND (
             p.nama LIKE '%$keyword%' OR
             k.id_pasien LIKE '%$keyword%' OR
-            k.tujuan LIKE '%$keyword%' OR
+            k.jenis_kunjungan LIKE '%$keyword%' OR
             k.poliklinik LIKE '%$keyword%' OR
             k.ruang_rawat LIKE '%$keyword%'
         )";
@@ -77,8 +77,8 @@
         SELECT
             k.id_kunjungan,
             k.id_pasien,
-            k.tanggal_kunjungan,
-            k.tujuan,
+            k.datetime_daftar,
+            k.jenis_kunjungan,
             k.poliklinik,
             k.ruang_rawat,
             p.nama
@@ -97,27 +97,27 @@
 
         $id_pasien         = $data['id_pasien'];
         $noRm              = sprintf("%07d", $id_pasien);
-        $tanggal_kunjungan = $data['tanggal_kunjungan'];
+        $datetime_daftar = $data['datetime_daftar'];
         $nama              = $data['nama'];
-        $tujuan            = $data['tujuan'];
+        $jenis_kunjungan            = $data['jenis_kunjungan'];
         $poliklinik        = $data['poliklinik'];
         $ruang_rawat       = $data['ruang_rawat'];
 
         // Label Tujuan
-        if($tujuan == "Rajal"){
-            $label_tujuan = '
+        if($jenis_kunjungan == "Rajal"){
+            $label_jenis_kunjungan = '
                 <span class="py-1 px-2 bg-success-subtle text-success rounded-1">
                     <small>Rajal</small>
                 </span>
             ';
-        }elseif($tujuan == "Ranap"){
-            $label_tujuan = '
+        }elseif($jenis_kunjungan == "Ranap"){
+            $label_jenis_kunjungan = '
                 <span class="py-1 px-2 bg-danger-subtle text-danger rounded-1">
                     <small>Ranap</small>
                 </span>
             ';
         }else{
-            $label_tujuan = '
+            $label_jenis_kunjungan = '
                 <span class="py-1 px-2 bg-secondary-subtle text-secondary rounded-1">
                     <small>None</small>
                 </span>
@@ -139,11 +139,11 @@
                 </td>
 
                 <td class="text-start">
-                    <small class="text-muted">'.date('d/m/Y', strtotime($tanggal_kunjungan)).'</small>
+                    <small class="text-muted">'.date('d/m/Y', strtotime($datetime_daftar)).'</small>
                 </td>
 
                 <td class="text-center">
-                    '.$label_tujuan.'
+                    '.$label_jenis_kunjungan.'
                 </td>
             </tr>
         ';
