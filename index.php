@@ -60,6 +60,7 @@
         "Kunjungan"             => "Kunjungan",
         "GeneralConsent"        => "General Consent",
         "Diagnosis"             => "Diagnosis",
+        "Tindakan"              => "Tindakan",
     ];
     
     // Menentukan Judul Halaman

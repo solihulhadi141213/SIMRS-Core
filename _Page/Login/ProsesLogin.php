@@ -161,10 +161,7 @@
     // GENERATE TOKEN BARU
     // ==========================
     $expired_seconds = 60 * 60; // 1 jam
-    $date_expired = date(
-        'Y-m-d H:i:s',
-        strtotime($current_utc) + $expired_seconds
-    );
+    $date_expired = date('Y-m-d H:i:s',strtotime($current_utc) + $expired_seconds);
 
     $token = generateStrongCode(36);
 

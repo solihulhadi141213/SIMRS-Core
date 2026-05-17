@@ -238,6 +238,7 @@
                         $Page=="ReferensiPoliklinik" ||
                         $Page=="ReferensiDokter" ||
                         $Page=="ReferensiJadwalDokter" ||
+                        $Page=="ReferensiPraktisi" ||
                         $Page=="ReferensiRuangRawat" ||
                         $Page=="ReferensiIcd" ||
                         $Page=="ReferensiTindakan" ||
@@ -277,6 +278,13 @@
                         <a href="index.php?Page=ReferensiJadwalDokter" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
                             <span class="pcoded-mtext">Jadwal Dokter</span>
+                        </a>
+                    </li>
+
+                    <li class="<?php if($Page=="ReferensiPraktisi"){echo 'active';} ?>">
+                        <a href="index.php?Page=ReferensiPraktisi" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                            <span class="pcoded-mtext">Praktisi (SDM)</span>
                         </a>
                     </li>
 
@@ -464,6 +472,7 @@
                         $Page == "Kunjungan" ||
                         $Page == "GeneralConsent" ||
                         $Page == "Diagnosis" ||
+                        $Page == "Tindakan" ||
                         $Page == "Antrian"
                     ){
                         echo 'active pcoded-trigger';
@@ -522,6 +531,27 @@
                         <a href="index.php?Page=Alergi" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Alergi</span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    <li class="<?php if($Page=="Imunisasi"){echo 'active';} ?>">
+                        <a href="index.php?Page=Imunisasi" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Imunisasi</span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    <li class="<?php if($Page=="EpisodePerawatan"){echo 'active';} ?>">
+                        <a href="index.php?Page=EpisodePerawatan" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Episode Perawatan</span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+                    <li class="<?php if($Page=="RencanaPerawatan"){echo 'active';} ?>">
+                        <a href="index.php?Page=RencanaPerawatan" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Rencana Perawatan</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
