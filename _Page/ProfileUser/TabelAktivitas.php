@@ -66,11 +66,11 @@
     $nama_bulan = $bulan_list[$bulan];
 
     // PASIEN
-    $query_pasien = mysqli_query($Conn, "SELECT id_pasien FROM pasien WHERE id_akses='$SessionIdAkses' AND tanggal_daftar LIKE '%$periode_data%'");
+    $query_pasien = mysqli_query($Conn, "SELECT id_pasien FROM pasien WHERE id_akses='$SessionIdAkses' AND registered_at LIKE '%$periode_data%'");
     $jml_pasien = mysqli_num_rows($query_pasien);
 
     // KUNJUNGAN
-    $query_kunjungan = mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama WHERE id_akses='$SessionIdAkses' AND tanggal LIKE '%$periode_data%'");
+    $query_kunjungan = mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan WHERE petugas_id='$SessionIdAkses' AND datetime_daftar LIKE '%$periode_data%'");
     $jml_kunjungan = mysqli_num_rows($query_kunjungan);
 
 ?>

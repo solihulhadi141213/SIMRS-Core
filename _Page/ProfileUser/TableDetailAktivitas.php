@@ -65,13 +65,13 @@
         ';
         echo '<tbody>';
         $no = 1;
-        $query = mysqli_query($Conn, "SELECT id_pasien, tanggal_daftar, nama FROM pasien WHERE id_akses='$SessionIdAkses' AND tanggal_daftar LIKE '%$periode%'");
+        $query = mysqli_query($Conn, "SELECT id_pasien, registered_at, nama FROM pasien WHERE id_akses='$SessionIdAkses' AND registered_at LIKE '%$periode%'");
         while ($data = mysqli_fetch_array($query)) {
             echo '
                 <tr>
                     <td class="text-center"><small class="text text-muted">'.$no.'</small></td>
                     <td class="text-left"><small class="text text-muted">'.$data['id_pasien'].'</small></td>
-                    <td class="text-left"><small class="text text-muted">'.$data['tanggal_daftar'].'</small></td>
+                    <td class="text-left"><small class="text text-muted">'.$data['registered_at'].'</small></td>
                     <td class="text-left"><small class="text text-muted">'.$data['nama'].'</small></td>
                 </tr>
             ';
@@ -97,18 +97,69 @@
         ';
         echo '<tbody>';
         $no = 1;
-        $query = mysqli_query($Conn, "SELECT id_pasien, id_kunjungan, tanggal, nama, tujuan FROM kunjungan_utama WHERE id_akses='$SessionIdAkses' AND tanggal LIKE '%$periode%'");
-        while ($data = mysqli_fetch_array($query)) {
+        $sql = "
+            SELECT 
+                ku.id_pasien,
+                ku.id_kunjungan,
+                ku.datetime_daftar,
+                ku.jenis_kunjungan,
+
+                p.nama
+
+            FROM kunjungan ku
+
+            LEFT JOIN pasien p
+                ON ku.id_pasien = p.id_pasien
+
+            WHERE 
+                ku.petugas_id = ?
+                AND ku.datetime_daftar LIKE ?
+        ";
+
+        $stmt = $Conn->prepare($sql);
+
+        $like_periode = "%$periode%";
+
+        $stmt->bind_param(
+            "is",
+            $SessionIdAkses,
+            $like_periode
+        );
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        while ($data = $result->fetch_assoc()) {
+
             echo '
                 <tr>
-                    <td class="text-center"><small class="text text-muted">'.$no.'</small></td>
-                    <td class="text-left"><small class="text text-muted">'.$data['id_pasien'].'</small></td>
-                    <td class="text-left"><small class="text text-muted">'.$data['id_kunjungan'].'</small></td>
-                    <td class="text-left"><small class="text text-muted">'.$data['tanggal'].'</small></td>
-                    <td class="text-left"><small class="text text-muted">'.$data['nama'].'</small></td>
-                    <td class="text-left"><small class="text text-muted">'.$data['tujuan'].'</small></td>
+                    <td class="text-center">
+                        <small class="text text-muted">'.$no.'</small>
+                    </td>
+
+                    <td class="text-left">
+                        <small class="text text-muted">'.$data['id_pasien'].'</small>
+                    </td>
+
+                    <td class="text-left">
+                        <small class="text text-muted">'.$data['id_kunjungan'].'</small>
+                    </td>
+
+                    <td class="text-left">
+                        <small class="text text-muted">'.$data['datetime_daftar'].'</small>
+                    </td>
+
+                    <td class="text-left">
+                        <small class="text text-muted">'.$data['nama'].'</small>
+                    </td>
+
+                    <td class="text-left">
+                        <small class="text text-muted">'.$data['jenis_kunjungan'].'</small>
+                    </td>
                 </tr>
             ';
+
             $no++;
         }
         echo '</tbody>';

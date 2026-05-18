@@ -52,6 +52,7 @@
         "ReferensiPoliklinik"   => "Poliklinik",
         "ReferensiDokter"       => "Dokter",
         "ReferensiJadwalDokter" => "Jadwal Praktek",
+        "ReferensiPraktisi"     => "Praktisi / SDM",
         "ReferensiRuangRawat"   => "Ruang Rawat",
         "ReferensiIcd"          => "ICD",
         "ReferensiTindakan"     => "Referensi Tindakan",

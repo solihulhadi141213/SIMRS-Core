@@ -27,6 +27,7 @@
         'ReferensiPoliklinik'   => '_Page/ReferensiPoliklinik/ModalReferensiPoliklinik.php',
         'ReferensiDokter'       => '_Page/ReferensiDokter/ModalReferensiDokter.php',
         'ReferensiJadwalDokter' => '_Page/ReferensiJadwalDokter/ModalReferensiJadwalDokter.php',
+        'ReferensiPraktisi'     => '_Page/ReferensiPraktisi/ModalReferensiPraktisi.php',
         'ReferensiRuangRawat'   => '_Page/ReferensiRuangRawat/ModalReferensiRuangRawat.php',
         'ReferensiIcd'          => '_Page/ReferensiIcd/ModalReferensiIcd.php',
         'ReferensiTindakan'     => '_Page/ReferensiTindakan/ModalReferensiTindakan.php',

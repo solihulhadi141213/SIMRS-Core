@@ -20,6 +20,7 @@
         'ReferensiPoliklinik'   => '_Page/ReferensiPoliklinik/ReferensiPoliklinik.php',
         'ReferensiDokter'       => '_Page/ReferensiDokter/ReferensiDokter.php',
         'ReferensiJadwalDokter' => '_Page/ReferensiJadwalDokter/ReferensiJadwalDokter.php',
+        'ReferensiPraktisi'     => '_Page/ReferensiPraktisi/ReferensiPraktisi.php',
         'ReferensiRuangRawat'   => '_Page/ReferensiRuangRawat/ReferensiRuangRawat.php',
         'ReferensiIcd'          => '_Page/ReferensiIcd/ReferensiIcd.php',
         'ReferensiTindakan'     => '_Page/ReferensiTindakan/ReferensiTindakan.php',

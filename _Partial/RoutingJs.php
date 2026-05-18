@@ -28,6 +28,7 @@
         "ReferensiPoliklinik"   => "_Page/ReferensiPoliklinik/ReferensiPoliklinik.js?v='.$version.'",
         "ReferensiDokter"       => "_Page/ReferensiDokter/ReferensiDokter.js?v='.$version.'",
         "ReferensiJadwalDokter" => "_Page/ReferensiJadwalDokter/ReferensiJadwalDokter.js?v=A'.$version.'",
+        "ReferensiPraktisi"     => "_Page/ReferensiPraktisi/ReferensiPraktisi.js?v=A'.$version.'",
         "ReferensiRuangRawat"   => "_Page/ReferensiRuangRawat/ReferensiRuangRawat.js?v=A'.$version.'",
         "ReferensiIcd"          => "_Page/ReferensiIcd/ReferensiIcd.js?v=A'.$version.'",
         "ReferensiTindakan"     => "_Page/ReferensiTindakan/ReferensiTindakan.js?v=A'.$version.'",
