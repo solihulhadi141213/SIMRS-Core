@@ -236,69 +236,122 @@
     </div>
 </div>
 <hr>
-<div class="row">
+<div class="row mb-4">
     <div class="col-12">
         <button type="button" class="btn btn-sm btn-primary btn-round w-100 modal_tambah_perfomrer" data-id="<?php echo $id_tindakan; ?>">
             <i class="bi bi-plus"></i> Tambah Pelaksana (<i>Performer</i>)
         </button>
     </div>
 </div>
-<hr>
-<div class="row mb-2">
-    <div class="col-12">
-        <div class="table table-responsive">
-            <table class="table table-sm">
-                <thead>
-                    <tr>
-                        <td class="text-center"><small><b>No</b></small></td>
-                        <td class="text-left"><small><b><i>Type</i></b></small></td>
-                        <td class="text-left"><small><b>Nama</b></small></td>
-                        <td class="text-left"><small><b>IHS</b></small></td>
-                        <td class="text-left"><small><b>NIK</b></small></td>
-                        <td class="text-left"><small><b>Catatan</b></small></td>
-                        <td class="text-left"><small><b>Opsi</b></small></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        // DATA PERFORMER
-                        $SqlPerformer = "
-                            SELECT *
-                            FROM tindakan_performer
-                            WHERE id_tindakan = ?
-                            ORDER BY id_tindakan_performer ASC
-                        ";
 
-                        $stmt_performer = $Conn->prepare($SqlPerformer);
-                        $stmt_performer->bind_param("i", $id_tindakan);
-                        $stmt_performer->execute();
-                        $result_performer = $stmt_performer->get_result();
-                        $jumlah_performer = $result_performer->num_rows;
+<?php
+    // DATA PERFORMER
+    $SqlPerformer = "
+        SELECT *
+        FROM tindakan_performer
+        WHERE id_tindakan = ?
+        ORDER BY id_tindakan_performer ASC
+    ";
 
-                        // Jika Kosong
-                        if(empty($jumlah_performer)){
-                            echo '
-                                <tr>
-                                    <td colspan="7" class="text-center"><small class="text-danger">Belum Ada Data Pelaksana (Performer)</small></td>
-                                </tr>
-                            ';
-                        }else{
-                            $no = 1;
-                            while($Performer = $result_performer->fetch_assoc()) {
-                                echo '
-                                    <tr>
-                                        <td class="text-center"><small class="text-muted">'.$no.'</small></td>
-                                        <td class="text-left"><small class="text-muted">'.$Performer['performer_type'].'</small></td>
-                                        <td class="text-left"><small class="text-muted">'.$Performer['performer_nama'].'</small></td>
-                                        <td class="text-left"><small class="text-muted">'.$Performer['performer_notes'].'</small></td>
-                                    </tr>
-                                ';
-                                $no++;
-                            }
-                        }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+    $stmt_performer = $Conn->prepare($SqlPerformer);
+    $stmt_performer->bind_param("i", $id_tindakan);
+    $stmt_performer->execute();
+    $result_performer = $stmt_performer->get_result();
+    $jumlah_performer = $result_performer->num_rows;
+
+    // Jika Kosong
+    if(empty($jumlah_performer)){
+        echo '
+            <div class="alert alert-danger text-center">
+                <small>
+                    Belum ada informasi Pelaksana (<i>Performer</i>) untuk tindakan ini. Silahkan tambahkan terlebih dulu.
+                </small>
+            </div>
+        ';
+    }else{
+        $no = 1;
+        while($Performer = $result_performer->fetch_assoc()) {
+            $id_tindakan_performer = $Performer['id_tindakan_performer'];
+            $performer_type        = $Performer['performer_type'];
+            $performer_nama        = $Performer['performer_nama'];
+            $performer_ihs         = $Performer['performer_ihs'];
+            $performer_nik         = $Performer['performer_nik'];
+            $performer_notes       = $Performer['performer_notes'];
+
+            // Routing berdasarkan $Performer['id_praktisi']
+            if(empty($Performer['id_praktisi'])){
+                $label_nama_performer = '
+                    <b>'.$no.'. '.$performer_nama.'</b>
+                ';
+                $opsi_detail = '';
+            }else{
+                $id_praktisi = $Performer['id_praktisi'];
+                $label_nama_performer = '
+                    <a href="javascript:void(0);" class="text-primary fw-bold modal_detail_performer" data-id="'.$id_praktisi.'">
+                        '.$no.'. '.$performer_nama.'
+                    </a>
+                ';
+                $opsi_detail = '
+                    <li>
+                        <a href="javascript:void(0);" class="dropdown-item modal_detail_performer" data-id="'.$id_praktisi.'">
+                            <i class="bi bi-info-circle"></i> Detail
+                        </a>
+                    </li>
+                ';
+            }
+            echo '
+                <hr>
+                <div class="row mt-3">
+                    <div class="col-10">
+                        <small>'.$label_nama_performer.'</small>
+                    </div>
+                    <div class="col-2 text-end icon-btn">
+                        <button type="button" class="btn-floating" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu shadow">
+                            '.$opsi_detail.'
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item modal_edit_performer" data-id="'.$id_tindakan_performer.'">
+                                    <i class="bi bi-pencil"></i> Ubah
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item modal_hapus_performer" data-id="'.$id_tindakan_performer.'">
+                                    <i class="bi bi-trash"></i> Hapus
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-5"><small>Tipe Pelaksana</small></div>
+                            <div class="col-1"><small>:</small></div>
+                            <div class="col-6"><small class="text-muted">'.$performer_type.'</small></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-5"><small>ID Practitioner</small></div>
+                            <div class="col-1"><small>:</small></div>
+                            <div class="col-6"><small class="text-muted">'.$performer_ihs.'</small></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-5"><small>No.NIK/KTP</small></div>
+                            <div class="col-1"><small>:</small></div>
+                            <div class="col-6"><small class="text-muted">'.$performer_nik.'</small></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-5"><small>Catatan/Keterangan</small></div>
+                            <div class="col-1"><small>:</small></div>
+                            <div class="col-6"><small class="text-muted">'.$performer_notes.'</small></div>
+                        </div>
+                    </div>
+                </div>
+            ';
+            $no++;
+        }
+    }
+?>

@@ -28,6 +28,7 @@
     $id_tindakan = validateAndSanitizeInput($_POST['id_tindakan']);
 ?>
 <input type="hidden" name="id_tindakan" value="<?php echo $id_tindakan; ?>">
+
 <div class="row mb-3">
     <div class="col-12">
         <label for="performer_type">
@@ -35,23 +36,18 @@
         </label>
         <select name="performer_type" id="performer_type" class="form-control" required>
             <option value="">Pilih</option>
-            <option value="Dokter">Dokter</option>
-            <option value="Perawat">Perawat</option>
-            <option value="Bidan">Bidan</option>
-            <option value="Ahli Gizi">Ahli Gizi</option>
-            <option value="Radiografer">Radiografer</option>
-            <option value="Fisioterapis">Fisioterapis</option>
-            <option value="Analis Laboratorium">Analis Laboratorium</option>
+            <option value="Utama">Utama</option>
+            <option value="Pendamping">Pendamping</option>
         </select>
     </div>
 </div>
 
 <div class="row mb-3">
-    <div class="col-12">
-        <label for="performer">
+    <div class="col-12" id="PilihPraktisi">
+        <label for="id_praktisi">
             <small>Pilih Pelaksana (<i>Performer</i>)</small>
         </label>
-        <select name="performer" id="performer" class="form-control">
+        <select name="id_praktisi" id="id_praktisi" class="form-select">
             <option value="">Pilih</option>
         </select>
     </div>
@@ -59,10 +55,10 @@
 
 <div class="row mb-3">
     <div class="col-12">
-        <label for="performer_id">
-            <small>ID Akses SIMRS</small>
+        <label for="performer_nama">
+            <small>Nama Lengkap</small>
         </label>
-        <input type="text" name="performer_id" id="performer_id" class="form-control">
+        <input type="text" name="performer_nama" id="performer_nama" class="form-control">
     </div>
 </div>
 
@@ -83,16 +79,6 @@
         <input type="text" name="performer_nik" id="performer_nik" class="form-control">
     </div>
 </div>
-
-<div class="row mb-3">
-    <div class="col-12">
-        <label for="performer_nama">
-            <small>Nama Lengkap</small>
-        </label>
-        <input type="text" name="performer_nama" id="performer_nama" class="form-control">
-    </div>
-</div>
-
 
 <div class="row mb-3">
     <div class="col-12">

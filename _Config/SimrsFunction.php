@@ -294,15 +294,24 @@
     // =========================================
     function generateTokenSatuSehat($Conn) {
 
-        // Validasi koneksi database
+        // =====================================================
+        // TIMEZONE
+        // =====================================================
+        date_default_timezone_set('Asia/Jakarta');
+
+        // =====================================================
+        // VALIDASI KONEKSI DATABASE
+        // =====================================================
         if (!$Conn || $Conn->connect_error) {
             return [
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'Koneksi database tidak valid!'
             ];
         }
 
-        // Ambil koneksi SATUSEHAT yang aktif
+        // =====================================================
+        // AMBIL KONFIGURASI SATUSEHAT
+        // =====================================================
         $Qry = $Conn->prepare("
             SELECT 
                 id_setting_satusehat,
@@ -319,7 +328,7 @@
 
         if (!$Qry->execute()) {
             return [
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'Error Database: ' . $Conn->error
             ];
         }
@@ -330,32 +339,57 @@
 
         if (!$Data) {
             return [
-                'status' => 'error',
-                'message' => 'Tidak ada koneksi Satu Sehat yang aktif!'
+                'status'  => 'error',
+                'message' => 'Tidak ada koneksi SATUSEHAT yang aktif!'
             ];
         }
 
-        // Ambil data
+        // =====================================================
+        // MAPPING DATA
+        // =====================================================
         $id_setting_satusehat = $Data['id_setting_satusehat'];
         $url_satusehat        = rtrim($Data['url_satusehat'], '/');
-        $client_key           = $Data['client_key'];
-        $secret_key           = $Data['secret_key'];
-        $token_db             = $Data['token'];
-        $expired_db           = $Data['datetime_expired'];
+        $client_key           = trim($Data['client_key']);
+        $secret_key           = trim($Data['secret_key']);
+        $token_db             = trim($Data['token']);
+        $expired_db           = trim($Data['datetime_expired']);
 
-        // Validasi Kelengkapan Pengaturan Koneksi Satu sehat
-        if (empty($client_key) || empty($secret_key) || empty($url_satusehat)) {
+        // =====================================================
+        // VALIDASI KONFIGURASI
+        // =====================================================
+        if (
+            empty($client_key) ||
+            empty($secret_key) ||
+            empty($url_satusehat)
+        ) {
             return [
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'Konfigurasi SATUSEHAT tidak lengkap!'
             ];
         }
 
         // =====================================================
-        // 1️⃣ JIKA TOKEN MASIH ADA & BELUM EXPIRED → PAKAI
+        // VALIDASI TOKEN CACHE
         // =====================================================
         if (!empty($token_db) && !empty($expired_db)) {
-            if (strtotime($expired_db) > (time() + 60)) {
+
+            $expired_time = strtotime($expired_db);
+            $current_time = time();
+
+            // DEBUG
+            /*
+            echo "<pre>";
+            echo "Expired DB : ".$expired_db."\n";
+            echo "Expired TS : ".$expired_time."\n";
+            echo "Current TS : ".$current_time."\n";
+            echo "</pre>";
+            */
+
+            // =================================================
+            // TOKEN MASIH VALID
+            // =================================================
+            if ($expired_time > $current_time) {
+
                 return [
                     'status'  => 'success',
                     'message' => 'Token masih valid (cache)',
@@ -365,7 +399,7 @@
         }
 
         // =====================================================
-        // 2️⃣ TOKEN KOSONG / EXPIRED → REQUEST TOKEN BARU
+        // REQUEST TOKEN BARU
         // =====================================================
         $ch = curl_init();
 
@@ -373,21 +407,20 @@
             CURLOPT_URL            => $url_satusehat . '/oauth2/v1/accesstoken?grant_type=client_credentials',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST           => true,
+
             CURLOPT_POSTFIELDS => http_build_query([
                 'client_id'     => $client_key,
                 'client_secret' => $secret_key
             ]),
+
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/x-www-form-urlencoded'
             ],
+
             CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_TIMEOUT        => 20,
 
-            // APABILA DALAM MODE PRODUCTION AKTIFKAN INI
-            // CURLOPT_SSL_VERIFYPEER => true,
-            // CURLOPT_SSL_VERIFYHOST => 2
-
-            // DEV ONLY
+            // DEVELOPMENT ONLY
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false
         ]);
@@ -395,75 +428,121 @@
         $response   = curl_exec($ch);
         $http_code  = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $curl_error = curl_error($ch);
+
         curl_close($ch);
 
+        // =====================================================
+        // CURL ERROR
+        // =====================================================
         if ($response === false) {
+
             return [
-                'status' => 'error',
-                'message' => 'Gagal menghubungi API Satu Sehat: ' . $curl_error
+                'status'  => 'error',
+                'message' => 'Gagal menghubungi API SATUSEHAT: ' . $curl_error
             ];
         }
 
+        // =====================================================
+        // HTTP ERROR
+        // =====================================================
         if ($http_code !== 200) {
+
             return [
-                'status' => 'error',
-                'message' => 'HTTP Error ' . $http_code . ' | ' . substr($response, 0, 200)
+                'status'  => 'error',
+                'message' => 'HTTP Error '.$http_code.' | '.substr($response, 0, 300)
             ];
         }
 
+        // =====================================================
+        // PARSE JSON
+        // =====================================================
         $result = json_decode($response, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
+
             return [
-                'status' => 'error',
-                'message' => 'Response API bukan JSON valid: ' . json_last_error_msg()
+                'status'  => 'error',
+                'message' => 'JSON Error: ' . json_last_error_msg()
             ];
         }
+
+        // =====================================================
+        // API ERROR
+        // =====================================================
         if (isset($result['error'])) {
+
             return [
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'API Error: ' . $result['error']
             ];
         }
 
+        // =====================================================
+        // VALIDASI TOKEN RESPONSE
+        // =====================================================
         if (empty($result['access_token'])) {
+
             return [
-                'status' => 'error',
-                'message' => 'Token tidak ditemukan pada response SATUSEHAT'
+                'status'  => 'error',
+                'message' => 'Access token tidak ditemukan'
             ];
         }
 
         // =====================================================
-        // 3️⃣ SIMPAN TOKEN BARU KE DATABASE
+        // MAPPING TOKEN
         // =====================================================
         $access_token = $result['access_token'];
-        $expires_in   = isset($result['expires_in']) ? intval($result['expires_in']) : 3600;
 
-        // Buffer 5 menit
-        $buffer           = 300;
-        $datetime_expired = date('Y-m-d H:i:s', time() + $expires_in - $buffer);
+        $expires_in = !empty($result['expires_in'])
+            ? intval($result['expires_in'])
+            : 3600;
 
+        // =====================================================
+        // DATETIME EXPIRED
+        // =====================================================
+        $expired_timestamp = time() + $expires_in;
+
+        $datetime_expired = date(
+            'Y-m-d H:i:s',
+            $expired_timestamp
+        );
+
+        // =====================================================
+        // UPDATE DATABASE
+        // =====================================================
         $Update = $Conn->prepare("
             UPDATE setting_satusehat 
-            SET token = ?, datetime_expired = ?
+            SET 
+                token = ?,
+                datetime_expired = ?
             WHERE id_setting_satusehat = ?
         ");
 
-        $Update->bind_param("ssi", $access_token, $datetime_expired, $id_setting_satusehat);
+        $Update->bind_param(
+            "ssi",
+            $access_token,
+            $datetime_expired,
+            $id_setting_satusehat
+        );
 
         if (!$Update->execute()) {
+
             return [
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'Gagal menyimpan token: ' . $Conn->error
             ];
         }
 
         $Update->close();
 
+        // =====================================================
+        // SUCCESS
+        // =====================================================
         return [
-            'status'  => 'success',
-            'message' => 'Token baru berhasil dibuat',
-            'token'   => $access_token
+            'status'           => 'success',
+            'message'          => 'Token baru berhasil dibuat',
+            'token'            => $access_token,
+            'datetime_expired' => $datetime_expired
         ];
     }
 

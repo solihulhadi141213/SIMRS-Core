@@ -206,6 +206,76 @@
     </div>
 </div> 
 
+<!-- MODAL EDIT TINDAKAN -->
+<div class="modal fade" id="ModalEditTindakan" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form action="javascript:void(0);" id="ProsesEditTindakan">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark"><i class="bi bi-pencil"></i> Edit Tindakan <i>(Procedure)</i></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12" id="FormEditTindakan">
+                            <!-- Form Edit Tindakan -->
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12" id="NotifikasiEditTindakan">
+                            <!-- Notifikasi Edit Tindakan -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-rounded" id="ButtonEditTindakan">
+                        <i class="bi bi-save"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-rounded" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL HAPUS TINDAKAN -->
+ <div class="modal fade" id="ModalHapusTindakan" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form action="javascript:void(0);" id="ProsesHapusTindakan">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary"><i class="bi bi-trash"></i> Hapus Tindakan <i>(Procedure)</i></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12" id="FormHapusTindakan">
+                            <!-- Form Edit Tindakan -->
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12" id="NotifikasiHapusTindakan">
+                            <!-- Notifikasi Edit Tindakan -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-rounded" id="ButtonHapusTindakan">
+                        <i class="bi bi-check"></i> Hapus
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-rounded" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <!-- Modal Daftar Performer -->
 <div class="modal fade" id="ModalPerformer" tabindex="-1">
@@ -235,26 +305,52 @@
 <div class="modal fade" id="ModalTambahPerformer" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-dark"><i class="bi bi-plus-circle"></i> Tambah Pelaksana Tindakan <i>(Performer)</i></h5>
+            <form action="javascript:void(0);" id="ProsesTambahPerformer">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark"><i class="bi bi-plus-circle"></i> Tambah Pelaksana Tindakan <i>(Performer)</i></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12" id="FormTambahPerformer">
+                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" id="NotifikasiTambahPerformer">
+                            <!-- Notifikasi Tambah Performer -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-rounded" id="ButtonTambahPerformer">
+                        <i class="bi bi-save"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-rounded" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detail Performer -->
+<div class="modal fade" id="ModalDetailPerformer" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-light"><i class="bi bi-info-circle"></i> Detail Pelaksana <i>(Performer)</i></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12" id="FormTambahPerformer">
+                    <div class="col-12" id="FormDetailPerformer">
                         
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12" id="NotifikasiTambahPerformer">
-                        <!-- Notifikasi Tambah Performer -->
-                    </div>
-                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-rounded" id="ButtonTambahPerformer">
-                    <i class="bi bi-save"></i> Simpan
-                </button>
+            <div class="modal-footer bg-info">
                 <button type="button" class="btn btn-secondary btn-rounded" data-bs-dismiss="modal">
                     <i class="bi bi-x-circle"></i> Tutup
                 </button>
@@ -262,3 +358,175 @@
         </div>
     </div>
 </div> 
+
+<!-- Modal Edit Performer -->
+<div class="modal fade" id="ModalEditPerformer" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <form action="javascript:void(0);" id="ProsesEditPerformer">
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title text-light"><i class="bi bi-plus-circle"></i> Edit Pelaksana Tindakan <i>(Performer)</i></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-success-subtle">
+                    <div class="row">
+                        <div class="col-12" id="FormEditPerformer">
+                            <!-- Form Edit -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" id="NotifikasiEditPerformer">
+                            <!-- Notifikasi Edit -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-success">
+                    <button type="submit" class="btn btn-primary btn-rounded" id="ButtonEditPerformer">
+                        <i class="bi bi-save"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-rounded" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Hapus Performer -->
+<div class="modal fade" id="ModalHapusPerformer" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <form action="javascript:void(0);" id="ProsesHapusPerformer">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-light"><i class="bi bi-trash"></i> Hapus Pelaksana Tindakan <i>(Performer)</i></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-danger-subtle">
+                    <div class="row">
+                        <div class="col-12" id="FormHapusPerformer">
+                            <!-- Form Hapus -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" id="NotifikasiHapusPerformer">
+                            <!-- Notifikasi Hapus -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-danger">
+                    <button type="submit" class="btn btn-primary btn-rounded" id="ButtonHapusPerformer">
+                        <i class="bi bi-check"></i> Hapus
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-rounded" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Kirim Procedure -->
+<div class="modal fade" id="ModalKirimProcedure" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form action="javascript:void(0);" id="ProsesKirimProcedure">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark"><i class="bi bi-send"></i> Kirim Resource <i>Procedure</i></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12" id="FormKirimProcedure">
+                            <!-- Form Kirim -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" id="NotifikasiKirimProcedure">
+                            <!-- Notifikasi Kirim -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-rounded" id="ButtonKirimProcedure">
+                        <i class="bi bi-send"></i> Kirim
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-rounded" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detail Procedure -->
+<div class="modal fade" id="ModalDetailProcedure" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-dark"><i class="bi bi-info-circle"></i> Detail Procedure</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="FormDetailProcedure">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Detaiil Disini -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-rounded" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<!-- Modal Download -->
+<div class="modal fade" id="ModalDownload" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <form action="_page/Tindakan/ProsesDownloadTindakan.php" method="POST" target="_blank">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark"><i class="bi bi-download"></i> Download Data Tindakan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="periode_awal"><small>Periode Awal</small></label>
+                            <input type="date" name="periode_awal" id="periode_awal" class="form-control">
+                        </div> 
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="periode_akhir"><small>Periode Akhir</small></label>
+                            <input type="date" name="periode_akhir" id="periode_akhir" class="form-control">
+                        </div> 
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="alert alert-warning text-center">
+                                <small>
+                                    <b>PENTING!</b><br>
+                                    Semakin besar data yang anda download, maka sistem akan membutuhkan waktu lebih lama untuk memprosesnya.
+                                </small>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-rounded">
+                        <i class="bi bi-download"></i> Download
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-rounded" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

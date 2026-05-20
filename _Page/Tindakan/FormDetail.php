@@ -450,7 +450,6 @@
                         <td class="text-center"><small><b>No</b></small></td>
                         <td class="text-left"><small><b><i>Type</i></b></small></td>
                         <td class="text-left"><small><b>Nama</b></small></td>
-                        <td class="text-left"><small><b>Catatan</b></small></td>
                     </tr>
                 </thead>
                 <tbody>
@@ -484,7 +483,6 @@
                                         <td class="text-center"><small class="text-muted">'.$no.'</small></td>
                                         <td class="text-left"><small class="text-muted">'.$Performer['performer_type'].'</small></td>
                                         <td class="text-left"><small class="text-muted">'.$Performer['performer_nama'].'</small></td>
-                                        <td class="text-left"><small class="text-muted">'.$Performer['performer_notes'].'</small></td>
                                     </tr>
                                 ';
                                 $no++;

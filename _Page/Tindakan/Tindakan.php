@@ -30,9 +30,6 @@
                                             <b class="card-title">Tindakan - Kunjungan</b>
                                         </div>
                                         <div class="col-6 text-end icon-btn">
-                                            <button type="button" class="btn btn-md btn-icon btn-outline-dark" data-bs-toggle="modal" data-bs-target="#ModalInfo" title="Keterangan Tindakan (<i>Procedure</i>)">
-                                                <i class="bi bi-info"></i>
-                                            </button>
                                             <button type="button" class="btn btn-md btn-icon btn-outline-dark" data-bs-toggle="modal" data-bs-target="#ModalDownload" title="Download Tindakan (<i>Procedure</i>)">
                                                 <i class="bi bi-download"></i>
                                             </button>
@@ -114,13 +111,13 @@
                                 <div class="card-body" id="FormTindakan">
                                     <!-- Form Tindakan Ditampilkan Disini -->
                                 </div>
-                                <div class="card-footer">
+                                <!-- <div class="card-footer">
                                     <div class="row">
                                         <div class="col-12" id="footer_detail_tindakan">
 
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

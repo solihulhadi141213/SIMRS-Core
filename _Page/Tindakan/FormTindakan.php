@@ -283,13 +283,13 @@
 
                             if(empty($id_procedure)){
                                 $procedure_button = '
-                                    <button type="button" class="btn btn-outline-danger btn-sm">
+                                    <button type="button" class="btn btn-outline-danger btn-sm modal_kirim_procedure" data-id="'.$id_tindakan.'">
                                         <i class="bi bi-send"></i> Kirim
                                     </button>
                                 ';
                             }else{
                                 $procedure_button = '
-                                    <button type="button" class="btn btn-info btn-sm">
+                                    <button type="button" class="btn btn-info btn-sm modal_detail_procedure" data-id="'.$id_procedure.'">
                                         <i class="bi bi-info-circle"></i> Detail
                                     </button>
                                 ';
@@ -334,7 +334,7 @@
                                             </li>
                                             <li>
                                                 <a href="javascript:void(0);" class="dropdown-item modal_edit" data-id="'.$id_tindakan.'">
-                                                    <i class="bi bi-pencil"></i> Ubah
+                                                    <i class="bi bi-pencil"></i> Edit
                                                 </a>
                                             </li>
                                             <li>

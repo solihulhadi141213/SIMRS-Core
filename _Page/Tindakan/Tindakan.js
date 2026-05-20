@@ -68,6 +68,24 @@ $(document).ready(function() {
         });
     }
 
+
+    // MENAMPILKAN PERFORMER
+    function ShowPerformer(id_tindakan){
+        
+        // Loading Form
+        $('#FormPerformer').html('Loading...');
+
+        // Tampilkan Detail Kunjungan Dengan Ajax
+        $.ajax({
+            type 	    : 'POST',
+            url 	    : '_Page/Tindakan/FormPerformer.php',
+            data        : {id_tindakan : id_tindakan},
+            success     : function(data){
+                $('#FormPerformer').html(data);
+            }
+        });
+    }
+
     //-----------------------------------------
     // BLOCK EVENT
     //-----------------------------------------
@@ -517,6 +535,400 @@ $(document).ready(function() {
         });
     });
 
+    // EDIT TINDAKAN
+    $(document).on('click', '.modal_edit', function () {
+        
+        // Tangkap id_tindakan
+        var id_tindakan = $(this).data('id');
+
+        // Show Modal
+        $('#ModalEditTindakan').modal('show');
+
+        // Kosongkan Notifikasi
+        $('#NotifikasiEditTindakan').html('');
+
+        // Loading Form
+        $('#FormEditTindakan').html('Loading...');
+
+        // Tampilkan Detail Kunjungan Dengan Ajax
+        $.ajax({
+            type 	    : 'POST',
+            url 	    : '_Page/Tindakan/FormEditTindakan.php',
+            data        : {id_tindakan : id_tindakan},
+            success     : function(data){
+                $('#FormEditTindakan').html(data);
+
+                // SELECT2 REFERENSI TINDAKAN
+                $('#id_tindakan_referensi_edit').select2({
+                    theme         : 'bootstrap-5',
+                    width         : '100%',
+                    dropdownParent: $('#form_tindakan_referensi_edit'),
+                    placeholder   : 'Cari tindakan...',
+                    allowClear    : true,
+                    ajax          : {
+                        url     : '_Page/Tindakan/ListReferensiTindakan.php',
+                        type    : 'POST',
+                        dataType: 'json',
+                        delay   : 250,
+                        data    : function(params){
+                            return {
+                                search: params.term,
+                                page  : params.page || 1
+                            };
+                        },
+                        processResults: function(data, params){
+
+                            params.page = params.page || 1;
+
+                            return {
+                                results   : data.results,
+                                pagination: {
+                                    more: data.pagination.more
+                                }
+                            };
+                        },
+                        cache: true
+                    }
+                });
+
+                // SELECT2 ICD
+                loadSelectIcdEdit();
+
+                // CHANGE REFERENSI TINDAKAN
+                $('#id_tindakan_referensi_edit').on('select2:select', function(e){
+
+                    let data = e.params.data;
+
+                    $('#kategori_tindakan_edit')
+                        .val(data.kategori_tindakan)
+                        .prop('readonly', true);
+
+                    $('#namanama_tindakan_edit_tindakan')
+                        .val(data.nama_tindakan)
+                        .prop('readonly', true);
+
+                    $('#lokasi_tubuh_edit')
+                        .val(data.lokasi_tubuh)
+                        .prop('readonly', true);
+
+                    // SET ICD9
+                    if(data.icd9_code){
+
+                        let newOption = new Option(
+                            data.icd9_text,
+                            data.icd9_code,
+                            true,
+                            true
+                        );
+
+                        $('#icd9_code_edit')
+                            .append(newOption)
+                            .trigger('change');
+
+                        $('#icd9_description_edit').val(data.icd9_description);
+
+                    }else{
+
+                        $('#icd9_code_edit').val(null).trigger('change');
+                        $('#icd9_description_edit').val('');
+                    }
+
+                    $('#icd9_code_edit').prop('disabled', true);
+
+                });
+
+                // CLEAR REFERENSI
+                $('#id_tindakan_referensi_edit').on('select2:clear', function(){
+
+                    $('#kategori_tindakan_edit')
+                        .val('')
+                        .prop('readonly', false);
+
+                    $('#nama_tindakan_edit')
+                        .val('')
+                        .prop('readonly', false);
+
+                    $('#lokasi_tubuh_edit')
+                        .val('')
+                        .prop('readonly', false);
+
+                    $('#icd9_code_edit')
+                        .val(null)
+                        .trigger('change')
+                        .prop('disabled', false);
+
+                    $('#icd9_description_edit').val('');
+
+                });
+
+                // GANTI JENIS ICD
+                $('input[name="reson_reference"]').on('change', function(){
+
+                    $('#reson_code_edit').val(null).trigger('change');
+
+                    $('#reson_code_edit').select2('destroy');
+
+                    loadSelectIcdEdit();
+
+                });
+
+                // FUNGSI LOAD ICD
+                function loadSelectIcdEdit(){
+
+                    $('#reson_code_edit').select2({
+                        theme         : 'bootstrap-5',
+                        width         : '100%',
+                        dropdownParent: $('#form_reson_code_edit'),
+                        placeholder   : 'Cari ICD...',
+                        allowClear    : true,
+                        ajax          : {
+                            url     : '_Page/Tindakan/ListIcd10.php',
+                            type    : 'POST',
+                            dataType: 'json',
+                            delay   : 250,
+                            data    : function(params){
+
+                                return {
+                                    search         : params.term,
+                                    page           : params.page || 1,
+                                    reson_reference: $('input[name="reson_reference"]:checked').val()
+                                };
+                            },
+                            processResults: function(data, params){
+
+                                params.page = params.page || 1;
+
+                                return {
+                                    results   : data.results,
+                                    pagination: {
+                                        more: data.pagination.more
+                                    }
+                                };
+                            },
+                            cache: true
+                        }
+                    });
+
+                }
+
+                // SET DISPLAY ICD
+                $('#reson_code_edit').on('select2:select', function(e){
+                    let data = e.params.data;
+                    $('#reson_display_edit').val(data.display);
+
+                });
+
+                $('#reson_code_edit').on('select2:clear', function(){
+                    $('#reson_display_edit').val('');
+                });
+            }
+        });
+    });
+
+    // Handdle Submit Edit Tindakan
+    $(document).on('submit', '#ProsesEditTindakan', function (e) {
+        e.preventDefault();
+
+        let form       = $(this);
+        let button     = $('#ButtonEditTindakan');
+        let modal      = $('#ModalEditTindakan');
+        let notifikasi = $('#NotifikasiEditTindakan');
+
+        // Simpan isi tombol awal
+        let buttonText = button.html();
+
+        // Ambil data form
+        let formData = new FormData(this);
+
+        // Kosongkan notifikasi
+        notifikasi.html('');
+
+        // Loading tombol
+        button.prop('disabled', true).html(`<span class="spinner-border spinner-border-sm me-1"></span> Loading...`);
+
+        $.ajax({
+            url        : '_Page/Tindakan/ProsesEditTindakan.php',
+            type       : 'POST',
+            data       : formData,
+            dataType   : 'json',
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+
+                // id_kunjungan
+                let id_kunjungan = response.id_kunjungan;
+
+                // Kembalikan tombol seperti semula
+                button.prop('disabled', false).html(buttonText);
+
+                if (response.status === 'success') {
+
+                    // Tangkap id_kunjungan
+                    let id_kunjungan = response.id_kunjungan;
+
+                    // Kosongkan notifikasi
+                    notifikasi.html('');
+
+                    // Tutup modal
+                    modal.modal('hide');
+
+                    // Toast sukses
+                    Swal.fire({
+                        toast            : true,
+                        position         : 'top-end',
+                        icon             : 'success',
+                        title            : 'Edit Tindakan Berhasil',
+                        showConfirmButton: false,
+                        timer            : 1000,
+                        timerProgressBar : true
+                    });
+                    
+                    // Tampilkan Ulang Data Performer
+                    ShowTindakan(id_kunjungan);
+                    TabelTindakan();
+
+                } else {
+
+                    // Tampilkan error
+                    notifikasi.html(`
+                        <div class="alert alert-danger">
+                            <small>${response.message}</small>
+                        </div>
+                    `);
+                }
+            },
+
+            error: function () {
+
+                // Kembalikan tombol
+                button.prop('disabled', false).html(buttonText);
+
+                // Error server
+                notifikasi.html(`
+                    <div class="alert alert-danger">
+                        <small>Terjadi kesalahan pada server.</small>
+                    </div>
+                `);
+            }
+        });
+    });
+
+    // HAPUS TINDAKAN
+    $(document).on('click', '.modal_hapus', function () {
+        
+        // Tangkap id_tindakan
+        var id_tindakan = $(this).data('id');
+
+        // Show Modal
+        $('#ModalHapusTindakan').modal('show');
+
+        // Kosongkan Notifikasi
+        $('#NotifikasiHapusTindakan').html('');
+
+        // Loading Form
+        $('#FormHapusTindakan').html('Loading...');
+
+        // Tampilkan Detail Kunjungan Dengan Ajax
+        $.ajax({
+            type 	    : 'POST',
+            url 	    : '_Page/Tindakan/FormHapusTindakan.php',
+            data        : {id_tindakan : id_tindakan},
+            success     : function(data){
+                $('#FormHapusTindakan').html(data);
+            }
+        });
+    });
+
+    // Handdle Submit Hapus Tindakan
+    $(document).on('submit', '#ProsesHapusTindakan', function (e) {
+        e.preventDefault();
+
+        let form       = $(this);
+        let button     = $('#ButtonHapusTindakan');
+        let modal      = $('#ModalHapusTindakan');
+        let notifikasi = $('#NotifikasiHapusTindakan');
+
+        // Simpan isi tombol awal
+        let buttonText = button.html();
+
+        // Ambil data form
+        let formData = new FormData(this);
+
+        // Kosongkan notifikasi
+        notifikasi.html('');
+
+        // Loading tombol
+        button.prop('disabled', true).html(`<span class="spinner-border spinner-border-sm me-1"></span> Loading...`);
+
+        $.ajax({
+            url        : '_Page/Tindakan/ProsesHapusTindakan.php',
+            type       : 'POST',
+            data       : formData,
+            dataType   : 'json',
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+
+                // id_kunjungan
+                let id_kunjungan = response.id_kunjungan;
+
+                // Kembalikan tombol seperti semula
+                button.prop('disabled', false).html(buttonText);
+
+                if (response.status === 'success') {
+
+                    // Tangkap id_kunjungan
+                    let id_kunjungan = response.id_kunjungan;
+
+                    // Kosongkan notifikasi
+                    notifikasi.html('');
+
+                    // Tutup modal
+                    modal.modal('hide');
+
+                    // Toast sukses
+                    Swal.fire({
+                        toast            : true,
+                        position         : 'top-end',
+                        icon             : 'success',
+                        title            : 'Hapus Tindakan Berhasil',
+                        showConfirmButton: false,
+                        timer            : 1000,
+                        timerProgressBar : true
+                    });
+                    
+                    // Tampilkan Ulang Data Performer
+                    ShowTindakan(id_kunjungan);
+                    TabelTindakan();
+
+                } else {
+
+                    // Tampilkan error
+                    notifikasi.html(`
+                        <div class="alert alert-danger">
+                            <small>${response.message}</small>
+                        </div>
+                    `);
+                }
+            },
+
+            error: function () {
+
+                // Kembalikan tombol
+                button.prop('disabled', false).html(buttonText);
+
+                // Error server
+                notifikasi.html(`
+                    <div class="alert alert-danger">
+                        <small>Terjadi kesalahan pada server.</small>
+                    </div>
+                `);
+            }
+        });
+    });
+
     // DAFTAR PERFORMER
     $(document).on('click', '.modal_performer', function () {
         
@@ -526,42 +938,619 @@ $(document).ready(function() {
         // Show Modal
         $('#ModalPerformer').modal('show');
 
-        // Loading Form
-        $('#FormPerformer').html('Loading...');
-
-        // Tampilkan Detail Kunjungan Dengan Ajax
-        $.ajax({
-            type 	    : 'POST',
-            url 	    : '_Page/Tindakan/FormPerformer.php',
-            data        : {id_tindakan : id_tindakan},
-            success     : function(data){
-                $('#FormPerformer').html(data);
-            }
-        });
+       ShowPerformer(id_tindakan);
     });
 
     // TAMBAH PERFORMER
     $(document).on('click', '.modal_tambah_perfomrer', function () {
-        
-        // Tangkap id_tindakan
+
         var id_tindakan = $(this).data('id');
 
-        // Show Modal
         $('#ModalTambahPerformer').modal('show');
 
-        // Kosongkan Notifikasi
         $('#NotifikasiTambahPerformer').html('');
 
-        // Loading Form
         $('#FormTambahPerformer').html('Loading...');
 
-        // Tampilkan Detail Kunjungan Dengan Ajax
         $.ajax({
-            type 	    : 'POST',
-            url 	    : '_Page/Tindakan/FormTambahPerformer.php',
-            data        : {id_tindakan : id_tindakan},
-            success     : function(data){
+            type: 'POST',
+            url: '_Page/Tindakan/FormTambahPerformer.php',
+            data: {
+                id_tindakan: id_tindakan
+            },
+            success: function(data){
+
                 $('#FormTambahPerformer').html(data);
+
+                // ==========================================
+                // INIT SELECT2
+                // ==========================================
+                $('#id_praktisi').select2({
+                    theme: 'bootstrap-5',
+                    width: '100%',
+                    dropdownParent: $('#ModalTambahPerformer'),
+                    placeholder: 'Cari Praktisi...',
+                    allowClear: true,
+                    ajax: {
+                        url: '_Page/Tindakan/ListPraktisi.php',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function(params){
+
+                            return {
+                                term: params.term,
+                                page: params.page || 1
+                            };
+
+                        },
+                        processResults: function(data, params){
+
+                            params.page = params.page || 1;
+
+                            return {
+                                results: data.results,
+                                pagination: {
+                                    more: data.pagination.more
+                                }
+                            };
+
+                        },
+                        cache: true
+                    }
+                });
+
+                // ==========================================
+                // EVENT PILIH PRAKTISI
+                // ==========================================
+                $('#id_praktisi').on('select2:select', function (e) {
+
+                    var data = e.params.data;
+
+                    $('#performer_ihs').val(data.ihs);
+                    $('#performer_nik').val(data.nik);
+                    $('#performer_nama').val(data.nama);
+                    $('#performer_profesi').val(data.profesi);
+
+                });
+
+                // ==========================================
+                // CLEAR FORM SAAT UNSELECT
+                // ==========================================
+                $('#id_praktisi').on('select2:clear', function () {
+
+                    $('#performer_ihs').val('');
+                    $('#performer_nik').val('');
+                    $('#performer_nama').val('');
+                    $('#performer_profesi').val('');
+
+                });
+
+            }
+        });
+    });
+
+    // Handdle Submit Performer
+    $(document).on('submit', '#ProsesTambahPerformer', function (e) {
+        e.preventDefault();
+
+        let form       = $(this);
+        let button     = $('#ButtonTambahPerformer');
+        let modal      = $('#ModalTambahPerformer');
+        let notifikasi = $('#NotifikasiTambahPerformer');
+
+        // Simpan isi tombol awal
+        let buttonText = button.html();
+
+        // Ambil data form
+        let formData = new FormData(this);
+
+        // Kosongkan notifikasi
+        notifikasi.html('');
+
+        // Loading tombol
+        button.prop('disabled', true).html(`<span class="spinner-border spinner-border-sm me-1"></span> Loading...`);
+
+        $.ajax({
+            url        : '_Page/Tindakan/ProsesTambahPerformer.php',
+            type       : 'POST',
+            data       : formData,
+            dataType   : 'json',
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+
+                // id_kunjungan
+                let id_kunjungan = response.id_kunjungan;
+
+                // Kembalikan tombol seperti semula
+                button.prop('disabled', false).html(buttonText);
+
+                if (response.status === 'success') {
+
+                    // Tangkap id_tindakan dan id_kunjungan
+                    let id_tindakan = response.id_tindakan;
+                    let id_kunjungan = response.id_kunjungan;
+
+                    // Kosongkan notifikasi
+                    notifikasi.html('');
+
+                    // Tutup modal
+                    modal.modal('hide');
+
+                    // Toast sukses
+                    Swal.fire({
+                        toast            : true,
+                        position         : 'top-end',
+                        icon             : 'success',
+                        title            : 'Tambah Performer Tindakan Berhasil',
+                        showConfirmButton: false,
+                        timer            : 1000,
+                        timerProgressBar : true
+                    });
+                    
+                    // Tampilkan Ulang Data Performer
+                    ShowPerformer(id_tindakan);
+                    ShowTindakan(id_kunjungan);
+
+                } else {
+
+                    // Tampilkan error
+                    notifikasi.html(`
+                        <div class="alert alert-danger">
+                            <small>${response.message}</small>
+                        </div>
+                    `);
+                }
+            },
+
+            error: function () {
+
+                // Kembalikan tombol
+                button.prop('disabled', false).html(buttonText);
+
+                // Error server
+                notifikasi.html(`
+                    <div class="alert alert-danger">
+                        <small>Terjadi kesalahan pada server.</small>
+                    </div>
+                `);
+            }
+        });
+    });
+
+    // DETAIL PERFORMAER
+    $(document).on('click', '.modal_detail_performer', function () {
+
+        var id_praktisi = $(this).data('id');
+
+        $('#ModalDetailPerformer').modal('show');
+
+        $('#FormDetailPerformer').html('Loading...');
+
+        $.ajax({
+            type: 'POST',
+            url: '_Page/Tindakan/FormDetailPerformer.php',
+            data: {id_praktisi: id_praktisi},
+            success: function(data){
+                $('#FormDetailPerformer').html(data);
+            }
+        });
+    });
+
+    // EDIT PERFORMAER
+    $(document).on('click', '.modal_edit_performer', function () {
+        // Ambil id_tindakan_performer
+        var id_tindakan_performer = $(this).data('id');
+
+        // Tampilkan ModalEditPerformer
+        $('#ModalEditPerformer').modal('show');
+
+        // Loading form FormEditPerformer
+        $('#FormEditPerformer').html('Loading...');
+
+        // Tampilkan form FormEditPerformer
+        $.ajax({
+            type: 'POST',
+            url: '_Page/Tindakan/FormEditPerformer.php',
+            data: {id_tindakan_performer: id_tindakan_performer},
+            success: function(data){
+                $('#FormEditPerformer').html(data);
+
+                // INIT SELECT2
+                $('#id_praktisi_edit').select2({
+                    theme         : 'bootstrap-5',
+                    width         : '100%',
+                    dropdownParent: $('#PilihPraktisiEdit'),
+                    placeholder   : 'Cari Praktisi...',
+                    allowClear    : true,
+                    ajax: {
+                        url: '_Page/Tindakan/ListPraktisi.php',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function(params){
+
+                            return {
+                                term: params.term,
+                                page: params.page || 1
+                            };
+
+                        },
+                        processResults: function(data, params){
+
+                            params.page = params.page || 1;
+
+                            return {
+                                results: data.results,
+                                pagination: {
+                                    more: data.pagination.more
+                                }
+                            };
+
+                        },
+                        cache: true
+                    }
+                });
+
+                // EVENT PILIH PRAKTISI
+                $('#id_praktisi_edit').on('select2:select', function (e) {
+
+                    var data = e.params.data;
+
+                    $('#performer_ihs_edit').val(data.ihs);
+                    $('#performer_nik_edit').val(data.nik);
+                    $('#performer_nama_edit').val(data.nama);
+                    $('#performer_profesi_edit').val(data.profesi);
+
+                });
+
+                // CLEAR FORM SAAT UNSELECT
+                $('#id_praktisi_edit').on('select2:clear', function () {
+
+                    $('#performer_ihs_edit').val('');
+                    $('#performer_nik_edit').val('');
+                    $('#performer_nama_edit').val('');
+                    $('#performer_profesi_edit').val('');
+
+                });
+            }
+        });
+    });
+
+    // Handle Submit Edit Performer
+    $(document).on('submit', '#ProsesEditPerformer', function (e) {
+        e.preventDefault();
+
+        let form       = $(this);
+        let button     = $('#ButtonEditPerformer');
+        let modal      = $('#ModalEditPerformer');
+        let notifikasi = $('#NotifikasiEditPerformer');
+
+        // Simpan isi tombol awal
+        let buttonText = button.html();
+
+        // Ambil data form
+        let formData = new FormData(this);
+
+        // Kosongkan notifikasi
+        notifikasi.html('');
+
+        // Loading tombol
+        button.prop('disabled', true).html(`<span class="spinner-border spinner-border-sm me-1"></span> Loading...`);
+
+        $.ajax({
+            url        : '_Page/Tindakan/ProsesEditPerformer.php',
+            type       : 'POST',
+            data       : formData,
+            dataType   : 'json',
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+
+                // id_kunjungan
+                let id_kunjungan = response.id_kunjungan;
+
+                // Kembalikan tombol seperti semula
+                button.prop('disabled', false).html(buttonText);
+
+                if (response.status === 'success') {
+
+                    // Tangkap id_tindakan dan id_kunjungan
+                    let id_tindakan = response.id_tindakan;
+                    let id_kunjungan = response.id_kunjungan;
+
+                    // Kosongkan notifikasi
+                    notifikasi.html('');
+
+                    // Tutup modal
+                    modal.modal('hide');
+
+                    // Toast sukses
+                    Swal.fire({
+                        toast            : true,
+                        position         : 'top-end',
+                        icon             : 'success',
+                        title            : 'Edit Performer Tindakan Berhasil',
+                        showConfirmButton: false,
+                        timer            : 1000,
+                        timerProgressBar : true
+                    });
+                    
+                    // Tampilkan Ulang Data Performer
+                    ShowPerformer(id_tindakan);
+                    ShowTindakan(id_kunjungan);
+
+                } else {
+
+                    // Tampilkan error
+                    notifikasi.html(`
+                        <div class="alert alert-danger">
+                            <small>${response.message}</small>
+                        </div>
+                    `);
+                }
+            },
+
+            error: function () {
+
+                // Kembalikan tombol
+                button.prop('disabled', false).html(buttonText);
+
+                // Error server
+                notifikasi.html(`
+                    <div class="alert alert-danger">
+                        <small>Terjadi kesalahan pada server.</small>
+                    </div>
+                `);
+            }
+        });
+    });
+
+    // HAPUS PERFORMAER
+    $(document).on('click', '.modal_hapus_performer', function () {
+        // Ambil id_tindakan_performer
+        var id_tindakan_performer = $(this).data('id');
+
+        // Tampilkan ModalHapusPerformer
+        $('#ModalHapusPerformer').modal('show');
+
+        // Loading form FormHapusPerformer
+        $('#FormHapusPerformer').html('Loading...');
+
+        // Tampilkan form FormHapusPerformer
+        $.ajax({
+            type: 'POST',
+            url: '_Page/Tindakan/FormHapusPerformer.php',
+            data: {id_tindakan_performer: id_tindakan_performer},
+            success: function(data){
+                $('#FormHapusPerformer').html(data);
+            }
+        });
+    });
+
+    // Handle Submit Hapus Performer
+    $(document).on('submit', '#ProsesHapusPerformer', function (e) {
+        e.preventDefault();
+
+        let form       = $(this);
+        let button     = $('#ButtonHapusPerformer');
+        let modal      = $('#ModalHapusPerformer');
+        let notifikasi = $('#NotifikasiHapusPerformer');
+
+        // Simpan isi tombol awal
+        let buttonText = button.html();
+
+        // Ambil data form
+        let formData = new FormData(this);
+
+        // Kosongkan notifikasi
+        notifikasi.html('');
+
+        // Loading tombol
+        button.prop('disabled', true).html(`<span class="spinner-border spinner-border-sm me-1"></span> Loading...`);
+
+        $.ajax({
+            url        : '_Page/Tindakan/ProsesHapusPerformer.php',
+            type       : 'POST',
+            data       : formData,
+            dataType   : 'json',
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+
+                // id_kunjungan
+                let id_kunjungan = response.id_kunjungan;
+
+                // Kembalikan tombol seperti semula
+                button.prop('disabled', false).html(buttonText);
+
+                if (response.status === 'success') {
+
+                    // Tangkap id_tindakan dan id_kunjungan
+                    let id_tindakan = response.id_tindakan;
+                    let id_kunjungan = response.id_kunjungan;
+
+                    // Kosongkan notifikasi
+                    notifikasi.html('');
+
+                    // Tutup modal
+                    modal.modal('hide');
+
+                    // Toast sukses
+                    Swal.fire({
+                        toast            : true,
+                        position         : 'top-end',
+                        icon             : 'success',
+                        title            : 'Hapus Performer Tindakan Berhasil',
+                        showConfirmButton: false,
+                        timer            : 1000,
+                        timerProgressBar : true
+                    });
+                    
+                    // Tampilkan Ulang Data Performer
+                    ShowPerformer(id_tindakan);
+                    ShowTindakan(id_kunjungan);
+
+                } else {
+
+                    // Tampilkan error
+                    notifikasi.html(`
+                        <div class="alert alert-danger">
+                            <small>${response.message}</small>
+                        </div>
+                    `);
+                }
+            },
+
+            error: function () {
+
+                // Kembalikan tombol
+                button.prop('disabled', false).html(buttonText);
+
+                // Error server
+                notifikasi.html(`
+                    <div class="alert alert-danger">
+                        <small>Terjadi kesalahan pada server.</small>
+                    </div>
+                `);
+            }
+        });
+    });
+
+    // KIRIM RESOURCE PROCEDURE
+    $(document).on('click', '.modal_kirim_procedure', function () {
+        // Ambil id_tindakan
+        var id_tindakan = $(this).data('id');
+
+        // Tampilkan ModalKirimProcedure
+        $('#ModalKirimProcedure').modal('show');
+
+        // Kosongkan Notifikasi
+        $('#NotifikasiKirimProcedure').html('');
+
+        // Loading form FormHapusPerformer
+        $('#FormKirimProcedure').html('Loading...');
+
+        // Tampilkan form FormKirimProcedure
+        $.ajax({
+            type: 'POST',
+            url: '_Page/Tindakan/FormKirimProcedure.php',
+            data: {id_tindakan: id_tindakan},
+            success: function(data){
+                $('#FormKirimProcedure').html(data);
+            }
+        });
+    });
+
+    // Handdle Kirim Procedure
+    $(document).on('submit', '#ProsesKirimProcedure', function (e) {
+        e.preventDefault();
+
+        let form       = $(this);
+        let button     = $('#ButtonKirimProcedure');
+        let modal      = $('#ModalKirimProcedure');
+        let notifikasi = $('#NotifikasiKirimProcedure');
+
+        // Simpan isi tombol awal
+        let buttonText = button.html();
+
+        // Ambil data form
+        let formData = new FormData(this);
+
+        // Kosongkan notifikasi
+        notifikasi.html('');
+
+        // Loading tombol
+        button.prop('disabled', true).html(`<span class="spinner-border spinner-border-sm me-1"></span> Loading...`);
+
+        $.ajax({
+            url        : '_Page/Tindakan/ProsesKirimProcedure.php',
+            type       : 'POST',
+            data       : formData,
+            dataType   : 'json',
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+
+                // Kembalikan tombol seperti semula
+                button.prop('disabled', false).html(buttonText);
+
+                if (response.status === 'success') {
+
+                    // Tangkap id_tindakan dan id_kunjungan
+                    let id_tindakan = response.id_tindakan;
+                    let id_kunjungan = response.id_kunjungan;
+
+                    // Kosongkan notifikasi
+                    notifikasi.html('');
+
+                    // Tutup modal
+                    modal.modal('hide');
+
+                    // Toast sukses
+                    Swal.fire({
+                        toast            : true,
+                        position         : 'top-end',
+                        icon             : 'success',
+                        title            : 'Kirim Procedure SATUSEHAT Berhasil',
+                        showConfirmButton: false,
+                        timer            : 1000,
+                        timerProgressBar : true
+                    });
+                    
+                    // Tampilkan Ulang Data Performer
+                    TabelTindakan();
+                    ShowPerformer(id_tindakan);
+                    ShowTindakan(id_kunjungan);
+
+                } else {
+
+                    // Tampilkan error
+                    notifikasi.html(`
+                        <div class="alert alert-danger">
+                            <small>${response.message}</small><br>
+                            <pre>${response.payload}</pre>
+                        </div>
+                    `);
+                }
+            },
+
+            error: function () {
+
+                // Kembalikan tombol
+                button.prop('disabled', false).html(buttonText);
+
+                // Error server
+                notifikasi.html(`
+                    <div class="alert alert-danger">
+                        <small>Terjadi kesalahan pada server.</small>
+                    </div>
+                `);
+            }
+        });
+    });
+
+    // DETAIL RESOURCE PROCEDURE
+    $(document).on('click', '.modal_detail_procedure', function () {
+        // Ambil id_procedure
+        var id_procedure = $(this).data('id');
+
+        // Tampilkan ModalKirimProcedure
+        $('#ModalDetailProcedure').modal('show');
+
+        // Loading form FormHapusPerformer
+        $('#FormDetailProcedure').html('Loading...');
+
+        // Tampilkan form FormKirimProcedure
+        $.ajax({
+            type: 'POST',
+            url: '_Page/Tindakan/FormDetailProcedure.php',
+            data: {id_procedure: id_procedure},
+            success: function(data){
+                $('#FormDetailProcedure').html(data);
             }
         });
     });

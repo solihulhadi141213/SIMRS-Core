@@ -231,13 +231,13 @@ if ($totalData > 0) {
 
             if($jumlah_procedure!==$jumlah_tindakan){
                 $tombol_procedure = '
-                    <button type="button" disabled class="btn btn-sm btn-warning show_detail_tindakan" data-id="'.$id_kunjungan.'">
+                    <button type="button" class="btn btn-sm btn-warning show_detail_tindakan" data-id="'.$id_kunjungan.'">
                         '.$jumlah_procedure.' Record
                     </button>
                 ';
             }else{
                 $tombol_procedure = '
-                    <button type="button" disabled class="btn btn-sm btn-success show_detail_tindakan" data-id="'.$id_kunjungan.'">
+                    <button type="button" class="btn btn-sm btn-success show_detail_tindakan" data-id="'.$id_kunjungan.'">
                         '.$jumlah_procedure.' Record
                     </button>
                 ';

@@ -139,7 +139,7 @@
             <div class="row mb-3">
                 <div class="col-12">
                     <div class="alert alert-danger text-center">
-                        <b>Opss!</b>
+                        <b>Opss!</b><br>
                         <small>
                            CURL ERROR: '.curl_error($curl).'<br>
                            RESPONSE: '.$response.'<br>
@@ -160,7 +160,7 @@
             <div class="row mb-3">
                 <div class="col-12">
                     <div class="alert alert-danger text-center">
-                        <b>Opss!</b>
+                        <b>Opss!</b><br>
                         <small>
                             Response bukan JSON valid<br>
                             Response: '.$response.'
