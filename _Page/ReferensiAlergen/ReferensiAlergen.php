@@ -4,9 +4,9 @@
             <div class="col-md-8">
                 <div class="page-header-title">
                     <h5 class="m-b-10">
-                        <a href="" class="h5"><i class="bi bi-file-earmark-medical"></i> Referensi Tindakan (<i>Procedure</i>)</a>
+                        <a href="" class="h5"><i class="bi bi-file-earmark-medical"></i> Referensi Alergen (<i>Allergens</i>)</a>
                     </h5>
-                    <p class="m-b-0">Kelola Referensi Tindakan <i>(Procedure)</i> Serta <i>Mapping</i> Terhadap Referensi ICD9 dan SNOMED</p>
+                    <p class="m-b-0"><i>Mapping</i> Referensi Alergen <i>(Allergens)</i> Berdasarkan Kode SNOMED CT</p>
                 </div>
             </div>
             <div class="col-md-4 text-right">
@@ -27,9 +27,22 @@
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-12 text-end icon-btn">
-                                            <button type="button" class="btn btn-md btn-icon btn-outline-dark" data-bs-toggle="modal" data-bs-target="#ModalDownload" title="Download Procedure">
-                                                <i class="bi bi-download"></i>
+                                            <button type="button" class="btn btn-md btn-icon btn-outline-dark" data-bs-toggle="dropdown">
+                                                <i class="bi bi-filetype-xlsx"></i>
                                             </button>
+                                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                                <li class="dropdown-header text-start"><h6>Option</h6></li>
+                                                <li>
+                                                    <a href="javascript:void(0)" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalDownload" title="Download Allergens">
+                                                        <i class="bi bi-download"></i> Download / Export
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0)" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ModalUpload" title="Upload Allergens">
+                                                        <i class="bi bi-upload"></i> Upload / Import
+                                                    </a>
+                                                </li>
+                                            </ul>
                                             <button type="button" class="btn btn-md btn-icon btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalFilter" title="Filter Data">
                                                 <i class="bi bi-filter"></i>
                                             </button>
@@ -45,18 +58,19 @@
                                             <thead>
                                                 <tr>
                                                     <td align="center" class="align-middle"><small><b>No</b></small></td>
+                                                    <td align="left" class="align-middle"><small><b>Alergen</b></small></td>
                                                     <td align="left" class="align-middle"><small><b>Kategori</b></small></td>
-                                                    <td align="left" class="align-middle"><small><b>Tindakan</b></small></td>
-                                                    <td align="left" class="align-middle"><small><b>Lokasi Tubuh</b></small></td>
-                                                    <td align="left" class="align-middle"><small><b>ICD 9</b></small></td>
-                                                    <td align="center"><small><b>Status</b></small></td>
-                                                    <td align="center"><small><b><i>Condition</i></b></small></td>
+                                                    <td align="left" class="align-middle"><small><b><i>Code</i></b></small></td>
+                                                    <td align="left" class="align-middle"><small><b><i>Display</i></b></small></td>
+                                                    <td align="left" class="align-middle"><small><b><i>System</i></b></small></td>
+                                                    <td align="center"><small><b><i>Active</i></b></small></td>
+                                                    <td align="center"><small><b>Opsi</b></small></td>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tabel_referensi_tindakan">
+                                            <tbody id="tabel_alergen">
                                                 <!-- Baris Tabel Akan Tampil Disini -->
                                                 <tr>
-                                                    <td align="center" colspan="7">
+                                                    <td align="center" colspan="8">
                                                         <small class="text text-muted">No Data</small>
                                                     </td>
                                                 </tr>

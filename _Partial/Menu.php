@@ -242,6 +242,7 @@
                         $Page=="ReferensiRuangRawat" ||
                         $Page=="ReferensiIcd" ||
                         $Page=="ReferensiTindakan" ||
+                        $Page=="ReferensiAlergen" ||
                         $Page=="ReferensiWilayah" ||
                         $Page=="ReferensiWilayahBpjs" ||
                         $Page=="ReferensiIcdBpjs" ||
@@ -305,7 +306,14 @@
                     <li class="<?php if($Page=="ReferensiTindakan"){echo 'active';} ?>">
                         <a href="index.php?Page=ReferensiTindakan" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
-                            <span class="pcoded-mtext">Tindakan (Procedure)</span>
+                            <span class="pcoded-mtext"><i>Procedure</i></span>
+                        </a>
+                    </li>
+
+                    <li class="<?php if($Page=="ReferensiAlergen"){echo 'active';} ?>">
+                        <a href="index.php?Page=ReferensiAlergen" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                            <span class="pcoded-mtext"><i>Allergens</i></span>
                         </a>
                     </li>
 

@@ -31,6 +31,7 @@
         'ReferensiRuangRawat'   => '_Page/ReferensiRuangRawat/ModalReferensiRuangRawat.php',
         'ReferensiIcd'          => '_Page/ReferensiIcd/ModalReferensiIcd.php',
         'ReferensiTindakan'     => '_Page/ReferensiTindakan/ModalReferensiTindakan.php',
+        'ReferensiAlergen'      => '_Page/ReferensiAlergen/ModalReferensiAlergen.php',
         'ReferensiWilayah'      => '_Page/ReferensiWilayah/ModalReferensiWilayah.php',
         'ReferensiWilayahBpjs'  => '_Page/ReferensiWilayahBpjs/ModalReferensiWilayahBpjs.php',
         'ReferensiIcdBpjs'      => '_Page/ReferensiIcdBpjs/ModalReferensiIcdBpjs.php',

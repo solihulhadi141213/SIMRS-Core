@@ -56,6 +56,7 @@
         "ReferensiRuangRawat"   => "Ruang Rawat",
         "ReferensiIcd"          => "ICD",
         "ReferensiTindakan"     => "Referensi Tindakan",
+        "ReferensiAlergen"      => "Allergens",
         "ReferensiWilayah"      => "Wilayah",
         "Pasien"                => "Pasien",
         "Kunjungan"             => "Kunjungan",
