@@ -247,7 +247,6 @@
                         $Page=="ReferensiWilayahBpjs" ||
                         $Page=="ReferensiIcdBpjs" ||
                         $Page=="Diagnosa"||
-                        $Page=="Alergi" ||
                         $Page=="Kfa"
                     )
                     {
@@ -481,6 +480,7 @@
                         $Page == "GeneralConsent" ||
                         $Page == "Diagnosis" ||
                         $Page == "Tindakan" ||
+                        $Page == "Alergi" ||
                         $Page == "Antrian"
                     ){
                         echo 'active pcoded-trigger';

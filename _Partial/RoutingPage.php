@@ -34,6 +34,7 @@
         'GeneralConsent'        => '_Page/GeneralConsent/GeneralConsent.php',
         'Diagnosis'             => '_Page/Diagnosis/Diagnosis.php',
         'Tindakan'              => '_Page/Tindakan/Tindakan.php',
+        'Alergi'                => '_Page/Alergi/Alergi.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

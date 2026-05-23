@@ -40,6 +40,7 @@
         'GeneralConsent'        => '_Page/GeneralConsent/ModalGeneralConsent.php',
         'Diagnosis'             => '_Page/Diagnosis/ModalDiagnosis.php',
         'Tindakan'              => '_Page/Tindakan/ModalTindakan.php',
+        'Alergi'                => '_Page/Alergi/ModalAlergi.php',
     ];
 
     /**
