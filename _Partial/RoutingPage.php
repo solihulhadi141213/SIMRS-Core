@@ -25,6 +25,7 @@
         'ReferensiIcd'          => '_Page/ReferensiIcd/ReferensiIcd.php',
         'ReferensiTindakan'     => '_Page/ReferensiTindakan/ReferensiTindakan.php',
         'ReferensiAlergen'      => '_Page/ReferensiAlergen/ReferensiAlergen.php',
+        'ReferensiObservation'  => '_Page/ReferensiObservation/ReferensiObservation.php',
         'ReferensiWilayah'      => '_Page/ReferensiWilayah/ReferensiWilayah.php',
         'ReferensiWilayahBpjs'  => '_Page/ReferensiWilayahBpjs/ReferensiWilayahBpjs.php',
         'ReferensiIcdBpjs'      => '_Page/ReferensiIcdBpjs/ReferensiIcdBpjs.php',

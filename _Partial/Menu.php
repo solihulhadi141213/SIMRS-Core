@@ -243,6 +243,7 @@
                         $Page=="ReferensiIcd" ||
                         $Page=="ReferensiTindakan" ||
                         $Page=="ReferensiAlergen" ||
+                        $Page=="ReferensiObservation" ||
                         $Page=="ReferensiWilayah" ||
                         $Page=="ReferensiWilayahBpjs" ||
                         $Page=="ReferensiIcdBpjs" ||
@@ -298,7 +299,7 @@
                     <li class="<?php if($Page=="ReferensiIcd"){echo 'active';} ?>">
                         <a href="index.php?Page=ReferensiIcd" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
-                            <span class="pcoded-mtext">ICD</span>
+                            <span class="pcoded-mtext">ICD9, 10 & 11</span>
                         </a>
                     </li>
 
@@ -316,6 +317,13 @@
                         </a>
                     </li>
 
+                    <li class="<?php if($Page=="ReferensiObservation"){echo 'active';} ?>">
+                        <a href="index.php?Page=ReferensiObservation" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>
+                            <span class="pcoded-mtext"><i>Observation</i></span>
+                        </a>
+                    </li>
+                    
                     <li class="<?php if($Page=="ReferensiWilayah"){echo 'active';} ?>">
                         <a href="index.php?Page=ReferensiWilayah" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-double-right"></i></span>

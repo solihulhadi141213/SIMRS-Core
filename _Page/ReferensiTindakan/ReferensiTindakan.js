@@ -402,7 +402,7 @@ $(document).ready(function() {
     // Load Tabel Pada Saat Pertama Kali
     TabelReferensiTindakan();
 
-     //Pagging
+    //Pagging
     $(document).on('click', '#next_page', function() {
         var page_now = parseInt($('#page_filter').val(), 10); // Pastikan nilai diambil sebagai angka
         var next_page = page_now + 1;

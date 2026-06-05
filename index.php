@@ -57,6 +57,7 @@
         "ReferensiIcd"          => "ICD",
         "ReferensiTindakan"     => "Referensi Tindakan",
         "ReferensiAlergen"      => "Allergens",
+        "ReferensiObservation"  => "Referensi Observation",
         "ReferensiWilayah"      => "Wilayah",
         "Pasien"                => "Pasien",
         "Kunjungan"             => "Kunjungan",
