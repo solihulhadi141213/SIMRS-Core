@@ -36,6 +36,7 @@
         'Diagnosis'             => '_Page/Diagnosis/Diagnosis.php',
         'Tindakan'              => '_Page/Tindakan/Tindakan.php',
         'Alergi'                => '_Page/Alergi/Alergi.php',
+        'Laboratorium'          => '_Page/Laboratorium/Laboratorium.php',
     ];
 
     $page = trim($_GET['Page'] ?? '');

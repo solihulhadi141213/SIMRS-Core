@@ -587,15 +587,28 @@
                     </li>
                 </ul>
             </li>
-            <li class="pcoded-hasmenu <?php if($Page=="Obat"||$Page=="Medication"||$Page=="StokOpename"||$Page=="ObatStorage"||$Page=="ExpiredLimit"||$Page=="TransaksiObat"||$Page=="Resep"){echo 'active pcoded-trigger';} ?>">
+            <li class="pcoded-hasmenu 
+                <?php 
+                    if(
+                    $Page=="Farmasi"||
+                    $Page=="Radiologi"||
+                    $Page=="Laboratorium"||
+                    $Page=="Fisioterapi"||
+                    $Page=="Hemodialisa"||
+                    $Page=="Operasi"
+                    ){
+                        echo 'active pcoded-trigger';
+                    } 
+                ?>
+            ">
                 <a href="javascript:void(0)" class="waves-effect waves-dark">
                     <span class="pcoded-micon"><i class="fa fa-medkit"></i></span>
                     <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Penunjang Medis</span>
                     <span class="pcoded-mcaret"></span>
                 </a>
                 <ul class="pcoded-submenu">
-                    <li class="<?php if($Page=="Obat"){echo 'active';} ?>">
-                        <a href="index.php?Page=Obat" class="waves-effect waves-dark">
+                    <li class="<?php if($Page=="Farmasi"){echo 'active';} ?>">
+                        <a href="index.php?Page=Farmasi" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
                                 Farmasi / Apotek
@@ -603,8 +616,8 @@
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Page=="Obat"){echo 'active';} ?>">
-                        <a href="index.php?Page=Obat" class="waves-effect waves-dark">
+                    <li class="<?php if($Page=="Radiologi"){echo 'active';} ?>">
+                        <a href="index.php?Page=Radiologi" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
                                 Radiologi
@@ -612,8 +625,8 @@
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Page=="Obat"){echo 'active';} ?>">
-                        <a href="index.php?Page=Obat" class="waves-effect waves-dark">
+                    <li class="<?php if($Page=="Laboratorium"){echo 'active';} ?>">
+                        <a href="index.php?Page=Laboratorium" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
                                 Laboratorium
@@ -621,8 +634,8 @@
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Page=="Obat"){echo 'active';} ?>">
-                        <a href="index.php?Page=Obat" class="waves-effect waves-dark">
+                    <li class="<?php if($Page=="Fisioterapi"){echo 'active';} ?>">
+                        <a href="index.php?Page=Fisioterapi" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
                                 Fisioterapi
@@ -630,8 +643,8 @@
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Page=="Obat"){echo 'active';} ?>">
-                        <a href="index.php?Page=Obat" class="waves-effect waves-dark">
+                    <li class="<?php if($Page=="Hemodialisa"){echo 'active';} ?>">
+                        <a href="index.php?Page=Hemodialisa" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
                                 Hemodialisa
@@ -639,8 +652,8 @@
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class="<?php if($Page=="Obat"){echo 'active';} ?>">
-                        <a href="index.php?Page=Obat" class="waves-effect waves-dark">
+                    <li class="<?php if($Page=="Operasi"){echo 'active';} ?>">
+                        <a href="index.php?Page=Operasi" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                             <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
                                 Operasi

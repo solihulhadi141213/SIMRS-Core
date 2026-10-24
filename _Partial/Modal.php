@@ -42,6 +42,7 @@
         'Diagnosis'             => '_Page/Diagnosis/ModalDiagnosis.php',
         'Tindakan'              => '_Page/Tindakan/ModalTindakan.php',
         'Alergi'                => '_Page/Alergi/ModalAlergi.php',
+        'Laboratorium'          => '_Page/Laboratorium/ModalLaboratorium.php',
     ];
 
     /**

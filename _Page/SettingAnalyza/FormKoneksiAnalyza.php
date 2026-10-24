@@ -202,12 +202,12 @@
 
     // UPDATE DATABASE
     $Update = $Conn->prepare("
-        UPDATE setting_radix 
+        UPDATE setting_analyza 
         SET token = ?, creat_at = ?, expired_at = ?, status = 1
-        WHERE id_setting_radix = ?
+        WHERE id_setting_analyza = ?
     ");
 
-    $Update->bind_param("sssi", $token, $created_at, $expired_at, $id_setting_radix);
+    $Update->bind_param("sssi", $token, $created_at, $expired_at, $id_setting_analyza);
 
     if (!$Update->execute()) {
         echo '

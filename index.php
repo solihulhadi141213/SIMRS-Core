@@ -65,6 +65,7 @@
         "Diagnosis"             => "Diagnosis",
         "Tindakan"              => "Tindakan",
         "Alergi"                => "Alergi",
+        "Laboratorium"          => "Laboratorium",
     ];
     
     // Menentukan Judul Halaman

@@ -43,6 +43,7 @@
         "Diagnosis"             => "_Page/Diagnosis/Diagnosis.js?v=A'.$version.'",
         "Tindakan"              => "_Page/Tindakan/Tindakan.js?v=A'.$version.'",
         "Alergi"                => "_Page/Alergi/Alergi.js?v=A'.$version.'",
+        "Laboratorium"          => "_Page/Laboratorium/Laboratorium.js?v=A'.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif
