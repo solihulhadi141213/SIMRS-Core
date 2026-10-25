@@ -1,383 +1,265 @@
-function renderPieMortalitas(selector, meninggal, sembuh) {
-    var options = {
-        series: [meninggal, sembuh],
-        chart: {
-            type: 'donut',
-            height: 250
-        },
-        labels: ['Meninggal', 'Sembuh'],
-        colors: ['#dc3545', '#28a745'],
-        legend: {
-            position: 'bottom'
-        },
-        dataLabels: {
-            enabled: true,
-            formatter: function (val) {
-                return val.toFixed(1) + "%";
-            }
-        },
-        tooltip: {
-            y: {
-                formatter: function (val) {
-                    return val + " pasien";
-                }
-            }
-        },
+const dashboardMonths = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+let dashboardVisitChart = null;
+let patientVisitOffset = 0;
+let patientVisitLoading = false;
+let patientVisitHasMore = true;
+
+function formatDashboardNumber(value) {
+    return new Intl.NumberFormat('id-ID').format(Number(value) || 0);
+}
+
+function showDashboardError(target, message) {
+    $(target).text(message).addClass('is-error').removeClass('is-hidden');
+}
+
+function clearDashboardError(target) {
+    $(target).empty().removeClass('is-error').addClass('is-hidden');
+}
+
+function renderDashboardDonut(target, labels, series, colors) {
+    const element = document.querySelector(target);
+    if (!element || typeof ApexCharts === 'undefined') {
+        showDashboardError(target, 'Komponen grafik tidak tersedia.');
+        return null;
+    }
+
+    return new ApexCharts(element, {
+        chart: { type: 'donut', height: 190, fontFamily: 'Open Sans, sans-serif' },
+        labels,
+        series,
+        colors,
+        legend: { position: 'bottom', fontSize: '11px' },
+        dataLabels: { enabled: true, formatter: (value) => `${value.toFixed(1)}%` },
+        stroke: { width: 2, colors: ['#fff'] },
         plotOptions: {
             pie: {
                 donut: {
-                    size: '65%',
+                    size: '66%',
                     labels: {
                         show: true,
                         total: {
                             show: true,
                             label: 'Total',
-                            formatter: function (w) {
-                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
-                            }
+                            formatter: (chart) => formatDashboardNumber(chart.globals.seriesTotals.reduce((total, value) => total + value, 0))
                         }
                     }
                 }
             }
-        }
-    };
-
-    // Hapus chart lama kalau ada (biar tidak double render)
-    $(selector).html("");
-
-    var chart = new ApexCharts(document.querySelector(selector), options);
-    chart.render();
-}
-
-// Dashboard.js Bersifat Global
-function tampilkanToast(pesan, tipe = 'success') {
-    const toastEl = document.getElementById('liveToast');
-
-    // ubah isi pesan
-    toastEl.querySelector('.toast-body').innerHTML = pesan;
-
-    // ubah warna berdasarkan tipe
-    toastEl.className = 'toast align-items-center border-0';
-
-    if (tipe === 'success') {
-        toastEl.classList.add('text-bg-success');
-    } else if (tipe === 'danger') {
-        toastEl.classList.add('text-bg-danger');
-    } else if (tipe === 'warning') {
-        toastEl.classList.add('text-bg-warning');
-    } else {
-        toastEl.classList.add('text-bg-primary');
-    }
-
-    const toast = new bootstrap.Toast(toastEl, {
-        delay: 1000
+        },
+        tooltip: { y: { formatter: (value) => `${formatDashboardNumber(value)} kunjungan` } },
+        noData: { text: 'Data tidak tersedia' }
     });
-
-    toast.show();
 }
 
-//Fungsi Menampilkan Data
-// Deklarasikan variabel chart di luar fungsi agar bisa diakses untuk dihancurkan/update
-let kunjunganChart = null;
+function loadDashboardDonut(url, target, colors) {
+    $.ajax({
+        url,
+        type: 'GET',
+        dataType: 'json'
+    }).done(function (response) {
+        if (response.status !== 'success' || !Array.isArray(response.series)) {
+            showDashboardError(target, response.message || 'Data grafik tidak valid.');
+            return;
+        }
 
-function ShowGrafik() {
-    // 1. Cek apakah elemen kontainer grafik ada di halaman ini
-    if ($('#GrafikPasien').length === 0) {
-        return; // Berhenti jika elemen tidak ditemukan
+        const chart = renderDashboardDonut(target, response.labels, response.series, colors);
+        if (chart) {
+            chart.render();
+        }
+    }).fail(function (xhr) {
+        const message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Gagal memuat data grafik.';
+        showDashboardError(target, message);
+    });
+}
+
+function renderDashboardVisitChart(categories, values) {
+    if (typeof ApexCharts === 'undefined') {
+        showDashboardError('#GrafikPasien', 'Komponen grafik tidak tersedia.');
+        return;
     }
 
-    // Ambil data filter
-    let formData = $('#ProsesFilterPeriodeGrafik').serialize();
+    if (dashboardVisitChart) {
+        dashboardVisitChart.destroy();
+    }
 
-    // Tampilkan Loading (Gunakan spinner agar lebih manis)
-    $('#GrafikPasien').html(`
-        <div class="text-center p-5">
-            <div class="spinner-border text-primary" role="status"></div>
-            <div class="mt-2">Memuat Grafik...</div>
-        </div>
-    `);
+    dashboardVisitChart = new ApexCharts(document.querySelector('#ChartKunjungan'), {
+        chart: {
+            type: 'area',
+            height: 300,
+            toolbar: { show: false },
+            fontFamily: 'Open Sans, sans-serif'
+        },
+        series: [{ name: 'Kunjungan', data: values }],
+        colors: ['#1a5a6a'],
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth', width: 3 },
+        fill: {
+            type: 'gradient',
+            gradient: { opacityFrom: 0.25, opacityTo: 0.02, shadeIntensity: 0.3 }
+        },
+        grid: { borderColor: '#e8eef0', strokeDashArray: 4 },
+        xaxis: { categories, axisBorder: { show: false }, axisTicks: { show: false } },
+        yaxis: {
+            min: 0,
+            forceNiceScale: true,
+            labels: { formatter: (value) => formatDashboardNumber(Math.round(value)) }
+        },
+        tooltip: { y: { formatter: (value) => `${formatDashboardNumber(value)} kunjungan` } },
+        noData: { text: 'Data tidak tersedia' }
+    });
+    dashboardVisitChart.render();
+}
+
+function loadVisitChart(formData) {
+    clearDashboardError('#GrafikPasien');
+    $('#ChartKunjungan').addClass('is-hidden');
 
     $.ajax({
         url: '_Page/Dashboard/GrafikDashboard.php',
         type: 'POST',
         data: formData,
-        dataType: 'json',
-        success: function (res) {
-            // 2. Validasi respon dari server
-            if (res.status !== 'success') {
-                $('#GrafikPasien').html(`<div class="alert alert-danger text-center">${res.message}</div>`);
-                return;
-            }
-
-            // 3. Logika Judul Dinamis
-            let judul = '';
-            if (res.periode === 'Tahunan') {
-                judul = `Grafik Kunjungan Tahun ${res.tahun}`;
-            } else if (res.periode === 'Bulanan') {
-                const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-                let bulanText = namaBulan[parseInt(res.bulan) - 1] || '';
-                judul = `Grafik Kunjungan ${bulanText} ${res.tahun}`;
-            }
-
-            // 4. Siapkan Wadah Chart
-            $('#GrafikPasien').html(`
-                <div class="mb-3 text-center">
-                    <h5 class="fw-bold">${judul}</h5>
-                </div>
-                <div id="ChartKunjungan" style="min-height: 450px;"></div>
-            `);
-
-            // 5. Konfigurasi ApexCharts
-            var options = {
-                chart: {
-                    type: 'area',
-                    height: 350,
-                    animations: { enabled: true },
-                    toolbar: { show: true } // Disarankan aktif untuk fitur download grafik
-                },
-                series: [{
-                    name: 'Jumlah Kunjungan',
-                    data: res.data || []
-                }],
-                xaxis: {
-                    categories: res.kategori || []
-                },
-                colors: ['#0d6efd'],
-                dataLabels: { enabled: true },
-                grid: {
-                    borderColor: '#e0e0e0',
-                    strokeDashArray: 4
-                },
-                tooltip: {
-                    y: {
-                        formatter: (val) => val + " kunjungan"
-                    }
-                },
-                noData: {
-                    text: 'Data tidak tersedia',
-                    align: 'center',
-                    verticalAlign: 'middle'
-                }
-            };
-
-            // 6. Cegah Penumpukan Objek (Destroy chart lama jika ada)
-            if (kunjunganChart !== null) {
-                kunjunganChart.destroy();
-            }
-
-            // Render Chart Baru
-            kunjunganChart = new ApexCharts(document.querySelector("#ChartKunjungan"), options);
-            kunjunganChart.render();
-        },
-        error: function (xhr) {
-            $('#GrafikPasien').html(`
-                <div class="alert alert-danger text-center">
-                    Gagal mengambil data: ${xhr.statusText}
-                </div>
-            `);
+        dataType: 'json'
+    }).done(function (response) {
+        if (response.status !== 'success' || !Array.isArray(response.kategori) || !Array.isArray(response.data)) {
+            showDashboardError('#GrafikPasien', response.message || 'Data grafik tidak valid.');
+            return;
         }
+
+        const periodText = response.periode === 'Tahunan'
+            ? `Tahun ${response.tahun}`
+            : `${dashboardMonths[Number(response.bulan) - 1]} ${response.tahun}`;
+        $('#dashboardVisitsPeriod').text(periodText);
+        $('#ChartKunjungan').removeClass('is-hidden');
+        renderDashboardVisitChart(response.kategori, response.data);
+    }).fail(function (xhr) {
+        const message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Gagal memuat grafik kunjungan.';
+        showDashboardError('#GrafikPasien', message);
     });
 }
-function formatDashboardNumber(number) {
-    number = parseInt(number) || 0;
 
-    // < 1.000
-    if (number < 1000) {
-        return number.toString();
-    }
-
-    // 1.000 s/d 999.999 => K
-    if (number < 1000000) {
-        let result = number / 1000;
-
-        // Jika bulat, tanpa desimal
-        if (result % 1 === 0) {
-            return result + ' K';
-        }
-
-        // Jika ada pecahan, 1 angka di belakang koma
-        return result.toFixed(1).replace('.', ',') + ' K';
-    }
-
-    // >= 1.000.000 => M
-    let result = number / 1000000;
-
-    if (result % 1 === 0) {
-        return result + ' M';
-    }
-
-    return result.toFixed(1).replace('.', ',') + ' M';
-}
-
-// Menampilkan Angka Dashboard
-function ShowDashboard() {
-    // Loading
-    $('#jumlah_pasien').html('Loading..');
-    $('#jumlah_kunjungan').html('Loading..');
-    $('#jumlah_poliklinik').html('Loading..');
-    $('#jumlah_bed').html('Loading..');
-
-    // Ambil Data Dengan AJAX
+function loadDashboardCounts() {
     $.ajax({
-        url     : '_Page/Dashboard/GetCount.php',
-        type    : 'GET',
-        dataType: 'json',
-        success : function (response) {
-           var pasien = response.pasien;
-           var kunjungan = response.kunjungan;
-           var poliklinik = response.poliklinik;
-           var bed_total = response.bed_total;
-
-            // Tempelkan He HTML
-            $('#jumlah_pasien').html(formatDashboardNumber(pasien));
-            $('#jumlah_kunjungan').html(formatDashboardNumber(kunjungan));
-            $('#jumlah_poliklinik').html(formatDashboardNumber(poliklinik));
-            $('#jumlah_bed').html(formatDashboardNumber(bed_total));
+        url: '_Page/Dashboard/GetCount.php',
+        type: 'GET',
+        dataType: 'json'
+    }).done(function (response) {
+        if (response.status !== 'success') {
+            const message = response.message || 'Data gagal dimuat.';
+            ['#jumlah_dokter', '#jumlah_poliklinik', '#jumlah_bed', '#jumlah_pasien'].forEach((selector) => {
+                $(selector).text(message);
+            });
+            return;
         }
+
+        $('#jumlah_dokter').text(formatDashboardNumber(response.dokter));
+        $('#jumlah_poliklinik').text(formatDashboardNumber(response.poliklinik));
+        $('#jumlah_bed').text(formatDashboardNumber(response.bed_total));
+        $('#jumlah_pasien').text(formatDashboardNumber(response.pasien));
+    }).fail(function (xhr) {
+        const message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Gagal memuat jumlah data.';
+        ['#jumlah_dokter', '#jumlah_poliklinik', '#jumlah_bed', '#jumlah_pasien'].forEach((selector) => {
+            $(selector).text('-').attr('title', message);
+        });
     });
 }
 
-// Menampilkan Tabel Pasien Existing
-function ShowPasienExisting() {
-    let ProsesFilterPasienExisting = $('#ProsesFilterPasienExisting').serialize();
+function formatPatientVisitDate(value) {
+    if (!value) return '-';
+    const utcDate = new Date(`${value.replace(' ', 'T')}Z`);
+    if (Number.isNaN(utcDate.getTime())) return value;
+    return new Intl.DateTimeFormat('id-ID', {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+    }).format(utcDate);
+}
 
-    // Tampilkan loading overlay
-    $('#LoadingPasienExisting').fadeIn(150);
+function appendPatientVisits(visits) {
+    const list = $('#PasienExistingList');
+    visits.forEach((visit) => {
+        const item = $('<article>').addClass('dashboard-existing-item');
+        const details = $('<div>').addClass('dashboard-existing-details');
+        const patientName = $('<h6>').text(visit.nama || 'Nama tidak tersedia');
+        const medicalRecord = $('<span>').text(`RM.${String(visit.id_pasien).padStart(5, '0')}`);
+        const visitInfo = $('<p>').text(`${visit.jenis_kunjungan || '-'} - ${formatPatientVisitDate(visit.datetime_daftar)}`);
+        details.append(patientName, medicalRecord, visitInfo);
+        item.append(details, $('<i>').addClass('bi bi-chevron-right').attr('aria-hidden', 'true'));
+        list.append(item);
+    });
+}
+
+function loadNextPatientVisits() {
+    if (patientVisitLoading || !patientVisitHasMore) return;
+
+    patientVisitLoading = true;
+    let pageLoaded = false;
+    $('#PasienExistingList').attr('aria-busy', 'true');
+    $('#LoadingPasienExisting').text('Memuat kunjungan...');
 
     $.ajax({
         url: '_Page/Dashboard/TabelPasienExisting.php',
-        type: 'POST',
-        data: ProsesFilterPasienExisting,
-        success: function (data) {
-            // Fade out isi lama
-            $('#TabelPasienExisting').fadeOut(120, function () {
-                $(this).html(data).fadeIn(180);
-            });
-        },
-        complete: function () {
-            // Hilangkan overlay
-            $('#LoadingPasienExisting').fadeOut(150);
+        type: 'GET',
+        data: { offset: patientVisitOffset },
+        dataType: 'json'
+    }).done(function (response) {
+        if (response.status !== 'success' || !Array.isArray(response.data)) {
+            $('#LoadingPasienExisting').text(response.message || 'Data kunjungan tidak valid.');
+            patientVisitHasMore = false;
+            return;
+        }
+
+        if (patientVisitOffset === 0) {
+            $('#PasienExistingList').empty();
+            if (response.data.length === 0) {
+                $('#PasienExistingList').html($('<p>').addClass('dashboard-existing-message').text('Belum ada kunjungan terdaftar.'));
+            }
+        }
+
+        appendPatientVisits(response.data);
+        patientVisitOffset = Number(response.nextOffset) || patientVisitOffset + response.data.length;
+        patientVisitHasMore = Boolean(response.hasMore);
+        pageLoaded = true;
+        $('#LoadingPasienExisting').text(patientVisitHasMore ? '' : (patientVisitOffset > 0 ? 'Semua kunjungan telah dimuat.' : ''));
+
+        if (response.data.length === 0) patientVisitHasMore = false;
+    }).fail(function (xhr) {
+        const message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Gagal memuat daftar kunjungan.';
+        $('#LoadingPasienExisting').text(message);
+    }).always(function () {
+        patientVisitLoading = false;
+        $('#PasienExistingList').attr('aria-busy', 'false');
+        const list = $('#PasienExistingList')[0];
+        if (pageLoaded && patientVisitHasMore && list.scrollHeight <= list.clientHeight + 40) {
+            loadNextPatientVisits();
         }
     });
 }
 
-// Fungsi load tahun dari server
-function loadTahun() {
-    $.ajax({
-        url     : '_Page/Dashboard/ListTahun.php',
-        type    : 'GET',
-        dataType: 'json',
-        success : function (res) {
-            let html = '<option value="">Pilih</option>';
+$(function () {
+    if (!$('#ChartKunjungan').length) return;
 
-            res.forEach(function (item) {
-                html += `<option value="${item.tahun}">${item.tahun}</option>`;
-            });
+    loadDashboardCounts();
+    loadDashboardDonut('_Page/Dashboard/GrafikKategoriPelayanan.php', '#ChartKategoriPelayanan', ['#1a5a6a', '#96aaaf']);
+    loadDashboardDonut('_Page/Dashboard/GrafikPembiayaan.php', '#ChartPembiayaan', ['#1a5a6a', '#d8a84e']);
+    loadVisitChart($('#ProsesFilterPeriodeGrafik').serialize());
+    loadNextPatientVisits();
 
-            $('#tahun').html(html);
-        }
-    });
-}
-
-// Fungsi load bulan
-function loadBulan() {
-    let bulan = [
-        { val: "01", text: "Januari" },
-        { val: "02", text: "Februari" },
-        { val: "03", text: "Maret" },
-        { val: "04", text: "April" },
-        { val: "05", text: "Mei" },
-        { val: "06", text: "Juni" },
-        { val: "07", text: "Juli" },
-        { val: "08", text: "Agustus" },
-        { val: "09", text: "September" },
-        { val: "10", text: "Oktober" },
-        { val: "11", text: "November" },
-        { val: "12", text: "Desember" }
-    ];
-
-    let html = '<option value="">Pilih</option>';
-
-    bulan.forEach(function (item) {
-        html += `<option value="${item.val}">${item.text}</option>`;
-    });
-
-    $('#bulan').html(html);
-}
-
-$(document).ready(function() {
-    //Menampilkan Data Pada Saat Pertama Kali
-    ShowGrafik();
-    ShowDashboard();
-    ShowPasienExisting();
-    renderPieMortalitas('.pie_mortalitas', 25, 75);
-
-    //Tombol Fiolter Grafik Di Pilih
-    $('.ganti_periode_grafik').click(function(){
-        $('#ModalFilterPeriodeGrafik').modal('show');
-    });
-
-
-    // Saat periode berubah
-    $('#periode').change(function () {
-        let periode = $(this).val();
-
-        // Reset
-        $('#tahun').html('<option value="">Loading...</option>');
-        $('#bulan').html('<option value="">Pilih</option>');
-
-        if (periode === "Tahunan") {
-
-            // Disable bulan
-            $('#bulan').prop('disabled', true);
-
-            // Ambil data tahun via AJAX
-            loadTahun();
-
-        } else if (periode === "Bulanan") {
-
-            // Enable bulan
-            $('#bulan').prop('disabled', false);
-
-            // Load tahun
-            loadTahun();
-
-            // Load bulan statis
-            loadBulan();
+    $('#PasienExistingList').on('scroll', function () {
+        if (this.scrollTop + this.clientHeight >= this.scrollHeight - 80) {
+            loadNextPatientVisits();
         }
     });
 
-    // Ketika Filter Di Submit
-    $('#ProsesFilterPeriodeGrafik').submit(function () {
-        $('#ModalFilterPeriodeGrafik').modal('hide');
-        ShowGrafik();
+    $('#periode').on('change', function () {
+        const isMonthly = $(this).val() === 'Bulanan';
+        $('#bulanPeriodeGroup').toggleClass('d-none', !isMonthly);
+        $('#bulan').prop('disabled', !isMonthly).prop('required', isMonthly);
     });
 
-    // Menampilkan Filter Pasien Exiting
-    $('.filter_pasien_existing').click(function(){
-        $('#ModalPasienExisting').modal('show');
-    });
+    $('#ProsesFilterPeriodeGrafik').on('submit', function (event) {
+        event.preventDefault();
+        if (!this.reportValidity()) return;
 
-    // Proses Filter Pasien Existing
-    $('#ProsesFilterPasienExisting').submit(function(){
-        ShowPasienExisting(0);
-        $('#ModalPasienExisting').modal('hide');
+        loadVisitChart($(this).serialize());
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalFilterPeriodeGrafik')).hide();
     });
-
-    // Pagging pasien Existing
-    $(document).on('click', '#next_page', function() {
-        var page_now = parseInt($('#page').val(), 10); // Pastikan nilai diambil sebagai angka
-        var next_page = page_now + 1;
-        $('#page').val(next_page);
-        ShowPasienExisting(0);
-    });
-    $(document).on('click', '#previous_page', function() {
-        var page_now = parseInt($('#page').val(), 10); // Pastikan nilai diambil sebagai angka
-        var next_page = page_now - 1;
-        $('#page').val(next_page);
-        ShowPasienExisting(0);
-    });
-    
-    
-
 });

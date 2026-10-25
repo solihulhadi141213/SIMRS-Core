@@ -2,7 +2,7 @@
     $version = date('YmdHis');
 
     // Tambahan default script (selalu dimuat)
-    if(empty($Page)){
+    if(empty($Page) || $Page === "Dashboard"){
         echo '<script type="text/javascript" src="_Page/Dashboard/Dashboard.js?v='.$version.'"></script>' . PHP_EOL;
     }
     

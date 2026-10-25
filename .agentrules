@@ -45,23 +45,33 @@ Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan
 3. **CSS Maintainability:** Tulis CSS yang bersih, terorganisir per bagian (Global, Layout, Component), dan gunakan penamaan kelas yang deskriptif. Hindari *inline style* kecuali sangat mendesak.
 4. **Self-Documenting Code:** Berikan komentar singkat (`/* Komentar Bagian */`) pada bagian-bagian kode CSS/HTML yang penting agar mudah dibaca kembali di masa depan.
 
-## Informasi dan Pengetahuan Bermanfaat Untuk Agent 
-Pengaturan Tampilan :
-1. `assets\css\style.css`     : Style umum yang mempengaruhi semua halaman.
-2. `assets\js\main.js`        : Javascript yang mempengaruhi semua halaman.
-3. `assets\css\Fonts`         : Koleksi File Font Yang Digunakan.
-4. `assets\css\Fonts\Font.css`: Mendefinisikan Aturan @font-face
-5. `assets\img\favicon`       : favicon dan file manifestasinya.
-6. `assets\img\user`          : Menyimpan File foto yang berkaitan dengan pengguna.
-7. `assets\img\dokter`        : Menyimpan File foto dokter.
-8. `assets\img\ui`            : Menyimpan File image yang berkaitan dengan tampilan aplikasi.
+## Penjelasan Directory dan File Project
+1. Pengaturan Tampilan :
+  - `assets\css\style.css`     : Style umum yang mempengaruhi semua halaman.
+  - `assets\js\main.js`        : Javascript yang mempengaruhi semua halaman.
+  - `assets\css\Fonts`         : Koleksi File Font Yang Digunakan.
+  - `assets\css\Fonts\Font.css`: Mendefinisikan Aturan @font-face
+  - `assets\img\favicon`       : favicon dan file manifestasinya.
+  - `assets\img\user`          : Menyimpan File foto yang berkaitan dengan pengguna.
+  - `assets\img\dokter`        : Menyimpan File foto dokter.
+  - `assets\img\ui`            : Menyimpan File image yang berkaitan dengan tampilan aplikasi.
+  - `assets\img\logo`          : Menyimpan File image logo faskes.
 
-Penyimpanan Data Standar:
-1. `_Database_\elsyifa_core.sql`: Struktur Database Standar (default).
-2. `_Database\referance`        : Menyimpan data referensi default.
-2. `_Database\icd.csv`          : Data ICD Standar (Default).
-2. `_Database\wilayah.csv`      : Data referensi wilayah (default).
+2. Penyimpanan Data Standar:
+  - `_Database_\elsyifa_core.sql`: Struktur Database Standar (default).
+  - `_Database\referance`        : Menyimpan data referensi default.
+  - `_Database\icd.csv`          : Data ICD Standar (Default).
+  - `_Database\wilayah.csv`      : Data referensi wilayah (default).
 
+3. Config dan Helper
+  - `_Config\Connection.php`         : Koneksi database mysql.
+  - `_Config\FungsiSirsOnline.php`   : Helper untuk integrasi dengan SIRS Online.
+  - `_Config\HelperBridging.php`     : Helper untuk integrasi dengan vclaim BPJS.
+  - `_Config\Session.php`            : Membuka data user berdasarkan session
+  - `_Config\SettingBridging.php`    : Membuka pengaturan kredensial bridging BPJS.
+  - `_Config\SettingEmailGateway.php`: Membuka pengaturan kredensial koneksi dengan email gateway.
+  - `_Config\SettingGeneral.php`     : Membuka pengaturan global aplikasi.
+  - `_Config\SimrsFunction.php`      : Helper global aplikasi.
 ## Pengaturan Metadata
 1. Halaman tidak mengijinkan melakukan indexing mesin pencari.
 2. Halaman diharapkan optimal sehingga dapat digunakan oleh browser apapun.

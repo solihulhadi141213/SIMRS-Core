@@ -23,13 +23,17 @@ body.login-body {
 
 .brand-panel {
     position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     padding: clamp(72px, 10vh, 104px) clamp(32px, 7vw, 112px) 48px;
     color: #fff;
-    background: var(--login-teal);
+    background-color: var(--login-teal);
+    background-image: radial-gradient(rgba(0, 0, 0, 0.25) 0.3px, transparent 0.6px);
+    background-size: 3px 3px;
+    box-shadow: 6px 0 12px rgba(0, 0, 0, 0.12);
     text-align: center;
 }
 
@@ -239,6 +243,7 @@ body.login-body {
     border: 2px solid var(--login-teal);
     background: var(--login-teal);
     color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
 }
 
 .login-submit:hover,
@@ -246,6 +251,7 @@ body.login-body {
     border-color: var(--login-teal);
     background: #144b59;
     color: #fff;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
 }
 
 .login-divider {
@@ -326,9 +332,11 @@ body.login-body {
 
     .brand-panel {
         flex: 0 0 auto;
+        z-index: auto;
         justify-content: center;
         padding: 24px 24px 0;
         background: var(--login-light);
+        box-shadow: none;
         color: var(--login-teal);
     }
 

@@ -20,10 +20,16 @@
         exit;
     }
 
-    if(empty($SessionGambar)){
-        $LinkFotoProfile="avatar-blank.jpg";
-    }else{
-        $LinkFotoProfile="user/$SessionGambar";
+    $NamaFotoProfile = basename((string) $SessionGambar);
+    $PathFotoProfile = __DIR__ . "/assets/img/user/$NamaFotoProfile";
+    $PathFotoProfileLama = __DIR__ . "/assets/images/user/$NamaFotoProfile";
+
+    if ($NamaFotoProfile !== '' && is_file($PathFotoProfile)) {
+        $LinkFotoProfile = "assets/img/user/" . rawurlencode($NamaFotoProfile);
+    } elseif ($NamaFotoProfile !== '' && is_file($PathFotoProfileLama)) {
+        $LinkFotoProfile = "assets/images/user/" . rawurlencode($NamaFotoProfile);
+    } else {
+        $LinkFotoProfile = "assets/img/user/No-Image.png";
     }
 
     // Routing Page
@@ -86,21 +92,22 @@
         <div id="pcoded" class="pcoded" theme-layout="vertical" vertical-nav-type="expanded" vertical-effect="push" vertical-placement="left" vertical-layout="wide" pcoded-device-type="desktop">
             <button type="button" class="pcoded-overlay-box" aria-label="Tutup menu"></button>
             <div class="pcoded-container navbar-wrapper">
-                <header class="navbar header-navbar pcoded-header bg-primary">
+                <header class="navbar header-navbar pcoded-header">
                     <div class="navbar-wrapper">
                         <div class="navbar-logo">
                             <button type="button" class="mobile-menu sidebar-menu-toggle" data-layout-toggle="sidebar" aria-label="Buka menu" aria-controls="main-navigation" aria-expanded="false">
                                 <i class="bi bi-list" aria-hidden="true"></i>
                             </button>
                             <a href="index.php" class="brand-link" aria-label="Beranda <?php echo htmlspecialchars($hospital_name, ENT_QUOTES, 'UTF-8'); ?>">
-                                <span><?php echo htmlspecialchars($hospital_name, ENT_QUOTES, 'UTF-8'); ?></span>
+                                <img src="assets/img/ui/app-logo.png" alt="" class="brand-logo-mark">
+                                <span>SIMRS-CORE</span>
                             </a>
                         </div>
                         <div class="navbar-container container-fluid">
                             <ul class="nav-left">
                                 <li>
                                     <button type="button" class="sidebar_toggle sidebar-menu-toggle" data-layout-toggle="sidebar" aria-label="Tutup menu" aria-controls="main-navigation" aria-expanded="true">
-                                        <i class="bi bi-list" aria-hidden="true"></i>
+                                        <i class="bi bi-arrow-bar-left" aria-hidden="true"></i>
                                     </button>
                                 </li>
                                 <li>
@@ -115,10 +122,16 @@
                                     include "_Partial/Notification.php";
                                 ?>
 
+                                <li>
+                                    <button type="button" class="header-action" data-theme-toggle aria-label="Aktifkan mode gelap" title="Aktifkan mode gelap">
+                                        <i class="bi bi-sun" aria-hidden="true"></i>
+                                    </button>
+                                </li>
+
                                 <!-- Menampilkan Dropdown Profil -->
                                 <li class="user-profile header-notification">
                                     <a href="javascript:void(0);" class="profile-toggle" aria-expanded="false" aria-label="Menu pengguna <?php echo htmlspecialchars($SessionNama, ENT_QUOTES, 'UTF-8'); ?>">
-                                        <img src="assets/img/<?php echo htmlspecialchars($LinkFotoProfile, ENT_QUOTES, 'UTF-8'); ?>" class="img-radius" width="40" height="40" alt="">
+                                        <img src="<?php echo htmlspecialchars($LinkFotoProfile, ENT_QUOTES, 'UTF-8'); ?>" class="img-radius" width="40" height="40" alt="">
                                         <span><?php echo htmlspecialchars($SessionNama, ENT_QUOTES, 'UTF-8'); ?></span>
                                         <i class="bi bi-chevron-down" aria-hidden="true"></i>
                                     </a>

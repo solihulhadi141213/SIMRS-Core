@@ -8,12 +8,14 @@ Repositori ini berisi aplikasi PHP dengan antarmuka HTML, CSS, dan JavaScript, s
 
 Fitur yang tersedia pada aplikasi mencakup:
 
-- **Dashboard dan monitoring:** dashboard, log aktivitas, monitoring antrian dan ruangan, serta laporan pengguna.
+- **Dashboard dan monitoring:** dashboard menampilkan profil fasilitas kesehatan, jumlah dokter/poliklinik/tempat tidur/pasien, grafik donut kunjungan rawat jalan/rawat inap dan metode pembiayaan, serta grafik kunjungan pasien dengan ApexCharts. Grafik tahunan mencakup Januari–Desember; periode tahun atau bulan dapat dipilih melalui modal. Daftar pasien existing memuat kunjungan berstatus Terdaftar terbaru secara bertahap saat panel digulir. Header dashboard menyediakan breadcrumb; navigasi aplikasi juga menyediakan tema gelap, notifikasi, fullscreen, sidebar ringkas berbentuk ikon, serta foto profil pengguna dengan fallback `assets/img/user/No-Image.png`.
 - **Aksesibilitas:** akun pengguna, entitas akses, pengelolaan fitur, dan pengajuan akses.
 - **Rekam medis dan pelayanan:** pasien, kunjungan, general consent, diagnosis, tindakan, alergi, dan laboratorium.
 - **Referensi:** poliklinik, dokter, jadwal dokter, praktisi, ruang rawat, ICD, tindakan, alergen, observation, serta data wilayah.
 - **Pengaturan:** profil fasilitas kesehatan, API key, email gateway, kredensial Google, percetakan, dan konfigurasi integrasi.
 - **Integrasi:** BPJS/VClaim, SATUSEHAT, SIRS Online, Radix, Analyza, dan Sifarma sesuai konfigurasi fasilitas kesehatan.
+- **Halaman login responsif:** panel brand desktop menggunakan tekstur noise halus dan bayangan tipis pada batas dengan panel form; tombol Login memiliki bayangan lembut.
+- **Tampilan responsif:** dashboard dan navigasi menyesuaikan ukuran layar, dengan menu samping yang dapat dibuka atau ditutup pada perangkat mobile.
 
 Daftar hak akses awal tersedia di [`_Database/referance/default_reference_feature_code.json`](_Database/referance/default_reference_feature_code.json). Daftar tersebut berisi fitur yang digunakan installer untuk mengisi referensi hak akses; ketersediaan integrasi tetap bergantung pada konfigurasi dan kredensial layanan eksternal.
 

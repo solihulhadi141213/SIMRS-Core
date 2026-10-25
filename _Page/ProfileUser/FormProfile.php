@@ -25,16 +25,22 @@
         $SessionIhs = "-";
     }
 
-    // Menentukan Link Gambar/Foto Profil ($SessionGambar dari Session.php)
-    if(empty($SessionGambar)){
-        $link_foto = "$base_url/assets/images/No-Image.png";
-    }else{
-        $link_foto = "$base_url/assets/images/user/$SessionGambar";
+    // Menampilkan foto profil dari penyimpanan saat ini, dengan dukungan gambar lama.
+    $nama_foto = basename((string) $SessionGambar);
+    $path_foto = __DIR__ . "/../../assets/img/user/$nama_foto";
+    $path_foto_lama = __DIR__ . "/../../assets/images/user/$nama_foto";
+
+    if ($nama_foto !== '' && is_file($path_foto)) {
+        $link_foto = "$base_url/assets/img/user/" . rawurlencode($nama_foto);
+    } elseif ($nama_foto !== '' && is_file($path_foto_lama)) {
+        $link_foto = "$base_url/assets/images/user/" . rawurlencode($nama_foto);
+    } else {
+        $link_foto = "$base_url/assets/img/user/No-Image.png";
     }
 ?>
 <div class="row mb-3">
     <div class="col-md-12 mb-4 text-center">
-        <img src="<?php echo $link_foto;?>" width="150px" height="150px" class="img-radius">
+        <img src="<?php echo htmlspecialchars($link_foto, ENT_QUOTES, 'UTF-8'); ?>" width="150" height="150" class="img-radius" alt="Foto profil pengguna">
     </div>
 </div>
 <div class="row mb-3">

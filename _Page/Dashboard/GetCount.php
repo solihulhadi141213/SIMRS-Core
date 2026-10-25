@@ -1,28 +1,42 @@
 <?php
-    // Header JSON
-    header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
+include "../../_Config/Connection.php";
+include "../../_Config/Session.php";
 
-    // Koneksi & timezone
-    date_default_timezone_set('Asia/Jakarta');
-    include "../../_Config/Connection.php";
+if (empty($SessionIdAkses)) {
+    http_response_code(401);
+    echo json_encode(['status' => 'error', 'message' => 'Sesi login tidak valid.']);
+    exit;
+}
 
-    // Hitung Jumlah pasien
-    $JumlahPasien     = mysqli_num_rows(mysqli_query($Conn, "SELECT id_pasien FROM pasien"));
+$query = "
+    SELECT
+        (SELECT COUNT(*) FROM dokter WHERE status = 1) AS dokter,
+        (SELECT COUNT(*) FROM poliklinik WHERE status = 1) AS poliklinik,
+        (SELECT COUNT(*) FROM rr_tempat_tidur WHERE status = 1) AS bed_total,
+        (SELECT COUNT(*) FROM pasien) AS pasien
+";
+try {
+    $result = mysqli_query($Conn, $query);
+} catch (mysqli_sql_exception $exception) {
+    error_log('Dashboard count query failed: ' . $exception->getMessage());
+    http_response_code(500);
+    echo json_encode(['status' => 'error', 'message' => 'Jumlah data dashboard gagal dimuat.']);
+    exit;
+}
 
-    // Hitung Jumlah Kunjungan
-    $JumlahKunjungan  = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan"));
+if (!$result) {
+    error_log('Dashboard count query failed: ' . mysqli_error($Conn));
+    http_response_code(500);
+    echo json_encode(['status' => 'error', 'message' => 'Jumlah data dashboard gagal dimuat.']);
+    exit;
+}
 
-    // Hitung Jumlah Poliklinik
-    $JumlahPoliklinik = mysqli_num_rows(mysqli_query($Conn, "SELECT id_poliklinik FROM poliklinik WHERE status=1"));
-
-    // Hitung Jumlah Total Tempat Tidur
-    $JumlahBed = mysqli_num_rows(mysqli_query($Conn, "SELECT id_tempat_tidur FROM rr_tempat_tidur WHERE status=1"));
-
-    // Tampilkan Response
-    echo json_encode([
-        "pasien" => $JumlahPasien,
-        "kunjungan" => $JumlahKunjungan,
-        "poliklinik" => $JumlahPoliklinik,
-        "bed_total" => $JumlahBed
-    ]);
-?>
+$counts = mysqli_fetch_assoc($result);
+echo json_encode([
+    'status' => 'success',
+    'dokter' => (int) $counts['dokter'],
+    'poliklinik' => (int) $counts['poliklinik'],
+    'bed_total' => (int) $counts['bed_total'],
+    'pasien' => (int) $counts['pasien'],
+]);

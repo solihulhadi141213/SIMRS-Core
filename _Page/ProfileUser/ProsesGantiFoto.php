@@ -61,8 +61,9 @@
     $ext = strtolower(pathinfo($nama_gambar, PATHINFO_EXTENSION));
     $namabaru = round(microtime(true) * 1000) . '.' . $ext;
 
-    // Path upload
-    $path_upload = "../../assets/images/user/" . $namabaru;
+    // Simpan foto profil baru pada folder aset UI.
+    $folder_foto = __DIR__ . "/../../assets/img/user";
+    $path_upload = $folder_foto . "/" . $namabaru;
 
     // Upload file
     if (!move_uploaded_file($tmp_gambar, $path_upload)) {
@@ -73,8 +74,10 @@
         exit;
     }
 
-    // Simpan nama gambar lama
-    $path_gambar_lama = "../../assets/images/user/" . $SessionGambar;
+    // Periksa lokasi foto lama saat ini dan lokasi legacy sebelum mengganti file.
+    $nama_gambar_lama = basename((string) $SessionGambar);
+    $path_gambar_lama = $folder_foto . "/" . $nama_gambar_lama;
+    $path_gambar_legacy = __DIR__ . "/../../assets/images/user/" . $nama_gambar_lama;
 
     // Update database
     $stmt = mysqli_prepare($Conn, "UPDATE akses SET gambar=? WHERE id_akses=?");
@@ -92,8 +95,10 @@
     if (mysqli_stmt_execute($stmt)) {
 
         // Hapus foto lama jika ada dan bukan default
-        if (!empty($SessionGambar) && file_exists($path_gambar_lama)) {
+        if ($nama_gambar_lama !== '' && $nama_gambar_lama !== 'No-Image.png' && is_file($path_gambar_lama)) {
             @unlink($path_gambar_lama);
+        } elseif ($nama_gambar_lama !== '' && $nama_gambar_lama !== 'No-Image.png' && is_file($path_gambar_legacy)) {
+            @unlink($path_gambar_legacy);
         }
 
         echo json_encode([

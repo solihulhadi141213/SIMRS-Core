@@ -14,25 +14,33 @@
                         <div class="col-md-12">
                             <label for="periode">Periode</label>
                             <select name="periode" id="periode" class="form-control">
-                                <option value="">Pilih</option>
-                                <option value="Tahunan">Tahunan</option>
-                                <option value="Bulanan">Bulanan</option>
+                                <option value="Tahunan">Tahun</option>
+                                <option value="Bulanan">Bulan</option>
                             </select>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label for="tahun">Tahun</label>
-                            <select name="tahun" id="tahun" class="form-control">
-                                <option value="">Pilih</option>
-                            </select>
+                            <input type="number" name="tahun" id="tahun" class="form-control" min="1900" max="2100" step="1" value="<?php echo gmdate('Y'); ?>" required>
                         </div>
                     </div>
-                    <div class="row mb-3">
+                    <div class="row mb-3 d-none" id="bulanPeriodeGroup">
                         <div class="col-md-12">
                             <label for="bulan">Bulan</label>
-                            <select name="bulan" id="bulan" class="form-control">
-                                <option value="">Pilih</option>
+                            <select name="bulan" id="bulan" class="form-control" disabled>
+                                <option value="1">Januari</option>
+                                <option value="2">Februari</option>
+                                <option value="3">Maret</option>
+                                <option value="4">April</option>
+                                <option value="5">Mei</option>
+                                <option value="6">Juni</option>
+                                <option value="7">Juli</option>
+                                <option value="8">Agustus</option>
+                                <option value="9">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
                             </select>
                         </div>
                     </div>
@@ -40,55 +48,6 @@
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-sm btn-primary btn-rounded">
                         <i class="bi bi-save"></i> Tampilkan
-                    </button>
-                    <button type="button" class="btn btn-sm btn-secondary btn-rounded" data-bs-dismiss="modal">
-                        <i class="bi bi-x"></i> Tutup
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Filter Pasien Existing -->
-<div class="modal fade" id="ModalPasienExisting" tabindex="-1">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <form action="javascript:void(0);" id="ProsesFilterPasienExisting" autocomplete="off">
-                <input type="hidden" name="page" id="page" value="1">
-                <div class="modal-header">
-                    <h5 class="modal-title text-dark">
-                        <i class="bi bi-filter"></i> Filter Data
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row mb-3">
-                        <div class="col-5">
-                            <label for="limit">Batas</label>
-                        </div>
-                        <div class="col-1">:</div>
-                        <div class="col-6">
-                            <select name="limit" id="limit" class="form-control">
-                                <option value="10">10</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-5">
-                            <label for="keyword">Kata Kunci</label>
-                        </div>
-                        <div class="col-1">:</div>
-                        <div class="col-6">
-                            <input type="text" name="keyword" id="keyword" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-sm btn-primary btn-rounded">
-                        <i class="bi bi-filter"></i> Tampilkan
                     </button>
                     <button type="button" class="btn btn-sm btn-secondary btn-rounded" data-bs-dismiss="modal">
                         <i class="bi bi-x"></i> Tutup
