@@ -72,6 +72,8 @@ Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan
   - `_Config\SettingEmailGateway.php`: Membuka pengaturan kredensial koneksi dengan email gateway.
   - `_Config\SettingGeneral.php`     : Membuka pengaturan global aplikasi.
   - `_Config\SimrsFunction.php`      : Helper global aplikasi.
+4. Fitur
+  - 
 ## Pengaturan Metadata
 1. Halaman tidak mengijinkan melakukan indexing mesin pencari.
 2. Halaman diharapkan optimal sehingga dapat digunakan oleh browser apapun.
@@ -80,5 +82,10 @@ Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan
 1. Database akan menyimpan informasi waktu dalam bentuk format 'ISO 8601 (UTC)'.
 2. Form dan Tampilan Data yang ditampilkan pada 'user' akan menyesuaikan zona waktu browser yang digunakan 'user', sehingga dibuthkan javascript untuk menampilkan dan memberikan informasi zona waktu ke dalam form.
 
+# Informasi Rumah Sakit dan Aplikasi.
+1. Logo rumah sakit disimpan di `assets\img\logo\` apabila informasi rumah sakit belum diatur atau file image tidak ditemukan maka logo diganti menjadi `assets\img\logo\no-image.jpg`.
+2. Logo aplikasi menggunakan `assets\img\ui\app-logo.png`
+3. Nama rumah sakit diatur melalui tabel 'setting'
+4. Nama aplikasi diatur secara hardcode dengan nama 'SIMRS-CORE'
 ## Keterangan
 Dokumen `.agentrules` ini adalah acuan aturan yang sangat penting namun masih memungkinkan adanya kesalahan redaksi bahasa atau relevansi dengan konteks yang sedang dikerjakan. Jangan ragu untuk bertanya, melakukan evaluasi dan memperbaharui dokumen ini apabila terdapat kesalahan fatal yang tidak diketahui developer (programer).

@@ -5,7 +5,15 @@ let patientVisitLoading = false;
 let patientVisitHasMore = true;
 
 function formatDashboardNumber(value) {
-    return new Intl.NumberFormat('id-ID').format(Number(value) || 0);
+    const number = Number(value) || 0;
+    if (number < 1000) {
+        return new Intl.NumberFormat('id-ID').format(number);
+    }
+
+    const unit = number >= 1000000 ? 'M' : 'K';
+    const divisor = unit === 'M' ? 1000000 : 1000;
+    const formatted = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 1 }).format(number / divisor);
+    return `${formatted}${unit}`;
 }
 
 function showDashboardError(target, message) {

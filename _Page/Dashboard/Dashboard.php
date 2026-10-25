@@ -20,29 +20,50 @@
                 <div class="row g-3 dashboard-content">
                     <div class="col-12 col-xl-9">
                         <div class="row g-3">
-                            <div class="col-12 col-lg-5">
+                            <div class="col-12 col-lg-6">
+                                <?php
+                                    $dashboardLogoName = basename((string) ($logo ?? ''));
+                                    $dashboardLogoPath = 'assets/img/logo/no-image.jpg';
+                                    if ($dashboardLogoName !== '') {
+                                        if (is_file(__DIR__ . '/../../assets/img/logo/' . $dashboardLogoName)) {
+                                            $dashboardLogoPath = 'assets/img/logo/' . rawurlencode($dashboardLogoName);
+                                        } elseif (is_file(__DIR__ . '/../../assets/images/' . $dashboardLogoName)) {
+                                            $dashboardLogoPath = 'assets/images/' . rawurlencode($dashboardLogoName);
+                                        }
+                                    }
+                                ?>
                                 <section class="card dashboard-faskes-card h-100" aria-labelledby="dashboardFaskesTitle">
                                     <div class="card-body">
-                                        <div class="dashboard-faskes-heading">
-                                            <span class="dashboard-faskes-icon"><i class="bi bi-hospital" aria-hidden="true"></i></span>
+                                        <div class="dashboard-faskes-brand">
+                                            <img class="dashboard-faskes-logo" src="<?php echo htmlspecialchars($dashboardLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="Logo <?php echo htmlspecialchars($hospital_name ?? 'rumah sakit', ENT_QUOTES, 'UTF-8'); ?>">
                                             <div>
-                                                <h5 id="dashboardFaskesTitle" class="mb-1">Informasi Faskes</h5>
-                                                <p class="mb-0">Profil fasilitas kesehatan</p>
+                                                <h5 id="dashboardFaskesTitle" class="mb-1"><?php echo htmlspecialchars($hospital_name ?? 'Nama Faskes', ENT_QUOTES, 'UTF-8'); ?></h5>
+                                                <p class="mb-0"><?php echo htmlspecialchars($hospital_address ?? '', ENT_QUOTES, 'UTF-8'); ?></p>
                                             </div>
                                         </div>
-                                        <div class="dashboard-faskes-info">
-                                            <span class="dashboard-faskes-mark"><i class="bi bi-heart-pulse-fill" aria-hidden="true"></i></span>
-                                            <div>
-                                                <h4 class="mb-1"><?php echo htmlspecialchars($hospital_name ?? 'Nama Faskes', ENT_QUOTES, 'UTF-8'); ?></h4>
-                                                <p class="mb-2"><?php echo htmlspecialchars($hospital_address ?? '', ENT_QUOTES, 'UTF-8'); ?></p>
-                                                <small>Kode faskes: <?php echo htmlspecialchars($hospital_code ?? '-', ENT_QUOTES, 'UTF-8'); ?></small>
+                                        <div class="dashboard-faskes-details">
+                                            <div class="dashboard-faskes-detail">
+                                                <span>Direktur / Manajer</span>
+                                                <span><?php echo htmlspecialchars($hospital_manager ?? '-', ENT_QUOTES, 'UTF-8'); ?></span>
+                                            </div>
+                                            <div class="dashboard-faskes-detail">
+                                                <span>Kode Faskes</span>
+                                                <span><?php echo htmlspecialchars($hospital_code ?? '-', ENT_QUOTES, 'UTF-8'); ?></span>
+                                            </div>
+                                            <div class="dashboard-faskes-detail">
+                                                <span>Email</span>
+                                                <span><?php echo htmlspecialchars($hospital_email ?? '-', ENT_QUOTES, 'UTF-8'); ?></span>
+                                            </div>
+                                            <div class="dashboard-faskes-detail">
+                                                <span>No.Telepon</span>
+                                                <span><?php echo htmlspecialchars($hospital_contact ?? '-', ENT_QUOTES, 'UTF-8'); ?></span>
                                             </div>
                                         </div>
                                     </div>
                                 </section>
                             </div>
 
-                            <div class="col-12 col-lg-7">
+                            <div class="col-12 col-lg-6">
                                 <div class="row g-3 dashboard-donuts">
                                     <div class="col-12 col-sm-6">
                                         <section class="card dashboard-chart-card h-100" aria-labelledby="kategoriPelayananTitle">
@@ -67,7 +88,7 @@
                                 <section class="card dashboard-stat-card h-100">
                                     <div class="card-body">
                                         <span class="dashboard-stat-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
-                                        <p class="mb-1">Dokter</p>
+                                        <p class="mb-0">Jumlah Tenaga Dokter</p>
                                         <strong id="jumlah_dokter" aria-live="polite">Memuat...</strong>
                                     </div>
                                 </section>
@@ -75,8 +96,8 @@
                             <div class="col-6 col-md-3">
                                 <section class="card dashboard-stat-card h-100">
                                     <div class="card-body">
-                                        <span class="dashboard-stat-icon"><i class="bi bi-clipboard2-pulse" aria-hidden="true"></i></span>
-                                        <p class="mb-1">Poliklinik</p>
+                                        <span class="dashboard-stat-icon"><i class="bi bi-hospital" aria-hidden="true"></i></span>
+                                        <p class="mb-0">Jumlah Poliklinik</p>
                                         <strong id="jumlah_poliklinik" aria-live="polite">Memuat...</strong>
                                     </div>
                                 </section>
@@ -84,8 +105,8 @@
                             <div class="col-6 col-md-3">
                                 <section class="card dashboard-stat-card h-100">
                                     <div class="card-body">
-                                        <span class="dashboard-stat-icon"><i class="bi bi-hospital" aria-hidden="true"></i></span>
-                                        <p class="mb-1">Tempat Tidur</p>
+                                        <span class="dashboard-stat-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
+                                        <p class="mb-0">Jumlah Tempat Tidur</p>
                                         <strong id="jumlah_bed" aria-live="polite">Memuat...</strong>
                                     </div>
                                 </section>
@@ -94,7 +115,7 @@
                                 <section class="card dashboard-stat-card h-100">
                                     <div class="card-body">
                                         <span class="dashboard-stat-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
-                                        <p class="mb-1">Data Pasien</p>
+                                        <p class="mb-0">Jumlah Data Pasien</p>
                                         <strong id="jumlah_pasien" aria-live="polite">Memuat...</strong>
                                     </div>
                                 </section>
