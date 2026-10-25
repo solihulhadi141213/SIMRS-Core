@@ -648,7 +648,7 @@ $(document).ready(function() {
 
                 $('#ButtonEditLaporanPengguna')
                     .prop('disabled', false)
-                    .html('<i class="ti-save"></i> Simpan');
+                    .html('<i class="bi bi-floppy"></i> Simpan');
 
                 // Tutup modal jika sukses
                 if (response.includes('success')) {
@@ -675,7 +675,7 @@ $(document).ready(function() {
 
                 $('#ButtonEditLaporanPengguna')
                     .prop('disabled', false)
-                    .html('<i class="ti-save"></i> Simpan');
+                    .html('<i class="bi bi-floppy"></i> Simpan');
             }
         });
     });

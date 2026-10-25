@@ -146,7 +146,7 @@
                                                 <i class="bi bi-question-circle" aria-hidden="true"></i> <span>Bantuan</span>
                                             </a>
                                         </li>
-                                        <li class="waves-effect waves-light border-bottom border-1 border-bottom-default">
+                                        <li class="waves-effect waves-light">
                                             <a href="javascript:void(0);" class="profile-menu-link" data-bs-toggle="modal" data-bs-target="#ModalLogout">
                                                 <i class="bi bi-box-arrow-right" aria-hidden="true"></i> <span>Logout</span>
                                             </a>

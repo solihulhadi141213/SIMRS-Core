@@ -2,10 +2,14 @@
 <ruleset name="LegacyCheck">
     <description>Cek penggunaan fungsi database lama</description>
     
+    <!-- Tentukan folder utama yang dipindai -->
     <file>.</file>
+    
+    <!-- ABAIKAN FOLDER VENDOR DAN CACHE -->
     <exclude-pattern>/vendor/*</exclude-pattern>
+    <exclude-pattern>/node_modules/*</exclude-pattern>
 
-    <!-- Melarang fungsi mysqli_query -->
+    <!-- Aturan larangan fungsi lama -->
     <rule ref="Generic.PHP.ForbiddenFunctions">
         <properties>
             <property name="forbiddenFunctions" type="array">

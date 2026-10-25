@@ -172,7 +172,7 @@
             <form action="javascript:void(0);" id="ProsesHapusGeneralConsent" autocomplete="off">
                 <div class="modal-header bg-danger-subtle">
                     <h5 class="modal-title">
-                        <i class="bi bi-trah"></i> Hapus General Consent
+                        <i class="bi bi-trash"></i> Hapus General Consent
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -194,8 +194,8 @@
                     <button type="submit" disabled class="btn btn-md btn-primary ms-2" id="ButtonHapusGeneralConsent">
                         <i class="bi bi-check"></i> Ya, Hapus
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>
@@ -232,8 +232,8 @@
                     <button type="submit" disabled class="btn btn-md btn-primary ms-2" id="ButtonKirimConsent">
                         <i class="bi bi-send"></i> Kirim
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>
@@ -260,8 +260,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti-close"></i> Tutup
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i> Tutup
                 </button>
             </div>
         </div>
@@ -297,8 +297,8 @@
                     <button type="submit" class="btn btn-md btn-primary ms-2" id="ButtonDownload">
                         <i class="bi bi-download"></i> Export / Download
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>

@@ -113,9 +113,9 @@
                                 $cek_kode=mysqli_query($Conn, "SELECT * FROM dokter WHERE kode='$kodedokter'");
                                 $cek_kode_row=mysqli_num_rows($cek_kode);
                                 if(!empty($cek_kode_row)){
-                                    $status="<label class='label label-success'><i class='ti ti-check-box'></i> Tersedia</label>";
+                                    $status="<label class='label label-success'><i class='bi bi-check-square'></i> Tersedia</label>";
                                 }else{
-                                    $status="<label class='label label-danger'><i class='ti ti-close'></i> None</label>";
+                                    $status="<label class='label label-danger'><i class='bi bi-x-lg'></i> None</label>";
                                 }
                                 echo '<tr>';
                                 echo '  <td class="text-center">'.$no.'</td>';

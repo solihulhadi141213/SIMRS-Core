@@ -83,10 +83,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-md btn-primary" id="ButtonTambahJadwal">
-                        <i class="ti-save"></i> Simpan
+                        <i class="bi bi-floppy"></i> Simpan
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>
@@ -114,8 +114,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti-close"></i> Tutup
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i> Tutup
                 </button>
             </div>
         </div>
@@ -146,10 +146,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-md btn-primary" id="ButtonEditJadwalDokter">
-                        <i class="ti-save"></i> Simpan
+                        <i class="bi bi-floppy"></i> Simpan
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>
@@ -184,8 +184,8 @@
                     <button type="submit" class="btn btn-md btn-primary" id="ButtonHapusJadwalDokter">
                         <i class="bi bi-check"></i> Ya, Hapus
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>
@@ -237,8 +237,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti-close"></i> Tutup
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i> Tutup
                 </button>
             </div>
         </div>
@@ -295,8 +295,8 @@
                     <button type="submit" class="btn btn-md btn-primary ms-2" id="ButtonUpdateJadwalHfiz">
                         <i class="bi bi-save"></i> Update Jadwal
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>

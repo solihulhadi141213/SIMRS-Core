@@ -98,5 +98,15 @@ Halaman utama `index.php` disusun berdasarkan beberapa komponen terpisah (modula
   - Optimalisasi query yang digunakan.
 3. Javascript
   - Optimalisasikan kinerja sistem dengan menggunakan Jquery.
+## Ui dan Interaksi Pengguna
+1. Autofocus
+  - Form yang ditampilkan menggunakan modal, tambahkan autofocus pada form input utama.
+  - Proses autofocus di handle menggunakan jquery.
+2. Preloader
+  - Sebelum menampilkan (reload) setap halaman, guanakan preloader untuk memastikan halaman web sudah dirender secara keseluruhan.
+## Logging
+Setiap aktivitas user pada sistem (aplikasi) akan dicatat pada database di tabel 'log' dengan parameter berikut :
+1. `id_akses` adalah id akses user yang melakukan aktivitas.
+2. `datetime_log` adalah informasi tanggal dan waktu user melakukan aktivitas.
 ## Keterangan
 Dokumen `.agentrules` ini adalah acuan aturan yang sangat penting namun masih memungkinkan adanya kesalahan redaksi bahasa atau relevansi dengan konteks yang sedang dikerjakan. Jangan ragu untuk bertanya, melakukan evaluasi dan memperbaharui dokumen ini apabila terdapat kesalahan fatal yang tidak diketahui developer (programer).

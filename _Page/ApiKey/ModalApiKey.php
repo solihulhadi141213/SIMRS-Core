@@ -74,10 +74,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-md btn-primary" id="ButtonTambahApiKey">
-                        <i class="ti-save"></i> Simpan
+                        <i class="bi bi-floppy"></i> Simpan
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>
@@ -103,8 +103,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti-close"></i> Tutup
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i> Tutup
                 </button>
             </div>
         </div>
@@ -135,10 +135,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-md btn-primary" id="ButtonEditApiKey">
-                        <i class="ti-save"></i> Simpan
+                        <i class="bi bi-floppy"></i> Simpan
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>
@@ -170,10 +170,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-md btn-primary" id="ButtonRegenerateClientKey">
-                        <i class="ti-save"></i> Simpan
+                        <i class="bi bi-floppy"></i> Simpan
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>
@@ -208,8 +208,8 @@
                     <button type="submit" class="btn btn-md btn-primary" id="ButtonHapusLogToken">
                         <i class="bi bi-check"></i> Ya, Hapus
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>
@@ -244,8 +244,8 @@
                     <button type="submit" class="btn btn-md btn-primary" id="ButtonHapusApiKey">
                         <i class="bi bi-check"></i> Ya, Hapus
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>

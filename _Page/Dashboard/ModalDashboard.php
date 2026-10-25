@@ -63,7 +63,7 @@
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header bg-inverse">
-                <b cass="text-light"><i class="ti-file"></i> Ringkasan Data Surat Menyurat</b> 
+                <b cass="text-light"><i class="bi bi-file-earmark"></i> Ringkasan Data Surat Menyurat</b>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -92,7 +92,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <button type="button" class="btn btn-md btn-primary mr-2 mt-2" id="TampilkanDataAntrian">
-                                <i class="ti-file"></i> Tampilkan
+                                <i class="bi bi-file-earmark"></i> Tampilkan
                             </button>
                         </div>
                     </div>

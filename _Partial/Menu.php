@@ -1,4 +1,3 @@
-
     <div class="sidebar_toggle">
         <button type="button" class="sidebar-close" data-layout-toggle="sidebar" aria-label="Tutup menu">
             <i class="bi bi-x-lg" aria-hidden="true"></i>
@@ -6,899 +5,192 @@
     </div>
 
     <div class="pcoded-inner-navbar main-menu scroll-container">
-        <div class="">
+        <div>
             <div class="main-menu-header">
-                <img class="img-80 img-radius" src="assets/images/<?php echo "$logo"; ?>" alt="User-Profile-Image">
+                <img class="img-80 img-radius" src="assets/images/<?php echo htmlspecialchars((string) $logo, ENT_QUOTES, 'UTF-8'); ?>" alt="User-Profile-Image">
                 <div class="user-details">
-                    <span id="more-details"><?php echo "$hospital_name";?></span>
+                    <span id="more-details"><?php echo htmlspecialchars((string) $hospital_name, ENT_QUOTES, 'UTF-8'); ?></span>
                 </div>
             </div>
         </div>
-        
-        <div class="pcoded-navigation-label" data-i18n="nav.category.navigation">Menu Utama</div>
 
-        <ul class="pcoded-item pcoded-left-item mb-3">
-            <li class="<?php if($Page==""){echo 'active';} ?>">
-                <a href="index.php" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-grid"></i><b>D</b></span>
-                    <span class="pcoded-mtext" data-i18n="nav.dash.main">Dashboard</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-            </li>
-            
-            
-            <li class="pcoded-hasmenu 
-            <?php 
-                if(
-                    $Page=="Setting"||
-                    $Page=="ApiKey"||
-                    $Page=="EmailGateway"||
-                    $Page=="GoogleCredential"||
-                    $Page=="AksesFitur"||
-                    $Page=="AksesEntitas"||
-                    $Page=="Akses"||
-                    $Page=="AksesPengajuan"||
-                    $Page=="Api" || 
-                    $Page=="SettingBpjs" || 
-                    $Page=="SettingSatuSehat" || 
-                    $Page=="SettingSirsOnline" || 
-                    $Page=="SettingRadix" || 
-                    $Page=="SettingAnalyza" || 
-                    $Page=="SettingSifarma" || 
-                    $Page=="LaporanKesalahan"
-                )
-                {
-                    echo 'active pcoded-trigger';
-                } 
-            ?>
-            ">
-                <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-gear"></i></span>
-                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Pengaturan</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-                <ul class="pcoded-submenu">
-                    <li class="<?php if($Page=="Setting"){echo 'active';} ?>">
-                        <a href="index.php?Page=Setting" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">
-                                Pengaturan Umum 
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
+        <?php
+            $menuSections = [
+                [
+                    'label' => 'Menu Utama',
+                    'items' => [
+                        ['label' => 'Dashboard', 'icon' => 'bi-grid', 'url' => 'index.php', 'pages' => ['', 'Dashboard']],
+                        ['label' => 'Antrian', 'icon' => 'bi-ticket-perforated', 'url' => 'index.php?Page=Antrian', 'page' => 'Antrian'],
+                        ['label' => 'Pasien', 'icon' => 'bi-people', 'url' => 'index.php?Page=Pasien', 'page' => 'Pasien'],
+                        ['label' => 'Kunjungan', 'icon' => 'bi-clipboard2-pulse', 'url' => 'index.php?Page=Kunjungan', 'page' => 'Kunjungan'],
+                        ['label' => 'Jadwal Dokter', 'icon' => 'bi-calendar', 'url' => 'index.php?Page=ReferensiJadwalDokter', 'page' => 'ReferensiJadwalDokter'],
+                    ],
+                ],
+                [
+                    'label' => 'Master Data',
+                    'items' => [
+                        [
+                            'label' => 'Rekam Medis',
+                            'icon' => 'bi-clipboard2-check',
+                            'children' => [
+                                ['label' => 'General Consent', 'url' => 'index.php?Page=GeneralConsent', 'page' => 'GeneralConsent'],
+                                ['label' => 'Observasi', 'url' => 'index.php?Page=Observasi', 'page' => 'Observasi'],
+                                ['label' => 'Diagnosis', 'url' => 'index.php?Page=Diagnosis', 'page' => 'Diagnosis'],
+                                ['label' => 'Tindakan', 'url' => 'index.php?Page=Tindakan', 'page' => 'Tindakan'],
+                                ['label' => 'Alergi', 'url' => 'index.php?Page=Alergi', 'page' => 'Alergi'],
+                                ['label' => 'Imunisasi', 'url' => 'index.php?Page=Imunisasi', 'page' => 'Imunisasi'],
+                                ['label' => 'Episode Perawatan', 'url' => 'index.php?Page=EpisodePerawatan', 'page' => 'EpisodePerawatan'],
+                                ['label' => 'Rencana Perawatan', 'url' => 'index.php?Page=RencanaPerawatan', 'page' => 'RencanaPerawatan'],
+                                ['label' => 'Laboratorium', 'url' => 'index.php?Page=Laboratorium', 'page' => 'Laboratorium'],
+                                ['label' => 'Radiologi', 'url' => 'index.php?Page=Radiologi', 'page' => 'Radiologi'],
+                                ['label' => 'Fisioterapi', 'url' => 'index.php?Page=Fisioterapi', 'page' => 'Fisioterapi'],
+                                ['label' => 'Hemodialisa', 'url' => 'index.php?Page=Hemodialisa', 'page' => 'Hemodialisa'],
+                                ['label' => 'Operasi', 'url' => 'index.php?Page=Operasi', 'page' => 'Operasi'],
+                                ['label' => 'Peresepan', 'url' => 'index.php?Page=Peresepan', 'page' => 'Peresepan'],
+                                ['label' => 'Resume', 'url' => 'index.php?Page=Resume', 'page' => 'Resume'],
+                            ],
+                        ],
+                        [
+                            'label' => 'Referensi Lokal',
+                            'icon' => 'bi-journal-medical',
+                            'children' => [
+                                ['label' => 'Poliklinik', 'url' => 'index.php?Page=ReferensiPoliklinik', 'page' => 'ReferensiPoliklinik'],
+                                ['label' => 'Dokter', 'url' => 'index.php?Page=ReferensiDokter', 'page' => 'ReferensiDokter'],
+                                ['label' => 'Tenaga Medis', 'url' => 'index.php?Page=ReferensiPraktisi', 'page' => 'ReferensiPraktisi'],
+                                ['label' => 'Ruang Rawat', 'url' => 'index.php?Page=ReferensiRuangRawat', 'page' => 'ReferensiRuangRawat'],
+                                ['label' => 'ICD', 'url' => 'index.php?Page=ReferensiIcd', 'page' => 'ReferensiIcd'],
+                                ['label' => 'Procedure', 'url' => 'index.php?Page=ReferensiTindakan', 'page' => 'ReferensiTindakan'],
+                                ['label' => 'Alergen', 'url' => 'index.php?Page=ReferensiAlergen', 'page' => 'ReferensiAlergen'],
+                                ['label' => 'Observation', 'url' => 'index.php?Page=ReferensiObservation', 'page' => 'ReferensiObservation'],
+                                ['label' => 'Wilayah', 'url' => 'index.php?Page=ReferensiWilayah', 'page' => 'ReferensiWilayah'],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'label' => 'Laporan & Monitoring',
+                    'items' => [
+                        [
+                            'label' => 'Indikator Pelayanan',
+                            'icon' => 'bi-file-earmark',
+                            'children' => [
+                                ['label' => 'Demografi', 'url' => 'index.php?Page=Demografi', 'page' => 'Demografi'],
+                                ['label' => 'Rawat Jalan', 'url' => 'index.php?Page=LaporanRajal', 'page' => 'LaporanRajal'],
+                                ['label' => 'Rawat Inap', 'url' => 'index.php?Page=LaporanRanap', 'page' => 'LaporanRanap'],
+                            ],
+                        ],
+                        [
+                            'label' => 'Log SATUSEHAT',
+                            'icon' => 'bi-file-earmark',
+                            'children' => [
+                                ['label' => 'Encounter', 'url' => 'index.php?Page=Encounter', 'page' => 'Encounter'],
+                                ['label' => 'Condition', 'url' => 'index.php?Page=Condition', 'page' => 'Condition'],
+                                ['label' => 'Observation', 'url' => 'index.php?Page=Observation', 'page' => 'Observation'],
+                                ['label' => 'Procedure', 'url' => 'index.php?Page=Procedure', 'page' => 'Procedure'],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'label' => 'System',
+                    'items' => [
+                        [
+                            'label' => 'Pengaturan',
+                            'icon' => 'bi-gear',
+                            'children' => [
+                                ['label' => 'Pengaturan Umum', 'url' => 'index.php?Page=Setting', 'page' => 'Setting'],
+                                ['label' => 'API Key', 'url' => 'index.php?Page=ApiKey', 'page' => 'ApiKey'],
+                                ['label' => 'Email Gateway', 'url' => 'index.php?Page=EmailGateway', 'page' => 'EmailGateway'],
+                                ['label' => 'Google Credential', 'url' => 'index.php?Page=GoogleCredential', 'page' => 'GoogleCredential'],
+                            ],
+                        ],
+                        [
+                            'label' => 'Aksesibilitas',
+                            'icon' => 'bi-person',
+                            'children' => [
+                                ['label' => 'Fitur Aplikasi', 'url' => 'index.php?Page=AksesFitur', 'page' => 'AksesFitur'],
+                                ['label' => 'Entitas Akses', 'url' => 'index.php?Page=AksesEntitas', 'page' => 'AksesEntitas'],
+                                ['label' => 'Akun Akses', 'url' => 'index.php?Page=Akses', 'page' => 'Akses'],
+                                ['label' => 'Pengajuan Akses', 'url' => 'index.php?Page=AksesPengajuan', 'page' => 'AksesPengajuan'],
+                            ],
+                        ],
+                        [
+                            'label' => 'Integrasi',
+                            'icon' => 'bi-diagram-3',
+                            'children' => [
+                                ['label' => 'Bridging BPJS', 'url' => 'index.php?Page=SettingBpjs', 'page' => 'SettingBpjs'],
+                                ['label' => 'SATUSEHAT', 'url' => 'index.php?Page=SettingSatuSehat', 'page' => 'SettingSatuSehat'],
+                                ['label' => 'SIRS Online', 'url' => 'index.php?Page=SettingSirsOnline', 'page' => 'SettingSirsOnline'],
+                                ['label' => 'Radix', 'url' => 'index.php?Page=SettingRadix', 'page' => 'SettingRadix'],
+                                ['label' => 'Analyza', 'url' => 'index.php?Page=SettingAnalyza', 'page' => 'SettingAnalyza'],
+                                ['label' => 'Sifarma', 'url' => 'index.php?Page=SettingSifarma', 'page' => 'SettingSifarma'],
+                            ],
+                        ],
+                        ['label' => 'Migrasi', 'icon' => 'bi-database', 'url' => 'index.php?Page=Migrasi', 'page' => 'Migrasi'],
+                        ['label' => 'Log', 'icon' => 'bi-record', 'url' => 'index.php?Page=Log', 'page' => 'Log'],
+                        ['label' => 'Dokumentasi', 'icon' => 'bi-bookmark', 'url' => 'index.php?Page=Dokumentasi', 'page' => 'Dokumentasi'],
+                    ],
+                ],
+                [
+                    'label' => 'Lainnya',
+                    'items' => [
+                        ['label' => 'Bantuan', 'icon' => 'bi-question-circle', 'url' => 'index.php?Page=Bantuan', 'page' => 'Bantuan'],
+                        [
+                            'label' => 'Logout',
+                            'icon' => 'bi-box-arrow-right',
+                            'url' => 'javascript:void(0);',
+                            'attributes' => 'data-bs-toggle="modal" data-bs-target="#ModalLogout"',
+                        ],
+                    ],
+                ],
+            ];
 
-                    <li class="<?php if($Page=="ApiKey"){echo 'active';} ?>">
-                        <a href="index.php?Page=ApiKey" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">
-                                API Key
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
+            foreach ($menuSections as $section) {
+                echo '<div class="pcoded-navigation-label" data-i18n="nav.category.navigation">' . htmlspecialchars($section['label'], ENT_QUOTES, 'UTF-8') . '</div>';
+                echo '<ul class="pcoded-item pcoded-left-item mb-3">';
 
-                    <li class="<?php if($Page=="EmailGateway"){echo 'active';} ?>">
-                        <a href="index.php?Page=EmailGateway" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">
-                                Email Gateway
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
+                foreach ($section['items'] as $item) {
+                    $hasChildren = isset($item['children']);
+                    $itemPages = $hasChildren
+                        ? array_column($item['children'], 'page')
+                        : ($item['pages'] ?? [$item['page'] ?? null]);
+                    $isActive = in_array($Page, $itemPages, true);
 
-                    <li class="<?php if($Page=="GoogleCredential"){echo 'active';} ?>">
-                        <a href="index.php?Page=GoogleCredential" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">
-                                Google Credential
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
+                    if ($hasChildren) {
+                        echo '<li class="pcoded-hasmenu' . ($isActive ? ' active pcoded-trigger' : '') . '">';
+                    } else {
+                        echo '<li class="' . ($isActive ? 'active' : '') . '">';
+                    }
+                    echo '<a href="' . htmlspecialchars($item['url'] ?? 'javascript:void(0)', ENT_QUOTES, 'UTF-8') . '" class="waves-effect waves-dark" ' . ($item['attributes'] ?? '') . '>';
+                    echo '<span class="pcoded-micon"><i class="bi ' . htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') . '"></i></span>';
+                    echo '<span class="pcoded-mtext">' . htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') . '</span>';
+                    echo '<span class="pcoded-mcaret"></span>';
+                    echo '</a>';
 
+                    if ($hasChildren) {
+                        echo '<ul class="pcoded-submenu">';
+                        foreach ($item['children'] as $child) {
+                            $childActive = $Page === $child['page'];
+                            echo '<li class="' . ($childActive ? 'active bg-default' : '') . '">';
+                            echo '<a href="' . htmlspecialchars($child['url'], ENT_QUOTES, 'UTF-8') . '" class="waves-effect waves-dark">';
+                            echo '<span class="pcoded-micon"><i class="bi bi-dot"></i></span>';
+                            echo '<span class="pcoded-mtext">' . htmlspecialchars($child['label'], ENT_QUOTES, 'UTF-8') . '</span>';
+                            echo '<span class="pcoded-mcaret"></span>';
+                            echo '</a></li>';
+                        }
+                        echo '</ul>';
+                    }
 
-                    <li class="pcoded-hasmenu 
-                        <?php 
-                            if($Page=="AksesFitur" || $Page=="AksesEntitas" || $Page=="Akses" || $Page=="AksesPengajuan"){
-                                echo 'active pcoded-trigger';
-                            } 
-                        ?>"
-                    >
-                        <a href="javascript:void(0)" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext">
-                                Aksesibilitas
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
+                    echo '</li>';
+                }
 
-                        <ul class="pcoded-submenu">
-                            <li class="<?php if($Page=="AksesFitur"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesFitur" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">
-                                        Fitur Aplikasi
-                                    </span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="AksesEntitas"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesEntitas" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">
-                                        Entitas Akses
-                                    </span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="Akses"){echo 'active';} ?>">
-                                <a href="index.php?Page=Akses" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">
-                                        Akun Pengguna
-                                    </span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="AksesPengajuan"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesPengajuan" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">
-                                        Pengajuan Akses
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="pcoded-hasmenu 
-                        <?php 
-                            if(
-                                $Page=="SettingBpjs" || 
-                                $Page=="SettingSatuSehat" || 
-                                $Page=="SettingSirsOnline" || 
-                                $Page=="SettingRadix" || 
-                                $Page=="SettingAnalyza" || 
-                                $Page=="SettingSifarma" || 
-                                $Page=="ModeKontras"
-                            ){
-                                echo 'active pcoded-trigger';
-                            } 
-                        ?>"
-                    >
-                        <a href="javascript:void(0)" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-diagram-3"></i></span>
-                            <span class="pcoded-mtext">
-                                Integrasi
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-
-                        <ul class="pcoded-submenu">
-                            <li class="<?php if($Page=="SettingBpjs"){echo 'active';} ?>">
-                                <a href="index.php?Page=SettingBpjs" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">Bridging BPJS </span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="SettingSatuSehat"){echo 'active';} ?>">
-                                <a href="index.php?Page=SettingSatuSehat" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">SATUSEHAT</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="SettingSirsOnline"){echo 'active';} ?>">
-                                <a href="index.php?Page=SettingSirsOnline" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">SIRS Online</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="SettingRadix"){echo 'active';} ?>">
-                                <a href="index.php?Page=SettingRadix" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">Radix</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="SettingAnalyza"){echo 'active';} ?>">
-                                <a href="index.php?Page=SettingAnalyza" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">Analyza</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="SettingSifarma"){echo 'active';} ?>">
-                                <a href="index.php?Page=SettingSifarma" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">Sifarma</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="<?php if($Page=="LaporanKesalahan"){echo 'active';} ?>">
-                        <a href="index.php?Page=LaporanKesalahan" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">
-                                Laporan Kesalahan
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-
-                </ul>
-            </li>
-            <li class="pcoded-hasmenu 
-                <?php 
-                    if(
-                        $Page=="ReferensiPoliklinik" ||
-                        $Page=="ReferensiDokter" ||
-                        $Page=="ReferensiJadwalDokter" ||
-                        $Page=="ReferensiPraktisi" ||
-                        $Page=="ReferensiRuangRawat" ||
-                        $Page=="ReferensiIcd" ||
-                        $Page=="ReferensiTindakan" ||
-                        $Page=="ReferensiAlergen" ||
-                        $Page=="ReferensiObservation" ||
-                        $Page=="ReferensiWilayah" ||
-                        $Page=="ReferensiWilayahBpjs" ||
-                        $Page=="ReferensiIcdBpjs" ||
-                        $Page=="Diagnosa"||
-                        $Page=="Kfa"
-                    )
-                    {
-                        echo 'active pcoded-trigger';
-                    } 
-                ?>
-            ">
-                <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-journal-medical"></i> </span>
-                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Referensi</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-                <ul class="pcoded-submenu">
-                    <li class="<?php if($Page=="ReferensiPoliklinik"){echo 'active';} ?>">
-                        <a href="index.php?Page=ReferensiPoliklinik" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext">Poliklinik</span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="ReferensiDokter"){echo 'active';} ?>">
-                        <a href="index.php?Page=ReferensiDokter" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext">Dokter</span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="ReferensiJadwalDokter"){echo 'active';} ?>">
-                        <a href="index.php?Page=ReferensiJadwalDokter" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext">Jadwal Dokter</span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="ReferensiPraktisi"){echo 'active';} ?>">
-                        <a href="index.php?Page=ReferensiPraktisi" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext">Praktisi (SDM)</span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="ReferensiRuangRawat"){echo 'active';} ?>">
-                        <a href="index.php?Page=ReferensiRuangRawat" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext">Ruang Rawat</span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="ReferensiIcd"){echo 'active';} ?>">
-                        <a href="index.php?Page=ReferensiIcd" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext">ICD9, 10 & 11</span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="ReferensiTindakan"){echo 'active';} ?>">
-                        <a href="index.php?Page=ReferensiTindakan" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext"><i>Procedure</i></span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="ReferensiAlergen"){echo 'active';} ?>">
-                        <a href="index.php?Page=ReferensiAlergen" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext"><i>Allergens</i></span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="ReferensiObservation"){echo 'active';} ?>">
-                        <a href="index.php?Page=ReferensiObservation" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext"><i>Observation</i></span>
-                        </a>
-                    </li>
-                    
-                    <li class="<?php if($Page=="ReferensiWilayah"){echo 'active';} ?>">
-                        <a href="index.php?Page=ReferensiWilayah" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext">Wilayah</span>
-                        </a>
-                    </li>
-
-                    <li class="pcoded-hasmenu 
-                        <?php 
-                            if(
-                                $Page=="ReferensiWilayahBpjs" || 
-                                $Page=="ReferensiWilayahIcd" || 
-                                $Page=="ReferensiIcdBpjs" || 
-                                $Page=="ReferensiDpho"
-                            ){
-                                echo 'active pcoded-trigger';
-                            } 
-                        ?>"
-                    >
-                        <a href="javascript:void(0)" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-diagram-3"></i></span>
-                            <span class="pcoded-mtext">
-                                BPJS
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-
-                        <ul class="pcoded-submenu">
-                            <li class="<?php if($Page=="ReferensiWilayahBpjs"){echo 'active';} ?>">
-                                <a href="index.php?Page=ReferensiWilayahBpjs" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">Wilayah</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="ReferensiIcdBpjs"){echo 'active';} ?>">
-                                <a href="index.php?Page=ReferensiIcdBpjs" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">ICD</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="ReferensiDpho"){echo 'active';} ?>">
-                                <a href="index.php?Page=ReferensiDpho" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">DPHO</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="pcoded-hasmenu 
-                        <?php 
-                            if($Page=="Aksesibilitas" || $Page=="Tema" || $Page=="Font" || $Page=="ModeKontras"){
-                                echo 'active pcoded-trigger';
-                            } 
-                        ?>"
-                    >
-                        <a href="javascript:void(0)" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-diagram-3"></i></span>
-                            <span class="pcoded-mtext">
-                                SATUSEHAT
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-
-                        <ul class="pcoded-submenu">
-                            <li class="<?php if($Page=="AksesFitur"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesFitur" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">Organization</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="AksesEntitas"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesEntitas" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">Location</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="AksesEntitas"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesEntitas" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">Practitioner</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="AksesEntitas"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesEntitas" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">Loinc</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="AksesEntitas"){echo 'active';} ?>">
-                                <a href="index.php?Page=AksesEntitas" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">Snomed</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="ReferensiKfa"){echo 'active';} ?>">
-                                <a href="index.php?Page=ReferensiKfa" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">KFA</span>
-                                </a>
-                            </li>
-
-                            <li class="<?php if($Page=="ReferensiWilayah"){echo 'active';} ?>">
-                                <a href="index.php?Page=ReferensiWilayah" class="waves-effect waves-dark">
-                                    <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                                    <span class="pcoded-mtext">Wilayah</span>
-                                </a>
-                            </li>
-
-                        </ul>
-                    </li>
-
-                </ul>
-            </li>
-            <li class="pcoded-hasmenu <?php if($Page=="Antrian"||$Page=="DashboardAntrol"||$Page=="AntrianPanggil"){echo 'active pcoded-trigger';} ?>">
-                <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-ticket-perforated"></i></span>
-                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Antrian</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-                <ul class="pcoded-submenu">
-                    <li class="<?php if($Page=="Antrian"){echo 'active';} ?>">
-                        <a href="index.php?Page=Antrian" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-person"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Daftar Antrian</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="DashboardAntrol"){echo 'active';} ?>">
-                        <a href="index.php?Page=DashboardAntrol" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-person"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Monitoring Antrian</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="AntrianPanggil"){echo 'active';} ?>">
-                        <a href="index.php?Page=AntrianPanggil" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-person"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
-                                Antrian Panggil 
-                                <span class="text text-success">
-                                    <i class="bi bi-check-circle"></i>
-                                </span>
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="pcoded-hasmenu 
-                <?php 
-                    if(
-                        $Page == "Pasien"||
-                        $Page == "Kunjungan" ||
-                        $Page == "GeneralConsent" ||
-                        $Page == "Diagnosis" ||
-                        $Page == "Tindakan" ||
-                        $Page == "Alergi" ||
-                        $Page == "Antrian"
-                    ){
-                        echo 'active pcoded-trigger';
-                    } 
-                ?>
-            ">
-                <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-person-vcard"></i></span>
-                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Rekam Medis</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-                <ul class="pcoded-submenu">
-                    <li class="<?php if($Page=="Pasien"){echo 'active';} ?>">
-                        <a href="index.php?Page=Pasien" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-person"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Pasien</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Kunjungan"){echo 'active';} ?>">
-                        <a href="index.php?Page=Kunjungan" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Kunjungan (<i>Encounter</i>)</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="GeneralConsent"){echo 'active';} ?>">
-                        <a href="index.php?Page=GeneralConsent" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs"><i>General Consent</i></span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Observasi"){echo 'active';} ?>">
-                        <a href="index.php?Page=Observasi" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Observasi</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Diagnosis"){echo 'active';} ?>">
-                        <a href="index.php?Page=Diagnosis" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Diagnosis</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Tindakan"){echo 'active';} ?>">
-                        <a href="index.php?Page=Tindakan" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Tindakan</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Alergi"){echo 'active';} ?>">
-                        <a href="index.php?Page=Alergi" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Alergi</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Imunisasi"){echo 'active';} ?>">
-                        <a href="index.php?Page=Imunisasi" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Imunisasi</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="EpisodePerawatan"){echo 'active';} ?>">
-                        <a href="index.php?Page=EpisodePerawatan" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Episode Perawatan</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="RencanaPerawatan"){echo 'active';} ?>">
-                        <a href="index.php?Page=RencanaPerawatan" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Rencana Perawatan</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Peresepan"){echo 'active';} ?>">
-                        <a href="index.php?Page=Peresepan" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Peresepan</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Resume"){echo 'active';} ?>">
-                        <a href="index.php?Page=Resume" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Resume</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="pcoded-hasmenu 
-                <?php 
-                    if(
-                    $Page=="Farmasi"||
-                    $Page=="Radiologi"||
-                    $Page=="Laboratorium"||
-                    $Page=="Fisioterapi"||
-                    $Page=="Hemodialisa"||
-                    $Page=="Operasi"
-                    ){
-                        echo 'active pcoded-trigger';
-                    } 
-                ?>
-            ">
-                <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-heart-pulse"></i></span>
-                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Penunjang Medis</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-                <ul class="pcoded-submenu">
-                    <li class="<?php if($Page=="Farmasi"){echo 'active';} ?>">
-                        <a href="index.php?Page=Farmasi" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
-                                Farmasi / Apotek
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Radiologi"){echo 'active';} ?>">
-                        <a href="index.php?Page=Radiologi" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
-                                Radiologi
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Laboratorium"){echo 'active';} ?>">
-                        <a href="index.php?Page=Laboratorium" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
-                                Laboratorium
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Fisioterapi"){echo 'active';} ?>">
-                        <a href="index.php?Page=Fisioterapi" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
-                                Fisioterapi
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Hemodialisa"){echo 'active';} ?>">
-                        <a href="index.php?Page=Hemodialisa" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
-                                Hemodialisa
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Operasi"){echo 'active';} ?>">
-                        <a href="index.php?Page=Operasi" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-chevron-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
-                                Operasi
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="pcoded-hasmenu <?php if($Page=="SEP"||$Page=="Rujukan"||$Page=="SpriSkdp"){echo 'active pcoded-trigger';} ?>">
-                <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-card-checklist"></i></span>
-                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">BPJS Kesehatan</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-                <ul class="pcoded-submenu">
-                    <li class="<?php if($Page=="SEP"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=SEP" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-file-earmark-medical"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">SEP</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Rujukan"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=Rujukan" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-arrow-left-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Rujukan</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                     <li class="<?php if($Page=="SpriSkdp"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=SpriSkdp" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-calendar2-check"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">SPRI / SKDP</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="pcoded-hasmenu <?php if($Page=="SirsOnline"||$Page=="SirsOnlineTempatTidur"||$Page=="SirsOnlineAlkes"||$Page=="SirsOnlineAntrian"||$Page=="PasienShk"||$Page=="SirsOnlineOksigen"||$Page=="SirsOnlineNakesTerinfeksi"){echo 'active pcoded-trigger';} ?>">
-                <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-cloud-arrow-up"></i></span>
-                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">SIRS Online</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-                <ul class="pcoded-submenu">
-                    <li class="<?php if($Page=="SirsOnlineTempatTidur"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=SirsOnlineTempatTidur" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-hospital"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Tempat Tidur</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="DataSdm"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=SirsOnline&Sub=DataSdm" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-person-badge"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Nakes/SDM</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="PcrNakes"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=SirsOnline&Sub=PcrNakes" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-virus2"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">PCR Nakes</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="SirsOnlineNakesTerinfeksi"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=SirsOnlineNakesTerinfeksi" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-heart-pulse"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Nakes Terinfeksi</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="SirsOnlineAlkes"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=SirsOnlineAlkes" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-box-seam"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Alkes</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="SirsOnlineOksigen"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=SirsOnlineOksigen" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-wind"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Oksigen</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="PasienShk"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=PasienShk" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-person-heart"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Pasien SHK</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="SirsOnlineAntrian"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=SirsOnlineAntrian" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-ticket-perforated"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Antrian</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="pcoded-hasmenu 
-                <?php 
-                    if(
-                        $Page == "Encounter"||
-                        $Page == "Condition"||
-                        $Page == "Observation"||
-                        $Page == "Procedure"||
-                        $Page == "Service Request"||
-                        $Page == "Medication Request"||
-                        $Page == "Immunization"
-                    )
-                    {
-                        echo 'active pcoded-trigger';
-                    } 
-                ?>
-            ">
-                <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-file-medical"></i></span>
-                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">SATUSEHAT</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-                <ul class="pcoded-submenu">
-                    <li class="<?php if($Page=="Encounter"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=Encounter" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-calendar2-check"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
-                                <i>Encounter</i>
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Condition"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=Condition" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-heart-pulse"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
-                                <i>Condition</i>
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Observation"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=Observation" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-clipboard2-pulse"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
-                                <i>Observation</i>
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    <li class="<?php if($Page=="Procedure"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=Procedure" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-activity"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">
-                                <i>Procedure</i>
-                            </span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    
-                </ul>
-            </li>
-
-            <li class="pcoded-hasmenu <?php if($Page=="TopDiagnosa"){echo 'active pcoded-trigger';} ?>">
-                <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-files"></i></span>
-                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Laporan</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-                <ul class="pcoded-submenu">
-                    <li class="<?php if($Page=="TopDiagnosa"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=TopDiagnosa" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-people"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Demografi Pasien</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="TopDiagnosa"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=TopDiagnosa" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-graph-up"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Demografi Kunjungan</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="TopDiagnosa"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=TopDiagnosa" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-hospital"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Rawat Inap</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="TopDiagnosa"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=TopDiagnosa" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-person-walking"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Rawat Jalan</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="TopDiagnosa"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=TopDiagnosa" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-clipboard2-pulse"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Top Diagnosa</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-
-                    <li class="<?php if($Page=="TopDiagnosa"){echo 'active bg-default';} ?>">
-                        <a href="index.php?Page=TopDiagnosa" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="bi bi-geo-alt"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Top Wilayah</span>
-                            <span class="pcoded-mcaret"></span>
-                        </a>
-                    </li>
-                    
-                </ul>
-            </li>
-            <li class="<?php if($Page=="Migrasi"){echo 'active';} ?>">
-                <a href="index.php?Page=Migrasi" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-database"></i><b>D</b></span>
-                    <span class="pcoded-mtext" data-i18n="nav.dash.main">Migrasi</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-            </li>
-            <li class="<?php if($Page=="Bantuan"){echo 'active';} ?>">
-                <a href="index.php?Page=Bantuan" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="bi bi-question-circle"></i><b>D</b></span>
-                    <span class="pcoded-mtext" data-i18n="nav.dash.main">Bantuan</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-            </li>
-        </ul>
+                echo '</ul>';
+            }
+        ?>
 
         <div class="text-center mb-3">
             <div class="main-menu-footer">
-                <span class="text-center mb-3">
-                   
-                </span>
+                <span class="text-center mb-3"></span>
             </div>
         </div>
     </div>

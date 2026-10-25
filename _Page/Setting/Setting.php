@@ -4,7 +4,7 @@
             <div class="col-md-8">
                 <div class="page-header-title">
                     <h5 class="m-b-10">
-                        <a href="" class="h5"><i class="ti ti-settings"></i> Setting</a>
+                        <a href="" class="h5"><i class="bi bi-gear"></i> Setting</a>
                     </h5>
                     <p class="m-b-0">Pengaturan Identitas Aplikasi, Informasi Faskes, Favicon dan Base URL </p>
                 </div>

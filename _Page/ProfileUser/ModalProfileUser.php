@@ -20,7 +20,7 @@
                     <button type="submit" class="btn btn-md btn-primary">
                         <i class="bi bi-search"></i> Cari
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="modal-footer border-0">
-                <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                     <i class="bi bi-x-lg"></i> Tutup
                 </button>
             </div>
@@ -80,7 +80,7 @@
                     <button type="submit" class="btn btn-md btn-primary">
                         <i class="bi bi-floppy"></i> Simpan
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
@@ -114,7 +114,7 @@
                     <button type="submit" class="btn btn-md btn-primary" id="button_ganti_password">
                         <i class="bi bi-floppy"></i> Simpan
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
@@ -148,7 +148,7 @@
                     <button type="submit" class="btn btn-md btn-primary">
                         <i class="bi bi-floppy"></i> Simpan
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
@@ -207,7 +207,7 @@
                     <button type="submit" class="btn btn-md btn-primary" id="ButtonLaporanPengguna">
                         <i class="bi bi-floppy"></i> Simpan
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
@@ -232,7 +232,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                     <i class="bi bi-x-lg"></i> Tutup
                 </button>
             </div>
@@ -265,7 +265,7 @@
                     <button type="submit" class="btn btn-md btn-primary" id="ButtonEditLaporanPengguna">
                         <i class="bi bi-floppy"></i> Simpan
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
@@ -299,7 +299,7 @@
                     <button type="submit" class="btn btn-md btn-primary" id="button_hapus_laporan_pengguna">
                         <i class="bi bi-check-lg"></i> Ya, Hapus
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
@@ -359,7 +359,7 @@
                     <button type="submit" class="btn btn-md btn-primary">
                         <i class="bi bi-check-lg"></i> Tampilkan
                     </button>
-                    <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
@@ -404,7 +404,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-md btn-inverse ms-2" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                     <i class="bi bi-x-lg"></i> Tutup
                 </button>
             </div>

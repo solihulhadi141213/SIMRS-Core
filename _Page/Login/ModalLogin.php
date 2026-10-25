@@ -7,7 +7,7 @@
                 <!-- Header -->
                 <div class="modal-header text-dark">
                     <h5 class="modal-title">
-                        <i class="icofont icofont-paper-plane"></i> Lembar Pengajuan Akses
+                        <i class="bi bi-send"></i> Lembar Pengajuan Akses
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -75,7 +75,7 @@
                         <div class="col-md-6 text-center">
                             <img src="" alt="captcha" width="100%" id="CaptchaPengajuanAkses" /><br>
                             <a href="javascript:void(0);" id="ReloadCaptchaPengajuanAkses" class="text-danger text-decoration-none">
-                                <i class="ti ti-reload"></i> Reload Captcha
+                                <i class="bi bi-arrow-clockwise"></i> Reload Captcha
                             </a>
                         </div>
                         <div class="col-md-6">
@@ -109,10 +109,10 @@
                 <!-- Footer -->
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary btn-md btn-round" id="button_kirim_pengajuan">
-                        <i class="icofont icofont-paper-plane"></i> Kirim Pengajuan
+                        <i class="bi bi-send"></i> Kirim Pengajuan
                     </button>
-                    <button type="button" class="btn btn-dark btn-md btn-round" data-bs-dismiss="modal">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-secondary btn-md btn-round" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>
@@ -158,8 +158,8 @@
                     <button type="submit" class="btn btn-primary btn-md btn-round" id="button_kirim_tautan">
                         <i class="bi bi-send"></i> Kirim Tautan
                     </button>
-                    <button type="button" class="btn btn-dark btn-md btn-round" data-bs-dismiss="modal">
-                        <i class="ti-close"></i> Tutup
+                    <button type="button" class="btn btn-secondary btn-md btn-round" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Tutup
                     </button>
                 </div>
             </form>

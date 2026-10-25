@@ -4,7 +4,7 @@
             <div class="col-md-8">
                 <div class="page-header-title">
                     <h5 class="m-b-10">
-                        <a href="" class="h5"><i class="icofont-doctor"></i> Dokter</a>
+                        <a href="" class="h5"><i class="bi bi-person-badge"></i> Dokter</a>
                     </h5>
                     <p class="m-b-0">Kelola Referensi Dokter Yang Tersedia</p>
                 </div>

@@ -226,7 +226,7 @@ $(document).ready(function() {
 
             complete: function(){
                 isSubmitting = false;
-                btn.prop("disabled", false).html('<i class="icofont icofont-paper-plane"></i> Kirim Pengajuan');
+                btn.prop("disabled", false).html('<i class="bi bi-send"></i> Kirim Pengajuan');
             }
         });
     });

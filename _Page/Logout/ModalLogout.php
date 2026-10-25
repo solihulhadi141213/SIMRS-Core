@@ -6,7 +6,7 @@
                 <!-- Header -->
                 <div class="modal-header text-dark">
                     <h5 class="modal-title" id="ModalLogoutLabel">
-                        <i class="ti-lock"></i> Logout
+                        <i class="bi bi-lock"></i> Logout
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -30,10 +30,10 @@
                 <!-- Footer -->
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary btn-md btn-round">
-                        <i class="ti-check"></i> Ya, Logout
+                        <i class="bi bi-check"></i> Ya, Logout
                     </button>
                     <button type="button" class="btn btn-dark btn-md btn-round" data-bs-dismiss="modal">
-                        <i class="ti-close"></i> Tidak
+                        <i class="bi bi-x-lg"></i> Tidak
                     </button>
                 </div>
             </form>
