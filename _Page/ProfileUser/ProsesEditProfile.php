@@ -1,6 +1,4 @@
 <?php
-    date_default_timezone_set('Asia/Jakarta');
-
     header('Content-Type: application/json');
 
     // Koneksi, Session, Function
@@ -79,12 +77,13 @@
     }
 
     // Update
-    $stmtUpdate = mysqli_prepare($Conn, "UPDATE akses SET email = ?, kontak = ? WHERE id_akses = ?");
+    $updatetimeUtc = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+    $stmtUpdate = mysqli_prepare($Conn, "UPDATE akses SET email = ?, kontak = ?, updatetime = ? WHERE id_akses = ?");
     if (!$stmtUpdate) {
         respond('error', 'Query gagal (update)');
     }
 
-    mysqli_stmt_bind_param($stmtUpdate, 'sss', $email, $kontak, $SessionIdAkses);
+    mysqli_stmt_bind_param($stmtUpdate, 'sssi', $email, $kontak, $updatetimeUtc, $SessionIdAkses);
 
     if (!mysqli_stmt_execute($stmtUpdate)) {
         mysqli_stmt_close($stmtUpdate);
@@ -94,4 +93,5 @@
     mysqli_stmt_close($stmtUpdate);
 
     // Success
+    $_SESSION['NotifikasiSwal'] = 'Profile Berhasil Diperbarui';
     respond('success', 'Profile berhasil diperbarui');

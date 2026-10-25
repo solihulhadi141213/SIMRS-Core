@@ -5,8 +5,6 @@
     error_reporting(E_ALL);
     ini_set('display_errors', 0);
 
-    date_default_timezone_set('Asia/Jakarta');
-
     try {
         include "../../_Config/Connection.php";
         include "../../_Config/SimrsFunction.php";
@@ -35,7 +33,7 @@
         }
 
         $id_akses = (int)$SessionIdAkses;
-        $tanggal  = date('Y-m-d H:i:s');
+        $tanggal = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
 
         $stmt = mysqli_prepare(
             $Conn,

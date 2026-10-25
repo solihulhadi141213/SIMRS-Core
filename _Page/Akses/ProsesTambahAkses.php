@@ -1,6 +1,5 @@
 <?php
     header('Content-Type: application/json');
-    date_default_timezone_set('Asia/Jakarta');
 
     include "../../_Config/Connection.php";
     include "../../_Config/Session.php";
@@ -105,7 +104,7 @@
         // INSERT AKSES
         // ==============================
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-        $now = date('Y-m-d H:i:s');
+        $now = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
 
         $stmt = $Conn->prepare("
             INSERT INTO akses (

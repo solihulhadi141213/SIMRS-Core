@@ -1,7 +1,4 @@
 <?php
-    // Zona Waktu
-    date_default_timezone_set('Asia/Jakarta');
-
     // Koneksi Dan Session
     include "../../_Config/Connection.php";
     include "../../_Config/SimrsFunction.php";
@@ -24,6 +21,10 @@
     if(empty($SessionIhs)){
         $SessionIhs = "-";
     }
+    $SessionTanggalIso = htmlspecialchars(str_replace(' ', 'T', (string) $SessionTanggal) . 'Z', ENT_QUOTES, 'UTF-8');
+    $SessionTanggalFallback = htmlspecialchars((string) $SessionTanggal . ' UTC', ENT_QUOTES, 'UTF-8');
+    $SessionUpdatetimeIso = htmlspecialchars(str_replace(' ', 'T', (string) $SessionUpdatetime) . 'Z', ENT_QUOTES, 'UTF-8');
+    $SessionUpdatetimeFallback = htmlspecialchars((string) $SessionUpdatetime . ' UTC', ENT_QUOTES, 'UTF-8');
 
     // Menampilkan foto profil dari penyimpanan saat ini, dengan dukungan gambar lama.
     $nama_foto = basename((string) $SessionGambar);
@@ -31,16 +32,16 @@
     $path_foto_lama = __DIR__ . "/../../assets/images/user/$nama_foto";
 
     if ($nama_foto !== '' && is_file($path_foto)) {
-        $link_foto = "$base_url/assets/img/user/" . rawurlencode($nama_foto);
+        $link_foto = "assets/img/user/" . rawurlencode($nama_foto);
     } elseif ($nama_foto !== '' && is_file($path_foto_lama)) {
-        $link_foto = "$base_url/assets/images/user/" . rawurlencode($nama_foto);
+        $link_foto = "assets/images/user/" . rawurlencode($nama_foto);
     } else {
-        $link_foto = "$base_url/assets/img/user/No-Image.png";
+        $link_foto = "assets/img/user/No-Image.png";
     }
 ?>
 <div class="row mb-3">
     <div class="col-md-12 mb-4 text-center">
-        <img src="<?php echo htmlspecialchars($link_foto, ENT_QUOTES, 'UTF-8'); ?>" width="150" height="150" class="img-radius" alt="Foto profil pengguna">
+        <img src="<?php echo htmlspecialchars($link_foto, ENT_QUOTES, 'UTF-8'); ?>" width="150" height="150" class="img-radius" alt="Foto profil pengguna" onerror="this.onerror=null;this.src='assets/img/user/No-Image.png';">
     </div>
 </div>
 <div class="row mb-3">
@@ -93,14 +94,14 @@
                     <div class="col-5"><small>Tanggal Daftar</small></div>
                     <div class="col-1"><small>:</small></div>
                     <div class="col-6">
-                        <small class="text text-muted">'.date('d/m/Y H:i', strtotime($SessionTanggal)).'</small>
+                        <small class="text text-muted"><time class="profile-local-datetime" datetime="'.$SessionTanggalIso.'">'.$SessionTanggalFallback.'</time></small>
                     </div>
                 </div>
                     <div class="row mb-2">
                     <div class="col-5"><small>Updatetime Terakhir</small></div>
                     <div class="col-1"><small>:</small></div>
                     <div class="col-6">
-                        <small class="text text-muted">'.date('d/m/Y H:i', strtotime($SessionUpdatetime)).'</small>
+                        <small class="text text-muted"><time class="profile-local-datetime" datetime="'.$SessionUpdatetimeIso.'">'.$SessionUpdatetimeFallback.'</time></small>
                     </div>
                 </div>
             ';

@@ -1,7 +1,6 @@
 # Aturan Dasar dan Prinsip Dasar Yang Perlu Dipatui
 Sistem harus memiliki stabilitas tinggi dengan mempertimbangkan alur kerja yang logis dan tidak menimbulkan resiko kesalahan yang fatal.
 Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan tidak menerapkan praktik baik. Oleh sebab itu, banyak hal yang tidak relevan. Saya membutuhkan bantuan agent AI untuk melakukan perbaikan, pengembangan dan evaluasi dengan aturan-aturan yang kita sepakati bersama.
-
 ## Aturan Utama
 1. Jangan pernah generate atau membuat gambar, vidio atau media lainnya.
 2. Jangan pernah menggunakan pustaka / dependensi dengan CDN tanpa ijin.
@@ -9,28 +8,23 @@ Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan
 4. Selalu mempertimbangkan optimalisasi kecepatan dan efisiensi
 5. Untuk mempermudah developer atau pengguna, maka setiap kali perubahan perlu dokumentasi yang jelas dan tertulis pada `README.md`.
 6. Jangan pernah membaca commit lebih dari 2 langkah terbaru pada repository. Anggap repository terbaru adalah perubahan yang paling relevan. 
-
 ## Penjelasan Aturan Untuk Dokumen `README.md`
 1. Setiap kali ada penambahan, perubahan, atau penghapusan fitur pada kode PHP, HTML/CSS, AI **wajib** memperbarui file `README.md`.
 2. File `README.md` harus selalu memuat daftar fitur aktif (*Active Features*) dan daftar kebutuhan (*Requirements*) yang diperbarui secara real-time.
 3. File `README.md` memuat pedoman instalasi aplikasi dan langkah-langkah yang perlu dilakukan untuk mempersiapkan aplikasi. Sertakan juga petunjuk langkah-langkah instalasi dan mempersiapkan aplikasi.
 4. File `README.md` memuat deskripsi aplikasi yang mudah dipahami, terdiri dari fungsi dan kegunaan aplikasi serta gambaran umum urgensinya.
 5. File `README.md` memuat daftar dependensi dan pustaka yang digunakan (walapun sudah ada pada package.json) sebagai gambaran kepada pengguna untuk mengetahui plugin, pustaka atau dependensi yang digunakan pada aplikasi ini.
-
 ## Batasan Teknis
 1. Pustaka dan depedensi NPM selalu dimuat pada folder `node_modules` dan tidak dipanggil menggunakan CDN.
 2. Pustaka dan depedensi composer dimuat pada folder `vendor` yang sudah disediakan.
 3. Pustaka dan depedensi yang tidak diinstal melalui NPM atau composer akan disimpan pada folder `assets\lib`.
-
-
 ## Dokumen Wajib Yang Harus Selalu Dibaca Setiap Kali Akan Melakukan Eksekusi Perintah
-1. `.agentrules` : Aturan dasar untuk AI agent.
-2.` README.md` : Dokumentasi Aplikasi.
-3. `.gitignore` : Kendali Version Control.
-4. `.package-lock.json` : Menjaga Konsistensi Lingkungan Dependensi dan Pustaka Javascript.
-5. `package.json` : Daftar Dependensi dan Pustaka Javascript.
-6. `package-lock.json`
-
+1. `.agentrules`       : Aturan dasar untuk AI agent.
+2.` README.md`         : Dokumentasi Aplikasi.
+3. `.gitignore`        : Kendali Version Control.
+4. `.package-lock.json`: Menjaga Konsistensi Lingkungan Dependensi dan Pustaka Javascript.
+5. `package.json`      : Daftar Dependensi dan Pustaka Javascript.
+6. `package-lock.json` : Memastikan konsistensi versi, mempercepat proses instalasi dan Keamanan & Integritas
 ## Prinsip Gaya Visual Yang Harus Dijaga
 1. Responsif (Mobile First).
 2. Gunakan Icon Yang Relevan Dengan Fungsi Fitur Atau Aksi.
@@ -38,13 +32,11 @@ Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan
 4. Utamakan efisiensi sumber daya dan akses cepat serta ringan.
 5. Terapkan desain yang bersih dan responsif menggunakan Flexbox atau CSS Grid serta optimalisasi menggunakan bootstrap dan MDB UI KIT.
 6. Jangan pernah membuat tampilan tanpa instruksi jelas.
-
 ## Aturan Penulisan Kode
 1. Selalu menyertakan komentar pada setiap blok agar mudah dipahami fungsi dan tujuannya
 2. **Semantic & Clean:** Gunakan tag HTML5 semantik (`<header>`, `<main>`, `<section>`, dll.) dan pastikan indentasi konsisten (2 spasi).
 3. **CSS Maintainability:** Tulis CSS yang bersih, terorganisir per bagian (Global, Layout, Component), dan gunakan penamaan kelas yang deskriptif. Hindari *inline style* kecuali sangat mendesak.
 4. **Self-Documenting Code:** Berikan komentar singkat (`/* Komentar Bagian */`) pada bagian-bagian kode CSS/HTML yang penting agar mudah dibaca kembali di masa depan.
-
 ## Penjelasan Directory dan File Project
 1. Pengaturan Tampilan :
   - `assets\css\style.css`     : Style umum yang mempengaruhi semua halaman.
@@ -72,20 +64,39 @@ Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan
   - `_Config\SettingEmailGateway.php`: Membuka pengaturan kredensial koneksi dengan email gateway.
   - `_Config\SettingGeneral.php`     : Membuka pengaturan global aplikasi.
   - `_Config\SimrsFunction.php`      : Helper global aplikasi.
-4. Fitur
-  - 
+
+4. Komponen Halaman
+Halaman utama `index.php` disusun berdasarkan beberapa komponen terpisah (modular) untuk mempermudah sistem menangani tampilan secara dinamis. Berikut ini peta komponen dan fungsinya :
+  - `_Partial\Copyright.php`   : Berfungsi menampilkan informasi copyright.
+  - `_Partial\FooterJs.php`    : Berfungsi menyimpan dan routing pemanggilan pustaka dan dependensi javascript.
+  - `_Partial\Head.php`        : Berfungsi menyatakan metatag halaman, menyimpan dan routing pemanggilan pustaka dan dependensi javascript dan css.
+  - `_Partial\Menu.php`        : Menampilkan bagian menu kiri.
+  - `_Partial\Modal.php`       : Routing komponen modal berdasarkan halaman (Oage).
+  - `_Partial\Notification.php`: Menghitung notifikasi dan menampilkan notifikasi.
+  - `_Partial\PreLoader.php`   : Tampilan preloader.
+  - `_Partial\RoutingJs.php`   : Melakukan routing file javascript yang digunakan pada masing-masing fitur halaman.
+  - `_Partial\RoutingPage.php` : Melakukan routing halaman php yang digunakan pada masing-masing fitur halaman.
+  - `_Partial\RoutingSwal.php` : Melakukan routing sweet alert.
+  - `_Partial\Toast.php`       : Menampilkan toast.
 ## Pengaturan Metadata
 1. Halaman tidak mengijinkan melakukan indexing mesin pencari.
 2. Halaman diharapkan optimal sehingga dapat digunakan oleh browser apapun.
-
 ## Zona Waktu
 1. Database akan menyimpan informasi waktu dalam bentuk format 'ISO 8601 (UTC)'.
 2. Form dan Tampilan Data yang ditampilkan pada 'user' akan menyesuaikan zona waktu browser yang digunakan 'user', sehingga dibuthkan javascript untuk menampilkan dan memberikan informasi zona waktu ke dalam form.
-
 # Informasi Rumah Sakit dan Aplikasi.
 1. Logo rumah sakit disimpan di `assets\img\logo\` apabila informasi rumah sakit belum diatur atau file image tidak ditemukan maka logo diganti menjadi `assets\img\logo\no-image.jpg`.
 2. Logo aplikasi menggunakan `assets\img\ui\app-logo.png`
 3. Nama rumah sakit diatur melalui tabel 'setting'
 4. Nama aplikasi diatur secara hardcode dengan nama 'SIMRS-CORE'
+## Gaya Penulisan Script
+1. PHP
+  - Optimalisasikan Efisiensi baris kode dengan menggunakan helper yang sudah tersedia pada `_Config\SimrsFunction.php`
+  - Insert, Update, Delete dan SELECT database mysql harus menggunakan prepared statment. Apabila ada yang masih menggunakan cara lama maka bantu saya memperbaikinya.
+2. MYSQL
+  - Periksa pada fitur yang sedang diubah atau dibuat mengenai potensi SQL injection.
+  - Optimalisasi query yang digunakan.
+3. Javascript
+  - Optimalisasikan kinerja sistem dengan menggunakan Jquery.
 ## Keterangan
 Dokumen `.agentrules` ini adalah acuan aturan yang sangat penting namun masih memungkinkan adanya kesalahan redaksi bahasa atau relevansi dengan konteks yang sedang dikerjakan. Jangan ragu untuk bertanya, melakukan evaluasi dan memperbaharui dokumen ini apabila terdapat kesalahan fatal yang tidak diketahui developer (programer).

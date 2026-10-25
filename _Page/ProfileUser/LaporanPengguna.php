@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-md-12 text-center mb-3">
                         <h4>
-                            <i class="icofont-paper-plane"></i> Riwayat Laporan Anda
+                            <i class="bi bi-send"></i> Riwayat Laporan Anda
                         </h4>
                         <small>
                             Kirim laporan kesalahan sistem atau temuan error pada aplikasi.
@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <button type="button" class="btn btn-sm btn-outline-dark btn-block" data-toggle="modal" data-target="#ModalKirimLaporanPengguna">
-                            <i class="ti ti-email"></i> Kirim Laporan
+                            <i class="bi bi-envelope"></i> Kirim Laporan
                         </button>
                     </div>
                 </div>
@@ -61,9 +61,9 @@
                                         $JamSaja=date('H:i:s T',$Strtotime);
                                         //Label Response
                                         if(empty($DataLaporanPengguna['response'])){
-                                            $response='<span class="text-danger"><i class="ti ti-close"></i> Belum Ada Response</span>';
+                                            $response='<span class="text-danger"><i class="bi bi-x-lg"></i> Belum Ada Response</span>';
                                         }else{
-                                            $response='<span class="text-success"><i class="ti ti-check"></i> Sudah Ada Response</span>';
+                                            $response='<span class="text-success"><i class="bi bi-check-lg"></i> Sudah Ada Response</span>';
                                         }
                             ?>
                                 <tr tabindex="0" class="table-light" data-toggle="modal" data-target="#ModalDetailLaporanPengguna" data-id="<?php echo "$id_laporan_pengguna";?>" onmousemove="this.style.cursor='pointer'">

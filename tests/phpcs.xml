@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="LegacyCheck">
+    <description>Cek penggunaan fungsi database lama</description>
+    
+    <file>.</file>
+    <exclude-pattern>/vendor/*</exclude-pattern>
+
+    <!-- Melarang fungsi mysqli_query -->
+    <rule ref="Generic.PHP.ForbiddenFunctions">
+        <properties>
+            <property name="forbiddenFunctions" type="array">
+                <element key="mysqli_query" value="Gunakan Prepared Statement atau PDO/MySQLi wrapper yang aman."/>
+            </property>
+        </properties>
+    </rule>
+</ruleset>

@@ -763,6 +763,25 @@ body[data-theme="dark"] .dashboard-view .table {
   color: #687c81;
 }
 
+.profile-page-header {
+  padding: 1.5rem 1.5rem 0;
+  border: 0;
+  background: transparent;
+}
+
+.profile-page-header::before {
+  display: none;
+}
+
+.profile-page-header h4,
+.profile-page-header p {
+  color: #164a57;
+}
+
+.profile-page-header + .pcoded-inner-content .page-wrapper {
+  padding: 1rem 1.5rem 1.5rem;
+}
+
 .dashboard-content {
   align-items: stretch;
 }
@@ -1019,8 +1038,15 @@ body[data-theme="dark"] .dashboard-view .page-header p {
   color: #e2edf0 !important;
 }
 
+body[data-theme="dark"] .profile-page-header h4,
+body[data-theme="dark"] .profile-page-header p {
+  color: #e2edf0 !important;
+}
+
 body[data-theme="dark"] .dashboard-view .dashboard-page-header .breadcrumb-item a,
 body[data-theme="dark"] .dashboard-view .dashboard-page-header .breadcrumb-item.active,
+body[data-theme="dark"] .profile-page-header .breadcrumb-item a,
+body[data-theme="dark"] .profile-page-header .breadcrumb-item.active,
 body[data-theme="dark"] .dashboard-view .dashboard-stat-card p,
 body[data-theme="dark"] .dashboard-view .dashboard-visits-card .card-header p,
 body[data-theme="dark"] .dashboard-view .dashboard-existing-card .card-header p,
@@ -1047,6 +1073,11 @@ body[data-theme="dark"] .dashboard-view .dashboard-stat-icon {
   }
 
   .dashboard-view .page-wrapper {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .profile-page-header + .pcoded-inner-content .page-wrapper {
     padding-right: 1rem;
     padding-left: 1rem;
   }

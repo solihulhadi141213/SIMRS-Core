@@ -1,7 +1,4 @@
 <?php
-     //Zona Waktu
-    date_default_timezone_set('Asia/Jakarta');
-
     // Connection
     include "../../_Config/Connection.php";
     
@@ -48,6 +45,8 @@
        
     }
     $tanggal  = $Data['tanggal'];
+    $tanggalUtc = htmlspecialchars(str_replace(' ', 'T', (string) $tanggal) . 'Z', ENT_QUOTES, 'UTF-8');
+    $tanggalFallback = htmlspecialchars((string) $tanggal . ' UTC', ENT_QUOTES, 'UTF-8');
     $judul    = $Data['judul'];
     $laporan  = $Data['laporan'];
     $response = $Data['response'] ?? '<span class="text-danger">Belum Ada</span>';
@@ -55,16 +54,16 @@
 
     // Routing Status
     if($status=="Draft"){
-        $label_status = '<span class="badge badge-warning"><i class="bi bi-filetype-doc"></i> Draft</span>';
+        $label_status = '<span class="badge badge-warning text-light"><i class="bi bi-filetype-doc"></i> Draft</span>';
     }else{
         if($status=="Terkirim"){
-            $label_status = '<span class="badge badge-info"><i class="bi bi-send"></i> Terkirim</span>';
+            $label_status = '<span class="badge badge-info text-dark"><i class="bi bi-send"></i> Terkirim</span>';
         }else{
             if($status=="Dibaca"){
-                $label_status = '<span class="badge badge-primary"><i class="bi bi-eye"></i> Dibaca</span>';
+                $label_status = '<span class="badge badge-primary text-light"><i class="bi bi-eye text-light"></i> Dibaca</span>';
             }else{
                 if($status=="Selesai"){
-                    $label_status = '<span class="badge badge-success"><i class="bi bi-check"></i> Selesai</span>';
+                    $label_status = '<span class="badge badge-success text-light"><i class="bi bi-check"></i> Selesai</span>';
                 }
             }
         }
@@ -76,7 +75,7 @@
             <div class="col-4"><small>Tanggal</small></div>
             <div class="col-1"><small>:</small></div>
             <div class="col-7">
-                <small class="text text-muted">'.date('d/m/Y H:i', strtotime($tanggal)).'</small>
+                <time class="text text-muted profile-local-datetime" datetime="'.$tanggalUtc.'">'.$tanggalFallback.'</time>
             </div>
         </div>
         <div class="row mb-3">

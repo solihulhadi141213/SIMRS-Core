@@ -1,9 +1,6 @@
 <?php
     header('Content-Type: application/json');
 
-    //Zona Waktu
-    date_default_timezone_set('Asia/Jakarta');
-
     // Connection
     include "../../_Config/Connection.php";
     
@@ -80,7 +77,8 @@
     $path_gambar_legacy = __DIR__ . "/../../assets/images/user/" . $nama_gambar_lama;
 
     // Update database
-    $stmt = mysqli_prepare($Conn, "UPDATE akses SET gambar=? WHERE id_akses=?");
+    $updatetimeUtc = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+    $stmt = mysqli_prepare($Conn, "UPDATE akses SET gambar=?, updatetime=? WHERE id_akses=?");
 
     if (!$stmt) {
         echo json_encode([
@@ -90,9 +88,10 @@
         exit;
     }
 
-    mysqli_stmt_bind_param($stmt, "si", $namabaru, $SessionIdAkses);
+    mysqli_stmt_bind_param($stmt, "ssi", $namabaru, $updatetimeUtc, $SessionIdAkses);
 
     if (mysqli_stmt_execute($stmt)) {
+        $_SESSION['NotifikasiSwal'] = 'Foto Profile Berhasil Diperbarui';
 
         // Hapus foto lama jika ada dan bukan default
         if ($nama_gambar_lama !== '' && $nama_gambar_lama !== 'No-Image.png' && is_file($path_gambar_lama)) {

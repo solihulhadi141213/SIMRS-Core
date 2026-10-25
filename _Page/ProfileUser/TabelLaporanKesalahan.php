@@ -1,7 +1,4 @@
 <?php
-    // Zona Waktu
-    date_default_timezone_set('Asia/Jakarta');
-
     // Connection
     include "../../_Config/Connection.php";
     
@@ -67,6 +64,8 @@
     while ($DataLaporan = mysqli_fetch_array($QryLaporan)) {
         $id_akses_laporan = $DataLaporan['id_akses_laporan'];
         $tanggal          = $DataLaporan['tanggal'];
+        $tanggalUtc       = htmlspecialchars(str_replace(' ', 'T', (string) $tanggal) . 'Z', ENT_QUOTES, 'UTF-8');
+        $tanggalFallback  = htmlspecialchars((string) $tanggal . ' UTC', ENT_QUOTES, 'UTF-8');
         $judul            = $DataLaporan['judul'];
         $status           = $DataLaporan['status'];
         
@@ -92,13 +91,13 @@
             ';
         }else{
             if($status == "Terkirim") { 
-                $label_status = '<span class="badge bg-info"><i class="bi bi-send"></i> Terkirim</small>';
+                $label_status = '<span class="badge bg-info text-light"><i class="bi bi-send text-light"></i> Terkirim</small>';
             }else{
                 if($status=="Dibaca"){
-                    $label_status = '<span class="badge badge-primary"><i class="bi bi-eye"></i> Dibaca</span>';
+                    $label_status = '<span class="badge badge-primary text-light"><i class="bi bi-eye text-light"></i> Dibaca</span>';
                 }else{
                     if($status=="Selesai"){
-                        $label_status = '<span class="badge badge-success"><i class="bi bi-check"></i> Selesai</span>';
+                        $label_status = '<span class="badge badge-success text-light"><i class="bi bi-check text-light"></i> Selesai</span>';
                     }
                 }
             }
@@ -113,7 +112,7 @@
                         </a>
                     </div>
                     <small>
-                        <small class="text-muted">'.date('d/m/Y H:i', strtotime($tanggal)).'</small> 
+                        <time class="text-muted profile-local-datetime" datetime="'.$tanggalUtc.'">'.$tanggalFallback.'</time>
                     </small>
                 </div>
                 <div class="text-end">

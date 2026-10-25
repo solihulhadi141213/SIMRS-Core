@@ -1,7 +1,4 @@
 <?php
-     //Zona Waktu
-    date_default_timezone_set('Asia/Jakarta');
-
     // Connection
     include "../../_Config/Connection.php";
     
@@ -48,6 +45,8 @@
        
     }
     $tanggal  = $Data['tanggal'];
+    $tanggalUtc = htmlspecialchars(str_replace(' ', 'T', (string) $tanggal) . 'Z', ENT_QUOTES, 'UTF-8');
+    $tanggalFallback = htmlspecialchars((string) $tanggal . ' UTC', ENT_QUOTES, 'UTF-8');
     $judul    = $Data['judul'];
     $laporan  = $Data['laporan'];
     $response = $Data['response'] ?? '<span class="text-danger">Belum Ada</span>';
@@ -77,7 +76,7 @@
             <div class="col-4"><small>Tanggal</small></div>
             <div class="col-1"><small>:</small></div>
             <div class="col-7">
-                <small class="text text-muted">'.date('d/m/Y H:i', strtotime($tanggal)).'</small>
+                <time class="text text-muted profile-local-datetime" datetime="'.$tanggalUtc.'">'.$tanggalFallback.'</time>
             </div>
         </div>
         <div class="row mb-3">

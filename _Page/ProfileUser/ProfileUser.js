@@ -1,3 +1,21 @@
+function formatProfileLocalDateTimes(container) {
+    if (!container) return;
+
+    container.querySelectorAll('.profile-local-datetime').forEach(function (element) {
+        const date = new Date(element.dateTime);
+        if (Number.isNaN(date.getTime())) return;
+
+        element.textContent = new Intl.DateTimeFormat(undefined, {
+            dateStyle: 'short',
+            timeStyle: 'short'
+        }).format(date);
+        element.title = new Intl.DateTimeFormat(undefined, {
+            dateStyle: 'full',
+            timeStyle: 'long'
+        }).format(date);
+    });
+}
+
 // Menampilkan Profile Saya
 function ProfilSaya() {
     
@@ -8,7 +26,8 @@ function ProfilSaya() {
         type: 'POST',
         url: '_Page/ProfileUser/FormProfile.php',
         success: function(data) {
-            $('#content_my_profile').html(data);
+            const profileContent = $('#content_my_profile').html(data)[0];
+            formatProfileLocalDateTimes(profileContent);
         }
     });
 }
@@ -34,7 +53,8 @@ function TabelLaporanKesalahan() {
         url    : '_Page/ProfileUser/TabelLaporanKesalahan.php',
         data   : {page: page},
         success: function(data) {
-            $('#TabelLaporanKesalahan').html(data);
+            const reports = $('#TabelLaporanKesalahan').html(data)[0];
+            formatProfileLocalDateTimes(reports);
         }
     });
 }
@@ -170,18 +190,7 @@ $(document).ready(function() {
                 
                 // Jika Berhasil
                 if (status === 'success') {
-                    // Kosongkan Notifikasi
-                    $('#NotifikasiGantiFoto').html('');
-
-                    // Tutup Modal
-                    $('#ModalEditFoto').modal('hide');
-                    $('.modal-backdrop').remove();
-
-                    // Tampilkan Toast
-                    tampilkanToast('Foto Profile berhasil diperbarui', 'success');
-
-                    // Reload Profile Saya
-                    ProfilSaya();
+                    window.location.reload();
                     
                 } else {
                     $('#NotifikasiGantiFoto').html('<div class="alert alert-danger">' + message + '</div>');
@@ -242,15 +251,7 @@ $(document).ready(function() {
                 var message = response.message || 'Terjadi kesalahan';
 
                 if (status === 'success') {
-                    // Tutup Modal
-                    $('#ModalEditProfile').modal('hide');
-                    $('.modal-backdrop').remove();
-
-                    // Tampilkan Toast
-                    tampilkanToast('Profile berhasil diperbarui', 'success');
-
-                    // Reload Profile Saya
-                    ProfilSaya();
+                    window.location.reload();
                     
                 } else {
                     $notif.html('<div class="alert alert-danger">' + message + '</div>');
@@ -326,14 +327,7 @@ $(document).ready(function() {
 
                 // Jika Proses Berhasil
                 if(status=='success'){
-                    // Kosongkan Notifikasi
-                    $('#NotifikasiGantiPassword').html('');
-
-                    // Tutup Modal
-                    $('#ModalGantiPassword').modal('hide');
-
-                    // Tampilkan toast
-                    tampilkanToast('Password berhasil diperbarui', 'success');
+                    window.location.reload();
                 }else{
 
                     // Jika Proses Gagal
@@ -571,7 +565,8 @@ $(document).ready(function() {
             url 	    : '_Page/ProfileUser/FormDetailLaporanPengguna.php',
             data 	    :  {id_akses_laporan: id_akses_laporan},
             success     : function(data){
-                $('#FormDetailLaporanKesalahan').html(data);
+                const reportDetail = $('#FormDetailLaporanKesalahan').html(data)[0];
+                formatProfileLocalDateTimes(reportDetail);
             }
         });
     });
@@ -706,7 +701,8 @@ $(document).ready(function() {
             url 	    : '_Page/ProfileUser/FormHapusLaporanPengguna.php',
             data 	    :  {id_akses_laporan: id_akses_laporan},
             success     : function(data){
-                $('#FormHapusLaporanPengguna').html(data);
+                const reportDeletion = $('#FormHapusLaporanPengguna').html(data)[0];
+                formatProfileLocalDateTimes(reportDeletion);
             }
         });
     });
@@ -807,5 +803,3 @@ $(document).ready(function() {
 
 
 });
-
-

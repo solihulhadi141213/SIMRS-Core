@@ -2,9 +2,6 @@
     // Header JSON
     header('Content-Type: application/json');
 
-    // Zona waktu
-    date_default_timezone_set('Asia/Jakarta');
-
     // Include file
     include "../../_Config/Connection.php";
     include "../../_Config/Session.php";
@@ -61,19 +58,21 @@
 
     // Hash password baru (AMAN)
     $passwordHash = password_hash($password1, PASSWORD_DEFAULT);
+    $updatetimeUtc = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
 
     // Update database dengan prepared statement
     $stmt = mysqli_prepare(
         $Conn,
         "UPDATE akses 
-         SET password = ?
+         SET password = ?, updatetime = ?
          WHERE id_akses = ?"
     );
 
     mysqli_stmt_bind_param(
         $stmt,
-        "si",
+        "ssi",
         $passwordHash,
+        $updatetimeUtc,
         $SessionIdAkses
     );
 
@@ -82,6 +81,7 @@
     mysqli_stmt_close($stmt);
 
     if ($update) {
+        $_SESSION['NotifikasiSwal'] = 'Password Berhasil Diperbarui';
         echo json_encode([
             'status' => 'success',
             'message' => 'Password berhasil diperbarui.'

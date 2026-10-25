@@ -28,7 +28,7 @@
                 <form action="index.php?Page=ProfileUser&Sub=MyLog" method="POST">
                     <div class="row mb-3">
                         <div class="col col-md-12">
-                            <h4><i class="ti ti-bar-chart"></i> Grafik Aktivitas</h4>
+                            <h4><i class="bi bi-bar-chart-line"></i> Grafik Aktivitas</h4>
                         </div>
                     </div>
                     <div class="row">
@@ -108,7 +108,7 @@
                             </select>
                         </div>
                         <div class="col col-md-3 mb-3">
-                            <button type="submit" class="btn btn-sm btn-block btn-outline-secondary"> <i class="ti-search"></i> Go</button>
+                            <button type="submit" class="btn btn-sm btn-block btn-outline-secondary"> <i class="bi bi-search"></i> Go</button>
                         </div>
                     </div>
                 </form>
@@ -133,7 +133,7 @@
                 <form action="javascript:void(0);" id="BatasPencarian">
                     <div class="row mb-3">
                         <div class="col col-md-12">
-                            <h4><i class="ti-time"></i> Log Aktivitas</h4>
+                            <h4><i class="bi bi-clock-history"></i> Log Aktivitas</h4>
                         </div>
                     </div>
                     <div class="row">
@@ -150,7 +150,7 @@
                         <div class="col col-md-12">
                             <div class="input-group">
                                 <input type="text" class="form-control" name="keyword" id="keyword" placeholder="Kata Kunci">
-                                <button type="submit" class="btn btn-sm btn-outline-secondary"> <i class="ti-search"></i> Go</button>
+                                <button type="submit" class="btn btn-sm btn-outline-secondary"> <i class="bi bi-search"></i> Go</button>
                             </div>
                             
                         </div>

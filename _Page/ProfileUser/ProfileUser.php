@@ -1,18 +1,16 @@
-<div class="page-header">
-    <div class="page-block">
-        <div class="row align-items-center">
-            <div class="col-md-12">
-                <div class="page-header-title">
-                    <h5 class="m-b-10">
-                        <a href="index.php?Page=Profile" class="h5">
-                            <i class="bi bi-person-circle"></i> My Profile
-                        </a>
-                    </h5>
-                    <p class="m-b-0">Kelola informasi akses, identitas dan riwayat aktivitas anda</p>
-                </div>
-            </div>
-        </div>
+<div class="page-header dashboard-page-header profile-page-header">
+    <div class="dashboard-heading">
+        <a href="index.php?Page=Profile" class="dashboard-title-link">
+            <h4 class="mb-0"><i class="bi bi-person-circle" aria-hidden="true"></i> My Profile</h4>
+        </a>
+        <p class="mb-0">Kelola informasi akses, identitas dan riwayat aktivitas anda</p>
     </div>
+    <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Profile</li>
+        </ol>
+    </nav>
 </div>
 <div class="pcoded-inner-content">
     <div class="main-body">

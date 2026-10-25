@@ -1,194 +1,106 @@
 <?php
-    //Zona Waktu
     date_default_timezone_set('Asia/Jakarta');
 
-    // Connection
     include "../../_Config/Connection.php";
-    
-    // Simrs Function
-    include "../../_Config/SimrsFunction.php";
-
-    // Session
     include "../../_Config/Session.php";
 
-    // Validasi Sessi Akses
-    if(empty($SessionIdAkses)){
-        echo '
-            <tr>
-                <td align="center" colspan="4">
-                    <small class="text text-danger">Sesi Akses Berakhir! Silahkan Login Ulang!</small>
-                </td>
-            </tr>
-        ';
+    $errorRow = static function (string $message): void {
+        echo '<tr><td class="text-center" colspan="4"><small class="text text-danger">'
+            . htmlspecialchars($message, ENT_QUOTES, 'UTF-8')
+            . '</small></td></tr>';
+    };
+
+    if (empty($SessionIdAkses)) {
+        $errorRow('Sesi akses berakhir! Silakan login ulang.');
         exit;
     }
 
-    // Validasi Tahun dan Bulan Tidak Boleh Kosong
-    if(empty($_POST['tahun'])){
-        echo '
-            <tr>
-                <td align="center" colspan="4">
-                    <small class="text text-danger">Tentukan Periode Tahun Data Terlebih Dulu!</small>
-                </td>
-            </tr>
-        ';
-        exit;
-    }
-    if(empty($_POST['bulan'])){
-        echo '
-            <tr>
-                <td align="center" colspan="4">
-                    <small class="text text-danger">Tentukan Periode Bulan Data Terlebih Dulu!</small>
-                </td>
-            </tr>
-        ';
+    $tahunInput = $_POST['tahun'] ?? '';
+    $bulanInput = $_POST['bulan'] ?? '';
+
+    if (!is_string($tahunInput) || !preg_match('/^\d{4}$/D', $tahunInput)
+        || (int) $tahunInput < 1000
+        || !is_string($bulanInput) || !preg_match('/^(0[1-9]|1[0-2])$/D', $bulanInput)) {
+        $errorRow('Tentukan periode tahun dan bulan yang valid.');
         exit;
     }
 
-    // Buat Variabel
-    $tahun = $_POST['tahun'];
-    $bulan = $_POST['bulan'];
-    $periode_data = "$tahun-$bulan";
-    $bulan_list = [
-        "01" => "Januari",
-        "02" => "Februari",
-        "03" => "Maret",
-        "04" => "April",
-        "05" => "Mei",
-        "06" => "Juni",
-        "07" => "Juli",
-        "08" => "Agustus",
-        "09" => "September",
-        "10" => "Oktober",
-        "11" => "November",
-        "12" => "Desember"
+    $tahun = (int) $tahunInput;
+    $bulan = (int) $bulanInput;
+    $periodeData = sprintf('%04d-%02d', $tahun, $bulan);
+    $startDate = $periodeData . '-01 00:00:00';
+    $endDate = (new DateTimeImmutable($startDate))->modify('+1 month')->format('Y-m-d H:i:s');
+
+    $activitySources = [
+        ['Pasien', 'Data Master Pasien', 'pasien', 'id_akses', 'registered_at', null],
+        ['Kunjungan', 'Kunjungan Rajal/Ranap', 'kunjungan', 'petugas_id', 'datetime_daftar', null],
+        ['Kunjungan', 'SEP', 'kunjungan', 'petugas_id', 'datetime_daftar', 'sep'],
+        ['Kunjungan', 'Diagnosis', 'diagnosis', 'petugas_id', 'datetime_creat', null],
+        ['Kunjungan', 'Tindakan', 'tindakan', 'petugas_id', 'datetime_creat', null],
+        ['Pasien', 'Alergi', 'alergi', 'author_id', 'datetime_creat', null],
+        ['Kunjungan', 'Observation', 'observation', 'petugas_id', 'datetime_entry', null],
+        ['Kunjungan', 'General Consent', 'general_consent', 'petugas_edukasi_id', 'datetime_creat', null]
     ];
-    $nama_bulan = $bulan_list[$bulan];
 
-    // PASIEN
-    $query_pasien = mysqli_query($Conn, "SELECT id_pasien FROM pasien WHERE id_akses='$SessionIdAkses' AND registered_at LIKE '%$periode_data%'");
-    $jml_pasien = mysqli_num_rows($query_pasien);
+    $countQueries = [];
+    $bindValues = [];
+    $bindTypes = '';
 
-    // KUNJUNGAN
-    $query_kunjungan = mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan WHERE petugas_id='$SessionIdAkses' AND datetime_daftar LIKE '%$periode_data%'");
-    $jml_kunjungan = mysqli_num_rows($query_kunjungan);
+    foreach ($activitySources as [$category, $label, $table, $userColumn, $dateColumn, $requiredColumn]) {
+        $countQueries[] = "SELECT '$label' AS label, COUNT(*) AS total
+            FROM `$table`
+            WHERE `$userColumn` = ? AND `$dateColumn` >= ? AND `$dateColumn` < ?"
+            . (isset($requiredColumn) ? " AND `$requiredColumn` IS NOT NULL AND `$requiredColumn` <> ''" : '');
+        $bindValues[] = (int) $SessionIdAkses;
+        $bindValues[] = $startDate;
+        $bindValues[] = $endDate;
+        $bindTypes .= 'iss';
+    }
 
+    $bindParameters = [];
+    foreach ($bindValues as &$bindValue) {
+        $bindParameters[] = &$bindValue;
+    }
+    unset($bindValue);
+
+    try {
+        $stmt = $Conn->prepare(implode(' UNION ALL ', $countQueries));
+        $stmt->bind_param($bindTypes, ...$bindParameters);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $activityCounts = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $activityCounts[$row['label']] = (int) $row['total'];
+        }
+
+        $stmt->close();
+    } catch (mysqli_sql_exception $exception) {
+        error_log('Gagal memuat ringkasan aktivitas Profile: ' . $exception->getMessage());
+        $errorRow('Ringkasan aktivitas gagal dimuat. Silakan coba kembali.');
+        exit;
+    }
+
+    foreach ($activitySources as $index => [$category, $label]) {
+        $categoryAttribute = htmlspecialchars($category, ENT_QUOTES, 'UTF-8');
+        $periodAttribute = htmlspecialchars($periodeData, ENT_QUOTES, 'UTF-8');
+        $rowClass = in_array($category, ['Pasien', 'Kunjungan'], true) && $index < 2
+            ? ' class="modal_detail_aktivitas" data-kategori="' . $categoryAttribute
+                . '" data-periode="' . $periodAttribute . '" style="cursor:pointer;"'
+            : '';
+
+        echo '<tr' . $rowClass . '>'
+            . '<td class="text-center"><small class="text text-muted">' . ($index + 1) . '</small></td>'
+            . '<td><small class="text text-muted">' . $categoryAttribute . '</small></td>'
+            . '<td><small class="text text-muted">' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '</small></td>'
+            . '<td class="text-center"><small class="text text-muted">'
+            . number_format($activityCounts[$label] ?? 0, 0, ',', '.')
+            . '</small></td>'
+            . '</tr>';
+    }
 ?>
-<tr class="modal_detail_aktivitas" data-kategori="Pasien" data-periode="<?php echo $periode_data; ?>" style="cursor:pointer;">
-    <td class="text-center">
-        <small class="text text-muted">1</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Pasien</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Data Master Pasien</small>
-    </td>
-    <td class="text-center">
-        <small class="text text-muted"><?php echo $jml_pasien;?></small>
-    </td>
-</tr>
-<tr class="modal_detail_aktivitas" data-kategori="Kunjungan" data-periode="<?php echo $periode_data; ?>" style="cursor:pointer;">
-    <td class="text-center">
-        <small class="text text-muted">2</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Kunjungan</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Kunjungan Rajal/Ranap</small>
-    </td>
-    <td class="text-center">
-        <small class="text text-muted"><?php echo $jml_kunjungan;?></small>
-    </td>
-</tr>
-<tr>
-    <td class="text-center">
-        <small class="text text-muted">3</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Kunjungan</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">SEP</small>
-    </td>
-    <td class="text-center">
-        <small class="text text-muted">1.000</small>
-    </td>
-</tr>
-<tr>
-    <td class="text-center">
-        <small class="text text-muted">4</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Kunjungan</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Diagnosis</small>
-    </td>
-    <td class="text-center">
-        <small class="text text-muted">1.000</small>
-    </td>
-</tr>
-<tr>
-    <td class="text-center">
-        <small class="text text-muted">5</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Kunjungan</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Rujukan</small>
-    </td>
-    <td class="text-center">
-        <small class="text text-muted">1.000</small>
-    </td>
-</tr>
-<tr>
-    <td class="text-center">
-        <small class="text text-muted">6</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Kunjungan</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Resume Medis</small>
-    </td>
-    <td class="text-center">
-        <small class="text text-muted">1.000</small>
-    </td>
-</tr>
-<tr>
-    <td class="text-center">
-        <small class="text text-muted">7</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Kunjungan</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Anamnesis</small>
-    </td>
-    <td class="text-center">
-        <small class="text text-muted">1.000</small>
-    </td>
-</tr>
-<tr>
-    <td class="text-center">
-        <small class="text text-muted">8</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">Kunjungan</small>
-    </td>
-    <td class="text-left">
-        <small class="text text-muted">General Consent</small>
-    </td>
-    <td class="text-center">
-        <small class="text text-muted">1.000</small>
-    </td>
-</tr>
-
 <script>
-    var nama_bulan = "<?php echo $nama_bulan; ?>" ;
-    var tahun      = "<?php echo $tahun; ?>" ;
-    $('.show_modal_filter_aktivitas').html(''+nama_bulan+', '+tahun+'');
+    $('.show_modal_filter_aktivitas').text(
+        <?php echo json_encode(sprintf('%02d', $bulan)); ?> + ', ' + <?php echo json_encode((string) $tahun); ?>
+    );
 </script>

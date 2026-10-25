@@ -149,8 +149,8 @@ while ($row = mysqli_fetch_assoc($qryFitur)) {
                                             $no2 = 1;
                                             foreach ($fiturList as $fitur) {
                                                 $statusIcon = ($fitur['status'] === 'Yes')
-                                                    ? '<span class="text-success"><i class="ti ti-check"></i></span>'
-                                                    : '<span class="text-danger"><i class="ti ti-close"></i></span>';
+                                                    ? '<span class="text-success"><i class="bi bi-check-lg"></i></span>'
+                                                    : '<span class="text-danger"><i class="bi bi-x-lg"></i></span>';
 
                                                 echo '<tr>';
                                                 echo '  <td align="right"><small>'.$statusIcon.' '.$no.'.'.$no2.'</small></td>';

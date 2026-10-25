@@ -194,7 +194,7 @@
 <div class="card-footer text-left">
     <div class="btn-group">
         <button type="button" class="btn btn-sm btn-outline-secondary" id="PrevPage" value="<?php echo $prev;?>">
-            <i class="ti-angle-left"></i>
+            <i class="bi bi-chevron-left"></i>
         </button>
         <?php 
             //Navigasi nomor
@@ -229,7 +229,7 @@
             }
         ?>
         <button type="button" class="btn btn-sm btn-outline-secondary" id="NextPage" value="<?php echo $next;?>">
-            <i class="ti-angle-right"></i>
+            <i class="bi bi-chevron-right"></i>
         </button>
     </div>
 </div>

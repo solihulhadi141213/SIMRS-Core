@@ -5,5 +5,8 @@
         "ezyang/htmlpurifier": "^4.19",
         "phpoffice/phpspreadsheet": "^1.30",
         "vlucas/phpdotenv": "^5.7"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^4.0"
     }
 }
