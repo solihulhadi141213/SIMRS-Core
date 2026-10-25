@@ -1,8 +1,8 @@
 
     <div class="sidebar_toggle">
-        <a href="javascrip:void(0);">
-            <i class="icon-close icons"></i>
-        </a>
+        <button type="button" class="sidebar-close" data-layout-toggle="sidebar" aria-label="Tutup menu">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
     </div>
 
     <div class="pcoded-inner-navbar main-menu scroll-container">

@@ -1,4 +1,4 @@
-<div class="theme-loader">
+<div class="theme-loader" aria-hidden="true">
     <div class="loader-track">
         <div class="preloader-wrapper">
             <div class="spinner-layer spinner-blue">

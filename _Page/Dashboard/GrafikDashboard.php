@@ -8,15 +8,14 @@
 
     // Ambil input dengan default
     $periode = !empty($_POST['periode']) ? $_POST['periode'] : "Tahunan";
-    $tahun   = !empty($_POST['tahun']) ? $_POST['tahun'] : date('Y');
-    $bulan   = !empty($_POST['bulan']) ? $_POST['bulan'] : date('m');
+    $tahun   = !empty($_POST['tahun']) ? (int) $_POST['tahun'] : (int) date('Y');
+    $bulan   = !empty($_POST['bulan']) ? (int) $_POST['bulan'] : (int) date('m');
 
     // Inisialisasi
     $kategori = [];
     $data = [];
 
-    // Karena tanggal = VARCHAR → pakai STR_TO_DATE
-    $colTanggal = "STR_TO_DATE(datetime_daftar, '%Y-%m-%d')";
+    $colTanggal = "datetime_daftar";
 
     // ================= BULANAN =================
     if ($periode == "Bulanan") {

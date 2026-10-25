@@ -90,11 +90,13 @@ $(document).ready(function() {
 
     //Kondisi saat tampilkan password
     $('#TampilkanPassword').click(function(){
-        if($(this).is(':checked')){
-            $('#password').attr('type','text');
-        }else{
-            $('#password').attr('type','password');
-        }
+        const passwordVisible = $(this).is(':checked');
+        $('#password').attr('type', passwordVisible ? 'text' : 'password');
+        $(this).siblings('.password-toggle')
+            .attr('aria-label', passwordVisible ? 'Sembunyikan Password' : 'Tampilkan Password')
+            .find('i')
+            .toggleClass('bi-eye', !passwordVisible)
+            .toggleClass('bi-eye-slash', passwordVisible);
     });
 
     

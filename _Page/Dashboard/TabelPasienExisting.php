@@ -23,7 +23,7 @@
     // =========================
     // WHERE CONDITION
     // =========================
-    $where = "WHERE k.status!='Selesai' AND k.status!='Batal'";
+    $where = "WHERE k.status='Terdaftar'";
 
     if(!empty($keyword)){
         $keyword = mysqli_real_escape_string($Conn, $keyword);

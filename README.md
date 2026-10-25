@@ -10,6 +10,28 @@ SIMRS Core V3 is a hospital management information system integrated with electr
 * MySql 9.1.0
 * Apache 2.4.62.1
 
+### Requirements ###
+
+* PHP 8.2 or later with the `mysqli` extension enabled
+* MySQL-compatible database with the application schema imported
+* A command-line terminal for running the initial installer
+
+### Active Features ###
+
+* Dashboard and hospital operations modules
+* User, access-entity, and feature-permission management
+* Reference data and external integrations listed under [Module](#module)
+
+### Initial Installation ###
+
+1. Create the application database and import `_Database/schema.sql` before continuing.
+2. Configure the database connection in `_Config/Connection.php`.
+3. Ensure `_Database/referance/default_reference_feature_code.json` is present.
+4. From the project root, run `php instal.php` once using the server's PHP CLI.
+5. Enter the administrator email and password when prompted. The password is entered visibly in the CLI and stored as a password hash.
+
+The installer seeds the `akses_fitur` table from the reference JSON when it is empty, creates the default `Admin` access entity, assigns all features to that entity, creates the `Admin Faskes` account, and grants the account all features. The account's `tanggal` and `updatetime` values are stored in UTC. The installer refuses to run if access accounts or entities already exist, preventing accidental duplicate setup.
+
 ### Dependencies ###
 
 * Bootstrap 5.3.8
@@ -22,6 +44,10 @@ SIMRS Core V3 is a hospital management information system integrated with electr
 * font-awesome
 * apexcharts ^5.10.4
 * bootstrap-icons ^1.13.1
+* nullpunkt/lz-string-php ^1.3
+* mpdf/mpdf ^8.1
+* ezyang/htmlpurifier ^4.19
+* phpoffice/phpspreadsheet ^1.30
 
 
 ### Module ###
@@ -93,4 +119,3 @@ SIMRS Core V3 is a hospital management information system integrated with electr
 
 ### Referance
 * Bridging BPJS : https://dvlp.bpjs-kesehatan.go.id:8888/trust-mark/portal.html
-

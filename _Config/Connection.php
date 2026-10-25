@@ -2,8 +2,9 @@
     //Ini adalah halaman untuk melakukan konfigurasi database
     $servername = "localhost";
     $username   = "root";
-    $password   = "arunaparasilvanursari";
+    $password   = "";
     $db         = "elsyifa_core";
+    
     // Create connection
     $Conn = new mysqli($servername, $username, $password, $db);
     // Check connection

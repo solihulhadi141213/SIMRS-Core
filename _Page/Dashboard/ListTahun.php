@@ -4,7 +4,6 @@
     $query = mysqli_query($Conn, "
         SELECT DISTINCT YEAR(datetime_daftar) as tahun 
         FROM kunjungan 
-        WHERE tanggal IS NOT NULL 
         ORDER BY tahun ASC
     ");
 

@@ -1,0 +1,527 @@
+[
+    {
+        "id_akses_fitur": "1",
+        "nama_fitur": "Kelola Referensi Akses",
+        "kategori": "Aksesibilitas",
+        "kode": "Ni4cfmtrUT",
+        "keterangan": "Masuk ke halaman referensi akses fitur"
+    },
+    {
+        "id_akses_fitur": "2",
+        "nama_fitur": "Entitas Akses",
+        "kategori": "Aksesibilitas",
+        "kode": "E5LS8US0cj",
+        "keterangan": "kelola data entitas"
+    },
+    {
+        "id_akses_fitur": "3",
+        "nama_fitur": "Akses User",
+        "kategori": "Aksesibilitas",
+        "kode": "RKhN2MSMep",
+        "keterangan": "masuk ke halaman akses user"
+    },
+    {
+        "id_akses_fitur": "5",
+        "nama_fitur": "Pengajuan Akses",
+        "kategori": "Aksesibilitas",
+        "kode": "YscRqcNMk8",
+        "keterangan": "Data yang menampilkan semua data permintaan akses"
+    },
+    {
+        "id_akses_fitur": "6",
+        "nama_fitur": "Profile Faskes",
+        "kategori": "Pengaturan",
+        "kode": "LX8gL8QXX9",
+        "keterangan": "Mengatur informasi Faskes"
+    },
+    {
+        "id_akses_fitur": "8",
+        "nama_fitur": "Percetakan",
+        "kategori": "Pengaturan",
+        "kode": "C77xoLcmaq",
+        "keterangan": "Untuk mengatur mode cetak"
+    },
+    {
+        "id_akses_fitur": "9",
+        "nama_fitur": "Bridging",
+        "kategori": "Pengaturan",
+        "kode": "nl1n7YdCYq",
+        "keterangan": "Pengaturan parameter bridging"
+    },
+    {
+        "id_akses_fitur": "10",
+        "nama_fitur": "Email Gateway",
+        "kategori": "Pengaturan",
+        "kode": "kDZ0amyC6b",
+        "keterangan": "Untuk melakukan pengaturan email gateway"
+    },
+    {
+        "id_akses_fitur": "11",
+        "nama_fitur": "Log Aktivitas",
+        "kategori": "Monitoring",
+        "kode": "OzuT2lskAZ",
+        "keterangan": "Halaman yang digunakan untuk melakukan pemantauan aktivitas user terhadap aplikasi"
+    },
+    {
+        "id_akses_fitur": "12",
+        "nama_fitur": "Data Master Obat & Alkes",
+        "kategori": "Obat & Alkes",
+        "kode": "c0YwXbjTPo",
+        "keterangan": "Mengelola data master obat dan alkes"
+    },
+    {
+        "id_akses_fitur": "13",
+        "nama_fitur": "Penyimpanan Farmasi",
+        "kategori": "Obat & Alkes",
+        "kode": "ScbnsZcVvq",
+        "keterangan": "Kelola data lokasi tempat penyimpanan obat dan alkes"
+    },
+    {
+        "id_akses_fitur": "14",
+        "nama_fitur": "Monitoring Antrian",
+        "kategori": "Monitoring",
+        "kode": "ZxhwKfAwAY",
+        "keterangan": "Halam untuk melakukan pemantauan kinerja antrian"
+    },
+    {
+        "id_akses_fitur": "15",
+        "nama_fitur": "Monitoring Ruangan",
+        "kategori": "Monitoring",
+        "kode": "g2Zx0Lsl1q",
+        "keterangan": "Halaman yang digunakan untuk mengamati kinerja pendataan ruangan inap"
+    },
+    {
+        "id_akses_fitur": "16",
+        "nama_fitur": "Laporan Pengguna",
+        "kategori": "Monitoring",
+        "kode": "9OjkuMqbsG",
+        "keterangan": "Halaman yang digunakan untuk mengetahui keluhan dan masukan dari pengguna terhadap pengembangan aplikasi"
+    },
+    {
+        "id_akses_fitur": "17",
+        "nama_fitur": "Daftar Antrian",
+        "kategori": "Antrian",
+        "kode": "PfDEKKimeh",
+        "keterangan": "Halaman yang berfungsi menampilkan data tabel / list antrian"
+    },
+    {
+        "id_akses_fitur": "18",
+        "nama_fitur": "Dashboard Antrian",
+        "kategori": "Antrian",
+        "kode": "kLOT1iidNU",
+        "keterangan": "Fitur/Halaman yang berfungsi untuk menampilkan task ID record dari WS BPJS"
+    },
+    {
+        "id_akses_fitur": "19",
+        "nama_fitur": "Stock Opename",
+        "kategori": "Obat & Alkes",
+        "kode": "v2BiFR0ehy",
+        "keterangan": "Halaman yang digunakan untuk mengelola kegiatan stock opename obat dan alkes di farmasi"
+    },
+    {
+        "id_akses_fitur": "20",
+        "nama_fitur": "Organization",
+        "kategori": "Referensi",
+        "kode": "iaSALIjrf2",
+        "keterangan": "Halaman yang berfungsi untuk mengelola data Organization"
+    },
+    {
+        "id_akses_fitur": "21",
+        "nama_fitur": "Location",
+        "kategori": "Referensi",
+        "kode": "uYR8rqHLXq",
+        "keterangan": "Halaman yang berfungsi mengelola Location"
+    },
+    {
+        "id_akses_fitur": "22",
+        "nama_fitur": "Practitioner",
+        "kategori": "Referensi",
+        "kode": "8rM1HUERv2",
+        "keterangan": "Halaman yang berfungsi mengelola Practitioner"
+    },
+    {
+        "id_akses_fitur": "23",
+        "nama_fitur": "Poliklinik",
+        "kategori": "Referensi",
+        "kode": "SSpjtfRfDl",
+        "keterangan": "Halaman yang berfungsi mengelola data poliklinik"
+    },
+    {
+        "id_akses_fitur": "24",
+        "nama_fitur": "Dokter",
+        "kategori": "Referensi",
+        "kode": "aYURuzwwnQ",
+        "keterangan": "Halaman yang berfungsi mengelola data dokter"
+    },
+    {
+        "id_akses_fitur": "25",
+        "nama_fitur": "Kelas Ruangan",
+        "kategori": "Referensi",
+        "kode": "8prgG5vbhC",
+        "keterangan": "Halaman yang berfungsi mengelola data kelas dan ruangan"
+    },
+    {
+        "id_akses_fitur": "26",
+        "nama_fitur": "Jadwal praktek",
+        "kategori": "Referensi",
+        "kode": "3zL8ERMPEe",
+        "keterangan": "Halaman yang berfungsi mengelola data jadwal praktek"
+    },
+    {
+        "id_akses_fitur": "27",
+        "nama_fitur": "Wilayah mendagri",
+        "kategori": "Referensi",
+        "kode": "tWQ6eBzlpc",
+        "keterangan": "Halaman yang digunakan untuk mengelola data wilayah mendagri"
+    },
+    {
+        "id_akses_fitur": "28",
+        "nama_fitur": "Wilayah BPJS",
+        "kategori": "Referensi",
+        "kode": "6p4MtNxb88",
+        "keterangan": "Halaman yang digunakan untuk mengelola data wilayah dari BPJS"
+    },
+    {
+        "id_akses_fitur": "29",
+        "nama_fitur": "Wilayah SIMRS",
+        "kategori": "Referensi",
+        "kode": "x0mQfbm1FD",
+        "keterangan": "Halaman yang digunakan untuk mengelola data wilayah pada database SIMRS"
+    },
+    {
+        "id_akses_fitur": "30",
+        "nama_fitur": "Diagnosa BPJS",
+        "kategori": "Referensi",
+        "kode": "Y0Z0rA6w74",
+        "keterangan": "Halaman yang digunakan untuk mengelola data diagnosa dari service beriding BPJS"
+    },
+    {
+        "id_akses_fitur": "31",
+        "nama_fitur": "Loinc",
+        "kategori": "Referensi",
+        "kode": "HsAy0ZAzzt",
+        "keterangan": "Halaman yang digunakan untuk mengelola data referensi Loinc"
+    },
+    {
+        "id_akses_fitur": "32",
+        "nama_fitur": "Snomed",
+        "kategori": "Referensi",
+        "kode": "qUL6USfUbB",
+        "keterangan": "Halaman yang digunakan untuk mengelola data referensi snomed"
+    },
+    {
+        "id_akses_fitur": "33",
+        "nama_fitur": "Diagnosa SIMRS",
+        "kategori": "Referensi",
+        "kode": "b8P9QhEMQE",
+        "keterangan": "Halaman ini digunakan untuk mengelola data diagnosa pada simrs"
+    },
+    {
+        "id_akses_fitur": "34",
+        "nama_fitur": "Pasien",
+        "kategori": "Rekam Medis",
+        "kode": "iTITO449dV",
+        "keterangan": "Halaman yang digunakan untuk mengelola data utama pasien"
+    },
+    {
+        "id_akses_fitur": "35",
+        "nama_fitur": "Kunjungan",
+        "kategori": "Rekam Medis",
+        "kode": "Zi3QW6vfyi",
+        "keterangan": "Halaman yang digunakan untuk mengelola data kunjungan pasien"
+    },
+    {
+        "id_akses_fitur": "36",
+        "nama_fitur": "Jadwal Operasi",
+        "kategori": "Rekam Medis",
+        "kode": "Dd6UIUIZxx",
+        "keterangan": "Halaman yang digunakan untuk mengelola jadwal pelaksanaan operasi"
+    },
+    {
+        "id_akses_fitur": "37",
+        "nama_fitur": "SEP",
+        "kategori": "Rekam Medis",
+        "kode": "znGzSzLoEs",
+        "keterangan": "Halaman yang digunakan untuk mengelola data pembuatan SEP"
+    },
+    {
+        "id_akses_fitur": "38",
+        "nama_fitur": "Approval",
+        "kategori": "Rekam Medis",
+        "kode": "3jt6XIicT7",
+        "keterangan": "Halaman yang digunakan untuk mengelola data approval back date dan finger print"
+    },
+    {
+        "id_akses_fitur": "39",
+        "nama_fitur": "Rujukan",
+        "kategori": "Rekam Medis",
+        "kode": "05oTlNw4Y7",
+        "keterangan": "Halaman yang digunakan untuk mengelola data rujukan"
+    },
+    {
+        "id_akses_fitur": "40",
+        "nama_fitur": "SPRI/SKDP",
+        "kategori": "Rekam Medis",
+        "kode": "ctLQwPqvCf",
+        "keterangan": "Halaman yang digunakan untuk mengelola data SPI dan SKDP"
+    },
+    {
+        "id_akses_fitur": "41",
+        "nama_fitur": "Fingerprint",
+        "kategori": "Rekam Medis",
+        "kode": "zjmuixVRWq",
+        "keterangan": "Halaman yang digunakan untuk mengelola data fingerprint"
+    },
+    {
+        "id_akses_fitur": "42",
+        "nama_fitur": "Monitoring",
+        "kategori": "Rekam Medis",
+        "kode": "j94LphHBqV",
+        "keterangan": "Halaman yang digunakan untuk melihat semua data monitoring rekam medis"
+    },
+    {
+        "id_akses_fitur": "43",
+        "nama_fitur": "Laporan",
+        "kategori": "Rekam Medis",
+        "kode": "L8dpIdlwnb",
+        "keterangan": "Halaman yang digunakan untuk menampilkan semua laporan rekam medis"
+    },
+    {
+        "id_akses_fitur": "44",
+        "nama_fitur": "Satu Sehat",
+        "kategori": "Pengaturan",
+        "kode": "FBI4OxEl5b",
+        "keterangan": "Halaman yang digunakan untuk mengatur parameter koneksi satu sehat"
+    },
+    {
+        "id_akses_fitur": "45",
+        "nama_fitur": "Resep Obat Farmasi",
+        "kategori": "Obat & Alkes",
+        "kode": "olW5uQFC1H",
+        "keterangan": "Halaman yang digunakan oleh petugas farmasi untuk mengelola resep masuk"
+    },
+    {
+        "id_akses_fitur": "46",
+        "nama_fitur": "Expired & Limit",
+        "kategori": "Obat & Alkes",
+        "kode": "ovp6E0xIFN",
+        "keterangan": "Halaman untuk mengelola data obat yang sudah expired dan hampir habis"
+    },
+    {
+        "id_akses_fitur": "47",
+        "nama_fitur": "Bantuan",
+        "kategori": "Bantuan",
+        "kode": "5fOBWxW2qn",
+        "keterangan": "Halaman untuk mengelola data bantuan yang dapat membantu pengguna mengetahui cara menggunakan aplikasi"
+    },
+    {
+        "id_akses_fitur": "48",
+        "nama_fitur": "Tarif Dan Tindakan",
+        "kategori": "Keuangan",
+        "kode": "XXBcV6NP9Z",
+        "keterangan": "Halaman yang mengelola data tarif dan tindakan"
+    },
+    {
+        "id_akses_fitur": "49",
+        "nama_fitur": "Akun Perkiraan",
+        "kategori": "Keuangan",
+        "kode": "p4TSzoYi1p",
+        "keterangan": "Halaman yang digunakan untuk mengelola akun keuangan"
+    },
+    {
+        "id_akses_fitur": "50",
+        "nama_fitur": "Transaksi",
+        "kategori": "Keuangan",
+        "kode": "6Wq8PdHbcV",
+        "keterangan": "Halaman yang digunakan untuk mengelola data transaksi operasional dan non operasional"
+    },
+    {
+        "id_akses_fitur": "51",
+        "nama_fitur": "Supplier",
+        "kategori": "Keuangan",
+        "kode": "VhC34wPcG5",
+        "keterangan": "Halaman yang digunakan untuk mengelola data kontak supplier"
+    },
+    {
+        "id_akses_fitur": "52",
+        "nama_fitur": "Setting Sirs Online",
+        "kategori": "Pengaturan",
+        "kode": "I5FpOiKA1g",
+        "keterangan": "Konfigurasi untuk akses SIRS online"
+    },
+    {
+        "id_akses_fitur": "53",
+        "nama_fitur": "Referensi TT Sirs Online",
+        "kategori": "Sirs Online",
+        "kode": "Sh43jR5XM9",
+        "keterangan": "Referensi jenis ruangan SIRS Online"
+    },
+    {
+        "id_akses_fitur": "54",
+        "nama_fitur": "Data TT Sirs Online",
+        "kategori": "Sirs Online",
+        "kode": "PAp18idUFM",
+        "keterangan": "Data tempat tidur fasyankes berdasarkan data SIRS online"
+    },
+    {
+        "id_akses_fitur": "55",
+        "nama_fitur": "Referensi SDM Sirs Online",
+        "kategori": "Sirs Online",
+        "kode": "nmS9P3ubwc",
+        "keterangan": "Data referensi jenis SDM menurut SIRS Online"
+    },
+    {
+        "id_akses_fitur": "56",
+        "nama_fitur": "Data SDM Sirs Online",
+        "kategori": "Sirs Online",
+        "kode": "Ic1Bn4K9BN",
+        "keterangan": "Data SDM Fasyankes Sirs Online"
+    },
+    {
+        "id_akses_fitur": "57",
+        "nama_fitur": "Referensi Alkes SIRS Online",
+        "kategori": "SIRS Online",
+        "kode": "BbugxfZCXj",
+        "keterangan": "Referensi Nama Alkes SIRS Online"
+    },
+    {
+        "id_akses_fitur": "58",
+        "nama_fitur": "Data Alkes Sirs Online",
+        "kategori": "Sirs Online",
+        "kode": "APzGdlAT7w",
+        "keterangan": "Data ketersediaan Alkes (APD) pada SIRS Online"
+    },
+    {
+        "id_akses_fitur": "59",
+        "nama_fitur": "Setting Sisrute",
+        "kategori": "Pengaturan",
+        "kode": "e0ZNkTx29X",
+        "keterangan": "Konfigurasi koneksi SIRUTE"
+    },
+    {
+        "id_akses_fitur": "61",
+        "nama_fitur": "Pasien SHK",
+        "kategori": "Sirs Online",
+        "kode": "UO0QqDTAtK",
+        "keterangan": "Kelola data pasien SHK"
+    },
+    {
+        "id_akses_fitur": "62",
+        "nama_fitur": "Oksigen",
+        "kategori": "Sirs Online",
+        "kode": "oHfxmmTlbs",
+        "keterangan": "Inventaris oksigen"
+    },
+    {
+        "id_akses_fitur": "63",
+        "nama_fitur": "Alkes SIRS Online",
+        "kategori": "Sirs Online",
+        "kode": "MnNZjUXe1h",
+        "keterangan": "Kelola laporan ketersedian alkes di SIRS online"
+    },
+    {
+        "id_akses_fitur": "64",
+        "nama_fitur": "Nakes Terinfeksi",
+        "kategori": "SIRS Online",
+        "kode": "4kimCMM1sk",
+        "keterangan": "Fitur untuk mengelola daftar nakes yang terinfeksi"
+    },
+    {
+        "id_akses_fitur": "65",
+        "nama_fitur": "Referensi Alergi",
+        "kategori": "Referensi",
+        "kode": "ZBUYol0ySM",
+        "keterangan": "Menghimpun data alergi dari berbagai code system"
+    },
+    {
+        "id_akses_fitur": "66",
+        "nama_fitur": "KFA",
+        "kategori": "Referensi",
+        "kode": "5bbcS3mJoY",
+        "keterangan": "Kamus Farmasi dan Alat Kesehatan (KFA)"
+    },
+    {
+        "id_akses_fitur": "67",
+        "nama_fitur": "Wilayah Satu Sehat",
+        "kategori": "Referensi",
+        "kode": "NaRe5gboHP",
+        "keterangan": "Referensi Wilayah Yang Berasal Dari Satu Sehat"
+    },
+    {
+        "id_akses_fitur": "68",
+        "nama_fitur": "Medication",
+        "kategori": "Obat & Alkes",
+        "kode": "yAFYY0uO14",
+        "keterangan": "Data medication obat yang terhubung dengan satu sehat"
+    },
+    {
+        "id_akses_fitur": "69",
+        "nama_fitur": "Antrian Panggil",
+        "kategori": "Antrian",
+        "kode": "xbmG7Ps7oL",
+        "keterangan": "Halaman untuk mengelola pemanggilan antrian poliklinik"
+    },
+    {
+        "id_akses_fitur": "70",
+        "nama_fitur": "Setting Koneksi Monitor Antrian",
+        "kategori": "Antrian",
+        "kode": "nTuLofvV0Y",
+        "keterangan": "Form untuk mengelola pengaturan koneksi menuju monitor antrian"
+    },
+    {
+        "id_akses_fitur": "71",
+        "nama_fitur": "Laporan Top Diagnosa",
+        "kategori": "Laporan",
+        "kode": "3cesc0LfAU",
+        "keterangan": "Halaman untuk menampilkan top diagnosa"
+    },
+    {
+        "id_akses_fitur": "72",
+        "nama_fitur": "Radix",
+        "kategori": "Pengaturan",
+        "kode": "wmoQB4r6r8",
+        "keterangan": "Fitur koneksi dengan aplikasi Radix"
+    },
+    {
+        "id_akses_fitur": "73",
+        "nama_fitur": "Analyza",
+        "kategori": "Pengaturan",
+        "kode": "J7pODP9bSV",
+        "keterangan": "Halaman untuk mengelola pengaturan koneksi dengan aplikasi Analyza"
+    },
+    {
+        "id_akses_fitur": "74",
+        "nama_fitur": "Laboratorium V.2",
+        "kategori": "Laboratorium",
+        "kode": "X24wwoFCTd",
+        "keterangan": "Halaman untuk mengelola data permintaan pemeriksaan laboratorium dari Analyza"
+    },
+    {
+        "id_akses_fitur": "75",
+        "nama_fitur": "Google Credential",
+        "kategori": "Pengaturan",
+        "kode": "Lt28BHRKRT",
+        "keterangan": "Halaman untuk mengelola google credential"
+    },
+    {
+        "id_akses_fitur": "76",
+        "nama_fitur": "Email Gateway2",
+        "kategori": "Pengaturan",
+        "kode": "vRT71aRZlm",
+        "keterangan": "Halaman untuk pengaturan Email Gateway"
+    },
+    {
+        "id_akses_fitur": "78",
+        "nama_fitur": "Download Pasien",
+        "kategori": "Rekam Medis",
+        "kode": "wrA8sp3Y4r",
+        "keterangan": "Ijin untuk melakukan download data pasien"
+    },
+    {
+        "id_akses_fitur": "79",
+        "nama_fitur": "Download Kunjungan",
+        "kategori": "Rekam Medis",
+        "kode": "AF4RhT3jlD",
+        "keterangan": "Untuk ijin download data kunjungan"
+    }
+]

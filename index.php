@@ -74,40 +74,39 @@
     : "Dashboard";
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
     <?php
         include "_Partial/Head.php";
     ?>
-    <body>
+    <body class="application-shell">
         <?php
             // Untuk menampilkan Pre Loader Disini
             include "_Partial/PreLoader.php";
         ?>
-        <div id="pcoded" class="pcoded">
-            <div class="pcoded-overlay-box"></div>
+        <div id="pcoded" class="pcoded" theme-layout="vertical" vertical-nav-type="expanded" vertical-effect="push" vertical-placement="left" vertical-layout="wide" pcoded-device-type="desktop">
+            <button type="button" class="pcoded-overlay-box" aria-label="Tutup menu"></button>
             <div class="pcoded-container navbar-wrapper">
-                <nav class="navbar header-navbar pcoded-header bg-primary">
+                <header class="navbar header-navbar pcoded-header bg-primary">
                     <div class="navbar-wrapper">
                         <div class="navbar-logo">
-                            <a class="mobile-menu waves-effect waves-light" id="mobile-collapse" href="javascript:void(0);">
-                                <i class="ti-menu"></i>
-                            </a>
-                            <a href="index.php" class="">
-                                <h4><?php echo "$hospital_name"; ?></h4>
-                            </a>
-                            <a class="mobile-options waves-effect waves-light">
-                                <i class="ti-more"></i>
+                            <button type="button" class="mobile-menu sidebar-menu-toggle" data-layout-toggle="sidebar" aria-label="Buka menu" aria-controls="main-navigation" aria-expanded="false">
+                                <i class="bi bi-list" aria-hidden="true"></i>
+                            </button>
+                            <a href="index.php" class="brand-link" aria-label="Beranda <?php echo htmlspecialchars($hospital_name, ENT_QUOTES, 'UTF-8'); ?>">
+                                <span><?php echo htmlspecialchars($hospital_name, ENT_QUOTES, 'UTF-8'); ?></span>
                             </a>
                         </div>
                         <div class="navbar-container container-fluid">
                             <ul class="nav-left">
                                 <li>
-                                    <div class="sidebar_toggle"><a href="javascript:void(0)"><i class="ti-menu"></i></a></div>
+                                    <button type="button" class="sidebar_toggle sidebar-menu-toggle" data-layout-toggle="sidebar" aria-label="Tutup menu" aria-controls="main-navigation" aria-expanded="true">
+                                        <i class="bi bi-list" aria-hidden="true"></i>
+                                    </button>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" onclick="javascript:toggleFullScreen()" class="waves-effect waves-light">
-                                        <i class="ti-fullscreen"></i>
-                                    </a>
+                                    <button type="button" class="header-action" data-fullscreen-toggle aria-label="Tampilan layar penuh">
+                                        <i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>
+                                    </button>
                                 </li>
                             </ul>
                             <ul class="nav-right">
@@ -118,25 +117,25 @@
 
                                 <!-- Menampilkan Dropdown Profil -->
                                 <li class="user-profile header-notification">
-                                    <a href="javascript:void(0);" class="waves-effect waves-light">
-                                        <img src="assets/images/<?php echo $LinkFotoProfile;?>" class="img-radius" width="45px" alt="User-Profile-Image">
-                                        <span><?php echo $SessionNama;?></span>
-                                        <i class="ti-angle-down"></i>
+                                    <a href="javascript:void(0);" class="profile-toggle" aria-expanded="false" aria-label="Menu pengguna <?php echo htmlspecialchars($SessionNama, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <img src="assets/img/<?php echo htmlspecialchars($LinkFotoProfile, ENT_QUOTES, 'UTF-8'); ?>" class="img-radius" width="40" height="40" alt="">
+                                        <span><?php echo htmlspecialchars($SessionNama, ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <i class="bi bi-chevron-down" aria-hidden="true"></i>
                                     </a>
                                     <ul class="show-notification profile-notification">
                                         <li class="waves-effect waves-light border-bottom border-1 border-bottom-default">
-                                            <a href="index.php?Page=Profile" class="p-2 is-hover">
-                                                <i class="ti-user"></i> Profile
+                                            <a href="index.php?Page=Profile" class="profile-menu-link">
+                                                <i class="bi bi-person" aria-hidden="true"></i> <span>Profile</span>
                                             </a>
                                         </li>
                                         <li class="waves-effect waves-light border-bottom border-1 border-bottom-default">
-                                            <a href="index.php?Page=Help" class="p-2 is-hover">
-                                                <i class="icofont-question-circle"></i></i> Bantuan
+                                            <a href="index.php?Page=Help" class="profile-menu-link">
+                                                <i class="bi bi-question-circle" aria-hidden="true"></i> <span>Bantuan</span>
                                             </a>
                                         </li>
                                         <li class="waves-effect waves-light border-bottom border-1 border-bottom-default">
-                                            <a href="javascript:void(0);" class="p-2 is-hover" data-bs-toggle="modal" data-bs-target="#ModalLogout">
-                                                <i class="ti-lock"></i> Logout
+                                            <a href="javascript:void(0);" class="profile-menu-link" data-bs-toggle="modal" data-bs-target="#ModalLogout">
+                                                <i class="bi bi-box-arrow-right" aria-hidden="true"></i> <span>Logout</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -145,25 +144,28 @@
                             </ul>
                         </div>
                     </div>
-                </nav>
+                </header>
                 <div class="pcoded-main-container">
                     <div class="pcoded-wrapper">
-                        <nav class="pcoded-navbar">
+                        <nav class="pcoded-navbar" id="main-navigation" aria-label="Menu utama">
                             <?php
                                 // Menampilkan Menu Kiri
                                 include "_Partial/Menu.php";
                             ?>
                         </nav>
-                        <div class="pcoded-content">
+                        <main class="pcoded-content" id="main-content">
                             <?php
                                 // Routing Halaman
                                 include "_Partial/RoutingPage.php";
                             ?>
-                        </div>
+                        </main>
                     </div>
                 </div>
             </div>
         </div>   
+        <footer id="app-footer" class="application-footer">
+            <?php include "_Partial/Copyright.php"; ?>
+        </footer>
         <?php
             // Footer JS
             include "_Partial/FooterJs.php";
@@ -180,13 +182,5 @@
             //RoutingSwall
             include "_Partial/RoutingSwal.php";
         ?>
-
-        
     </body>
-    <footer class="text-right">
-        <?php
-            include "_Partial/Copyright.php";
-        ?>
-    </footer>
-    
 </html>

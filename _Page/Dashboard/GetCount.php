@@ -13,10 +13,10 @@
     $JumlahKunjungan  = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan"));
 
     // Hitung Jumlah Poliklinik
-    $JumlahPoliklinik = mysqli_num_rows(mysqli_query($Conn, "SELECT id_poliklinik FROM poliklinik WHERE status='Aktif'"));
+    $JumlahPoliklinik = mysqli_num_rows(mysqli_query($Conn, "SELECT id_poliklinik FROM poliklinik WHERE status=1"));
 
     // Hitung Jumlah Total Tempat Tidur
-    $JumlahBed = mysqli_num_rows(mysqli_query($Conn, "SELECT id_ruang_rawat FROM ruang_rawat WHERE kategori='bed' AND status='Aktif'"));
+    $JumlahBed = mysqli_num_rows(mysqli_query($Conn, "SELECT id_tempat_tidur FROM rr_tempat_tidur WHERE status=1"));
 
     // Tampilkan Response
     echo json_encode([

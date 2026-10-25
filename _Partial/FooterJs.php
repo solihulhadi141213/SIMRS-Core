@@ -4,7 +4,7 @@
 <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 
 <!-- jquery-ui-1.14.2 UI JS -->
-<script src="assets/jquery-ui-1.14.2/jquery-ui.min.js"></script>
+<script src="node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
 
 <!-- bootstrap -->
 <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -18,12 +18,9 @@
 ?>
 
 <!-- menu js -->
-<script type="text/javascript" src="assets/js/accordion.js"></script>
-<script src="assets/js/pcoded.min.js"></script>
-<script src="assets/js/vertical-layout.min.js "></script>
 
 <!-- script.js -->
-<script type="text/javascript" src="assets/js/script.js?v=1"></script>
+<script type="text/javascript" src="assets/js/main.js?v=<?php echo filemtime(__DIR__ . '/../assets/js/main.js'); ?>"></script>
 
 <!-- Summernote -->
 <?php 
@@ -41,7 +38,7 @@
     // Agar aplikasi lebih ringan maka qrcodejs hanya dipanggil pada halaman tertentu
     if($Page=="Kunjungan"){
         echo '
-            <script src="node_modules\qrcodejs\qrcode.min.js"></script>
+            <script src="node_modules/qrcodejs/qrcode.min.js"></script>
         ';
     }
 ?>
@@ -57,13 +54,10 @@
 ?>
 
 <!-- jQuery-Mask-Plugin -->
-<script src="assets/jQuery-Mask-Plugin/dist/jquery.mask.min.js"></script>
+<script src="node_modules/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
 
 <!-- Driver -->
-<script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+<script src="node_modules/driver.js/dist/driver.js.iife.js"></script>
 
 <!-- Select2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<!-- popper -->
-<!-- <script src="node_modules\@popperjs\core\dist\umd\popper.min.js" crossorigin="anonymous"></script> -->
+<script src="node_modules/select2/dist/js/select2.min.js"></script>

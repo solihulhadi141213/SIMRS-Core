@@ -10,16 +10,17 @@
     <meta name="author" content="<?php echo "$aplication_author"; ?>" />
 
     <!-- Favicon icon -->
-    <link rel="icon" href="assets/images/<?php echo "$favicon"; ?>" type="image/x-icon">
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png">
 
     <!-- Google font-->
-    <link href="assets\css\Fonts\Font.css?v=3" rel="stylesheet">
+    <link href="assets/css/Fonts/Font.css?v=3" rel="stylesheet">
 
     <!-- jQuery UI CSS -->
-    <link rel="stylesheet" href="assets/jquery-ui-1.14.2/jquery-ui.min.css">
+    <link rel="stylesheet" href="node_modules/jquery-ui/dist/themes/base/jquery-ui.min.css">
 
     <!-- bootstrap -->
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="node_modules/mdb-ui-kit/css/mdb.min.css">
 
     <!-- sweetalert2 -->
     <script src="node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
@@ -42,25 +43,17 @@
             ';
         }
     ?>
-   
-    <!-- themify icon -->
-    <link rel="stylesheet" type="text/css" href="assets/icon/themify-icons/themify-icons.css">
-
-    <!-- icofont -->
-    <link rel="stylesheet" type="text/css" href="assets/icon/icofont/icofont.min.css">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" type="text/css" href="assets/icon/font-awesome/css/font-awesome.min.css">
 
     <!-- Custome Style (Style.css) -->
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css?v=<?php echo date('YmdHis'); ?>">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css?v=<?php echo filemtime(__DIR__ . '/../assets/css/style.css'); ?>">
+    <link rel="stylesheet" href="assets/css/layout.css?v=<?php echo filemtime(__DIR__ . '/../assets/css/layout.css'); ?>">
 
     <!-- Driver -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+    <link rel="stylesheet" href="node_modules/driver.js/dist/driver.css">
     
     <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
+    <link href="node_modules/select2/dist/css/select2.min.css" rel="stylesheet">
+    <link href="node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
 
     <!-- bootstrap-icons -->
     <link href="node_modules/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" crossorigin="anonymous">
