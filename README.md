@@ -1,121 +1,122 @@
-# SIMRS CORE V 3.0.0 (Beta) #
+# SIMRS Core V3
 
-SIMRS Core V3 is an improvement over the previous version, SIMRS V2.
-This version features significant changes and a different way of working.
-SIMRS Core V3 is a hospital management information system integrated with electronic medical records. The application is built on a microservice basis, enabling other applications to communicate with the central SIMRS database. Patient medical information is written using FHIR. An API service is available for easier application development.
+SIMRS Core adalah aplikasi web Sistem Informasi Manajemen Rumah Sakit untuk membantu fasilitas kesehatan mengelola data operasional dan rekam medis secara terpusat. Aplikasi menyediakan pengelolaan pasien, kunjungan, diagnosis, tindakan, alergi, laboratorium, referensi, serta akses pengguna. Integrasi dengan layanan kesehatan eksternal membantu mengurangi pengisian data berulang dan mendukung pertukaran informasi antar sistem.
 
-### System Specifications ###
+Repositori ini berisi aplikasi PHP dengan antarmuka HTML, CSS, dan JavaScript, serta integrasi ke basis data MySQL dan layanan eksternal. Sistem akses berbasis akun, entitas, dan hak akses fitur.
 
-* PHP 8.x
-* MySql 9.1.0
-* Apache 2.4.62.1
+## Fitur Aktif
 
-### Requirements ###
+Fitur yang tersedia pada aplikasi mencakup:
 
-* PHP 8.2 or later with the `mysqli` extension enabled
-* MySQL-compatible database with the application schema imported
-* A command-line terminal for running the initial installer
+- **Dashboard dan monitoring:** dashboard, log aktivitas, monitoring antrian dan ruangan, serta laporan pengguna.
+- **Aksesibilitas:** akun pengguna, entitas akses, pengelolaan fitur, dan pengajuan akses.
+- **Rekam medis dan pelayanan:** pasien, kunjungan, general consent, diagnosis, tindakan, alergi, dan laboratorium.
+- **Referensi:** poliklinik, dokter, jadwal dokter, praktisi, ruang rawat, ICD, tindakan, alergen, observation, serta data wilayah.
+- **Pengaturan:** profil fasilitas kesehatan, API key, email gateway, kredensial Google, percetakan, dan konfigurasi integrasi.
+- **Integrasi:** BPJS/VClaim, SATUSEHAT, SIRS Online, Radix, Analyza, dan Sifarma sesuai konfigurasi fasilitas kesehatan.
 
-### Active Features ###
+Daftar hak akses awal tersedia di [`_Database/referance/default_reference_feature_code.json`](_Database/referance/default_reference_feature_code.json). Daftar tersebut berisi fitur yang digunakan installer untuk mengisi referensi hak akses; ketersediaan integrasi tetap bergantung pada konfigurasi dan kredensial layanan eksternal.
 
-* Dashboard and hospital operations modules
-* User, access-entity, and feature-permission management
-* Reference data and external integrations listed under [Module](#module)
+## Requirements
 
-### Initial Installation ###
+- PHP **8.2 atau lebih baru** dengan ekstensi `mysqli` dan `gd` aktif.
+- Ekstensi PHP yang diperlukan dependensi Composer, termasuk `mbstring`, `dom`, `xml`, `xmlreader`, `xmlwriter`, `zip`, dan `zlib`.
+- MySQL **8.0 atau lebih baru**. Skema menggunakan collation `utf8mb4_0900_ai_ci` dan dump skema dibuat dari MySQL 8.4.7.
+- Apache 2.4 atau web server lain yang dapat menjalankan PHP.
+- Composer 2 dan Node.js/npm untuk memasang dependensi aplikasi.
+- Akses jaringan dan kredensial yang sesuai untuk integrasi eksternal yang akan digunakan.
 
-1. Create the application database and import `_Database/schema.sql` before continuing.
-2. Configure the database connection in `_Config/Connection.php`.
-3. Ensure `_Database/referance/default_reference_feature_code.json` is present.
-4. From the project root, run `php instal.php` once using the server's PHP CLI.
-5. Enter the administrator email and password when prompted. The password is entered visibly in the CLI and stored as a password hash.
+Pastikan versi PHP CLI yang dipakai Composer dan installer sama dengan versi PHP yang dipakai web server.
+Halaman login saat ini memuat font Open Sans dari Google Fonts, sehingga akses jaringan dibutuhkan agar font tersebut tersedia.
 
-The installer seeds the `akses_fitur` table from the reference JSON when it is empty, creates the default `Admin` access entity, assigns all features to that entity, creates the `Admin Faskes` account, and grants the account all features. The account's `tanggal` and `updatetime` values are stored in UTC. The installer refuses to run if access accounts or entities already exist, preventing accidental duplicate setup.
+## Instalasi dan Persiapan
 
-### Dependencies ###
+1. Pasang aplikasi di document root web server, lalu pastikan PHP, MySQL, Composer, dan Node.js/npm tersedia.
+2. Buat basis data kosong bernama `elsyifa_core`, lalu impor [`_Database/schema.sql`](_Database/schema.sql). **Impor skema hanya pada basis data baru**, karena file tersebut menghapus dan membuat ulang tabel yang didefinisikan di dalamnya.
+3. Sesuaikan host, nama pengguna, kata sandi, dan nama basis data pada [`_Config/Connection.php`](_Config/Connection.php). Nilai bawaan saat ini adalah `localhost`, pengguna `root`, kata sandi kosong, dan basis data `elsyifa_core`.
+4. Dari direktori utama proyek, pasang dependensi PHP dan JavaScript:
 
-* Bootstrap 5.3.8
-* Jquery 4.0.0
-* jquery-ui-1.14.2
-* sweetalert2 ^11.26.24
-* tinymce ^8.3.2
-* themify-icons
-* icofont
-* font-awesome
-* apexcharts ^5.10.4
-* bootstrap-icons ^1.13.1
-* nullpunkt/lz-string-php ^1.3
-* mpdf/mpdf ^8.1
-* ezyang/htmlpurifier ^4.19
-* phpoffice/phpspreadsheet ^1.30
+   ```sh
+   composer install
+   npm ci
+   ```
 
+   Dependensi Composer dipasang ke `vendor/`, sedangkan dependensi JavaScript dipasang ke `node_modules/`. Kedua direktori tersebut tidak disimpan di version control.
 
-### Module ###
+5. Jalankan installer **satu kali** dari CLI di direktori utama proyek:
 
-* Dashboard
-* Pengaturan
-  - Pengaturan Umum
-  - API Key
-  - Email Gateway
-  - Google Credential
-  - Aksesibilitas
-    - Fitur Aplikasi
-    - Entitas Akses
-    - Akun Pengguna
-    - Pengajuan Akses
-  - Integrasi
-    - Bridging BPJS
-    - SATUSEHAT
-    - SIRS Online
-    - Radix
-    - Analyza
-    - Sifarma
-  - Laporan Kesalahan
-* Monitoring
-* Pengaturan
-* Referensi
+   ```sh
+   php instal.php
+   ```
 
-### Database ###
-```json
-[
-    {
-        "table_name" : "akses",
-        "column" : [
-            {
-                "column_name" : "id_akses",
-                "type" : "",
-                "column_name" : "",
-            }
-        ]
-    }
-]
+   Masukkan email administrator yang valid dan kata sandi sepanjang 8–20 karakter saat diminta. Input kata sandi ditampilkan oleh terminal ketika diketik; jalankan installer di terminal yang aman.
+
+6. Installer membuat entitas `Admin` dan akun `Admin Faskes`, menyimpan kata sandi sebagai hash, serta memberikan fitur yang tersedia pada file referensi kepada entitas dan akun administrator. Waktu pembuatan dan pembaruan disimpan dalam UTC.
+7. Jalankan Apache/web server dan buka alamat proyek melalui browser. Konfigurasikan kredensial layanan eksternal melalui halaman pengaturan aplikasi sebelum menggunakan integrasi terkait.
+
+Installer hanya ditujukan untuk basis data awal. Installer menolak berjalan jika tabel akun atau entitas akses sudah berisi data, dan memeriksa kecocokan referensi fitur yang sudah tersedia. Jangan menghapus atau mengosongkan data produksi untuk menjalankannya kembali.
+
+## Dependensi
+
+### JavaScript/npm
+
+Dependensi langsung yang dikelola melalui `package.json` dan `package-lock.json`:
+
+- `apexcharts` ^5.10.4
+- `bootstrap` ^5.3.8
+- `bootstrap-icons` ^1.13.1
+- `driver.js` ^1.10.2
+- `jquery` ^4.0.0
+- `jquery-mask-plugin` ^1.14.16
+- `jquery-ui` ^1.14.2
+- `mdb-ui-kit` ^9.3.0
+- `qrcodejs` ^1.0.0
+- `quill` ^2.0.3
+- `select2` ^4.1.0
+- `select2-bootstrap-5-theme` ^1.3.0
+- `signature_pad` ^5.1.3
+- `sweetalert2` ^11.26.24
+- `tinymce` ^8.3.2
+
+### PHP/Composer
+
+Dependensi langsung yang dikelola melalui `composer.json` dan `composer.lock`:
+
+- `nullpunkt/lz-string-php` ^1.3
+- `mpdf/mpdf` ^8.1
+- `ezyang/htmlpurifier` ^4.19
+- `phpoffice/phpspreadsheet` ^1.30
+- `vlucas/phpdotenv` ^5.7
+
+Versi terpasang yang terkunci dicatat pada kedua file lock. Aset pustaka tambahan yang tidak dikelola npm atau Composer disimpan di `assets/lib/`.
+
+## Pengujian
+
+Pemeriksaan sintaks seluruh file PHP aplikasi (tanpa memindai `vendor/` dan `node_modules/`) dapat dijalankan dengan:
+
+```sh
+php tests/run.php
 ```
-* akses
-* akses_acc
-* akses_entitas
-* akses_login
-* akses_pengajuan
-* akses_ref
-* akun_perkiraan
 
-### InteSystem Integration ###
+## Panduan Perubahan
 
-* BPJS
-* SATUSEHAT
-* SIMRS Online
-* Email Gateway
-* Radix
-* Analyza
+- Perbarui bagian fitur aktif dan dokumentasi terkait di README setiap kali ada perubahan fitur.
+- Gunakan dependensi yang dipasang melalui npm atau Composer; jangan menambahkan dependensi CDN tanpa persetujuan.
+- Hindari menambahkan fitur yang tidak diminta dan pertimbangkan dampak perubahan terhadap performa serta alur kerja.
+- Gunakan HTML semantik dan CSS responsif; letakkan pustaka tambahan yang tidak dikelola npm atau Composer di `assets/lib/`.
 
-### Documentation Link ###
+## Struktur Proyek
 
-* Git Book : https://rsu-el-syifa.gitbook.io/rsu-el-syifa-docs
+- `_Config/` — koneksi basis data, konfigurasi aplikasi, sesi, dan fungsi bersama.
+- `_Database/` — skema serta data referensi awal.
+- `_Page/` — halaman, modul, dan proses aplikasi.
+- `_Partial/` — komponen halaman yang digunakan bersama.
+- `assets/` — CSS, JavaScript, ikon, gambar, dan pustaka antarmuka.
+- `tests/` — skrip pemeriksaan proyek.
+- `vendor/` — dependensi PHP hasil Composer.
+- `node_modules/` — dependensi JavaScript hasil npm.
 
-### What's Changed In This Version? ###
-* Generate captcha and save on database
-* Login system, validation from login token
-* There is a relationship between tables in the access module
-* Activity history is not recorded partially, but is recorded based on data that has been created.
+## Referensi
 
-### Referance
-* Bridging BPJS : https://dvlp.bpjs-kesehatan.go.id:8888/trust-mark/portal.html
+- Dokumentasi pengguna: [SIMRS Core di GitBook](https://rsu-el-syifa.gitbook.io/rsu-el-syifa-docs)
+- Integrasi BPJS: [Portal Developer BPJS Kesehatan](https://dvlp.bpjs-kesehatan.go.id:8888/trust-mark/portal.html)
