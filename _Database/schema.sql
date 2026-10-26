@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 24, 2026 at 07:26 PM
--- Server version: 8.4.7
--- PHP Version: 8.2.29
+-- Waktu pembuatan: 26 Okt 2026 pada 09.46
+-- Versi server: 8.4.7
+-- Versi PHP: 8.5.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `elsyifa_core`
+-- Basis data: `elsyifa_core`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `akses`
+-- Struktur dari tabel `akses`
 --
 
 DROP TABLE IF EXISTS `akses`;
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `akses` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `akses_acc`
+-- Struktur dari tabel `akses_acc`
 --
 
 DROP TABLE IF EXISTS `akses_acc`;
@@ -62,12 +62,12 @@ CREATE TABLE IF NOT EXISTS `akses_acc` (
   PRIMARY KEY (`id_akses_acc`),
   KEY `id_akses` (`id_akses`),
   KEY `id_akses_fitur` (`id_akses_fitur`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Mapping akses ke akses_fitur';
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `akses_entitas`
+-- Struktur dari tabel `akses_entitas`
 --
 
 DROP TABLE IF EXISTS `akses_entitas`;
@@ -76,12 +76,12 @@ CREATE TABLE IF NOT EXISTS `akses_entitas` (
   `akses` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Nama akses yang ada pada data akses',
   `deskripsi` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Gambaran umum akses',
   PRIMARY KEY (`id_akses_entitas`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Menyimpan data entitas akses';
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `akses_entitas_acc`
+-- Struktur dari tabel `akses_entitas_acc`
 --
 
 DROP TABLE IF EXISTS `akses_entitas_acc`;
@@ -92,12 +92,12 @@ CREATE TABLE IF NOT EXISTS `akses_entitas_acc` (
   PRIMARY KEY (`id_akses_entitas_acc`),
   KEY `entitas_acc_to_entitas` (`id_akses_entitas`),
   KEY `entitas_acc_to_fitur` (`id_akses_fitur`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='akses standar yang dimiliki entitas akses';
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `akses_fitur`
+-- Struktur dari tabel `akses_fitur`
 --
 
 DROP TABLE IF EXISTS `akses_fitur`;
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `akses_fitur` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `akses_laporan`
+-- Struktur dari tabel `akses_laporan`
 --
 
 DROP TABLE IF EXISTS `akses_laporan`;
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `akses_laporan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `akses_login`
+-- Struktur dari tabel `akses_login`
 --
 
 DROP TABLE IF EXISTS `akses_login`;
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `akses_login` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `akses_pengajuan`
+-- Struktur dari tabel `akses_pengajuan`
 --
 
 DROP TABLE IF EXISTS `akses_pengajuan`;
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `akses_pengajuan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `akses_reset`
+-- Struktur dari tabel `akses_reset`
 --
 
 DROP TABLE IF EXISTS `akses_reset`;
@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `akses_reset` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `alergi`
+-- Struktur dari tabel `alergi`
 --
 
 DROP TABLE IF EXISTS `alergi`;
@@ -219,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `alergi` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `alergi_alergen`
+-- Struktur dari tabel `alergi_alergen`
 --
 
 DROP TABLE IF EXISTS `alergi_alergen`;
@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `alergi_alergen` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `api_key`
+-- Struktur dari tabel `api_key`
 --
 
 DROP TABLE IF EXISTS `api_key`;
@@ -259,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `api_key` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `api_token`
+-- Struktur dari tabel `api_token`
 --
 
 DROP TABLE IF EXISTS `api_token`;
@@ -276,7 +276,7 @@ CREATE TABLE IF NOT EXISTS `api_token` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `body_site`
+-- Struktur dari tabel `body_site`
 --
 
 DROP TABLE IF EXISTS `body_site`;
@@ -296,7 +296,7 @@ CREATE TABLE IF NOT EXISTS `body_site` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `captcha`
+-- Struktur dari tabel `captcha`
 --
 
 DROP TABLE IF EXISTS `captcha`;
@@ -312,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `captcha` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `diagnosis`
+-- Struktur dari tabel `diagnosis`
 --
 
 DROP TABLE IF EXISTS `diagnosis`;
@@ -345,7 +345,7 @@ CREATE TABLE IF NOT EXISTS `diagnosis` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dokter`
+-- Struktur dari tabel `dokter`
 --
 
 DROP TABLE IF EXISTS `dokter`;
@@ -372,7 +372,7 @@ CREATE TABLE IF NOT EXISTS `dokter` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `general_consent`
+-- Struktur dari tabel `general_consent`
 --
 
 DROP TABLE IF EXISTS `general_consent`;
@@ -404,7 +404,7 @@ CREATE TABLE IF NOT EXISTS `general_consent` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `icd`
+-- Struktur dari tabel `icd`
 --
 
 DROP TABLE IF EXISTS `icd`;
@@ -422,7 +422,7 @@ CREATE TABLE IF NOT EXISTS `icd` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jadwal_dokter`
+-- Struktur dari tabel `jadwal_dokter`
 --
 
 DROP TABLE IF EXISTS `jadwal_dokter`;
@@ -445,7 +445,7 @@ CREATE TABLE IF NOT EXISTS `jadwal_dokter` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kunjungan`
+-- Struktur dari tabel `kunjungan`
 --
 
 DROP TABLE IF EXISTS `kunjungan`;
@@ -494,17 +494,17 @@ CREATE TABLE IF NOT EXISTS `kunjungan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `log`
+-- Struktur dari tabel `log`
 --
 
 DROP TABLE IF EXISTS `log`;
 CREATE TABLE IF NOT EXISTS `log` (
   `id_log` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `id_akses` int UNSIGNED DEFAULT NULL,
-  `datetime_log` datetime NOT NULL,
+  `id_akses` int UNSIGNED DEFAULT NULL COMMENT 'ID akses pengguna yang melakukan aktivitas',
+  `datetime_log` datetime NOT NULL COMMENT 'tanggal dan waktu kejadian',
   `nama_petugas` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Sesuai Tabel Akses Pada saat kejadian',
-  `title_log` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `metadata_log` json DEFAULT NULL,
+  `title_log` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'diisi dengan informasi fitur atau nama aktifitas',
+  `metadata_log` json DEFAULT NULL COMMENT 'Untuk aktifitas yang melibatkan penghapusan data sensitif',
   PRIMARY KEY (`id_log`),
   KEY `id_akses` (`id_akses`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Mencatat kejadian penting';
@@ -512,7 +512,7 @@ CREATE TABLE IF NOT EXISTS `log` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `observation`
+-- Struktur dari tabel `observation`
 --
 
 DROP TABLE IF EXISTS `observation`;
@@ -537,7 +537,7 @@ CREATE TABLE IF NOT EXISTS `observation` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `observation_reference`
+-- Struktur dari tabel `observation_reference`
 --
 
 DROP TABLE IF EXISTS `observation_reference`;
@@ -563,7 +563,7 @@ CREATE TABLE IF NOT EXISTS `observation_reference` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pasien`
+-- Struktur dari tabel `pasien`
 --
 
 DROP TABLE IF EXISTS `pasien`;
@@ -604,7 +604,7 @@ CREATE TABLE IF NOT EXISTS `pasien` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `poliklinik`
+-- Struktur dari tabel `poliklinik`
 --
 
 DROP TABLE IF EXISTS `poliklinik`;
@@ -620,7 +620,7 @@ CREATE TABLE IF NOT EXISTS `poliklinik` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `praktisi`
+-- Struktur dari tabel `praktisi`
 --
 
 DROP TABLE IF EXISTS `praktisi`;
@@ -644,7 +644,7 @@ CREATE TABLE IF NOT EXISTS `praktisi` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rr_kelas_rawat`
+-- Struktur dari tabel `rr_kelas_rawat`
 --
 
 DROP TABLE IF EXISTS `rr_kelas_rawat`;
@@ -660,7 +660,7 @@ CREATE TABLE IF NOT EXISTS `rr_kelas_rawat` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rr_ruang_rawat`
+-- Struktur dari tabel `rr_ruang_rawat`
 --
 
 DROP TABLE IF EXISTS `rr_ruang_rawat`;
@@ -677,7 +677,7 @@ CREATE TABLE IF NOT EXISTS `rr_ruang_rawat` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rr_tempat_tidur`
+-- Struktur dari tabel `rr_tempat_tidur`
 --
 
 DROP TABLE IF EXISTS `rr_tempat_tidur`;
@@ -699,7 +699,7 @@ CREATE TABLE IF NOT EXISTS `rr_tempat_tidur` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ruang_rawat`
+-- Struktur dari tabel `ruang_rawat`
 --
 
 DROP TABLE IF EXISTS `ruang_rawat`;
@@ -722,34 +722,29 @@ CREATE TABLE IF NOT EXISTS `ruang_rawat` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `setting`
+-- Struktur dari tabel `setting`
 --
 
 DROP TABLE IF EXISTS `setting`;
 CREATE TABLE IF NOT EXISTS `setting` (
   `id_setting` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `setting_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `aplication_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `aplication_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `aplication_keyword` json DEFAULT NULL COMMENT 'contoh : [''RSU'',''EL-Syifa'']',
-  `aplication_author` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Nama pembuat aplikasi',
-  `base_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `hospital_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `hospital_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `hospital_contact` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `setting_name` enum('Development','Staging','Production') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Lingkungan pengaturan',
+  `base_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Base URL Aplikasi',
+  `hospital_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Nama Faskes',
+  `hospital_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Alamat Faskes',
+  `hospital_contact` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Kontak RS',
   `hospital_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Email Resmi RS Untuk Kop',
   `hospital_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Kode Faskes Kemenkes',
-  `hospital_manager` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `favicon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `status` tinyint(1) NOT NULL,
+  `hospital_manager` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Nama direktur/manajer RS',
+  `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Nama File Logo RS/Faskes',
+  `status` tinyint(1) NOT NULL COMMENT '0: Inactive|1:Active',
   PRIMARY KEY (`id_setting`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Pengaturan umum aplikasi';
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `setting_analyza`
+-- Struktur dari tabel `setting_analyza`
 --
 
 DROP TABLE IF EXISTS `setting_analyza`;
@@ -769,7 +764,7 @@ CREATE TABLE IF NOT EXISTS `setting_analyza` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `setting_bpjs`
+-- Struktur dari tabel `setting_bpjs`
 --
 
 DROP TABLE IF EXISTS `setting_bpjs`;
@@ -792,7 +787,7 @@ CREATE TABLE IF NOT EXISTS `setting_bpjs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `setting_email_gateway`
+-- Struktur dari tabel `setting_email_gateway`
 --
 
 DROP TABLE IF EXISTS `setting_email_gateway`;
@@ -811,7 +806,7 @@ CREATE TABLE IF NOT EXISTS `setting_email_gateway` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `setting_google`
+-- Struktur dari tabel `setting_google`
 --
 
 DROP TABLE IF EXISTS `setting_google`;
@@ -827,7 +822,7 @@ CREATE TABLE IF NOT EXISTS `setting_google` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `setting_radix`
+-- Struktur dari tabel `setting_radix`
 --
 
 DROP TABLE IF EXISTS `setting_radix`;
@@ -847,7 +842,7 @@ CREATE TABLE IF NOT EXISTS `setting_radix` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `setting_satusehat`
+-- Struktur dari tabel `setting_satusehat`
 --
 
 DROP TABLE IF EXISTS `setting_satusehat`;
@@ -867,7 +862,7 @@ CREATE TABLE IF NOT EXISTS `setting_satusehat` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `setting_sifarma`
+-- Struktur dari tabel `setting_sifarma`
 --
 
 DROP TABLE IF EXISTS `setting_sifarma`;
@@ -887,7 +882,7 @@ CREATE TABLE IF NOT EXISTS `setting_sifarma` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `setting_sirs_online`
+-- Struktur dari tabel `setting_sirs_online`
 --
 
 DROP TABLE IF EXISTS `setting_sirs_online`;
@@ -904,7 +899,7 @@ CREATE TABLE IF NOT EXISTS `setting_sirs_online` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `setting_sisrute`
+-- Struktur dari tabel `setting_sisrute`
 --
 
 DROP TABLE IF EXISTS `setting_sisrute`;
@@ -921,7 +916,7 @@ CREATE TABLE IF NOT EXISTS `setting_sisrute` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `setting_web`
+-- Struktur dari tabel `setting_web`
 --
 
 DROP TABLE IF EXISTS `setting_web`;
@@ -937,7 +932,7 @@ CREATE TABLE IF NOT EXISTS `setting_web` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tindakan`
+-- Struktur dari tabel `tindakan`
 --
 
 DROP TABLE IF EXISTS `tindakan`;
@@ -967,7 +962,7 @@ CREATE TABLE IF NOT EXISTS `tindakan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tindakan_performer`
+-- Struktur dari tabel `tindakan_performer`
 --
 
 DROP TABLE IF EXISTS `tindakan_performer`;
@@ -988,7 +983,7 @@ CREATE TABLE IF NOT EXISTS `tindakan_performer` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tindakan_referensi`
+-- Struktur dari tabel `tindakan_referensi`
 --
 
 DROP TABLE IF EXISTS `tindakan_referensi`;
@@ -1019,7 +1014,7 @@ CREATE TABLE IF NOT EXISTS `tindakan_referensi` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `wilayah`
+-- Struktur dari tabel `wilayah`
 --
 
 DROP TABLE IF EXISTS `wilayah`;
@@ -1046,44 +1041,44 @@ CREATE TABLE IF NOT EXISTS `wilayah` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `akses`
+-- Ketidakleluasaan untuk tabel `akses`
 --
 ALTER TABLE `akses`
   ADD CONSTRAINT `akses_to_entitas` FOREIGN KEY (`id_akses_entitas`) REFERENCES `akses_entitas` (`id_akses_entitas`) ON DELETE SET NULL,
   ADD CONSTRAINT `akses_to_pengajuan` FOREIGN KEY (`id_akses_pengajuan`) REFERENCES `akses_pengajuan` (`id_akses_pengajuan`) ON DELETE SET NULL;
 
 --
--- Constraints for table `akses_acc`
+-- Ketidakleluasaan untuk tabel `akses_acc`
 --
 ALTER TABLE `akses_acc`
   ADD CONSTRAINT `acc_to_akses` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `acc_to_fitur` FOREIGN KEY (`id_akses_fitur`) REFERENCES `akses_fitur` (`id_akses_fitur`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `akses_entitas_acc`
+-- Ketidakleluasaan untuk tabel `akses_entitas_acc`
 --
 ALTER TABLE `akses_entitas_acc`
   ADD CONSTRAINT `entitas_acc_to_entitas` FOREIGN KEY (`id_akses_entitas`) REFERENCES `akses_entitas` (`id_akses_entitas`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `entitas_acc_to_fitur` FOREIGN KEY (`id_akses_fitur`) REFERENCES `akses_fitur` (`id_akses_fitur`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `akses_login`
+-- Ketidakleluasaan untuk tabel `akses_login`
 --
 ALTER TABLE `akses_login`
   ADD CONSTRAINT `login_to_access` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `akses_reset`
+-- Ketidakleluasaan untuk tabel `akses_reset`
 --
 ALTER TABLE `akses_reset`
   ADD CONSTRAINT `reset_to_akses` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `alergi`
+-- Ketidakleluasaan untuk tabel `alergi`
 --
 ALTER TABLE `alergi`
   ADD CONSTRAINT `alergi_akses` FOREIGN KEY (`author_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL,
@@ -1092,13 +1087,13 @@ ALTER TABLE `alergi`
   ADD CONSTRAINT `alergi_to_alergen` FOREIGN KEY (`id_alergi_alergen`) REFERENCES `alergi_alergen` (`id_alergi_alergen`) ON DELETE SET NULL;
 
 --
--- Constraints for table `api_token`
+-- Ketidakleluasaan untuk tabel `api_token`
 --
 ALTER TABLE `api_token`
   ADD CONSTRAINT `api_key_to_token` FOREIGN KEY (`id_api_key`) REFERENCES `api_key` (`id_api_key`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `diagnosis`
+-- Ketidakleluasaan untuk tabel `diagnosis`
 --
 ALTER TABLE `diagnosis`
   ADD CONSTRAINT `diagnosis_akses` FOREIGN KEY (`petugas_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL,
@@ -1107,7 +1102,7 @@ ALTER TABLE `diagnosis`
   ADD CONSTRAINT `diagnosis_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `general_consent`
+-- Ketidakleluasaan untuk tabel `general_consent`
 --
 ALTER TABLE `general_consent`
   ADD CONSTRAINT `gc_to_akses` FOREIGN KEY (`petugas_edukasi_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL,
@@ -1115,14 +1110,14 @@ ALTER TABLE `general_consent`
   ADD CONSTRAINT `gc_to_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `jadwal_dokter`
+-- Ketidakleluasaan untuk tabel `jadwal_dokter`
 --
 ALTER TABLE `jadwal_dokter`
   ADD CONSTRAINT `jadwal_dokter_to_poli` FOREIGN KEY (`id_poliklinik`) REFERENCES `poliklinik` (`id_poliklinik`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `jadwal_to_dokter` FOREIGN KEY (`id_dokter`) REFERENCES `dokter` (`id_dokter`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `kunjungan`
+-- Ketidakleluasaan untuk tabel `kunjungan`
 --
 ALTER TABLE `kunjungan`
   ADD CONSTRAINT `kunjungan_dokter` FOREIGN KEY (`id_dokter`) REFERENCES `dokter` (`id_dokter`) ON DELETE SET NULL,
@@ -1132,40 +1127,40 @@ ALTER TABLE `kunjungan`
   ADD CONSTRAINT `kunjungan_poliklinik` FOREIGN KEY (`id_poliklinik`) REFERENCES `poliklinik` (`id_poliklinik`) ON DELETE SET NULL;
 
 --
--- Constraints for table `observation`
+-- Ketidakleluasaan untuk tabel `observation`
 --
 ALTER TABLE `observation`
   ADD CONSTRAINT `observation_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `observation_reference` FOREIGN KEY (`id_observation_reference`) REFERENCES `observation_reference` (`id_observation_reference`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `pasien`
+-- Ketidakleluasaan untuk tabel `pasien`
 --
 ALTER TABLE `pasien`
   ADD CONSTRAINT `pasien_to_akses` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL;
 
 --
--- Constraints for table `praktisi`
+-- Ketidakleluasaan untuk tabel `praktisi`
 --
 ALTER TABLE `praktisi`
   ADD CONSTRAINT `praktisi_akses` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL,
   ADD CONSTRAINT `praktisi_dokter` FOREIGN KEY (`id_dokter`) REFERENCES `dokter` (`id_dokter`) ON DELETE CASCADE;
 
 --
--- Constraints for table `rr_ruang_rawat`
+-- Ketidakleluasaan untuk tabel `rr_ruang_rawat`
 --
 ALTER TABLE `rr_ruang_rawat`
   ADD CONSTRAINT `ruang_to_kelas` FOREIGN KEY (`id_kelas_rawat`) REFERENCES `rr_kelas_rawat` (`id_kelas_rawat`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `rr_tempat_tidur`
+-- Ketidakleluasaan untuk tabel `rr_tempat_tidur`
 --
 ALTER TABLE `rr_tempat_tidur`
   ADD CONSTRAINT `tt_to_kelas` FOREIGN KEY (`id_kelas_rawat`) REFERENCES `rr_kelas_rawat` (`id_kelas_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `tt_to_ruang_rawat` FOREIGN KEY (`id_ruang_rawat`) REFERENCES `rr_ruang_rawat` (`id_ruang_rawat`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `tindakan`
+-- Ketidakleluasaan untuk tabel `tindakan`
 --
 ALTER TABLE `tindakan`
   ADD CONSTRAINT `tindakan_akses` FOREIGN KEY (`petugas_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL,
@@ -1174,14 +1169,14 @@ ALTER TABLE `tindakan`
   ADD CONSTRAINT `tindakan_to_referensi` FOREIGN KEY (`id_tindakan_referensi`) REFERENCES `tindakan_referensi` (`id_tindakan_referensi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `tindakan_performer`
+-- Ketidakleluasaan untuk tabel `tindakan_performer`
 --
 ALTER TABLE `tindakan_performer`
   ADD CONSTRAINT `performer_praktisi` FOREIGN KEY (`id_praktisi`) REFERENCES `praktisi` (`id_praktisi`) ON DELETE SET NULL,
   ADD CONSTRAINT `performer_tindakan` FOREIGN KEY (`id_tindakan`) REFERENCES `tindakan` (`id_tindakan`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `tindakan_referensi`
+-- Ketidakleluasaan untuk tabel `tindakan_referensi`
 --
 ALTER TABLE `tindakan_referensi`
   ADD CONSTRAINT `tindakan_referensi_to_akses` FOREIGN KEY (`author_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL;

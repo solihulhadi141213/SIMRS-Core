@@ -6,7 +6,7 @@
                     <h5 class="m-b-10">
                         <a href="" class="h5"><i class="bi bi-gear"></i> Setting</a>
                     </h5>
-                    <p class="m-b-0">Pengaturan Identitas Aplikasi, Informasi Faskes, Favicon dan Base URL </p>
+                    <p class="m-b-0">Pengaturan lingkungan aplikasi dan identitas fasilitas kesehatan</p>
                 </div>
             </div>
             <div class="col-md-4 text-right">
@@ -33,15 +33,15 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="table table-responsive">
+                                <div class="table table-responsive" id="setting_table_responsive">
                                     <table class="table table-hover table-sm">
                                         <thead>
                                             <tr>
                                                 <td align="center"><small><b>No</b></small></td>
-                                                <td align="left"><small><b>Nama Pengaturan</b></small></td>
-                                                <td align="left"><small><b>Nama Aplikasi</b></small></td>
+                                                <td align="left"><small><b>Lingkungan</b></small></td>
                                                 <td align="left"><small><b><i>Base URL</i></b></small></td>
                                                 <td align="left"><small><b><i>Nama Faskes</i></b></small></td>
+                                                <td align="left"><small><b>Logo</b></small></td>
                                                 <td align="center"><small><b><i>Status</i></b></small></td>
                                                 <td align="center"><small><b>Opsi</b></small></td>
                                             </tr>

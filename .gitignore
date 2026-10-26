@@ -9,30 +9,18 @@
 /node_modules/
 
 # File Image
-/assets/images/pasien/
-/assets/images/PengajuanAkses/
-/assets/images/Radiologi/
-/assets/images/user/
+/assets/img/dokter/*
+/assets/img/favicon/*
+/assets/img/logo/*
+/assets/img/ui/*
+/assets/img/user/*
 
-#CSS
-/assets/css/animate.css/
-/assets/css/bootstrap/
-/assets/css/chartist/
-/assets/css/morris.js/
-
-# ICON
-/assets/icon/
-
-# JS
-/assets/apexcharts/
-/assets/jQuery-Mask-Plugin/
-/assets/js/
-/assets/phpqrcode/
-/assets/sweetalert2/
-/assets/tinymce/
-
-#Pages
-/assets/pages/
+# Kecualikan file no-img.jpg agar tetap di-track oleh Git
+!assets/img/dokter/No-Image.png
+!assets/img/favicon/no_image.jpg
+!assets/img/logo/no-image.jpg
+!assets/img/ui/app-logo.png
+!assets/img/user/No-Image.png
 
 #_FileUpload
 _FileUpload/*

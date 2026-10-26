@@ -5,9 +5,6 @@
     // Connection
     include "../../_Config/Connection.php";
 
-    // Simrs Function
-    include "../../_Config/SimrsFunction.php";
-
     // Session
     include "../../_Config/Session.php";
 
@@ -21,11 +18,19 @@
         ]);
         exit;
     }
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Metode request tidak valid.'
+        ]);
+        exit;
+    }
 
     // ======================================
     // VALIDASI ID
     // ======================================
-    if (empty($_POST['id_setting'])) {
+    $id_setting = filter_input(INPUT_POST, 'id_setting', FILTER_VALIDATE_INT);
+    if (!$id_setting || $id_setting < 1) {
         echo json_encode([
             'status' => 'error',
             'message' => 'ID setting tidak valid.'
@@ -33,12 +38,10 @@
         exit;
     }
 
-    $id_setting = validateAndSanitizeInput($_POST['id_setting']);
-
     // ======================================
     // AMBIL DATA FILE LAMA
     // ======================================
-    $stmt = $Conn->prepare("SELECT favicon, logo FROM setting WHERE id_setting = ?");
+    $stmt = $Conn->prepare("SELECT logo FROM setting WHERE id_setting = ?");
     $stmt->bind_param("i", $id_setting);
     $stmt->execute();
 
@@ -53,23 +56,9 @@
         exit;
     }
 
-    $favicon = $data['favicon'] ?? '';
     $logo = $data['logo'] ?? '';
 
     $stmt->close();
-
-    // ======================================
-    // HAPUS FILE
-    // ======================================
-    $uploadDir = "../../assets/images/";
-
-    if (!empty($favicon) && file_exists($uploadDir . $favicon)) {
-        unlink($uploadDir . $favicon);
-    }
-
-    if (!empty($logo) && file_exists($uploadDir . $logo)) {
-        unlink($uploadDir . $logo);
-    }
 
     // ======================================
     // HAPUS DATABASE
@@ -80,6 +69,19 @@
     $delete = $stmtDelete->execute();
 
     if ($delete) {
+        if (!empty($logo)) {
+            $logoName = basename((string) $logo);
+            foreach ([
+                __DIR__ . '/../../assets/img/logo/' . $logoName,
+                __DIR__ . '/../../assets/images/' . $logoName,
+                __DIR__ . '/../../_File/Setting/' . $logoName,
+            ] as $logoPath) {
+                if (is_file($logoPath)) {
+                    unlink($logoPath);
+                }
+            }
+        }
+
         echo json_encode([
             'status' => 'success',
             'message' => 'Data berhasil dihapus.'

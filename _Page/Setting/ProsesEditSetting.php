@@ -2,314 +2,174 @@
     header('Content-Type: application/json');
     date_default_timezone_set('Asia/Jakarta');
 
-    // Connection
     include "../../_Config/Connection.php";
-
-    // Simrs Function
-    include "../../_Config/SimrsFunction.php";
-
-    // Session
     include "../../_Config/Session.php";
 
-    // =====================================
-    // VALIDASI SESSION
-    // =====================================
+    $respond = static function (string $status, string $message): void {
+        echo json_encode(['status' => $status, 'message' => $message]);
+        exit;
+    };
+
     if (empty($SessionIdAkses)) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Sesi akses sudah berakhir, silakan login ulang.'
-        ]);
-        exit;
+        $respond('error', 'Sesi akses sudah berakhir, silakan login ulang.');
     }
-
-    // =====================================
-    // VALIDASI METHOD
-    // =====================================
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Metode request tidak valid.'
-        ]);
-        exit;
+        $respond('error', 'Metode request tidak valid.');
     }
 
-    // =====================================
-    // VALIDASI ID
-    // =====================================
-    $id_setting = $_POST['id_setting'] ?? '';
-
-    if (empty($id_setting)) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'ID setting tidak valid.'
-        ]);
-        exit;
+    $id_setting = filter_input(INPUT_POST, 'id_setting', FILTER_VALIDATE_INT);
+    if (!$id_setting || $id_setting < 1) {
+        $respond('error', 'ID pengaturan tidak valid.');
     }
 
-    // =====================================
-    // AMBIL DATA FORM
-    // =====================================
-    $setting_name           = trim($_POST['setting_name'] ?? '');
-    $aplication_name        = trim($_POST['aplication_name'] ?? '');
-    $aplication_description = trim($_POST['aplication_description'] ?? '');
-    $aplication_keyword     = trim($_POST['aplication_keyword'] ?? '');
-    $aplication_author      = trim($_POST['aplication_author'] ?? '');
-    $base_url               = trim($_POST['base_url'] ?? '');
-    $hospital_name          = trim($_POST['hospital_name'] ?? '');
-    $hospital_address       = trim($_POST['hospital_address'] ?? '');
-    $hospital_contact       = trim($_POST['hospital_contact'] ?? '');
-    $hospital_email         = trim($_POST['hospital_email'] ?? '');
-    $hospital_code          = trim($_POST['hospital_code'] ?? '');
-    $hospital_manager       = trim($_POST['hospital_manager'] ?? '');
-    $status                 = isset($_POST['aktivasi_setting']) ? 1 : 0;
+    $setting_name = trim($_POST['setting_name'] ?? '');
+    $base_url = trim($_POST['base_url'] ?? '');
+    $hospital_name = trim($_POST['hospital_name'] ?? '');
+    $hospital_address = trim($_POST['hospital_address'] ?? '');
+    $hospital_contact = trim($_POST['hospital_contact'] ?? '');
+    $hospital_email = trim($_POST['hospital_email'] ?? '');
+    $hospital_code = trim($_POST['hospital_code'] ?? '');
+    $hospital_manager = trim($_POST['hospital_manager'] ?? '');
+    $status = isset($_POST['aktivasi_setting']) ? 1 : 0;
+    $environments = ['Development', 'Staging', 'Production'];
 
-    // =====================================
-    // VALIDASI FIELD WAJIB
-    // =====================================
-    $mandatory = [
-        $setting_name,
-        $aplication_name,
-        $aplication_description,
-        $aplication_keyword,
-        $aplication_author,
-        $base_url,
-        $hospital_name,
-        $hospital_address,
-        $hospital_contact,
-        $hospital_email
-    ];
-
-    foreach ($mandatory as $item) {
-        if (empty($item)) {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Masih ada field wajib yang kosong.'
-            ]);
-            exit;
+    if (!in_array($setting_name, $environments, true)) {
+        $respond('error', 'Lingkungan pengaturan tidak valid.');
+    }
+    foreach ([$base_url, $hospital_name, $hospital_address, $hospital_contact, $hospital_email] as $required) {
+        if ($required === '') {
+            $respond('error', 'Masih ada data wajib yang belum diisi.');
+        }
+    }
+    if (
+        filter_var($base_url, FILTER_VALIDATE_URL) === false ||
+        filter_var($hospital_email, FILTER_VALIDATE_EMAIL) === false
+    ) {
+        $respond('error', 'Base URL atau email tidak valid.');
+    }
+    foreach ([$base_url, $hospital_name, $hospital_address, $hospital_contact, $hospital_email, $hospital_code, $hospital_manager] as $value) {
+        if (mb_strlen($value, 'UTF-8') > 255) {
+            $respond('error', 'Panjang data tidak boleh melebihi 255 karakter.');
         }
     }
 
-    // =====================================
-    // VALIDASI PANJANG KARAKTER
-    // =====================================
-    if (
-        strlen($setting_name) > 250 ||
-        strlen($aplication_name) > 250 ||
-        strlen($aplication_author) > 250 ||
-        strlen($base_url) > 250 ||
-        strlen($hospital_name) > 250 ||
-        strlen($hospital_address) > 250 ||
-        strlen($hospital_contact) > 250 ||
-        strlen($hospital_email) > 250 ||
-        strlen($hospital_code) > 250 ||
-        strlen($hospital_manager) > 250
-    ) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Ada data yang melebihi batas karakter.'
-        ]);
-        exit;
-    }
-
-    if (strlen($aplication_description) > 500) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Deskripsi maksimal 500 karakter.'
-        ]);
-        exit;
-    }
-
-    // =====================================
-    // PROSES KEYWORD → JSON
-    // =====================================
-    $keywordArray = array_map('trim', explode(',', $aplication_keyword));
-    $keywordArray = array_filter($keywordArray);
-
-    if (count($keywordArray) > 5) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Keyword maksimal 5.'
-        ]);
-        exit;
-    }
-
-    $keywordJson = json_encode(array_values($keywordArray));
-
-    // =====================================
-    // AMBIL DATA LAMA
-    // =====================================
-    $stmtOld = $Conn->prepare("SELECT favicon, logo FROM setting WHERE id_setting = ?");
+    $stmtOld = $Conn->prepare("SELECT logo FROM setting WHERE id_setting = ?");
     $stmtOld->bind_param("i", $id_setting);
     $stmtOld->execute();
     $resultOld = $stmtOld->get_result();
-    $dataOld = $resultOld->fetch_assoc();
+    $oldData = $resultOld->fetch_assoc();
+    $stmtOld->close();
+    if (!$oldData) {
+        $respond('error', 'Data pengaturan tidak ditemukan.');
+    }
+    $oldLogo = $oldData['logo'];
+    $logoName = $oldLogo;
+    $newLogoPath = null;
+    $uploadDirectory = __DIR__ . '/../../assets/img/logo/';
 
-    if (!$dataOld) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Data setting tidak ditemukan.'
-        ]);
-        exit;
+    if (isset($_FILES['logo']) && $_FILES['logo']['error'] !== UPLOAD_ERR_NO_FILE) {
+        if ($_FILES['logo']['error'] !== UPLOAD_ERR_OK) {
+            $respond('error', 'Logo gagal diunggah.');
+        }
+        $logoFile = $_FILES['logo'];
+        $extension = strtolower(pathinfo($logoFile['name'], PATHINFO_EXTENSION));
+        if (
+            $logoFile['size'] > 1024 * 1024 ||
+            !in_array($extension, ['ico', 'png', 'jpg', 'jpeg', 'gif'], true)
+        ) {
+            $respond('error', 'Logo harus berformat ICO, PNG, JPG, JPEG, atau GIF dan maksimal 1 MB.');
+        }
+        if (!is_dir($uploadDirectory) && !mkdir($uploadDirectory, 0775, true) && !is_dir($uploadDirectory)) {
+            $respond('error', 'Direktori penyimpanan logo tidak dapat dibuat.');
+        }
+        $logoName = bin2hex(random_bytes(16)) . '.' . $extension;
+        $newLogoPath = $uploadDirectory . $logoName;
+        if (!move_uploaded_file($logoFile['tmp_name'], $newLogoPath)) {
+            $respond('error', 'Logo gagal diunggah.');
+        }
     }
 
-    $faviconOld = $dataOld['favicon'];
-    $logoOld = $dataOld['logo'];
-
-    $uploadDir = "../../_File/Setting/";
-    $allowedExt = ['ico', 'png', 'jpg', 'jpeg', 'gif'];
-    $maxSize = 1024 * 1024;
-
-    // =====================================
-    // FUNCTION UPLOAD FILE
-    // =====================================
-    function uploadReplaceFile($file, $oldFile, $uploadDir, $allowedExt, $maxSize)
-    {
-        if (empty($file['name'])) {
-            return $oldFile;
-        }
-
-        if ($file['size'] > $maxSize) {
-            return false;
-        }
-
-        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-
-        if (!in_array($ext, $allowedExt)) {
-            return false;
-        }
-
-        $newName = bin2hex(random_bytes(16)) . '.' . $ext;
-        $destination = $uploadDir . $newName;
-
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        if (move_uploaded_file($file['tmp_name'], $destination)) {
-
-            // hapus file lama
-            if (!empty($oldFile) && file_exists($uploadDir . $oldFile)) {
-                unlink($uploadDir . $oldFile);
+    $lockAcquired = false;
+    if ($status === 1) {
+        $lockResult = $Conn->query("SELECT GET_LOCK(CONCAT(DATABASE(), ':simrs_setting_active'), 10) AS acquired");
+        $lockData = $lockResult ? $lockResult->fetch_assoc() : null;
+        $lockAcquired = isset($lockData['acquired']) && (int) $lockData['acquired'] === 1;
+        if (!$lockAcquired) {
+            if ($newLogoPath !== null) {
+                unlink($newLogoPath);
             }
-
-            return $newName;
+            $respond('error', 'Pengaturan aktif sedang diproses. Silakan coba kembali.');
         }
-
-        return false;
     }
 
-    // =====================================
-    // HANDLE FAVICON
-    // =====================================
-    $faviconNew = $faviconOld;
+    $Conn->begin_transaction();
+    $saved = true;
+    if ($status === 1) {
+        $deactivate = $Conn->prepare("UPDATE setting SET status = 0 WHERE status = 1 AND id_setting != ?");
+        $deactivate->bind_param("i", $id_setting);
+        $saved = $deactivate->execute();
+        $deactivate->close();
+    }
 
-    if (isset($_FILES['favicon']) && !empty($_FILES['favicon']['name'])) {
-        $faviconNew = uploadReplaceFile(
-            $_FILES['favicon'],
-            $faviconOld,
-            $uploadDir,
-            $allowedExt,
-            $maxSize
+    if ($saved) {
+        $stmt = $Conn->prepare("
+            UPDATE setting SET
+                setting_name = ?,
+                base_url = ?,
+                hospital_name = ?,
+                hospital_address = ?,
+                hospital_contact = ?,
+                hospital_email = ?,
+                hospital_code = ?,
+                hospital_manager = ?,
+                logo = ?,
+                status = ?
+            WHERE id_setting = ?
+        ");
+        $stmt->bind_param(
+            "sssssssssii",
+            $setting_name,
+            $base_url,
+            $hospital_name,
+            $hospital_address,
+            $hospital_contact,
+            $hospital_email,
+            $hospital_code,
+            $hospital_manager,
+            $logoName,
+            $status,
+            $id_setting
         );
+        $saved = $stmt->execute();
+        $stmt->close();
+    }
 
-        if ($faviconNew === false) {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Upload favicon gagal.'
-            ]);
-            exit;
+    if ($saved) {
+        $Conn->commit();
+        if ($newLogoPath !== null && !empty($oldLogo)) {
+            $oldLogoName = basename((string) $oldLogo);
+            foreach ([
+                $uploadDirectory . $oldLogoName,
+                __DIR__ . '/../../assets/images/' . $oldLogoName,
+                __DIR__ . '/../../_File/Setting/' . $oldLogoName,
+            ] as $oldLogoPath) {
+                if (is_file($oldLogoPath)) {
+                    unlink($oldLogoPath);
+                }
+            }
         }
-    }
-
-    // =====================================
-    // HANDLE LOGO
-    // =====================================
-    $logoNew = $logoOld;
-
-    if (isset($_FILES['logo']) && !empty($_FILES['logo']['name'])) {
-        $logoNew = uploadReplaceFile(
-            $_FILES['logo'],
-            $logoOld,
-            $uploadDir,
-            $allowedExt,
-            $maxSize
-        );
-
-        if ($logoNew === false) {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Upload logo gagal.'
-            ]);
-            exit;
-        }
-    }
-
-    // =====================================
-    // JIKA STATUS 1 → NONAKTIFKAN LAIN
-    // =====================================
-    if ($status == 1) {
-        $stmtNonaktif = $Conn->prepare("UPDATE setting SET status = 0 WHERE id_setting != ?");
-        $stmtNonaktif->bind_param("i", $id_setting);
-        $stmtNonaktif->execute();
-    }
-
-    // =====================================
-    // UPDATE DATA
-    // =====================================
-    $stmt = $Conn->prepare("
-        UPDATE setting SET
-            setting_name = ?,
-            aplication_name = ?,
-            aplication_description = ?,
-            aplication_keyword = ?,
-            aplication_author = ?,
-            base_url = ?,
-            hospital_name = ?,
-            hospital_address = ?,
-            hospital_contact = ?,
-            hospital_email = ?,
-            hospital_code = ?,
-            hospital_manager = ?,
-            favicon = ?,
-            logo = ?,
-            status = ?
-        WHERE id_setting = ?
-    ");
-
-    $stmt->bind_param(
-        "ssssssssssssssii",
-        $setting_name,
-        $aplication_name,
-        $aplication_description,
-        $keywordJson,
-        $aplication_author,
-        $base_url,
-        $hospital_name,
-        $hospital_address,
-        $hospital_contact,
-        $hospital_email,
-        $hospital_code,
-        $hospital_manager,
-        $faviconNew,
-        $logoNew,
-        $status,
-        $id_setting
-    );
-
-    $execute = $stmt->execute();
-
-    // =====================================
-    // RESPONSE
-    // =====================================
-    if ($execute) {
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'Edit setting berhasil.'
-        ]);
     } else {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Gagal update data.'
-        ]);
+        $Conn->rollback();
+        if ($newLogoPath !== null) {
+            unlink($newLogoPath);
+        }
     }
+    if ($lockAcquired) {
+        $Conn->query("SELECT RELEASE_LOCK(CONCAT(DATABASE(), ':simrs_setting_active'))");
+    }
+
+    if (!$saved) {
+        $respond('error', 'Gagal memperbarui data pengaturan.');
+    }
+    $respond('success', 'Edit pengaturan berhasil.');
 ?>

@@ -1,4 +1,7 @@
 Berikut ini adalah catatan struktur menu kiri yang diharapkan:
+- Section menunjukan pcoded-navigation-label
+- daftar dengan tanda + menunjukan menu level 1
+- daftar dengan tanda - menunjukan menu level 2
 
 Section 1 : Menu Utama
 + [icon: bi bi-grid] Dashboard -> (URL : `index.php`)

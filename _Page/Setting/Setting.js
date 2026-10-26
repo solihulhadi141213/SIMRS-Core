@@ -32,6 +32,15 @@ $(document).ready(function() {
     // Pertama Kali Halaman Load, Tampilkan Tabel Setting
     TabelSetting();
 
+    // Lepas batas overflow tabel saat menu opsi terbuka agar dropdown tidak terpotong.
+    $(document).on('shown.bs.dropdown', '#setting_table_responsive .dropdown', function () {
+        $('#setting_table_responsive').css('overflow', 'visible');
+    });
+
+    $(document).on('hidden.bs.dropdown', '#setting_table_responsive .dropdown', function () {
+        $('#setting_table_responsive').css('overflow', '');
+    });
+
     //==================================================================
     // TAMBAH SETTING
     //==================================================================

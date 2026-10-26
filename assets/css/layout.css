@@ -329,6 +329,7 @@
 }
 
 #pcoded .pcoded-content {
+  position: relative;
   min-width: 0;
   width: calc(100% - 235px);
   margin-left: 235px;
@@ -768,6 +769,22 @@ body[data-theme="dark"] .dashboard-view .table {
   color: #687c81;
 }
 
+.route-breadcrumb {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 1;
+  font-size: 0.875rem;
+}
+
+.route-breadcrumb .breadcrumb-item a {
+  color: #1a5a6a;
+}
+
+.route-breadcrumb .breadcrumb-item.active {
+  color: #687c81;
+}
+
 .pcoded-content > .page-header:not(.dashboard-page-header) {
   padding: 1.5rem 1.5rem 0;
   border: 0;
@@ -1106,6 +1123,8 @@ body[data-theme="dark"] .pcoded-content > .page-header:not(.dashboard-page-heade
 
 body[data-theme="dark"] .dashboard-view .dashboard-page-header .breadcrumb-item a,
 body[data-theme="dark"] .dashboard-view .dashboard-page-header .breadcrumb-item.active,
+body[data-theme="dark"] .route-breadcrumb .breadcrumb-item a,
+body[data-theme="dark"] .route-breadcrumb .breadcrumb-item.active,
 body[data-theme="dark"] .profile-page-header .breadcrumb-item a,
 body[data-theme="dark"] .profile-page-header .breadcrumb-item.active,
 body[data-theme="dark"] .dashboard-view .dashboard-stat-card p,
@@ -1146,6 +1165,13 @@ body[data-theme="dark"] .dashboard-view .dashboard-stat-icon {
   .pcoded-content > .page-header:not(.dashboard-page-header) {
     padding-right: 1rem;
     padding-left: 1rem;
+  }
+
+  .route-breadcrumb {
+    position: static;
+    display: flex;
+    justify-content: flex-start;
+    margin: 1rem 1rem 0;
   }
 
   .pcoded-content > .page-header:not(.dashboard-page-header) + .pcoded-inner-content .page-wrapper {

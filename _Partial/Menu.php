@@ -7,7 +7,20 @@
     <div class="pcoded-inner-navbar main-menu scroll-container">
         <div>
             <div class="main-menu-header">
-                <img class="img-80 img-radius" src="assets/images/<?php echo htmlspecialchars((string) $logo, ENT_QUOTES, 'UTF-8'); ?>" alt="User-Profile-Image">
+                <?php
+                    $menuLogoName = basename((string) ($logo ?? ''));
+                    $menuLogoPath = 'assets/img/logo/no-image.jpg';
+                    if ($menuLogoName !== '') {
+                        if (is_file(__DIR__ . '/../assets/img/logo/' . $menuLogoName)) {
+                            $menuLogoPath = 'assets/img/logo/' . rawurlencode($menuLogoName);
+                        } elseif (is_file(__DIR__ . '/../assets/images/' . $menuLogoName)) {
+                            $menuLogoPath = 'assets/images/' . rawurlencode($menuLogoName);
+                        } elseif (is_file(__DIR__ . '/../_File/Setting/' . $menuLogoName)) {
+                            $menuLogoPath = '_File/Setting/' . rawurlencode($menuLogoName);
+                        }
+                    }
+                ?>
+                <img class="img-80 img-radius" src="<?php echo htmlspecialchars($menuLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="Logo Faskes">
                 <div class="user-details">
                     <span id="more-details"><?php echo htmlspecialchars((string) $hospital_name, ENT_QUOTES, 'UTF-8'); ?></span>
                 </div>

@@ -39,13 +39,87 @@
         'Laboratorium'          => '_Page/Laboratorium/Laboratorium.php',
     ];
 
+    // Berikut ini adalah array yang berisi informasi breadcrumb untuk setiap halaman. Setiap entri memiliki format:
+    // 'NamaHalaman' => ['NamaFitur', 'NamaHalamanFitur', 'NamaSubFitur']
+    $breadcrumbRoutes = [
+        'Setting'               => ['Pengaturan', 'Setting', 'Pengaturan Umum'],
+        'ApiKey'                => ['Pengaturan', 'Setting', 'API Key'],
+        'EmailGateway'          => ['Pengaturan', 'Setting', 'Email Gateway'],
+        'GoogleCredential'      => ['Pengaturan', 'Setting', 'Google Credential'],
+        'AksesFitur'            => ['Aksesibilitas', 'Akses', 'Fitur Aplikasi'],
+        'AksesEntitas'          => ['Aksesibilitas', 'Akses', 'Entitas Akses'],
+        'Akses'                 => ['Aksesibilitas', 'Akses', 'Akun Akses'],
+        'AksesPengajuan'        => ['Aksesibilitas', 'Akses', 'Pengajuan Akses'],
+        'SettingSatuSehat'      => ['Pengaturan Integrasi', 'Setting', 'SATUSEHAT'],
+        'SettingBpjs'           => ['Pengaturan Integrasi', 'Setting', 'BPJS'],
+        'SettingSirsOnline'     => ['Pengaturan Integrasi', 'Setting', 'SIRS Online'],
+        'SettingRadix'          => ['Pengaturan Integrasi', 'Setting', 'Radix'],
+        'SettingAnalyza'        => ['Pengaturan Integrasi', 'Setting', 'Analyza'],
+        'SettingSifarma'        => ['Pengaturan Integrasi', 'Setting', 'Sifarma'],
+        'LaporanKesalahan'      => ['Laporan Kesalahan', null, null],
+        'ReferensiPoliklinik'   => ['Referensi Lokal', 'ReferensiPoliklinik', 'Poliklinik'],
+        'ReferensiDokter'       => ['Referensi Lokal', 'ReferensiPoliklinik', 'Dokter'],
+        'ReferensiJadwalDokter' => ['Menu Utama', 'Dashboard', 'Jadwal Dokter'],
+        'ReferensiPraktisi'     => ['Referensi Lokal', 'ReferensiPoliklinik', 'Tenaga Medis'],
+        'ReferensiRuangRawat'   => ['Referensi Lokal', 'ReferensiPoliklinik', 'Ruang Rawat'],
+        'ReferensiIcd'          => ['Referensi Lokal', 'ReferensiPoliklinik', 'ICD'],
+        'ReferensiTindakan'     => ['Referensi Lokal', 'ReferensiPoliklinik', 'Procedure'],
+        'ReferensiAlergen'      => ['Referensi Lokal', 'ReferensiPoliklinik', 'Alergen'],
+        'ReferensiObservation'  => ['Referensi Lokal', 'ReferensiPoliklinik', 'Observation'],
+        'ReferensiWilayah'      => ['Referensi Lokal', 'ReferensiPoliklinik', 'Wilayah'],
+        'ReferensiWilayahBpjs'  => ['Referensi BPJS', 'ReferensiWilayahBpjs', 'Wilayah'],
+        'ReferensiIcdBpjs'      => ['Referensi BPJS', 'ReferensiWilayahBpjs', 'ICD'],
+        'ReferensiDpho'         => ['Referensi BPJS', 'ReferensiWilayahBpjs', 'DPHO'],
+        'Pasien'                => ['Menu Utama', 'Dashboard', 'Pasien'],
+        'Kunjungan'             => ['Menu Utama', 'Dashboard', 'Kunjungan'],
+        'GeneralConsent'        => ['Rekam Medis', 'GeneralConsent', 'General Consent'],
+        'Diagnosis'             => ['Rekam Medis', 'GeneralConsent', 'Diagnosis'],
+        'Tindakan'              => ['Rekam Medis', 'GeneralConsent', 'Tindakan'],
+        'Alergi'                => ['Rekam Medis', 'GeneralConsent', 'Alergi'],
+        'Laboratorium'          => ['Rekam Medis', 'GeneralConsent', 'Laboratorium'],
+    ];
+
     $page = trim($_GET['Page'] ?? '');
 
     if ($page === '') {
         include $routes['Dashboard'];
     } elseif (isset($routes[$page])) {
+        if (!in_array($page, ['Dashboard', 'Profile'], true)) {
+            [$feature, $featurePage, $subFeature] = $breadcrumbRoutes[$page];
+            echo '
+                <div class="route-breadcrumb">
+                    <nav aria-label="Breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
+            ';
+            if ($subFeature !== null) {
+                echo '
+                            <li class="breadcrumb-item"><a href="index.php?Page=' . rawurlencode($featurePage) . '">' . htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') . '</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">' . htmlspecialchars($subFeature, ENT_QUOTES, 'UTF-8') . '</li>
+                ';
+            } else {
+                echo '
+                            <li class="breadcrumb-item active" aria-current="page">' . htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') . '</li>
+                ';
+            }
+            echo '
+                        </ol>
+                    </nav>
+                </div>
+            ';
+        }
         include $routes[$page];
     } else {
+        echo '
+            <div class="route-breadcrumb">
+                <nav aria-label="Breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Halaman Tidak Ditemukan</li>
+                    </ol>
+                </nav>
+            </div>
+        ';
         include '_Page/Error/PageNotFound.php';
     }
 ?>

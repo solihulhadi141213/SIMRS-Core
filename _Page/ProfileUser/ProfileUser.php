@@ -8,7 +8,7 @@
     <nav aria-label="Breadcrumb">
         <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Profile</li>
+            <li class="breadcrumb-item active" aria-current="page">Profil Pengguna</li>
         </ol>
     </nav>
 </div>

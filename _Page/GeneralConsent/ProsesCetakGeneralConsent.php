@@ -40,9 +40,17 @@
     // =========================================================
     // GET SETTING
     // =========================================================
-    $querySetting = "SELECT * FROM setting LIMIT 1";
-    $resultSetting = mysqli_query($Conn, $querySetting);
-    $Setting = mysqli_fetch_assoc($resultSetting);
+    $stmtSetting = $Conn->prepare("
+        SELECT hospital_name, hospital_address, hospital_contact, hospital_email, logo
+        FROM setting
+        WHERE status = 1
+        ORDER BY id_setting DESC
+        LIMIT 1
+    ");
+    $stmtSetting->execute();
+    $resultSetting = $stmtSetting->get_result();
+    $Setting = $resultSetting->fetch_assoc();
+    $stmtSetting->close();
 
     $hospital_name    = $Setting['hospital_name'] ?? 'RUMAH SAKIT';
     $hospital_address = $Setting['hospital_address'] ?? '';
@@ -166,22 +174,29 @@
     // =========================================================
     // LOGO
     // =========================================================
-    $logoPath = '../../assets/images/'.$logo;
-
-    if (!empty($logo) && file_exists($logoPath)) {
-
-        $logoData = base64_encode(file_get_contents($logoPath));
-
-        $logoHtml = '
-            <img 
-                src="data:image/png;base64,'.$logoData.'" 
-                style="width:80px;"
-            >
-        ';
-    } else {
-
-        $logoHtml = '';
+    $logoName = basename((string) $logo);
+    $logoPath = __DIR__ . '/../../assets/img/logo/' . $logoName;
+    if ($logoName === '' || !is_file($logoPath)) {
+        $logoPath = __DIR__ . '/../../assets/images/' . $logoName;
     }
+    if ($logoName === '' || !is_file($logoPath)) {
+        $logoPath = __DIR__ . '/../../_File/Setting/' . $logoName;
+    }
+    if ($logoName === '' || !is_file($logoPath)) {
+        $logoPath = __DIR__ . '/../../assets/img/logo/no-image.jpg';
+    }
+
+    $logoMimeType = mime_content_type($logoPath);
+    if (!in_array($logoMimeType, ['image/jpeg', 'image/png', 'image/gif', 'image/x-icon', 'image/vnd.microsoft.icon'], true)) {
+        throw new RuntimeException('Format file logo faskes tidak didukung.');
+    }
+    $logoData = base64_encode(file_get_contents($logoPath));
+    $logoHtml = '
+        <img
+            src="data:' . htmlspecialchars($logoMimeType, ENT_QUOTES, 'UTF-8') . ';base64,' . $logoData . '"
+            style="width:80px;"
+        >
+    ';
 
     // =========================================================
     // HTML PDF

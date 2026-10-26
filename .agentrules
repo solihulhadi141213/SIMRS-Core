@@ -8,6 +8,7 @@ Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan
 4. Selalu mempertimbangkan optimalisasi kecepatan dan efisiensi
 5. Untuk mempermudah developer atau pengguna, maka setiap kali perubahan perlu dokumentasi yang jelas dan tertulis pada `README.md`.
 6. Jangan pernah membaca commit lebih dari 2 langkah terbaru pada repository. Anggap repository terbaru adalah perubahan yang paling relevan. 
+7. Menggunakan script PHP yang sesuai untuk versi PHP yang digunakan pada project ini.
 ## Penjelasan Aturan Untuk Dokumen `README.md`
 1. Setiap kali ada penambahan, perubahan, atau penghapusan fitur pada kode PHP, HTML/CSS, AI **wajib** memperbarui file `README.md`.
 2. File `README.md` harus selalu memuat daftar fitur aktif (*Active Features*) dan daftar kebutuhan (*Requirements*) yang diperbarui secara real-time.
@@ -22,7 +23,7 @@ Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan
 1. `.agentrules`       : Aturan dasar untuk AI agent.
 2.` README.md`         : Dokumentasi Aplikasi.
 3. `.gitignore`        : Kendali Version Control.
-4. `.package-lock.json`: Menjaga Konsistensi Lingkungan Dependensi dan Pustaka Javascript.
+4. `package-lock.json`: Menjaga Konsistensi Lingkungan Dependensi dan Pustaka Javascript.
 5. `package.json`      : Daftar Dependensi dan Pustaka Javascript.
 6. `package-lock.json` : Memastikan konsistensi versi, mempercepat proses instalasi dan Keamanan & Integritas
 ## Prinsip Gaya Visual Yang Harus Dijaga
@@ -104,9 +105,29 @@ Halaman utama `index.php` disusun berdasarkan beberapa komponen terpisah (modula
   - Proses autofocus di handle menggunakan jquery.
 2. Preloader
   - Sebelum menampilkan (reload) setap halaman, guanakan preloader untuk memastikan halaman web sudah dirender secara keseluruhan.
+3. breadcrumb
+  - Setiap halaman, wajib memiliki 'breadcrumb' agar user tidak tersesat.
+  - Struktur notasi breadcrumb terdiri dari Halaman Awal/Fitur/Sub Fitur
+  - Halaman Awal selalu mengarah ke halaman Dashboard.
+  - Halaman Awal clickable dan mengarah ke halaman `index.php`
+  - Fitur clickable jika memiliki Sub Fitur dan mengarah ke fitur utama.
+  - Sub Fitur tidak clickable.
 ## Logging
 Setiap aktivitas user pada sistem (aplikasi) akan dicatat pada database di tabel 'log' dengan parameter berikut :
 1. `id_akses` adalah id akses user yang melakukan aktivitas.
 2. `datetime_log` adalah informasi tanggal dan waktu user melakukan aktivitas.
+## User Flow/Onboarding
+Berikut ini adalah catatan langkah-langkah wajib dilakukan user untuk menggunakan aplikasi dengan benar.
+1. Kelola Pengguna
+  - User perlu memastikan halaman `index.php?Page=AksesFitur` (Aksesibilitas -> Fitur Aplikasi) sudah memuat daftar fitur yang sesuai.
+  - User perlu mengelola entitas akses yang akan digunakan pada `index.php?Page=AksesEntitas` (Aksesibilitas -> Entitas Akses).
+  - Pada saat pertama kali instal aplikasi, maka sistem akan membuatkan akun default. 
+  - Oleh sebab itu user perlu mengubah akun default tersebut karena tidak aman pada halaman profil pengguna.
+  - Menambah atau membuat akun akses pengguna, utamakan menggunakan mekanisme pengajuan akses.
+  - Gunakan halaman `index.php?Page=Akses` hanya untuk kondisi urgent.
+2. Pengaturan
+  - Pada saat pertama kali aplikasi diinstal, sistem belum memiliki record pada tabel setting.
+  - Pengaturan masih menggunakan default. Oleh sebab itu, user harus membuat record pengaturan yang aktif.
+
 ## Keterangan
 Dokumen `.agentrules` ini adalah acuan aturan yang sangat penting namun masih memungkinkan adanya kesalahan redaksi bahasa atau relevansi dengan konteks yang sedang dikerjakan. Jangan ragu untuk bertanya, melakukan evaluasi dan memperbaharui dokumen ini apabila terdapat kesalahan fatal yang tidak diketahui developer (programer).
