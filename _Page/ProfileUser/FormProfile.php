@@ -38,6 +38,18 @@
     } else {
         $link_foto = "assets/img/user/No-Image.png";
     }
+    $barisNama = '';
+    if (trim((string) $SessionNama) !== 'Admin Faskes') {
+        $barisNama = '
+            <div class="row mb-2">
+                <div class="col-5"><small>Nama</small></div>
+                <div class="col-1"><small>:</small></div>
+                <div class="col-6">
+                    <small class="text text-muted">' . htmlspecialchars((string) $SessionNama, ENT_QUOTES, 'UTF-8') . '</small>
+                </div>
+            </div>
+        ';
+    }
 ?>
 <div class="row mb-3">
     <div class="col-md-12 mb-4 text-center">
@@ -48,13 +60,7 @@
     <div class="col-md-12 mb-4">
         <?php
             echo '
-                <div class="row mb-2">
-                    <div class="col-5"><small>Nama</small></div>
-                    <div class="col-1"><small>:</small></div>
-                    <div class="col-6">
-                        <small class="text text-muted">'.$SessionNama.'</small>
-                    </div>
-                </div>
+                ' . $barisNama . '
                 <div class="row mb-2">
                     <div class="col-5"><small>Kontak</small></div>
                     <div class="col-1"><small>:</small></div>

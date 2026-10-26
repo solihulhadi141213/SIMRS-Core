@@ -37,6 +37,9 @@
                                                 <a class="dropdown-item modal_upload" href="javascript:void(0)" data-id="ICD10">Upload / Import</a>
                                             </li>
                                         </ul>
+                                        <button type="button" class="btn btn-md btn-icon btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalListGroupWilayah" title="Daftar Wilayah" aria-label="Tampilkan daftar wilayah bertingkat">
+                                            <i class="bi bi-card-list"></i>
+                                        </button>
                                         <button type="button" class="btn btn-md btn-icon btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalFilter" title="Filter Data">
                                             <i class="bi bi-filter"></i>
                                         </button>

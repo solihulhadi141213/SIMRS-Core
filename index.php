@@ -130,9 +130,8 @@
 
                                 <!-- Menampilkan Dropdown Profil -->
                                 <li class="user-profile header-notification">
-                                    <a href="javascript:void(0);" class="profile-toggle" aria-expanded="false" aria-label="Menu pengguna <?php echo htmlspecialchars($SessionNama, ENT_QUOTES, 'UTF-8'); ?>">
+                                    <a href="javascript:void(0);" class="profile-toggle" aria-expanded="false" aria-label="Menu pengguna">
                                         <img src="<?php echo htmlspecialchars($LinkFotoProfile, ENT_QUOTES, 'UTF-8'); ?>" class="img-radius" width="40" height="40" alt="">
-                                        <span><?php echo htmlspecialchars($SessionNama, ENT_QUOTES, 'UTF-8'); ?></span>
                                         <i class="bi bi-chevron-down" aria-hidden="true"></i>
                                     </a>
                                     <ul class="show-notification profile-notification">

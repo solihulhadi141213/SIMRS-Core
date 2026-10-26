@@ -112,12 +112,15 @@ Halaman utama `index.php` disusun berdasarkan beberapa komponen terpisah (modula
   - Halaman Awal clickable dan mengarah ke halaman `index.php`
   - Fitur clickable jika memiliki Sub Fitur dan mengarah ke fitur utama.
   - Sub Fitur tidak clickable.
+4. Placeholder UI.
+  - Setiap kali data, proses atau sebuah UI form ditampilkan menggunakan javascript / jquery wajib menggunakan indikator Skeleton Loader atau Loading Spinner.
+  - Skeleton Loader atau Loading Spinner memanfaatkan penggunaan pustaka dan dependensi yang sudah ada, atau membuat class khusus pada css.
 ## Logging
 Setiap aktivitas user pada sistem (aplikasi) akan dicatat pada database di tabel 'log' dengan parameter berikut :
 1. `id_akses` adalah id akses user yang melakukan aktivitas.
 2. `datetime_log` adalah informasi tanggal dan waktu user melakukan aktivitas.
 ## User Flow/Onboarding
-Berikut ini adalah catatan langkah-langkah wajib dilakukan user untuk menggunakan aplikasi dengan benar.
+Berikut ini adalah catatan langkah-langkah wajib dilakukan user untuk menggunakan aplikasi dengan benar secara berurutan.
 1. Kelola Pengguna
   - User perlu memastikan halaman `index.php?Page=AksesFitur` (Aksesibilitas -> Fitur Aplikasi) sudah memuat daftar fitur yang sesuai.
   - User perlu mengelola entitas akses yang akan digunakan pada `index.php?Page=AksesEntitas` (Aksesibilitas -> Entitas Akses).
@@ -127,7 +130,10 @@ Berikut ini adalah catatan langkah-langkah wajib dilakukan user untuk menggunaka
   - Gunakan halaman `index.php?Page=Akses` hanya untuk kondisi urgent.
 2. Pengaturan
   - Pada saat pertama kali aplikasi diinstal, sistem belum memiliki record pada tabel setting.
-  - Pengaturan masih menggunakan default. Oleh sebab itu, user harus membuat record pengaturan yang aktif.
-
+  - Pengaturan umum masih menggunakan default. Oleh sebab itu, user harus membuat record pengaturan yang aktif.
+  - User harus menambahkan pengaturan email gateway agar sistem dapat mengirim email pada saat pengajuan akses user.
+  - User pertama kali harus menambahkan google credential, agar login menggunakan akun google dapat berfungsi
+3. Referensi
+  - User mengelola data referensi sebagai fondasi awal kelengkapan data pada saat pendaftaran pasien dan kunjungan.
 ## Keterangan
 Dokumen `.agentrules` ini adalah acuan aturan yang sangat penting namun masih memungkinkan adanya kesalahan redaksi bahasa atau relevansi dengan konteks yang sedang dikerjakan. Jangan ragu untuk bertanya, melakukan evaluasi dan memperbaharui dokumen ini apabila terdapat kesalahan fatal yang tidak diketahui developer (programer).

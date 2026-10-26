@@ -42,7 +42,7 @@
     // Berikut ini adalah array yang berisi informasi breadcrumb untuk setiap halaman. Setiap entri memiliki format:
     // 'NamaHalaman' => ['NamaFitur', 'NamaHalamanFitur', 'NamaSubFitur']
     $breadcrumbRoutes = [
-        'Setting'               => ['Pengaturan', 'Setting', 'Pengaturan Umum'],
+        'Setting'               => ['Pengaturan', 'Setting', null],
         'ApiKey'                => ['Pengaturan', 'Setting', 'API Key'],
         'EmailGateway'          => ['Pengaturan', 'Setting', 'Email Gateway'],
         'GoogleCredential'      => ['Pengaturan', 'Setting', 'Google Credential'],
@@ -84,42 +84,40 @@
     if ($page === '') {
         include $routes['Dashboard'];
     } elseif (isset($routes[$page])) {
-        if (!in_array($page, ['Dashboard', 'Profile'], true)) {
+        if (in_array($page, ['Dashboard', 'Profile'], true)) {
+            include $routes[$page];
+        } else {
             [$feature, $featurePage, $subFeature] = $breadcrumbRoutes[$page];
-            echo '
-                <div class="route-breadcrumb">
+            // Header route menyatukan judul halaman dan breadcrumb dalam satu tata letak.
+            echo '<div class="routed-page"><div class="route-breadcrumb">
                     <nav aria-label="Breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
-            ';
+                ';
             if ($subFeature !== null) {
-                echo '
-                            <li class="breadcrumb-item"><a href="index.php?Page=' . rawurlencode($featurePage) . '">' . htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') . '</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">' . htmlspecialchars($subFeature, ENT_QUOTES, 'UTF-8') . '</li>
-                ';
+                if ($featurePage !== null) {
+                    echo '<li class="breadcrumb-item"><a href="index.php?Page=' . rawurlencode($featurePage) . '">' . htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') . '</a></li>';
+                } else {
+                    echo '<li class="breadcrumb-item">' . htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') . '</li>';
+                }
+                echo '<li class="breadcrumb-item active" aria-current="page">' . htmlspecialchars($subFeature, ENT_QUOTES, 'UTF-8') . '</li>';
             } else {
-                echo '
-                            <li class="breadcrumb-item active" aria-current="page">' . htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') . '</li>
-                ';
+                echo '<li class="breadcrumb-item active" aria-current="page">' . htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') . '</li>';
             }
-            echo '
-                        </ol>
-                    </nav>
-                </div>
-            ';
+            echo '</ol></nav></div>';
+            include $routes[$page];
+            echo '</div>';
         }
-        include $routes[$page];
     } else {
-        echo '
-            <div class="route-breadcrumb">
+        echo '<div class="routed-page"><div class="route-breadcrumb">
                 <nav aria-label="Breadcrumb">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Halaman Tidak Ditemukan</li>
                     </ol>
                 </nav>
-            </div>
-        ';
+            </div>';
         include '_Page/Error/PageNotFound.php';
+        echo '</div>';
     }
 ?>

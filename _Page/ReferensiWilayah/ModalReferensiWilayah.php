@@ -656,3 +656,39 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="ModalListGroupWilayah" tabindex="-1" aria-labelledby="ModalListGroupWilayahLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalListGroupWilayahLabel"><i class="bi bi-card-list"></i> Daftar Wilayah</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="ListGroupWilayah" aria-live="polite">
+                    <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="KembaliListGroupWilayah" hidden>
+                            <i class="bi bi-arrow-left"></i> Kembali
+                        </button>
+                        <nav aria-label="Posisi wilayah" class="ms-auto">
+                            <ol class="breadcrumb mb-0" id="BreadcrumbListGroupWilayah"></ol>
+                        </nav>
+                    </div>
+                    <div id="StatusListGroupWilayah" class="text-muted py-3 text-center"></div>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm align-middle region-hierarchy-table">
+                            <thead id="HeaderListGroupWilayah"></thead>
+                            <tbody id="BodyListGroupWilayah"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i> Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

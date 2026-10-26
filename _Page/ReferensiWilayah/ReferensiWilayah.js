@@ -1477,5 +1477,241 @@ $(document).ready(function() {
         });
     });
 
+    // Navigasi daftar wilayah bertingkat pada modal.
+    $(function () {
+        const modal = $('#ModalListGroupWilayah');
+        if (!modal.length) {
+            return;
+        }
 
-});
+        const levelLabels = {
+            province: 'Provinsi',
+            regency: 'Kabupaten/Kota',
+            district: 'Kecamatan',
+            village: 'Desa/Kelurahan'
+        };
+        const columnsByLevel = {
+            province: [
+                ['code', 'Kode'],
+                ['name', 'Nama Provinsi'],
+                ['regency_count', 'Kabupaten/Kota'],
+                ['district_count', 'Kecamatan'],
+                ['village_count', 'Desa/Kelurahan']
+            ],
+            regency: [
+                ['code', 'Kode'],
+                ['name', 'Nama Kabupaten/Kota'],
+                ['type', 'Tipe'],
+                ['district_count', 'Kecamatan'],
+                ['village_count', 'Desa/Kelurahan']
+            ],
+            district: [
+                ['code', 'Kode'],
+                ['name', 'Nama Kecamatan'],
+                ['village_count', 'Desa/Kelurahan']
+            ],
+            village: [
+                ['code', 'Kode'],
+                ['name', 'Nama Desa/Kelurahan'],
+                ['type', 'Tipe']
+            ]
+        };
+        const nextLevel = {
+            province: 'regency',
+            regency: 'district',
+            district: 'village'
+        };
+        let level = 'province';
+        let selected = {};
+        let request = null;
+
+        function renderBreadcrumb() {
+            const breadcrumb = $('#BreadcrumbListGroupWilayah').empty();
+            const trail = ['province', 'regency', 'district', 'village']
+                .filter((item) => selected[item]);
+
+            if (!trail.length) {
+                $('<li>', {
+                    class: 'breadcrumb-item active',
+                    text: 'Provinsi',
+                    'aria-current': 'page'
+                }).appendTo(breadcrumb);
+                return;
+            }
+
+            trail.forEach((item, index) => {
+                const isCurrent = index === trail.length - 1 && level === item;
+                $('<li>', {
+                    class: `breadcrumb-item${isCurrent ? ' active' : ''}`,
+                    text: selected[item].name,
+                    ...(isCurrent ? { 'aria-current': 'page' } : {})
+                }).appendTo(breadcrumb);
+            });
+
+            if (level !== 'village') {
+                $('<li>', {
+                    class: 'breadcrumb-item active',
+                    text: levelLabels[level],
+                    'aria-current': 'page'
+                }).appendTo(breadcrumb);
+            }
+        }
+
+        function renderRows(rows) {
+            const header = $('#HeaderListGroupWilayah').empty();
+            const body = $('#BodyListGroupWilayah').empty();
+            const columns = columnsByLevel[level];
+            const headerRow = $('<tr>').appendTo(header);
+
+            columns.forEach(([key, label]) => {
+                const headerCell = $('<th>', { scope: 'col', text: label });
+                if (key.endsWith('_count')) {
+                    headerCell.addClass('text-end');
+                }
+                headerCell.appendTo(headerRow);
+            });
+            $('<th>', {
+                scope: 'col',
+                class: 'text-center region-action-column',
+                text: 'Aksi'
+            }).appendTo(headerRow);
+
+            if (!rows.length) {
+                $('<tr>')
+                    .append($('<td>', {
+                        colspan: columns.length + 1,
+                        class: 'text-center text-muted py-3',
+                        text: 'Data wilayah tidak ditemukan.'
+                    }))
+                    .appendTo(body);
+                return;
+            }
+
+            rows.forEach((row) => {
+                const tableRow = $('<tr>').appendTo(body);
+                columns.forEach(([key]) => {
+                    let value = row[key];
+                    const cell = $('<td>');
+
+                    if (value === null || value === undefined || value === '') {
+                        value = '-';
+                    } else if (key.endsWith('_count')) {
+                        value = Number(value).toLocaleString('id-ID');
+                        cell.addClass('text-end region-count');
+                    } else if (key === 'code') {
+                        cell.addClass('region-code');
+                    } else if (key === 'name') {
+                        cell.addClass('region-name');
+                    }
+
+                    cell.text(value).appendTo(tableRow);
+                });
+
+                const actionCell = $('<td>', { class: 'text-center region-action-column' }).appendTo(tableRow);
+                if (nextLevel[level]) {
+                    $('<button>', {
+                        type: 'button',
+                        class: 'btn btn-sm btn-outline-primary js-pilih-wilayah',
+                        'aria-label': `Buka ${levelLabels[nextLevel[level]]}: ${row.name}`,
+                        html: '<i class="bi bi-chevron-right" aria-hidden="true"></i>'
+                    })
+                        .attr('data-code', row.code)
+                        .attr('data-name', row.name)
+                        .appendTo(actionCell);
+                } else {
+                    actionCell.text('-');
+                }
+            });
+        }
+
+        function loadLevel(targetLevel) {
+            level = targetLevel;
+            renderBreadcrumb();
+            $('#KembaliListGroupWilayah').prop('hidden', level === 'province');
+            $('#HeaderListGroupWilayah, #BodyListGroupWilayah').empty();
+            $('#StatusListGroupWilayah').text('Memuat data wilayah...');
+
+            if (request) {
+                request.abort();
+            }
+
+            request = $.ajax({
+                type: 'POST',
+                url: '_Page/ReferensiWilayah/ListGroupWilayah.php',
+                dataType: 'json',
+                data: {
+                    level,
+                    parent_code: level === 'province' ? '' : selected[
+                        level === 'regency' ? 'province' : level === 'district' ? 'regency' : 'district'
+                    ].code
+                }
+            })
+                .done((response) => {
+                    request = null;
+                    if (response.status !== 'success' || !Array.isArray(response.rows)) {
+                        $('#StatusListGroupWilayah').text(response.message || 'Data wilayah gagal dimuat.');
+                        return;
+                    }
+
+                    $('#StatusListGroupWilayah').empty();
+                    renderRows(response.rows);
+                })
+                .fail((xhr, status) => {
+                    request = null;
+                    if (status !== 'abort') {
+                        const message = xhr.responseJSON && xhr.responseJSON.message
+                            ? xhr.responseJSON.message
+                            : 'Data wilayah gagal dimuat. Silakan coba lagi.';
+                        $('#StatusListGroupWilayah').text(message);
+                    }
+                });
+        }
+
+        modal.on('shown.bs.modal', function () {
+            selected = {};
+            loadLevel('province');
+        });
+
+        modal.on('hidden.bs.modal', function () {
+            if (request) {
+                request.abort();
+                request = null;
+            }
+            selected = {};
+            level = 'province';
+            $('#BreadcrumbListGroupWilayah, #HeaderListGroupWilayah, #BodyListGroupWilayah').empty();
+            $('#StatusListGroupWilayah').empty();
+            $('#KembaliListGroupWilayah').prop('hidden', true);
+        });
+
+        modal.on('click', '.js-pilih-wilayah', function () {
+            const currentLevel = level;
+            const followingLevel = nextLevel[currentLevel];
+            if (!followingLevel) {
+                return;
+            }
+
+            selected[currentLevel] = {
+                code: String($(this).attr('data-code')),
+                name: String($(this).attr('data-name'))
+            };
+            loadLevel(followingLevel);
+        });
+
+        $('#KembaliListGroupWilayah').on('click', function () {
+            const previousLevel = {
+                regency: 'province',
+                district: 'regency',
+                village: 'district'
+            }[level];
+            if (!previousLevel) {
+                return;
+            }
+
+            delete selected[level];
+            loadLevel(previousLevel);
+        });
+    });
+
+
+    });

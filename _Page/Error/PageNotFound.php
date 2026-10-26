@@ -1,20 +1,20 @@
-<!-- Page-header start -->
+<!-- Header ini memakai struktur halaman routed agar judul sejajar dengan breadcrumb. -->
 <div class="page-header">
     <div class="page-block">
-        <div class="row">
-            <div class="col-md-12">
-                <h4 class="m-b-10 mb-2 text-white">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    Page Not Found
-                </h4>
-                <p class="m-b-0 mb-0 text-white">
-                    Halaman yang Anda cari tidak tersedia atau mungkin telah dipindahkan.
-                </p>
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Page Not Found
+                    </h5>
+                    <p class="m-b-0">Halaman yang Anda cari tidak tersedia atau mungkin telah dipindahkan.</p>
+                </div>
             </div>
+            <div class="col-md-4 text-right"></div>
         </div>
     </div>
 </div>
-<!-- Page-header end -->
 
 <div class="pcoded-inner-content">
     <div class="main-body">
