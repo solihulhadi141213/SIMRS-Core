@@ -1,9 +1,7 @@
 <?php
-    date_default_timezone_set('Asia/Jakarta');
-
     include "../../_Config/Connection.php";
-    include "../../_Config/SimrsFunction.php";
     include "../../_Config/Session.php";
+    include "AksesHelper.php";
 
     // ===============================
     // VALIDASI SESSION
@@ -24,23 +22,34 @@
         exit;
     }
 
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        echo '<tr><td colspan="7" class="text-center text-danger">Metode request tidak valid.</td></tr>';
+        exit;
+    }
+
     // ===============================
     // INPUT
     // ===============================
-    $keyword_by = $_POST['keyword_by'] ?? '';
-    $keyword    = $_POST['keyword'] ?? '';
-    $batas      = (int) ($_POST['batas'] ?? 10);
-    $page       = (int) ($_POST['page'] ?? 1);
-    $ShortBy    = strtoupper($_POST['ShortBy'] ?? 'DESC');
-    $OrderBy    = $_POST['OrderBy'] ?? 'id_akses';
+    $keyword_by = isset($_POST['keyword_by']) && is_string($_POST['keyword_by']) ? trim($_POST['keyword_by']) : '';
+    $keyword = isset($_POST['keyword']) && is_string($_POST['keyword']) ? trim($_POST['keyword']) : '';
+    $batas = filter_var($_POST['batas'] ?? 10, FILTER_VALIDATE_INT);
+    $page = filter_var($_POST['page'] ?? 1, FILTER_VALIDATE_INT);
+    $ShortBy = isset($_POST['ShortBy']) && is_string($_POST['ShortBy']) ? strtoupper($_POST['ShortBy']) : 'DESC';
+    $OrderBy = isset($_POST['OrderBy']) && is_string($_POST['OrderBy']) ? $_POST['OrderBy'] : 'id_akses';
 
 
     // ===============================
     // VALIDASI
     // ===============================
-    $batas = in_array($batas, [5,10,25,50,100,250,500]) ? $batas : 10;
-    $page  = ($page > 0) ? $page : 1;
+    $batas = in_array($batas, [5,10,25,50,100,250,500], true) ? $batas : 10;
+    $page  = ($page && $page > 0) ? $page : 1;
     $posisi = ($page - 1) * $batas;
+
+    $allowedKeywordColumns = ['nama', 'email', 'id_akses_entitas', 'tanggal', 'updatetime'];
+    if (!in_array($keyword_by, $allowedKeywordColumns, true)) {
+        $keyword_by = '';
+    }
 
     // 🔥 Mapping OrderBy (frontend → database)
     $order_map = [
@@ -55,7 +64,7 @@
     $OrderBy = $order_map[$OrderBy] ?? 'a.id_akses';
 
     // validasi sort
-    $ShortBy = in_array($ShortBy, ['ASC','DESC']) ? $ShortBy : 'DESC';
+    $ShortBy = in_array($ShortBy, ['ASC','DESC'], true) ? $ShortBy : 'DESC';
 
     // ===============================
     // WHERE
@@ -111,15 +120,33 @@
     ";
 
     $stmt_count = mysqli_prepare($Conn, $sql_count);
-
-    if (!empty($params)) {
-        mysqli_stmt_bind_param($stmt_count, $types, ...$params);
+    if (!$stmt_count) {
+        error_log('Akses: gagal menyiapkan jumlah data tabel.');
+        http_response_code(500);
+        echo '<tr><td colspan="7" class="text-center text-danger">Data akses gagal dimuat.</td></tr>';
+        exit;
     }
 
-    mysqli_stmt_execute($stmt_count);
+    if (!empty($params)) {
+        if (!mysqli_stmt_bind_param($stmt_count, $types, ...$params)) {
+            mysqli_stmt_close($stmt_count);
+            error_log('Akses: gagal menyiapkan parameter jumlah data.');
+            http_response_code(500);
+            echo '<tr><td colspan="7" class="text-center text-danger">Data akses gagal dimuat.</td></tr>';
+            exit;
+        }
+    }
+    if (!mysqli_stmt_execute($stmt_count)) {
+        mysqli_stmt_close($stmt_count);
+        error_log('Akses: gagal menghitung data tabel.');
+        http_response_code(500);
+        echo '<tr><td colspan="7" class="text-center text-danger">Data akses gagal dimuat.</td></tr>';
+        exit;
+    }
     $result_count = mysqli_stmt_get_result($stmt_count);
     $row_count = mysqli_fetch_assoc($result_count);
-    $jml_data = $row_count['total'];
+    $jml_data = (int) ($row_count['total'] ?? 0);
+    mysqli_stmt_close($stmt_count);
 
     if ($jml_data == 0) {
         echo '
@@ -156,18 +183,42 @@
     ";
 
     $stmt = mysqli_prepare($Conn, $sql);
+    if (!$stmt) {
+        error_log('Akses: gagal menyiapkan query tabel.');
+        http_response_code(500);
+        echo '<tr><td colspan="7" class="text-center text-danger">Data akses gagal dimuat.</td></tr>';
+        exit;
+    }
 
     // bind dinamis
     if (!empty($params)) {
         $params[] = $posisi;
         $params[] = $batas;
         $types .= "ii";
-        mysqli_stmt_bind_param($stmt, $types, ...$params);
+        if (!mysqli_stmt_bind_param($stmt, $types, ...$params)) {
+            mysqli_stmt_close($stmt);
+            error_log('Akses: gagal menyiapkan parameter tabel.');
+            http_response_code(500);
+            echo '<tr><td colspan="7" class="text-center text-danger">Data akses gagal dimuat.</td></tr>';
+            exit;
+        }
     } else {
-        mysqli_stmt_bind_param($stmt, "ii", $posisi, $batas);
+        if (!mysqli_stmt_bind_param($stmt, "ii", $posisi, $batas)) {
+            mysqli_stmt_close($stmt);
+            error_log('Akses: gagal menyiapkan parameter paginasi.');
+            http_response_code(500);
+            echo '<tr><td colspan="7" class="text-center text-danger">Data akses gagal dimuat.</td></tr>';
+            exit;
+        }
     }
 
-    mysqli_stmt_execute($stmt);
+    if (!mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
+        error_log('Akses: gagal memuat data tabel.');
+        http_response_code(500);
+        echo '<tr><td colspan="7" class="text-center text-danger">Data akses gagal dimuat.</td></tr>';
+        exit;
+    }
     $result = mysqli_stmt_get_result($stmt);
 
     // ===============================
@@ -175,17 +226,17 @@
     // ===============================
     while ($data = mysqli_fetch_assoc($result)) {
 
-        $id_akses   = $data['id_akses'];
-        $nama       = htmlspecialchars($data['nama'] ?? '');
-        $email      = htmlspecialchars($data['email'] ?? '');
-        $akses      = htmlspecialchars($data['nama_akses'] ?? '-');
-
-        $tanggal = !empty($data['tanggal']) 
-            ? date('d/m/Y H:i', strtotime($data['tanggal'])) 
+        $id_akses = (int) $data['id_akses'];
+        $nama = aksesEscapeHtml($data['nama'] ?? '');
+        $email = aksesEscapeHtml($data['email'] ?? '');
+        $akses = aksesEscapeHtml($data['nama_akses'] ?? '-');
+        $tanggalIso = aksesUtcDateIso($data['tanggal'] ?? null);
+        $updatetimeIso = aksesUtcDateIso($data['updatetime'] ?? null);
+        $tanggal = $tanggalIso !== ''
+            ? '<time class="js-akses-date" datetime="' . aksesEscapeHtml($tanggalIso) . '" data-utc="' . aksesEscapeHtml($tanggalIso) . '">' . aksesEscapeHtml(aksesUtcDateDisplay($data['tanggal'])) . '</time>'
             : '-';
-
-        $updatetime = !empty($data['updatetime']) 
-            ? date('d/m/Y H:i', strtotime($data['updatetime'])) 
+        $updatetime = $updatetimeIso !== ''
+            ? '<time class="js-akses-date" datetime="' . aksesEscapeHtml($updatetimeIso) . '" data-utc="' . aksesEscapeHtml($updatetimeIso) . '">' . aksesEscapeHtml(aksesUtcDateDisplay($data['updatetime'])) . '</time>'
             : '-';
 
         echo "
@@ -232,6 +283,7 @@
 
         $no++;
     }
+    mysqli_stmt_close($stmt);
 ?>
 
 <script>

@@ -1,27 +1,35 @@
 <?php
-     // Koneksi
-    include "../../_Config/Connection.php";
+include "../../_Config/Connection.php";
+include "../../_Config/Session.php";
+include "AksesHelper.php";
 
-    // Function
-    include "../../_Config/SimrsFunction.php";
+if (empty($SessionIdAkses)) {
+    http_response_code(401);
+    echo '<option value="">Sesi berakhir</option>';
+    exit;
+}
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo '<option value="">Metode request tidak valid</option>';
+    exit;
+}
 
-    // Tampilkan Option List
-    $sql = "SELECT DISTINCT id_akses_entitas, akses FROM akses_entitas ORDER BY akses ASC";
-    $stmt = mysqli_prepare($Conn, $sql);
+$stmt = $Conn->prepare('SELECT id_akses_entitas, akses FROM akses_entitas ORDER BY akses ASC');
+if (!$stmt || !$stmt->execute()) {
     if ($stmt) {
-        echo '<option>Pilih</option>';
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        while ($data = mysqli_fetch_assoc($result)) {
-            $id_akses_entitas = $data['id_akses_entitas'];
-            $akses            = $data['akses'];
-
-            echo '<option value="' . htmlspecialchars($id_akses_entitas) . '">'
-                . htmlspecialchars($akses) .
-                '</option>';
-        }
-        mysqli_stmt_close($stmt);
-    } else {
-        echo '<option value="">Gagal memuat data</option>';
+        $stmt->close();
     }
-?>
+    error_log('Akses: gagal memuat daftar entitas.');
+    http_response_code(500);
+    echo '<option value="">Daftar entitas gagal dimuat</option>';
+    exit;
+}
+
+echo '<option value="">Pilih</option>';
+$result = $stmt->get_result();
+while ($row = $result->fetch_assoc()) {
+    echo '<option value="' . aksesEscapeHtml($row['id_akses_entitas']) . '">'
+        . aksesEscapeHtml($row['akses'])
+        . '</option>';
+}
+$stmt->close();

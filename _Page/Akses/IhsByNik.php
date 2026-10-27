@@ -1,138 +1,108 @@
 <?php
-    header('Content-Type: application/json');
-    date_default_timezone_set('Asia/Jakarta');
+header('Content-Type: application/json; charset=UTF-8');
 
-    // Connection & Function
-    include "../../_Config/Connection.php";
-    include "../../_Config/Session.php";
-    include "../../_Config/SimrsFunction.php"; // pastikan fungsi generateToken ada di sini
+include "../../_Config/Connection.php";
+include "../../_Config/Session.php";
+include "../../_Config/SimrsFunction.php";
 
-    $response = [
-        'status' => 'error',
-        'message' => 'Terjadi kesalahan.'
-    ];
+$response = ['status' => 'error', 'message' => 'Data Practitioner tidak dapat dimuat.'];
+if (empty($SessionIdAkses)) {
+    http_response_code(401);
+    echo json_encode(['status' => 'error', 'message' => 'Sesi berakhir.'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['status' => 'error', 'message' => 'Metode request tidak valid.'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
-    // ==============================
-    // VALIDASI SESSION
-    // ==============================
-    if (empty($SessionIdAkses)) {
-        $response['message'] = 'Sesi berakhir.';
-        echo json_encode($response);
-        exit;
+$nik = $_POST['nik'] ?? null;
+if (!is_string($nik) || !preg_match('/^[0-9]{16}$/', $nik)) {
+    http_response_code(400);
+    echo json_encode(['status' => 'error', 'message' => 'NIK harus terdiri dari 16 digit angka.'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+try {
+    $tokenResult = generateTokenSatuSehat($Conn);
+    if (!is_array($tokenResult) || ($tokenResult['status'] ?? '') !== 'success' || empty($tokenResult['token'])) {
+        throw new RuntimeException('Token SATUSEHAT tidak tersedia.');
     }
 
-    // ==============================
-    // VALIDASI INPUT
-    // ==============================
-    $nik = $_POST['nik'] ?? '';
+    $stmt = $Conn->prepare(
+        'SELECT url_satusehat FROM setting_satusehat
+         WHERE status_setting_satusehat = 1 LIMIT 1'
+    );
+    if (!$stmt || !$stmt->execute()) {
+        if ($stmt) {
+            $stmt->close();
+        }
+        throw new RuntimeException('Konfigurasi SATUSEHAT gagal dimuat.');
+    }
+    $setting = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
 
-    if (empty($nik)) {
-        $response['message'] = 'NIK wajib diisi.';
-        echo json_encode($response);
-        exit;
+    $baseUrl = rtrim((string) ($setting['url_satusehat'] ?? ''), '/');
+    if (!$setting || !filter_var($baseUrl, FILTER_VALIDATE_URL) || !in_array(parse_url($baseUrl, PHP_URL_SCHEME), ['https'], true)) {
+        throw new RuntimeException('Konfigurasi URL SATUSEHAT tidak valid.');
     }
 
-    try {
-
-        // ==============================
-        // AMBIL TOKEN SATUSEHAT
-        // ==============================
-        $tokenResult = generateTokenSatuSehat($Conn);
-
-        if ($tokenResult['status'] !== 'success') {
-            echo json_encode($tokenResult);
-            exit;
-        }
-
-        $token = $tokenResult['token'];
-
-        // ==============================
-        // AMBIL URL SATUSEHAT AKTIF
-        // ==============================
-        $stmt = $Conn->prepare("
-            SELECT url_satusehat 
-            FROM setting_satusehat 
-            WHERE status_setting_satusehat = 1 
-            LIMIT 1
-        ");
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $data = $result->fetch_assoc();
-        $stmt->close();
-
-        if (!$data) {
-            $response['message'] = 'Konfigurasi SATUSEHAT tidak ditemukan.';
-            echo json_encode($response);
-            exit;
-        }
-
-        $base_url = rtrim($data['url_satusehat'], '/');
-
-        // ==============================
-        // REQUEST KE API SATUSEHAT
-        // ==============================
-        $url = $base_url . "/fhir-r4/v1/Practitioner?identifier=https://fhir.kemkes.go.id/id/nik|".$nik;
-
-        $ch = curl_init();
-
-        curl_setopt_array($ch, [
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => [
-                "Authorization: Bearer $token",
-                "Content-Type: application/json"
-            ],
-            CURLOPT_TIMEOUT => 20,
-            CURLOPT_CONNECTTIMEOUT => 10,
-
-            // DEV ONLY
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false
-        ]);
-
-        $apiResponse = curl_exec($ch);
-        $httpCode    = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError   = curl_error($ch);
-        curl_close($ch);
-
-        if ($apiResponse === false) {
-            $response['message'] = 'Gagal koneksi ke SATUSEHAT: ' . $curlError;
-            echo json_encode($response);
-            exit;
-        }
-
-        if ($httpCode !== 200) {
-            $response['message'] = 'HTTP Error ' . $httpCode;
-            echo json_encode($response);
-            exit;
-        }
-
-        $result = json_decode($apiResponse, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            $response['message'] = 'Response tidak valid.';
-            echo json_encode($response);
-            exit;
-        }
-
-        // ==============================
-        // PARSING HASIL
-        // ==============================
-        if (!empty($result['entry'][0]['resource']['id'])) {
-
-            $ihs = $result['entry'][0]['resource']['id'];
-
-            $response = [
-                'status' => 'success',
-                'ihs'    => $ihs
-            ];
-
-        } else {
-            $response['message'] = 'Data Practitioner tidak ditemukan di SATUSEHAT.';
-        }
-
-    } catch (Exception $e) {
-        $response['message'] = $e->getMessage();
+    $query = http_build_query(
+        ['identifier' => 'https://fhir.kemkes.go.id/id/nik|' . $nik],
+        '',
+        '&',
+        PHP_QUERY_RFC3986
+    );
+    $curl = curl_init($baseUrl . '/fhir-r4/v1/Practitioner?' . $query);
+    if ($curl === false) {
+        throw new RuntimeException('Koneksi SATUSEHAT gagal disiapkan.');
     }
 
-    echo json_encode($response);
+    curl_setopt_array($curl, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            'Authorization: Bearer ' . $tokenResult['token'],
+            'Accept: application/json',
+        ],
+        CURLOPT_TIMEOUT => 20,
+        CURLOPT_CONNECTTIMEOUT => 10,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
+    ]);
+
+    $apiResponse = curl_exec($curl);
+    $httpCode = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    if ($apiResponse === false) {
+        $curlError = curl_error($curl);
+        curl_close($curl);
+        error_log('Akses IHS: request SATUSEHAT gagal: ' . $curlError);
+        throw new RuntimeException('Koneksi ke SATUSEHAT gagal.');
+    }
+    curl_close($curl);
+
+    if ($httpCode !== 200) {
+        error_log('Akses IHS: SATUSEHAT mengembalikan HTTP ' . $httpCode . '.');
+        throw new RuntimeException('SATUSEHAT tidak dapat menemukan data Practitioner.');
+    }
+
+    $result = json_decode($apiResponse, true);
+    if (!is_array($result)) {
+        throw new RuntimeException('Response SATUSEHAT tidak valid.');
+    }
+
+    $ihs = $result['entry'][0]['resource']['id'] ?? '';
+    if (!is_string($ihs) || $ihs === '') {
+        $response['message'] = 'Data Practitioner tidak ditemukan di SATUSEHAT.';
+    } else {
+        $response = ['status' => 'success', 'ihs' => $ihs];
+    }
+} catch (Throwable $error) {
+    error_log('Akses IHS: ' . $error->getMessage());
+    $response['message'] = $error->getMessage() === 'Koneksi ke SATUSEHAT gagal.'
+        || $error->getMessage() === 'SATUSEHAT tidak dapat menemukan data Practitioner.'
+        ? $error->getMessage()
+        : 'Pencarian Practitioner ke SATUSEHAT gagal.';
+}
+
+echo json_encode($response, JSON_UNESCAPED_UNICODE);

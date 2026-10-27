@@ -27,9 +27,9 @@
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-12 text-end icon-btn">
-                                            <button type="button" class="btn btn-md btn-icon btn-outline-dark" data-bs-toggle="modal" data-bs-target="#ModalDownload" title="Download Referensi Observation">
+                                            <!-- <button type="button" class="btn btn-md btn-icon btn-outline-dark" data-bs-toggle="modal" data-bs-target="#ModalDownload" title="Download Referensi Observation">
                                                 <i class="bi bi-download"></i>
-                                            </button>
+                                            </button> -->
                                             <button type="button" class="btn btn-md btn-icon btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalFilter" title="Filter Data">
                                                 <i class="bi bi-filter"></i>
                                             </button>

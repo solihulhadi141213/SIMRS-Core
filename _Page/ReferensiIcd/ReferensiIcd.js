@@ -501,71 +501,7 @@ $(document).ready(function() {
     });
 
 
-    // PROSES CHUNK
-    function prosesChunk(id_upload) {
-
-        $.ajax({
-            url: '_Page/ReferensiIcd/ProsesChunk.php',
-            type: 'POST',
-            data: {id_upload: id_upload},
-            dataType: 'json',
-
-            success: function(res) {
-
-                let persen = res.progress || 0;
-
-                $('#progressBar')
-                    .css('width', persen + '%')
-                    .text(persen + '%');
-
-                $('#progressText').text('Memproses data... ' + persen + '%');
-
-                if (res.status === 'lanjut') {
-
-                    // kasih jeda biar UI smooth
-                    setTimeout(function () {
-                        prosesChunk(id_upload);
-                    }, 150);
-
-                } else if (res.status === 'selesai') {
-
-                    $('#progressBar')
-                        .removeClass('progress-bar-animated')
-                        .addClass('bg-success')
-                        .text('100%');
-
-                    $('#progressText').text('Selesai');
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Upload selesai',
-                        timer: 1500,
-                        showConfirmButton: false
-                    });
-
-                    $('#ButtonUpload').prop('disabled', false);
-
-                    TabelIcd();
-                    $('#ModalUpload').modal('hide');
-
-                } else {
-
-                    $('#progressText').text('Terjadi kesalahan');
-                    $('#ButtonUpload').prop('disabled', false);
-                }
-            },
-
-            error: function(xhr) {
-                console.log(xhr.responseText);
-
-                $('#progressText').text('Error server');
-                $('#ButtonUpload').prop('disabled', false);
-            }
-        });
-    }
-
-
-    // SUBMIT UPLOAD
+    // IMPORT ICD dilakukan dalam satu request tanpa membuat catatan pada tabel log unggahan.
     $(document).on('submit', '#ProsesUpload', function (e) {
         e.preventDefault();
 
@@ -583,10 +519,11 @@ $(document).ready(function() {
 
         // tampilkan progress
         $('#progressContainer').removeClass('d-none');
-        $('#progressText').text('Uploading file...');
+        $('#progressBar').addClass('progress-bar-animated').removeClass('bg-success').css('width', '50%').text('50%');
+        $('#progressText').text('Mengimpor data ICD...');
 
         $.ajax({
-            url: '_Page/ReferensiIcd/UploadFile.php',
+            url: '_Page/ReferensiIcd/ProsesUploadIcd.php',
             type: 'POST',
             data: formData,
             processData: false,
@@ -596,11 +533,23 @@ $(document).ready(function() {
             success: function(res) {
 
                 if (res.status === 'success') {
+                    $('#progressBar')
+                        .removeClass('progress-bar-animated')
+                        .addClass('bg-success')
+                        .css('width', '100%')
+                        .text('100%');
+                    $('#progressText').text(res.message || 'Import selesai.');
 
-                    $('#progressText').text('File uploaded, memulai proses...');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Import selesai',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
 
-                    // mulai chunk
-                    prosesChunk(res.id_upload);
+                    $('#ButtonUpload').prop('disabled', false);
+                    TabelIcd();
+                    $('#ModalUpload').modal('hide');
 
                 } else {
 

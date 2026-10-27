@@ -1,6 +1,10 @@
 # Aturan Dasar dan Prinsip Dasar Yang Perlu Dipatui
 Sistem harus memiliki stabilitas tinggi dengan mempertimbangkan alur kerja yang logis dan tidak menimbulkan resiko kesalahan yang fatal.
 Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan tidak menerapkan praktik baik. Oleh sebab itu, banyak hal yang tidak relevan. Saya membutuhkan bantuan agent AI untuk melakukan perbaikan, pengembangan dan evaluasi dengan aturan-aturan yang kita sepakati bersama.
+1. Pertahankan gaya (style) tampilan dengan cara mempelajari tampilan yang sudah ada.
+2. Pelajari bagaimana data ditampilkan, load dengan javascript (jquery) dengan cara mempelajari keseluruhan project.
+3. Simpan dalam memori, ingatan agent bagaimana modul dan fitur bekerja.
+4. Simpan setiap bagian yang konsisten dalam skill.
 ## Aturan Utama
 1. Jangan pernah generate atau membuat gambar, vidio atau media lainnya.
 2. Jangan pernah menggunakan pustaka / dependensi dengan CDN tanpa ijin.
@@ -115,6 +119,20 @@ Halaman utama `index.php` disusun berdasarkan beberapa komponen terpisah (modula
 4. Placeholder UI.
   - Setiap kali data, proses atau sebuah UI form ditampilkan menggunakan javascript / jquery wajib menggunakan indikator Skeleton Loader atau Loading Spinner.
   - Skeleton Loader atau Loading Spinner memanfaatkan penggunaan pustaka dan dependensi yang sudah ada, atau membuat class khusus pada css.
+5. Form
+  - Pada form yang wajib diisi, tandai dengan tanda * berwarna merah
+  - Optimalkan penggunaan select2 dengan cara yang benar, tiru fitur yang sudah ada untuk menampilkan select2 pada form.
+6. Card
+  - Jangan gunakan card di dalam card
+  - Jangan gunakan card di dalam modal 
+7. accordion
+  - accordion-body harus memiliki ukuran text lebih kecil dari accordion-header.
+  - Warna accordion-body berbeda dan pada background putih, warnanya lebih cerah dari pada accordion-header.
+  - Agar tidak membingungkan user, warna accordion-body dan accordion-header harus berbeda dengan menerapkan praktik baik UI/UX
+## Modal
+Routing modal pada `_Partial\Modal.php` berfungsi agar setiap halaman memiliki konteks modalnya masing-masing. Hal ini dilakukan dengan tujuan efisiensi dan kecepatan halaman yang lebih optimal. Berikut aturan penggunaan modal:
+1. Gunakan modal untuk menampilkan konfirmasi data akan dihapus. Jangan Gunakan sweet alert untuk melakukan konfirmasi penghapusan data, tapi gunakan modal dengan tampilan profesional. Untuk implementasi tampilan modal, tiru dan pelajari bagaimana fitur yang sudah ada.
+2. Gunakan modal untuk menampilkan form, gunakan gaya form vertikal yang sistematis.
 ## Logging
 Setiap aktivitas user pada sistem (aplikasi) akan dicatat pada database di tabel 'log' dengan parameter berikut :
 1. `id_akses` adalah id akses user yang melakukan aktivitas.

@@ -67,6 +67,7 @@
         "ReferensiWilayah"      => "Wilayah",
         "Pasien"                => "Pasien",
         "Kunjungan"             => "Kunjungan",
+        "Antrian"               => "Antrian",
         "GeneralConsent"        => "General Consent",
         "Diagnosis"             => "Diagnosis",
         "Tindakan"              => "Tindakan",

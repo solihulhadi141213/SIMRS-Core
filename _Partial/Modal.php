@@ -1,4 +1,6 @@
 <?php
+    $activePage = trim((string) ($_GET['Page'] ?? ($Page ?? '')));
+
     // Routing modal yang mudah dirawat dan lebih cepat diproses.
     // Global modals: selalu disertakan.
     $globalModals = [
@@ -38,27 +40,25 @@
         'ReferensiIcdBpjs'      => '_Page/ReferensiIcdBpjs/ModalReferensiIcdBpjs.php',
         'Pasien'                => '_Page/Pasien/ModalPasien.php',
         'Kunjungan'             => '_Page/Kunjungan/ModalKunjungan.php',
+        'Antrian'             => '_Page/Antrian/ModalAntrian.php',
         'GeneralConsent'        => '_Page/GeneralConsent/ModalGeneralConsent.php',
+        'Observasi'        => '_Page/Observasi/ModalObservasi.php',
         'Diagnosis'             => '_Page/Diagnosis/ModalDiagnosis.php',
         'Tindakan'              => '_Page/Tindakan/ModalTindakan.php',
         'Alergi'                => '_Page/Alergi/ModalAlergi.php',
         'Laboratorium'          => '_Page/Laboratorium/ModalLaboratorium.php',
     ];
 
-    /**
-     * Sertakan file jika ada. Membungkus include agar aman saat file hilang.
-     */
-    $safeInclude = static function (string $path): void {
-        if (is_file($path)) {
-            include $path;
-        }
-    };
-
     foreach ($globalModals as $modalPath) {
-        $safeInclude($modalPath);
+        if (is_file($modalPath)) {
+            include $modalPath;
+        }
     }
 
-    if (!empty($Page) && isset($modalRoutes[$Page])) {
-        $safeInclude($modalRoutes[$Page]);
+    if ($activePage !== '' && isset($modalRoutes[$activePage])) {
+        $modalPath = $modalRoutes[$activePage];
+        if (is_file($modalPath)) {
+            include $modalPath;
+        }
     }
 ?>

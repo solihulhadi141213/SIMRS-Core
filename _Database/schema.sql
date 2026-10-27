@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Waktu pembuatan: 26 Okt 2026 pada 09.46
+-- Waktu pembuatan: 26 Okt 2026 pada 16.55
 -- Versi server: 8.4.7
 -- Versi PHP: 8.5.0
 
@@ -236,6 +236,69 @@ CREATE TABLE IF NOT EXISTS `alergi_alergen` (
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id_alergi_alergen`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Referensi zat alergen';
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `antrian`
+--
+
+DROP TABLE IF EXISTS `antrian`;
+CREATE TABLE IF NOT EXISTS `antrian` (
+  `id_antrian` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id_pasien` int UNSIGNED DEFAULT NULL COMMENT 'Jika kosong maka pasien baru',
+  `id_kunjungan` int UNSIGNED DEFAULT NULL COMMENT 'Jika kosong maka belum ada kunjungan',
+  `id_poliklinik` int UNSIGNED DEFAULT NULL COMMENT 'Jika kosong maka poli dihapus',
+  `id_dokter` int UNSIGNED DEFAULT NULL COMMENT 'Jika kosong maka dokter dihapus',
+  `id_jadwal` int UNSIGNED DEFAULT NULL COMMENT 'Jika kosong maka jadwal dihapus',
+  `no_antrian` int UNSIGNED NOT NULL COMMENT 'Nomor urutan antrian',
+  `kode_booking` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'kode acak booking',
+  `nama_pasien` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nama lengkap pasien',
+  `nik` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Identitas KTP',
+  `no_bpjs` varchar(13) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Nomor BPJS',
+  `kontak` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Kontak pasien',
+  `gender` enum('Laki-laki','Perempuan') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Jenis Kelamin',
+  `nomor_referensi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nomor dokumen yang mereferensikan',
+  `jenis_referensi` enum('1','2','3','4') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT ' 	1.Rujukan FKTP 2.Rujukan Internal 3.Kontrol 4.Rujukan Antar RS ',
+  `jenis_request` tinyint(1) NOT NULL COMMENT 'Pasien Baru? 0=Tidak, 1=Ya ',
+  `poli_eksekutif` tinyint(1) NOT NULL COMMENT 'Apakah Polieksekutif? 0. Tidak 1. Ya ',
+  `pembayaran` enum('UMUM','BPJS','ASURANSI') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Metode pembayaran yang digunakan',
+  `keluhan` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Keluhan yang dirasakan pasien',
+  `nama_dokter` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nama dokter sesuai tabel dokter',
+  `nama_poliklinik` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'nama poli sesuai poliklinik',
+  `tanggal_kunjungan` date NOT NULL COMMENT 'Tanggal Rencana Kunjungan',
+  `datetime_creat` datetime NOT NULL COMMENT 'Tanggal & Jam Pendaftaran antrian dibuat (UTC)',
+  `status_antrian` enum('Terdaftar','Batal','Checkin','Panggil Admisi','Tunggu Poli','Layanan Poli','Tunggu Farmasi','Layanan Farmasi','Selesai') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Posisi status pelayanan pasien',
+  `sumber_antrian` enum('JKN Mobile','Website','Mesin Antrian','Manual') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Dari mana data ini berasal',
+  `ws_bpjs` tinyint(1) NOT NULL COMMENT 'Apakahh antrian sudah dikirim ke antrol BPJS',
+  `keterangan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Misalnya keterangan penyebab pembatalan',
+  `update_by_id` int UNSIGNED DEFAULT NULL COMMENT 'ID Akses yang melakukan update',
+  `update_by_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Nama akses yang melakukan update',
+  `update_at` datetime DEFAULT NULL COMMENT 'Waktu update (kosong, jika belum pernah diubah)',
+  PRIMARY KEY (`id_antrian`),
+  KEY `antrian_pasien` (`id_pasien`),
+  KEY `antrian_to_kunjungan` (`id_kunjungan`),
+  KEY `antrian_to_poliklinik` (`id_poliklinik`),
+  KEY `antrian_dokter` (`id_dokter`),
+  KEY `antrian_to_jadwal` (`id_jadwal`),
+  KEY `antrian_to_akses` (`update_by_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `antrian_log`
+--
+
+DROP TABLE IF EXISTS `antrian_log`;
+CREATE TABLE IF NOT EXISTS `antrian_log` (
+  `id_antrian_log` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id_antrian` int UNSIGNED NOT NULL COMMENT 'Dari tabel antrian',
+  `status_antrian` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Sesuai Enum status antrian',
+  `datetime_rs` datetime NOT NULL COMMENT 'Tanggal & Jam Rumah Sakit',
+  `datetime_bpjs` datetime DEFAULT NULL COMMENT 'Tanggal & Jam BPJS',
+  PRIMARY KEY (`id_antrian_log`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Catatan layanan antrian';
 
 -- --------------------------------------------------------
 
@@ -1085,6 +1148,17 @@ ALTER TABLE `alergi`
   ADD CONSTRAINT `alergi_kunjungan` FOREIGN KEY (`id_kunjungan`) REFERENCES `kunjungan` (`id_kunjungan`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `alergi_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `alergi_to_alergen` FOREIGN KEY (`id_alergi_alergen`) REFERENCES `alergi_alergen` (`id_alergi_alergen`) ON DELETE SET NULL;
+
+--
+-- Ketidakleluasaan untuk tabel `antrian`
+--
+ALTER TABLE `antrian`
+  ADD CONSTRAINT `antrian_dokter` FOREIGN KEY (`id_dokter`) REFERENCES `dokter` (`id_dokter`) ON DELETE SET NULL,
+  ADD CONSTRAINT `antrian_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE SET NULL,
+  ADD CONSTRAINT `antrian_to_akses` FOREIGN KEY (`update_by_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL,
+  ADD CONSTRAINT `antrian_to_jadwal` FOREIGN KEY (`id_jadwal`) REFERENCES `jadwal_dokter` (`id_jadwal`) ON DELETE SET NULL,
+  ADD CONSTRAINT `antrian_to_kunjungan` FOREIGN KEY (`id_kunjungan`) REFERENCES `kunjungan` (`id_kunjungan`) ON DELETE SET NULL,
+  ADD CONSTRAINT `antrian_to_poliklinik` FOREIGN KEY (`id_poliklinik`) REFERENCES `poliklinik` (`id_poliklinik`) ON DELETE SET NULL;
 
 --
 -- Ketidakleluasaan untuk tabel `api_token`

@@ -16043,3 +16043,28 @@ canvas{
     height:100%;
     touch-action:none;
 }
+
+/* Foto profil detail akses dicrop ke bingkai lingkaran tanpa mengubah rasio gambar. */
+.akses-detail-photo {
+    display: block;
+    width: 120px;
+    height: 120px;
+    margin-inline: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Bedakan latar header dan isi pada seluruh accordion aplikasi. */
+.accordion .accordion-button {
+    background-color: #e9eef3;
+}
+
+.accordion .accordion-button:not(.collapsed) {
+    background-color: #e9eef3;
+}
+
+.accordion .accordion-body,
+.accordion .accordion-body .list-group-item {
+    background-color: #f8fafc;
+}

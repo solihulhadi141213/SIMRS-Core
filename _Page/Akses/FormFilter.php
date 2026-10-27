@@ -1,58 +1,47 @@
 <?php
-    // Koneksi
-    include "../../_Config/Connection.php";
+include "../../_Config/Connection.php";
+include "../../_Config/Session.php";
+include "AksesHelper.php";
 
-    // Function
-    include "../../_Config/SimrsFunction.php";
+if (empty($SessionIdAkses)) {
+    http_response_code(401);
+    echo '<div class="alert alert-danger">Sesi berakhir.</div>';
+    exit;
+}
 
-    $keyword_by = isset($_POST['keyword_by']) ? trim($_POST['keyword_by']) : '';
+$keywordBy = isset($_POST['keyword_by']) && is_string($_POST['keyword_by'])
+    ? trim($_POST['keyword_by'])
+    : '';
+$allowedColumns = ['nama', 'email', 'id_akses_entitas', 'tanggal', 'updatetime'];
+if ($keywordBy !== '' && !in_array($keywordBy, $allowedColumns, true)) {
+    http_response_code(400);
+    echo '<div class="alert alert-danger">Kolom pencarian tidak valid.</div>';
+    exit;
+}
 
-    // Default
-    if (empty($keyword_by)) {
-        echo '<input type="text" name="keyword" id="keyword" class="form-control">';
+if ($keywordBy === 'id_akses_entitas') {
+    $stmt = $Conn->prepare('SELECT id_akses_entitas, akses FROM akses_entitas ORDER BY akses ASC');
+    if (!$stmt || !$stmt->execute()) {
+        if ($stmt) {
+            $stmt->close();
+        }
+        error_log('Akses: gagal memuat pilihan filter entitas.');
+        echo '<div class="alert alert-danger">Pilihan entitas gagal dimuat.</div>';
         exit;
     }
+    ?>
+    <select name="keyword" id="keyword" class="form-select">
+        <option value="">Pilih</option>
+        <?php $result = $stmt->get_result(); ?>
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <option value="<?= aksesEscapeHtml($row['id_akses_entitas']) ?>"><?= aksesEscapeHtml($row['akses']) ?></option>
+        <?php endwhile; ?>
+    </select>
+    <?php
+    $stmt->close();
+    exit;
+}
 
-    // Dropdown akses entitas
-    if ($keyword_by === "id_akses_entitas") {
-
-        echo '<select name="keyword" id="keyword" class="form-control">';
-        echo '<option value="">Pilih</option>';
-
-        // 🔥 Ambil langsung id + akses (tanpa query tambahan)
-        $sql = "SELECT DISTINCT id_akses_entitas, akses 
-                FROM akses_entitas 
-                ORDER BY akses ASC";
-
-        $stmt = mysqli_prepare($Conn, $sql);
-
-        if ($stmt) {
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-
-            while ($data = mysqli_fetch_assoc($result)) {
-                $id_akses_entitas = $data['id_akses_entitas'];
-                $akses            = $data['akses'];
-
-                echo '<option value="' . htmlspecialchars($id_akses_entitas) . '">'
-                    . htmlspecialchars($akses) .
-                    '</option>';
-            }
-
-            mysqli_stmt_close($stmt);
-        } else {
-            echo '<option value="">Gagal memuat data</option>';
-        }
-
-        echo '</select>';
-
-    } else {
-
-        if ($keyword_by === "tanggal" || $keyword_by === "updatetime") {
-            echo '<input type="date" name="keyword" id="keyword" class="form-control">';
-        } else {
-            echo '<input type="text" name="keyword" id="keyword" class="form-control">';
-        }
-
-    }
+$inputType = in_array($keywordBy, ['tanggal', 'updatetime'], true) ? 'date' : 'search';
 ?>
+<input type="<?= $inputType ?>" name="keyword" id="keyword" class="form-control">

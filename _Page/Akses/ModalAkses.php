@@ -112,16 +112,16 @@
                     <!-- Nama Pengguna -->
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="nama"><small>Nama Lengkap</small></label>
-                            <input type="text" name="nama" id="nama" class="form-control" placeholder="Contoh : Jhon Doe" required>
+                            <label for="nama"><small>Nama Lengkap <span class="text-danger">*</span></small></label>
+                            <input type="text" name="nama" id="nama" class="form-control" placeholder="Contoh : Jhon Doe" maxlength="255" required>
                         </div>
                     </div>
 
                     <!-- NIK -->
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="nik"><small>NIK / KTP</small></label>
-                            <input type="text" name="nik" id="nik" class="form-control" placeholder="Contoh : 32000000001" required>
+                            <label for="nik"><small>NIK / KTP <span class="text-danger">*</span></small></label>
+                            <input type="text" name="nik" id="nik" class="form-control" placeholder="Contoh : 32000000001" maxlength="255" required>
                         </div>
                     </div>
 
@@ -142,24 +142,24 @@
                     <!-- EMAIL -->
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="email"><small>Alamat Email</small></label>
-                            <input type="email" name="email" id="email" class="form-control" required>
+                            <label for="email"><small>Alamat Email <span class="text-danger">*</span></small></label>
+                            <input type="email" name="email" id="email" class="form-control" maxlength="255" required>
                         </div>
                     </div>
 
                     <!-- KONTAK -->
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="kontak"><small>Nomor Kontak</small></label>
-                            <input type="text" name="kontak" id="kontak" class="form-control" placeholder="62" required>
+                            <label for="kontak"><small>Nomor Kontak <span class="text-danger">*</span></small></label>
+                            <input type="text" name="kontak" id="kontak" class="form-control" placeholder="62" maxlength="255" required>
                         </div>
                     </div>
 
                     <!-- AKSES -->
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="id_akses_entitas"><small>Entitas Akses</small></label>
-                            <select name="id_akses_entitas" id="id_akses_entitas" class="form-control">
+                            <label for="id_akses_entitas"><small>Entitas Akses <span class="text-danger">*</span></small></label>
+                            <select name="id_akses_entitas" id="id_akses_entitas" class="form-control" required>
                                 <option value="">Pilih</option>
                             </select>
                         </div>
@@ -168,9 +168,9 @@
                     <!-- PASSWORD -->
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="password"><small>Password</small></label>
+                            <label for="password"><small>Password <span class="text-danger">*</span></small></label>
                             <div class="input-group">
-                                <input type="text" name="password" id="password" class="form-control"  required>
+                                <input type="password" name="password" id="password" class="form-control" autocomplete="new-password" required>
                                 <button type="button" class="btn btn-sm btn-secondary" id="GeneratePassword" title="Buat Password Otomatiis">
                                     <i class="bi bi-repeat"></i> Generate
                                 </button>
@@ -182,8 +182,8 @@
                     <!-- FOTO PROFIL -->
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="gambar"><small>Foto Profil</small></label>
-                            <input type="file" name="gambar" id="gambar" class="form-control"  required>
+                            <label for="gambar"><small>Foto Profil <span class="text-danger">*</span></small></label>
+                            <input type="file" name="gambar" id="gambar" class="form-control" accept=".jpg,.jpeg,.png,.gif" required>
                             <small class="text text-muted">Maksimal 2 Mb (File Type : JPG, PNG, GIF)</small>
                         </div>
                     </div>
@@ -216,13 +216,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                
-                <div class="row">
-                    <div class="col-12" id="FormDetailAkses">
-                        <!-- Form Detail Akan Muncul Disini -->
-                    </div>
+                <div id="FormDetailAkses">
+                    <!-- Detail akses dimuat melalui AJAX. -->
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">

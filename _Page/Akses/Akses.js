@@ -1,3 +1,18 @@
+// Tampilkan loading yang konsisten untuk konten modal yang dimuat melalui AJAX.
+function aksesLoadingMarkup() {
+    return '<div class="text-center text-muted py-3"><span class="spinner-border spinner-border-sm me-2" role="status" aria-label="Memuat"></span>Memuat data...</div>';
+}
+
+// Tampilkan timestamp UTC sesuai zona waktu browser.
+function formatAksesDates(container) {
+    container.find('.js-akses-date[data-utc]').each(function () {
+        const date = new Date($(this).attr('data-utc'));
+        if (!Number.isNaN(date.getTime())) {
+            $(this).text(date.toLocaleString());
+        }
+    });
+}
+
 // Tabel Akses
 function TabelAkses() {
     var ProsesFilter = $('#ProsesFilter').serialize();
@@ -16,11 +31,17 @@ function TabelAkses() {
                 target.html(data)
                       .addClass('blur-loading')
                       .css('opacity', '1');
+                formatAksesDates(target);
 
                 setTimeout(function () {
                     target.removeClass('blur-loading');
                 }, 200);
             }, 150);
+        },
+        error: function () {
+            target.removeClass('blur-loading').html(
+                '<tr><td colspan="7" class="text-center text-danger">Data akses gagal dimuat. Silakan coba kembali.</td></tr>'
+            );
         }
     });
 }
@@ -31,12 +52,16 @@ $(document).ready(function() {
     // Keyword By
     $('#keyword_by').change(function(){
         var keyword_by = $('#keyword_by').val();
+        $('#FormFilter').html(aksesLoadingMarkup());
         $.ajax({
             type 	    : 'POST',
             url 	    : '_Page/Akses/FormFilter.php',
             data        : {keyword_by: keyword_by},
             success     : function(data){
                 $('#FormFilter').html(data);
+            },
+            error: function () {
+                $('#FormFilter').html('<div class="alert alert-danger mb-0">Filter gagal dimuat.</div>');
             }
         });
     });
@@ -74,6 +99,9 @@ $(document).ready(function() {
             url 	    : '_Page/Akses/OptionEntitasAkses.php',
             success     : function(data){
                 $('#id_akses_entitas').html(data);
+            },
+            error: function () {
+                $('#id_akses_entitas').html('<option value="">Daftar entitas gagal dimuat</option>');
             }
         });
     });
@@ -122,7 +150,7 @@ $(document).ready(function() {
                     $('#ihs').val(response.ihs);
                 } else {
                     $('#nik').addClass('is-invalid');
-                    $('#nik').after('<div class="invalid-feedback">' + response.message + '</div>');
+                    $('<div class="invalid-feedback">').text(response.message).insertAfter('#nik');
                 }
             },
             error: function () {
@@ -242,11 +270,9 @@ $(document).ready(function() {
 
                 } else {
 
-                    notifikasi.html(`
-                        <div class="alert alert-danger">
-                            <small>${response.message}</small>
-                        </div>
-                    `);
+                    $('<div class="alert alert-danger">')
+                        .append($('<small>').text(response.message))
+                        .appendTo(notifikasi);
                 }
             },
 
@@ -275,7 +301,7 @@ $(document).ready(function() {
         $('#ModalDetailAkses').modal('show');
 
         // Loading Form
-        $('#FormDetailAkses').html('Loading...');
+        $('#FormDetailAkses').html(aksesLoadingMarkup());
 
         // Tampilkan Dengan AJAX
         $.ajax({
@@ -284,6 +310,10 @@ $(document).ready(function() {
             data        : {id_akses: id_akses},
             success     : function(data){
                 $('#FormDetailAkses').html(data);
+                formatAksesDates($('#FormDetailAkses'));
+            },
+            error: function () {
+                $('#FormDetailAkses').html('<div class="alert alert-danger">Detail akses gagal dimuat.</div>');
             }
         });
     });
@@ -300,7 +330,7 @@ $(document).ready(function() {
         $('#ModalDaftarPengguna').modal('show');
 
         // Loading Form
-        $('#FormDaftarPengguna').html('Loading...');
+        $('#FormDaftarPengguna').html(aksesLoadingMarkup());
 
         // Tampilkan Dengan AJAX
         $.ajax({
@@ -328,7 +358,7 @@ $(document).ready(function() {
         $('#NotifikasiEditAkses').html('');
 
         // Loading Form
-        $('#FormEditAkses').html('Loading...');
+        $('#FormEditAkses').html(aksesLoadingMarkup());
 
         // Tampilkan Dengan AJAX
         $.ajax({
@@ -337,6 +367,10 @@ $(document).ready(function() {
             data        : {id_akses: id_akses},
             success     : function(data){
                 $('#FormEditAkses').html(data);
+                $('#nama_edit').trigger('focus');
+            },
+            error: function () {
+                $('#FormEditAkses').html('<div class="alert alert-danger">Form edit akses gagal dimuat.</div>');
             }
         });
     });
@@ -384,7 +418,7 @@ $(document).ready(function() {
                 } else {
 
                     nikInput.addClass('is-invalid');
-                    nikInput.after('<div class="invalid-feedback">' + response.message + '</div>');
+                    $('<div class="invalid-feedback">').text(response.message).insertAfter(nikInput);
                 }
             },
 
@@ -459,11 +493,9 @@ $(document).ready(function() {
                     TabelAkses();
 
                 } else {
-                    notifikasi.html(`
-                        <div class="alert alert-danger">
-                            ${response.message}
-                        </div>
-                    `);
+                    $('<div class="alert alert-danger">')
+                        .text(response.message)
+                        .appendTo(notifikasi);
                 }
             },
 
@@ -494,7 +526,7 @@ $(document).ready(function() {
         $('#NotifikasiIjinAkses').html('');
 
         // Loading Form
-        $('#FormIjinAkses').html('Loading...');
+        $('#FormIjinAkses').html(aksesLoadingMarkup());
 
         // Tampilkan Dengan AJAX
         $.ajax({
@@ -503,6 +535,9 @@ $(document).ready(function() {
             data        : {id_akses: id_akses},
             success     : function(data){
                 $('#FormIjinAkses').html(data);
+            },
+            error: function () {
+                $('#FormIjinAkses').html('<div class="alert alert-danger">Form izin akses gagal dimuat.</div>');
             }
         });
     });
@@ -577,11 +612,9 @@ $(document).ready(function() {
 
                 } else {
 
-                    notifikasi.html(`
-                        <div class="alert alert-danger">
-                            <small>${response.message}</small>
-                        </div>
-                    `);
+                    $('<div class="alert alert-danger">')
+                        .append($('<small>').text(response.message))
+                        .appendTo(notifikasi);
                 }
             },
 
@@ -614,7 +647,7 @@ $(document).ready(function() {
         $('#NotifikasiHapusAkses').html('');
 
         // Loading Form
-        $('#FormHapusAkses').html('Loading...');
+        $('#FormHapusAkses').html(aksesLoadingMarkup());
 
         // Tampilkan Dengan AJAX
         $.ajax({
@@ -623,6 +656,10 @@ $(document).ready(function() {
             data        : {id_akses: id_akses},
             success     : function(data){
                 $('#FormHapusAkses').html(data);
+                formatAksesDates($('#FormHapusAkses'));
+            },
+            error: function () {
+                $('#FormHapusAkses').html('<div class="alert alert-danger">Konfirmasi hapus akses gagal dimuat.</div>');
             }
         });
     });
@@ -692,11 +729,9 @@ $(document).ready(function() {
                 } else {
 
                     // Tampilkan error
-                    notifikasi.html(`
-                        <div class="alert alert-danger">
-                            <small>${response.message}</small>
-                        </div>
-                    `);
+                    $('<div class="alert alert-danger">')
+                        .append($('<small>').text(response.message))
+                        .appendTo(notifikasi);
                 }
             },
 

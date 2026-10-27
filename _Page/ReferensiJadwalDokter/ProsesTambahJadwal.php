@@ -41,7 +41,7 @@
     $kuota_jkn      = $_POST['kuota_jkn'] ?? 0;
     $kuota_non_jkn  = $_POST['kuota_non_jkn'] ?? 0;
     $time_max       = $_POST['time_max'] ?? '';
-    $status       = $_POST['time_max'] ?? 0;
+    $status        = isset($_POST['status']) && $_POST['status'] === '1' ? 1 : 0;
 
     // ==========================
     // VALIDASI INPUT

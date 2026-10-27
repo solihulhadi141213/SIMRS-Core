@@ -1,124 +1,124 @@
 <?php
-    include "../../_Config/Connection.php";
-    include "../../_Config/Session.php";
+include "../../_Config/Connection.php";
+include "../../_Config/Session.php";
+include "AksesHelper.php";
 
-    if (empty($SessionIdAkses)) {
-        echo '<div class="alert alert-danger">Sesi berakhir</div>';
-        exit;
-    }
+if (empty($SessionIdAkses)) {
+    echo '<div class="alert alert-danger">Sesi berakhir.</div>';
+    exit;
+}
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo '<div class="alert alert-danger">Metode request tidak valid.</div>';
+    exit;
+}
 
-    $id_akses = $_POST['id_akses'] ?? '';
+$idAkses = filter_input(INPUT_POST, 'id_akses', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+if (!$idAkses) {
+    echo '<div class="alert alert-danger">ID akses tidak valid.</div>';
+    exit;
+}
 
-    if (empty($id_akses)) {
-        echo '<div class="alert alert-danger">ID tidak valid</div>';
-        exit;
-    }
-
-    // Ambil data akses
-    $stmt = $Conn->prepare("SELECT * FROM akses WHERE id_akses=?");
-    $stmt->bind_param("i", $id_akses);
-    $stmt->execute();
-    $data = $stmt->get_result()->fetch_assoc();
+$stmt = $Conn->prepare('SELECT * FROM akses WHERE id_akses = ?');
+if (!$stmt) {
+    error_log('Akses: gagal menyiapkan data form edit.');
+    echo '<div class="alert alert-danger">Data akses gagal dimuat.</div>';
+    exit;
+}
+$stmt->bind_param('i', $idAkses);
+if (!$stmt->execute()) {
     $stmt->close();
+    error_log('Akses: gagal memuat data form edit.');
+    echo '<div class="alert alert-danger">Data akses gagal dimuat.</div>';
+    exit;
+}
+$data = $stmt->get_result()->fetch_assoc();
+$stmt->close();
 
-    if (!$data) {
-        echo '<div class="alert alert-danger">Data tidak ditemukan</div>';
-        exit;
+if (!$data) {
+    echo '<div class="alert alert-danger">Data tidak ditemukan.</div>';
+    exit;
+}
+
+$stmtEntitas = $Conn->prepare('SELECT id_akses_entitas, akses, deskripsi FROM akses_entitas ORDER BY akses ASC');
+if (!$stmtEntitas || !$stmtEntitas->execute()) {
+    if ($stmtEntitas) {
+        $stmtEntitas->close();
     }
-
-    // Ambil entitas
-    $entitas = $Conn->query("SELECT * FROM akses_entitas ORDER BY akses ASC");
-
-    // Gambar
-    $gambar = (!empty($data['gambar']) && file_exists("../../assets/images/user/".$data['gambar']))
-        ? "assets/images/user/".$data['gambar']
-        : "assets/images/user/no-image.png";
+    error_log('Akses: gagal memuat daftar entitas pada form edit.');
+    echo '<div class="alert alert-danger">Daftar entitas akses gagal dimuat.</div>';
+    exit;
+}
+$entitas = $stmtEntitas->get_result();
 ?>
+<input type="hidden" name="id_akses" value="<?= aksesEscapeHtml($data['id_akses']) ?>">
 
-<input type="hidden" name="id_akses" value="<?= $data['id_akses'] ?>">
-
-
-
-<!-- NAMA -->
 <div class="row mb-3">
     <div class="col-12">
-        <label><small>Nama Lengkap</small></label>
-        <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($data['nama']) ?>" required>
+        <label for="nama_edit" class="form-label"><small>Nama Lengkap <span class="text-danger">*</span></small></label>
+        <input type="text" name="nama" id="nama_edit" class="form-control" value="<?= aksesEscapeHtml($data['nama']) ?>" required>
     </div>
 </div>
-
-<!-- NIK + IHS -->
 <div class="row mb-3">
     <div class="col-md-12">
-        <label for="nik_edit"><small>NIK / KTP</small></label>
-        <input type="text" name="nik" id="nik_edit" class="form-control" value="<?php echo $data['nik']; ?>" required>
+        <label for="nik_edit" class="form-label"><small>NIK / KTP <span class="text-danger">*</span></small></label>
+        <input type="text" name="nik" id="nik_edit" class="form-control" value="<?= aksesEscapeHtml($data['nik']) ?>" required>
     </div>
 </div>
-
-<!-- ID Practitioner (IHS) -->
 <div class="row mb-3">
     <div class="col-md-12">
-        <label for="ihs_edit"><small>ID Practitioner (IHS)</small></label>
+        <label for="ihs_edit" class="form-label"><small>ID Practitioner (IHS)</small></label>
         <div class="input-group">
-            <input type="text" name="ihs" id="ihs_edit" class="form-control" value="<?php echo $data['ihs']; ?>">
+            <input type="text" name="ihs" id="ihs_edit" class="form-control" value="<?= aksesEscapeHtml($data['ihs']) ?>">
             <button type="button" class="btn btn-sm btn-outline-secondary" id="SearchByNikEdit">
                 <i class="bi bi-search"></i> Cari
             </button>
         </div>
     </div>
 </div>
-
-<!-- EMAIL -->
 <div class="row mb-3">
     <div class="col-md-12">
-        <label for="email_edit"><small>Alamat Email</small></label>
-        <input type="email" name="email" id="email_edit" class="form-control" value="<?= htmlspecialchars($data['email']) ?>" required>
+        <label for="email_edit" class="form-label"><small>Alamat Email <span class="text-danger">*</span></small></label>
+        <input type="email" name="email" id="email_edit" class="form-control" value="<?= aksesEscapeHtml($data['email']) ?>" required>
     </div>
 </div>
-
-<!-- EKONTAK -->
 <div class="row mb-3">
     <div class="col-md-12">
-        <label for="kontak_edit"><small>Nomor Kontak</small></label>
-        <input type="text" name="kontak" id="kontak_edit" class="form-control" value="<?= htmlspecialchars($data['kontak']) ?>" required>
+        <label for="kontak_edit" class="form-label"><small>Nomor Kontak <span class="text-danger">*</span></small></label>
+        <input type="text" name="kontak" id="kontak_edit" class="form-control" value="<?= aksesEscapeHtml($data['kontak']) ?>" required>
     </div>
 </div>
-
-<!-- AKSES -->
 <div class="row mb-3">
     <div class="col-12">
-        <label><small>Entitas Akses</small></label>
-        <select name="id_akses_entitas" class="form-control" required>
+        <label for="id_akses_entitas_edit" class="form-label"><small>Entitas Akses <span class="text-danger">*</span></small></label>
+        <select name="id_akses_entitas" id="id_akses_entitas_edit" class="form-select" required>
             <option value="">Pilih</option>
-            <?php while($row = $entitas->fetch_assoc()){ ?>
-                <option value="<?= $row['id_akses_entitas'] ?>"
-                    <?= $row['id_akses_entitas'] == $data['id_akses_entitas'] ? 'selected' : '' ?>>
-                    <?= $row['akses'] ?> - <?= $row['deskripsi'] ?>
+            <?php while ($row = $entitas->fetch_assoc()): ?>
+                <option value="<?= aksesEscapeHtml($row['id_akses_entitas']) ?>"
+                    <?= (int) $row['id_akses_entitas'] === (int) $data['id_akses_entitas'] ? 'selected' : '' ?>>
+                    <?= aksesEscapeHtml($row['akses']) ?> - <?= aksesEscapeHtml($row['deskripsi']) ?>
                 </option>
-            <?php } ?>
+            <?php endwhile; ?>
         </select>
     </div>
 </div>
-
-<!-- PASSWORD -->
 <div class="row mb-3">
     <div class="col-12">
-        <label><small>Password Baru (opsional)</small></label>
+        <label for="password_edit" class="form-label"><small>Password Baru (opsional)</small></label>
         <div class="input-group">
-            <input type="text" name="password" id="password_edit" class="form-control">
+            <input type="password" name="password" id="password_edit" class="form-control" autocomplete="new-password">
             <button type="button" class="btn btn-sm btn-secondary" id="GeneratePasswordEdit">
                 <i class="bi bi-arrow-left-right"></i> Generate
             </button>
         </div>
-        <small class="text-muted">Kosongkan jika tidak ingin mengubah password</small>
+        <small class="text-muted">Kosongkan jika tidak ingin mengubah password.</small>
     </div>
 </div>
-
-<!-- FOTO -->
 <div class="row mb-3">
     <div class="col-md-12">
-        <label><small>Ganti Foto (opsional)</small></label>
-        <input type="file" name="gambar" class="form-control">
-        <small class="text-muted">Max 2MB (JPG, PNG, GIF)</small>
+        <label for="gambar_edit" class="form-label"><small>Ganti Foto (opsional)</small></label>
+        <input type="file" name="gambar" id="gambar_edit" class="form-control" accept=".jpg,.jpeg,.png,.gif">
+        <small class="text-muted">Maksimal 2MB (JPG, PNG, GIF).</small>
     </div>
 </div>
+<?php $stmtEntitas->close(); ?>

@@ -1,15 +1,21 @@
 <?php
     include "../../_Config/Connection.php";
     include "../../_Config/Session.php";
+    include "AksesHelper.php";
 
     // Validasi session
     if (empty($SessionIdAkses)) {
         echo '<div class="alert alert-danger">Sesi berakhir</div>';
         exit;
     }
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        echo '<div class="alert alert-danger">Metode request tidak valid.</div>';
+        exit;
+    }
 
     // Ambil ID
-    $id_akses = $_POST['id_akses'] ?? '';
+    $id_akses = filter_input(INPUT_POST, 'id_akses', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 
     if (empty($id_akses)) {
         echo '<div class="alert alert-danger">ID tidak valid</div>';
@@ -26,8 +32,18 @@
             ON a.id_akses_entitas = e.id_akses_entitas
         WHERE a.id_akses = ?
     ");
+    if (!$stmt) {
+        error_log('Akses: gagal menyiapkan detail akses.');
+        echo '<div class="alert alert-danger">Data akses gagal dimuat.</div>';
+        exit;
+    }
     $stmt->bind_param("i", $id_akses);
-    $stmt->execute();
+    if (!$stmt->execute()) {
+        $stmt->close();
+        error_log('Akses: gagal memuat detail akses.');
+        echo '<div class="alert alert-danger">Data akses gagal dimuat.</div>';
+        exit;
+    }
     $result = $stmt->get_result();
     $data = $result->fetch_assoc();
     $stmt->close();
@@ -37,8 +53,15 @@
         exit;
     }
 
-    // Path gambar
-    $gambar = !empty($data['gambar']) ? "assets/images/user/" . $data['gambar'] : "assets/images/user/no-image.png";
+    // Tampilkan hanya foto pengguna yang valid, bukan gambar fallback.
+    $namaGambar = trim((string) ($data['gambar'] ?? ''));
+    $gambar = '';
+    if ($namaGambar !== '' && !preg_match('/^no-image\.(png|jpe?g|gif)$/i', basename($namaGambar))) {
+        $urlGambar = aksesImageUrl($namaGambar);
+        if ($urlGambar !== 'assets/img/user/No-Image.png') {
+            $gambar = $urlGambar;
+        }
+    }
 
     // CEK APAKAH USER PUNYA CUSTOM AKSES
     $stmtCek = $Conn->prepare("
@@ -46,8 +69,18 @@
         FROM akses_acc 
         WHERE id_akses = ?
     ");
+    if (!$stmtCek) {
+        error_log('Akses: gagal menyiapkan pemeriksaan akses khusus.');
+        echo '<div class="alert alert-danger">Izin akses gagal dimuat.</div>';
+        exit;
+    }
     $stmtCek->bind_param("i", $id_akses);
-    $stmtCek->execute();
+    if (!$stmtCek->execute()) {
+        $stmtCek->close();
+        error_log('Akses: gagal memeriksa akses khusus.');
+        echo '<div class="alert alert-danger">Izin akses gagal dimuat.</div>';
+        exit;
+    }
     $resultCek = $stmtCek->get_result();
     $rowCek = $resultCek->fetch_assoc();
     $stmtCek->close();
@@ -65,7 +98,7 @@
             WHERE ac.id_akses = ?
             ORDER BY f.kategori ASC, f.nama_fitur ASC
         ");
-        $stmtFitur->bind_param("i", $id_akses);
+        $idUntukFitur = $id_akses;
 
     } else {
 
@@ -77,10 +110,21 @@
             WHERE ae.id_akses_entitas = ?
             ORDER BY f.kategori ASC, f.nama_fitur ASC
         ");
-        $stmtFitur->bind_param("i", $data['id_akses_entitas']);
+        $idUntukFitur = (int) $data['id_akses_entitas'];
     }
 
-    $stmtFitur->execute();
+    if (!$stmtFitur) {
+        error_log('Akses: gagal memuat daftar fitur akses.');
+        echo '<div class="alert alert-danger">Daftar izin akses gagal dimuat.</div>';
+        exit;
+    }
+    $stmtFitur->bind_param('i', $idUntukFitur);
+    if (!$stmtFitur->execute()) {
+        $stmtFitur->close();
+        error_log('Akses: gagal memuat daftar fitur akses.');
+        echo '<div class="alert alert-danger">Daftar izin akses gagal dimuat.</div>';
+        exit;
+    }
     $resultFitur = $stmtFitur->get_result();
 
    // KELOMPOKKAN
@@ -92,109 +136,89 @@
 
     $stmtFitur->close();
 ?>
-<!-- Foto -->
-<div class="row mb-4 border-1 border-bottom">
-    <div class="col-md-12 text-center mb-3">
-        <img src="<?= $gambar ?>" class="img-radius" width="200px" height="200px">
+<!-- Foto pengguna ditampilkan sebelum identitas dengan ukuran tetap dan crop melingkar. -->
+<?php if ($gambar !== '') { ?>
+<div class="text-center mb-3">
+    <img src="<?= aksesEscapeHtml($gambar) ?>" class="akses-detail-photo" alt="Foto <?= aksesEscapeHtml($data['nama']) ?>">
+</div>
+<?php } ?>
+
+<!-- Informasi identitas mengikuti pola baris detail yang digunakan halaman lain. -->
+<div class="row mb-2">
+    <div class="col-12"><b><small>A. Identitas Pengguna</small></b></div>
+</div>
+<?php
+    $detailAkses = [
+        'Nama Pengguna' => $data['nama'] ?? '',
+        'NIK / KTP' => $data['nik'] ?? '',
+        'ID Practitioner (IHS)' => $data['ihs'] ?? '',
+        'Alamat Email' => $data['email'] ?? '',
+        'Nomor Kontak' => $data['kontak'] ?? '',
+        'Entitas Akses' => $data['akses'] ?? '',
+    ];
+    foreach ($detailAkses as $label => $value) {
+?>
+    <div class="row mb-2">
+        <div class="col-4"><small><?= aksesEscapeHtml($label) ?></small></div>
+        <div class="col-1"><small>:</small></div>
+        <div class="col-7"><small class="text-muted text-break"><?= $value !== '' ? aksesEscapeHtml($value) : '-' ?></small></div>
+    </div>
+<?php
+}
+?>
+<div class="row mb-2">
+    <div class="col-4"><small>Tanggal Dibuat</small></div>
+    <div class="col-1"><small>:</small></div>
+    <div class="col-7">
+        <?php $tanggalIso = aksesUtcDateIso($data['tanggal'] ?? null); ?>
+        <small class="text-muted"><time class="js-akses-date" <?= $tanggalIso !== '' ? 'datetime="' . aksesEscapeHtml($tanggalIso) . '" data-utc="' . aksesEscapeHtml($tanggalIso) . '"' : '' ?>><?= aksesEscapeHtml(aksesUtcDateDisplay($data['tanggal'] ?? null)) ?></time></small>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-4"><small>Update Terakhir</small></div>
+    <div class="col-1"><small>:</small></div>
+    <div class="col-7">
+        <?php $updatetimeIso = aksesUtcDateIso($data['updatetime'] ?? null); ?>
+        <small class="text-muted"><time class="js-akses-date" <?= $updatetimeIso !== '' ? 'datetime="' . aksesEscapeHtml($updatetimeIso) . '" data-utc="' . aksesEscapeHtml($updatetimeIso) . '"' : '' ?>><?= aksesEscapeHtml(aksesUtcDateDisplay($data['updatetime'] ?? null)) ?></time></small>
     </div>
 </div>
 
-<!-- DETAIL -->
-<div class="row mb-3">
-    <div class="col-5"><small>Nama Pengguna</small></div>
-    <div class="col-1"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?= htmlspecialchars($data['nama']) ?></small>
+<!-- Role akses disusun per kategori dalam accordion, dengan fitur di dalam list group. -->
+<section class="mt-4" aria-labelledby="judul-role-akses">
+    <div class="row mb-2">
+        <div class="col-12"><b><small id="judul-role-akses">B. Role Akses</small></b></div>
     </div>
-</div>
-<div class="row mb-3">
-    <div class="col-5"><small>NIK / KTP</small></div>
-    <div class="col-1"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?= !empty($data['nik']) ? htmlspecialchars($data['nik']) : '<span class="text-muted">-</span>' ?></small>
-    </div>
-</div>
-<div class="row mb-3">
-    <div class="col-5"><small>ID Practitioner (IHS)</small></div>
-    <div class="col-1"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?= !empty($data['ihs']) ? htmlspecialchars($data['ihs']) : '<span class="text-muted">-</span>' ?></small>
-    </div>
-</div>
-<div class="row mb-3">
-    <div class="col-5"><small>Alamat Email</small></div>
-    <div class="col-1"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?= !empty($data['email']) ? htmlspecialchars($data['email']) : '<span class="text-muted">-</span>' ?></small>
-    </div>
-</div> 
-<div class="row mb-3">
-    <div class="col-5"><small>Nomor Kontak</small></div>
-    <div class="col-1"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?= !empty($data['kontak']) ? htmlspecialchars($data['kontak']) : '<span class="text-muted">-</span>' ?></small>
-    </div>
-</div>
-<div class="row mb-3">
-    <div class="col-5"><small>Entitas Akses</small></div>
-    <div class="col-1"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?= !empty($data['akses']) ? htmlspecialchars($data['akses']) : '<span class="text-muted">-</span>' ?></small>
-    </div>
-</div>
-<div class="row mb-3">
-    <div class="col-5"><small>Tanggal Dibuat</small></div>
-    <div class="col-1"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?= date('d/m/Y H:i', strtotime($data['tanggal'])) ?></small>
-    </div>
-</div>
-<div class="row mb-3">
-    <div class="col-5"><small>Update Terakhir</small></div>
-    <div class="col-1"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?= date('d/m/Y H:i', strtotime($data['updatetime'])) ?></small>
-    </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col-12">
-        <?php if (!empty($fiturByKategori)) { ?>
-            <div class="row mt-3">
-                <?php foreach ($fiturByKategori as $kategori => $fiturList) { ?>
-                    <div class="col-md-12 mb-3">
-                        <div class="card border">
-                            <div class="card-header bg-light">
-                                <small><b><?= htmlspecialchars($kategori) ?></b></small>
-                            </div>
-                            <div class="card-body p-2">
-                                <ul class="mb-0 ps-3">
-                                    <?php foreach ($fiturList as $fitur) { ?>
-                                        <li>
-                                            <small class="text-muted">
-                                                <?= htmlspecialchars($fitur) ?>
-                                            </small>
-                                        </li>
-                                    <?php } ?>
-                                </ul>
-                            </div>
+    <?php if (!empty($fiturByKategori)) { ?>
+        <?php $accordionId = 'accordion-role-akses-' . (int) $id_akses; ?>
+        <div class="accordion accordion-flush border rounded" id="<?= aksesEscapeHtml($accordionId) ?>">
+            <?php $indexKategori = 0; ?>
+            <?php foreach ($fiturByKategori as $kategori => $fiturList) { ?>
+                <?php
+                $indexKategori++;
+                $collapseId = $accordionId . '-kategori-' . $indexKategori;
+                ?>
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="<?= aksesEscapeHtml($collapseId) ?>-heading">
+                        <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#<?= aksesEscapeHtml($collapseId) ?>" aria-expanded="false" aria-controls="<?= aksesEscapeHtml($collapseId) ?>">
+                            <span><?= aksesEscapeHtml($kategori) ?></span>
+                            <span class="badge rounded-pill text-bg-secondary ms-2"><?= count($fiturList) ?></span>
+                        </button>
+                    </h3>
+                    <div id="<?= aksesEscapeHtml($collapseId) ?>" class="accordion-collapse collapse" aria-labelledby="<?= aksesEscapeHtml($collapseId) ?>-heading" data-bs-parent="#<?= aksesEscapeHtml($accordionId) ?>">
+                        <div class="accordion-body p-0">
+                            <ul class="list-group list-group-flush">
+                                <?php foreach ($fiturList as $fitur) { ?>
+                                    <li class="list-group-item py-2 small text-muted"><?= aksesEscapeHtml($fitur) ?></li>
+                                <?php } ?>
+                            </ul>
                         </div>
                     </div>
-                <?php } ?>
-            </div>
-        <?php } else { ?>
-            <div class="alert alert-warning mt-2">
-                <small>Belum ada fitur yang diizinkan untuk entitas ini</small>
-            </div>
-        <?php } ?>
-    </div>
-</div>
-<div class="alert alert-info mt-3">
-    <small>
-        <?php if ($pakaiCustom) { ?>
-            Menggunakan <b>akses khusus user (custom)</b>
-        <?php } else { ?>
-            Menggunakan <b>akses default entitas</b>
-        <?php } ?>
-    </small>
-</div>
+                </div>
+            <?php } ?>
+        </div>
+    <?php } else { ?>
+        <ul class="list-group">
+            <li class="list-group-item text-muted">Belum ada fitur yang diizinkan untuk entitas ini.</li>
+        </ul>
+    <?php } ?>
+</section>
