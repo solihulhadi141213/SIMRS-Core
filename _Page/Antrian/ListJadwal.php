@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 $idPoliklinik = (int) ($_GET['id_poliklinik'] ?? 0);
+$idDokter = (int) ($_GET['id_dokter'] ?? 0);
 $tanggal = trim((string) ($_GET['tanggal_kunjungan'] ?? ''));
 $selectedSchedule = (int) ($_GET['selected_id'] ?? 0);
 $date = DateTime::createFromFormat('!Y-m-d', $tanggal);
@@ -47,7 +48,8 @@ $stmt = mysqli_prepare(
      INNER JOIN poliklinik p ON p.id_poliklinik = jd.id_poliklinik
      WHERE jd.id_poliklinik = ?
        AND jd.hari = ?
-       AND ((jd.status = 1 AND d.status = 1 AND p.status = 1)
+       AND (? = 0 OR jd.id_dokter = ?)
+       AND ((jd.status <> 0 AND d.status = 1 AND p.status = 1)
             OR (jd.id_jadwal = ? AND jd.id_poliklinik = ?))
      ORDER BY jd.jam_mulai ASC, d.nama ASC"
 );
@@ -56,7 +58,7 @@ if (!$stmt) {
     echo json_encode(['error' => 'Gagal menyiapkan daftar jadwal dokter.']);
     exit;
 }
-mysqli_stmt_bind_param($stmt, 'isii', $idPoliklinik, $day, $selectedSchedule, $idPoliklinik);
+mysqli_stmt_bind_param($stmt, 'isiiii', $idPoliklinik, $day, $idDokter, $idDokter, $selectedSchedule, $idPoliklinik);
 if (!mysqli_stmt_execute($stmt)) {
     mysqli_stmt_close($stmt);
     http_response_code(500);

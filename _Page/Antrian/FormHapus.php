@@ -48,9 +48,28 @@ if (!$queue) {
     exit;
 }
 
-// Siapkan escaping dan atribut tanggal yang akan diformat sesuai zona waktu browser.
+// Siapkan escaping dan konversi zona waktu tanggal sesuai sesi pengguna.
 $escape = static fn($value): string => htmlspecialchars((string) ($value ?? '-'), ENT_QUOTES, 'UTF-8');
-$createdUtc = str_replace(' ', 'T', (string) $queue['datetime_creat']) . 'Z';
+try {
+    $timezoneUser = new DateTimeZone($SessionUserTimezone ?: 'UTC');
+} catch (Throwable $error) {
+    $timezoneUser = new DateTimeZone('UTC');
+}
+$tanggal_daftar = '-';
+if (!empty($queue['datetime_creat'])) {
+    $tanggalDaftarUtc = new DateTimeImmutable(
+        (string) $queue['datetime_creat'],
+        new DateTimeZone('UTC')
+    );
+    $tanggal_daftar = $tanggalDaftarUtc
+        ->setTimezone($timezoneUser)
+        ->format('d/m/Y H:i T');
+}
+$tanggal_kunjungan = '-';
+if (!empty($queue['tanggal_kunjungan'])) {
+    $dateObj = DateTime::createFromFormat('!Y-m-d', $queue['tanggal_kunjungan']);
+    $tanggal_kunjungan = $dateObj ? $dateObj->format('d/m/Y') : (string) $queue['tanggal_kunjungan'];
+}
 ?>
 <!-- ID dan detail ini dikirim bersama persetujuan pada saat form dihapus. -->
 <input type="hidden" name="id_antrian" id="hapus_antrian_id" value="<?php echo (int) $queue['id_antrian']; ?>">
@@ -74,12 +93,12 @@ $createdUtc = str_replace(' ', 'T', (string) $queue['datetime_creat']) . 'Z';
 <div class="row mb-2">
     <div class="col-5"><small>Tanggal Daftar</small></div>
     <div class="col-1 text-center"><small>:</small></div>
-    <div class="col-6"><small class="text-muted fw-normal"><time class="js-date-time" data-utc="<?php echo $escape($createdUtc); ?>">-</time></small></div>
+    <div class="col-6"><small class="text-muted fw-normal"><?php echo $escape($tanggal_daftar); ?></small></div>
 </div>
 <div class="row mb-2">
     <div class="col-5"><small>Rencana Kunjungan</small></div>
     <div class="col-1 text-center"><small>:</small></div>
-    <div class="col-6"><small class="text-muted fw-normal"><time class="js-local-date" data-date="<?php echo $escape($queue['tanggal_kunjungan']); ?>">-</time></small></div>
+    <div class="col-6"><small class="text-muted fw-normal"><?php echo $escape($tanggal_kunjungan); ?></small></div>
 </div>
 <div class="row mb-2">
     <div class="col-5"><small>Poliklinik</small></div>

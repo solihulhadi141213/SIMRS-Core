@@ -141,7 +141,6 @@
 
         $error_curl = curl_error($curl);
 
-        curl_close($curl);
 
         showAlert('CURL Error : '.$error_curl);
         exit;
@@ -152,7 +151,6 @@
     // =========================================================
     $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-    curl_close($curl);
 
     // =========================================================
     // DECODE JSON

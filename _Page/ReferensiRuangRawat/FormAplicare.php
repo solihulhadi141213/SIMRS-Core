@@ -86,7 +86,6 @@
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $content = curl_exec($ch);
     $err = curl_error($ch);
-    curl_close($ch);
 
     // Jika Ada Masalah pada Content Response
     if($content==false){

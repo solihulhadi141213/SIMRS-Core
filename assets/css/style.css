@@ -16068,3 +16068,134 @@ canvas{
 .accordion .accordion-body .list-group-item {
     background-color: #f8fafc;
 }
+
+/* Select2 pada modal tambah observasi mendukung label pasien/kunjungan beberapa baris. */
+#ModalTambah #FormIdPasien .select2-container,
+#ModalTambah #FormIdKunjungan .select2-container,
+#ModalTambah #FormIdPraktisi .select2-container {
+    display: block;
+    width: 100% !important;
+}
+
+#ModalTambah #FormIdPasien .select2-selection--single,
+#ModalTambah #FormIdKunjungan .select2-selection--single,
+#ModalTambah #FormIdPraktisi .select2-selection--single {
+    height: auto;
+    min-height: calc(1.5em + .75rem + 2px);
+    display: flex;
+    align-items: center;
+}
+
+#ModalTambah #FormIdPasien .select2-selection--single .select2-selection__rendered,
+#ModalTambah #FormIdKunjungan .select2-selection--single .select2-selection__rendered,
+#ModalTambah #FormIdPraktisi .select2-selection--single .select2-selection__rendered {
+    height: auto;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.2;
+    padding: 0;
+}
+
+#ModalTambah #FormIdPasien .select2-selection__arrow,
+#ModalTambah #FormIdKunjungan .select2-selection__arrow,
+#ModalTambah #FormIdPraktisi .select2-selection__arrow {
+    height: 100%;
+}
+
+/* Pilihan Select2 edit observasi mengikuti ruang input dan tetap terbaca multi-baris. */
+#ModalEdit #FormEditIdPasien .select2-container,
+#ModalEdit #FormEditIdKunjungan .select2-container,
+#ModalEdit #FormEditIdPraktisi .select2-container,
+#ModalEdit #FormEditCategoryName .select2-container,
+#ModalEdit #FormEditObservationReference .select2-container {
+    display: block;
+    width: 100% !important;
+}
+
+#ModalEdit #FormEditIdPasien .select2-selection--single,
+#ModalEdit #FormEditIdKunjungan .select2-selection--single,
+#ModalEdit #FormEditIdPraktisi .select2-selection--single,
+#ModalEdit #FormEditCategoryName .select2-selection--single,
+#ModalEdit #FormEditObservationReference .select2-selection--single {
+    height: auto;
+    min-height: calc(1.5em + .75rem + 2px);
+    display: flex;
+    align-items: center;
+}
+
+#ModalEdit #FormEditIdPasien .select2-selection--single .select2-selection__rendered,
+#ModalEdit #FormEditIdKunjungan .select2-selection--single .select2-selection__rendered,
+#ModalEdit #FormEditIdPraktisi .select2-selection--single .select2-selection__rendered,
+#ModalEdit #FormEditCategoryName .select2-selection--single .select2-selection__rendered,
+#ModalEdit #FormEditObservationReference .select2-selection--single .select2-selection__rendered {
+    height: auto;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.2;
+    padding: 0;
+}
+
+#ModalEdit #FormEditIdPasien .select2-selection__arrow,
+#ModalEdit #FormEditIdKunjungan .select2-selection__arrow,
+#ModalEdit #FormEditIdPraktisi .select2-selection__arrow,
+#ModalEdit #FormEditCategoryName .select2-selection__arrow,
+#ModalEdit #FormEditObservationReference .select2-selection__arrow {
+    height: 100%;
+}
+
+/* Select2 pasien antrean menampilkan No. RM tebal dan nama pada baris kedua. */
+#ModalTambah #select_id_pasien .select2-container,
+#ModalEdit #select_id_pasien_edit .select2-container {
+    display: block;
+    width: 100% !important;
+}
+
+#ModalTambah #select_id_pasien .select2-selection--single,
+#ModalEdit #select_id_pasien_edit .select2-selection--single {
+    display: flex;
+    align-items: center;
+    height: auto;
+    min-height: calc(1.5em + .75rem + 2px);
+    position: relative;
+}
+
+#ModalTambah #select_id_pasien .select2-selection--single .select2-selection__rendered,
+#ModalEdit #select_id_pasien_edit .select2-selection--single .select2-selection__rendered {
+    height: auto;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    padding-right: 2.25rem;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.25;
+}
+
+#ModalTambah #select_id_pasien .select2-selection__arrow,
+#ModalEdit #select_id_pasien_edit .select2-selection__arrow {
+    height: 100%;
+}
+
+.antrian-select2-pasien-id {
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+
+.antrian-select2-pasien-nama {
+    font-weight: 400;
+    font-size: .875rem;
+    line-height: 1.25;
+}
+
+/* Form readonly harus memiliki background abu-abu */
+input[readonly],
+textarea[readonly],
+select[readonly],
+.form-control[readonly] {
+    background-color: var(--mdb-secondary-bg, #eeeeee);
+    opacity: 1;
+}
+

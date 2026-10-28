@@ -52,7 +52,8 @@ try {
 
     $dateInput = trim((string) ($_POST['tanggal_observasi'] ?? ''));
     $timeInput = trim((string) ($_POST['jam_observasi'] ?? ''));
-    $timezoneInput = trim((string) ($_POST['timezone_user'] ?? ''));
+    // Gunakan timezone tersimpan pada sesi agar konversi tidak bergantung pada input klien.
+    $timezoneInput = trim((string) ($SessionUserTimezone ?? ''));
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateInput)) {
         throw new ObservasiRequestException('Tanggal observasi tidak valid.');
     }
@@ -60,7 +61,7 @@ try {
         throw new ObservasiRequestException('Jam observasi tidak valid.');
     }
     if ($timezoneInput === '') {
-        throw new ObservasiRequestException('Zona waktu pengguna tidak tersedia. Muat ulang halaman dan coba lagi.');
+        throw new ObservasiRequestException('Zona waktu pengguna pada sesi tidak tersedia. Silakan login kembali.');
     }
 
     // Terima zona waktu IANA dari browser, serta offset UTC yang dipakai sebagai fallback.

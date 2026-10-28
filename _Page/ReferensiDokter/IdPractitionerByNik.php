@@ -57,7 +57,6 @@
         exit;
     }
 
-    curl_close($curl);
 
     // =============================
     // DECODE JSON

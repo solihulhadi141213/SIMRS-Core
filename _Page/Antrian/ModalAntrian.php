@@ -1,32 +1,14 @@
-<?php
-    // Siapkan daftar poliklinik aktif untuk pilihan pada form tambah dan edit antrean.
-    $stmtPoliklinikAntrian = mysqli_prepare(
-        $Conn,
-        "SELECT id_poliklinik, poliklinik
-         FROM poliklinik
-         WHERE status = 1
-         ORDER BY poliklinik ASC"
-    );
-    $resultPoliklinikAntrian = false;
-    if ($stmtPoliklinikAntrian && mysqli_stmt_execute($stmtPoliklinikAntrian)) {
-        $resultPoliklinikAntrian = mysqli_stmt_get_result($stmtPoliklinikAntrian);
-    } else {
-        error_log('Antrian: gagal memuat daftar poliklinik: ' . mysqli_error($Conn));
-    }
-    if ($stmtPoliklinikAntrian) {
-        mysqli_stmt_close($stmtPoliklinikAntrian);
-    }
-?>
-<!-- Modal ini mengatur batas hasil, pengurutan, dan kriteria pencarian daftar antrean. -->
+
+<!-- filter -->
 <div class="modal fade" id="ModalFilter" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <form action="javascript:void(0);" id="ProsesFilter" autocomplete="off">
                 <input type="hidden" name="page_filter" id="page_filter" value="1">
-                <input type="hidden" name="utc_start" id="filter_utc_start" value="">
-                <input type="hidden" name="utc_end" id="filter_utc_end" value="">
                 <div class="modal-header">
-                    <h5 class="modal-title text-dark"><i class="bi bi-funnel"></i> Filter Antrian</h5>
+                    <h5 class="modal-title text-dark">
+                        <i class="bi bi-search"></i> Filter Antrian
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -116,7 +98,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary btn-rounded">
-                        <i class="bi bi-check"></i> Tampilkan
+                        <i class="bi bi-search"></i> Filter
                     </button>
                     <button type="button" class="btn btn-secondary btn-rounded" data-bs-dismiss="modal">
                         <i class="bi bi-x-circle"></i> Tutup
@@ -127,127 +109,259 @@
     </div>
 </div>
 
-<!-- Form tambah tersedia langsung pada modal; form edit dimuat dari PHP berdasarkan ID antrean. -->
+<!-- TAMBAH ANTRIAN -->
 <div class="modal fade" id="ModalTambah" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-fullscreen-lg-down">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form id="FormAntrian" class="js-form-simpan-antrian" autocomplete="off">
                 <input type="hidden" name="id_antrian" id="antrian_id" value="">
                 <input type="hidden" name="id_pasien" id="antrian_id_pasien" value="">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="judul_form_antrian"><i class="bi bi-plus-circle"></i> Tambah Antrian Manual</h5>
+                    <h5 class="modal-title" id="judul_form_antrian">
+                        <i class="bi bi-plus-circle"></i> Tambah Antrian Manual
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row g-2 g-lg-3">
-                        <!-- Bagian A mengatur pemilihan rekam medis atau pengisian pasien baru. -->
+
+                    <!-- Group Form pasien -->
+                    <div class="row mb-3">
                         <div class="col-12">
-                            <h6 class="fw-semibold text-primary mb-0">A. Identitas Pasien</h6>
+                            <small>
+                                <b>A. Data Pasien</b>
+                            </small>
                         </div>
-                        <div class="col-12 col-lg-4">
-                            <label class="form-label mb-1 d-block">Jenis pasien</label>
+                    </div>
+                    <!-- Jenis Pasien -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label><small>Jenis Pasien</small></label>
+                        </div>
+                        <div class="col-md-8">
                             <div class="d-flex flex-wrap gap-2 pt-1">
                                 <div class="form-check form-check-inline mb-0">
-                                    <input class="form-check-input js-mode-pasien" type="radio" name="mode_pasien" id="mode_pasien_lama" value="lama" checked>
-                                    <label class="form-check-label" for="mode_pasien_lama">Pilih pasien terdaftar</label>
+                                    <input class="form-check-input js-mode-pasien" type="radio" name="jenis_request" id="pasien_lama" value="0" checked>
+                                    <label class="form-check-label" for="pasien_lama">
+                                        <small>Pasien Lama</small>
+                                    </label>
                                 </div>
                                 <div class="form-check form-check-inline mb-0">
-                                    <input class="form-check-input js-mode-pasien" type="radio" name="mode_pasien" id="mode_pasien_baru" value="baru">
-                                    <label class="form-check-label" for="mode_pasien_baru">Pasien baru</label>
+                                    <input class="form-check-input js-mode-pasien" type="radio" name="jenis_request" id="pasien_baru" value="1">
+                                    <label class="form-check-label" for="pasien_baru">
+                                        <small>Pasien Baru</small>
+                                    </label>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-8 js-pilih-pasien-field" id="pilih_pasien_field">
-                            <label for="pilih_pasien_antrian" class="form-label mb-1">Cari pasien <span class="text-danger">*</span></label>
-                            <select id="pilih_pasien_antrian" class="form-control js-pilih-pasien-antrian"></select>
-                        </div>
-                        <!-- Data tambahan diaktifkan hanya saat petugas memilih pasien baru. -->
-                        <div class="col-12 d-none js-data-pasien-field" id="data_pasien_field">
-                            <div class="row g-2 g-lg-3">
-                                <div class="col-6">
-                                    <label for="nama_pasien" class="form-label mb-1">Nama lengkap pasien <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_pasien" id="nama_pasien" class="form-control" maxlength="255" required>
-                                </div>
-                                <div class="col-6">
-                                    <label for="gender_antrian" class="form-label mb-1">Jenis kelamin <span class="text-danger">*</span></label>
-                                    <select name="gender" id="gender_antrian" class="form-select" required>
-                                        <option value="">Pilih</option>
-                                        <option value="Laki-laki">Laki-laki</option>
-                                        <option value="Perempuan">Perempuan</option>
-                                    </select>
-                                </div>
-                                <div class="col-6 col-lg-4">
-                                    <label for="nik_antrian" class="form-label mb-1">NIK</label>
-                                    <input type="text" name="nik" id="nik_antrian" class="form-control" maxlength="16" inputmode="numeric">
-                                </div>
-                                <div class="col-6 col-lg-4">
-                                    <label for="no_bpjs_antrian" class="form-label mb-1">Nomor BPJS</label>
-                                    <input type="text" name="no_bpjs" id="no_bpjs_antrian" class="form-control" maxlength="13" inputmode="numeric">
-                                </div>
-                                <div class="col-6 col-lg-4">
-                                    <label for="kontak_antrian" class="form-label mb-1">Kontak</label>
-                                    <input type="text" name="kontak" id="kontak_antrian" class="form-control" maxlength="20" inputmode="tel">
-                                </div>
-                            </div>
-                        </div>
+                    </div>
 
-                        <!-- Bagian B mengelompokkan tanggal, poliklinik, dan jadwal pelayanan. -->
-                        <div class="col-12"><hr class="my-1"></div>
+                    <!-- Form Pencarian Pasien -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label><small>No.RM</small></label>
+                        </div>
+                        <div class="col-md-8" id="select_id_pasien">
+                            <select name="id_pasien" id="id_pasien" class="form-control">
+                                <option value="">Pilih Pasien</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Nama Pasien -->
+                     <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="nama_pasien">
+                                <small>Nama Pasien</small> <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" name="nama_pasien" id="nama_pasien" class="form-control" maxlength="255" required>
+                        </div>
+                     </div>
+
+                    <!-- Gender -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="gender_antrian">
+                                <small>Jenis Kelamin</small> <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-8">
+                            <select name="gender" id="gender_antrian" class="form-select" required>
+                                <option value="">Pilih</option>
+                                <option value="Laki-laki">Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- NIK -->
+                     <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="nik_antrian">
+                                <small>Nomor Induk Kependudukan (NIK)</small>
+                            </label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" name="nik" id="nik_antrian" class="form-control" maxlength="16" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <!-- Nomor BPJS -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="no_bpjs_antrian">
+                                <small>Nomor BPJS</small>
+                            </label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" name="no_bpjs" id="no_bpjs_antrian" class="form-control" maxlength="13" inputmode="numeric">
+                        </div>
+                    </div>
+                    <!-- Kontak -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="kontak_antrian">
+                                <small>Kontak</small>
+                            </label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" name="kontak" id="kontak_antrian" class="form-control" maxlength="20" inputmode="tel">
+                        </div>
+                    </div>
+
+                    <!-- Group Form pasien -->
+                    <div class="row mb-3 mt-3">
                         <div class="col-12">
-                            <h6 class="fw-semibold text-primary mb-0">B. Tujuan Kunjungan</h6>
+                            <small>
+                                <b>B. Data Antrian</b>
+                            </small>
                         </div>
-                        <div class="col-6 col-lg-4">
-                            <label for="tanggal_kunjungan" class="form-label mb-1">Rencana kunjungan <span class="text-danger">*</span></label>
-                            <input type="date" name="tanggal_kunjungan" id="tanggal_kunjungan" class="form-control js-antrian-schedule-filter" value="<?php echo date('Y-m-d'); ?>" required>
+                    </div>
+
+                    <!-- Tanggal Rencana Kunjungan -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="tanggal_kunjungan">
+                                <small>Tanggal Rencana Kunjungan</small> <span class="text-danger">*</span>
+                            </label>
                         </div>
-                        <div class="col-6 col-lg-4">
-                            <label for="id_poliklinik" class="form-label mb-1">Poliklinik <span class="text-danger">*</span></label>
-                            <select name="id_poliklinik" id="id_poliklinik" class="form-select js-antrian-schedule-filter" required>
+                        <div class="col-md-8">
+                            <input type="date" name="tanggal_kunjungan" id="tanggal_kunjungan" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Poliklinik -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="id_poliklinik">
+                                <small>Poliklinik</small> <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-8">
+                            <select name="id_poliklinik" id="id_poliklinik" class="form-select" required>
                                 <option value="">Pilih poliklinik</option>
-                                <?php if ($resultPoliklinikAntrian): ?>
-                                    <?php while ($poliAntrian = mysqli_fetch_assoc($resultPoliklinikAntrian)): ?>
-                                        <option value="<?php echo (int) $poliAntrian['id_poliklinik']; ?>"><?php echo htmlspecialchars($poliAntrian['poliklinik'], ENT_QUOTES, 'UTF-8'); ?></option>
-                                    <?php endwhile; ?>
-                                <?php else: ?>
-                                    <option value="" disabled>Daftar poliklinik gagal dimuat</option>
-                                <?php endif; ?>
                             </select>
                         </div>
-                        <div class="col-12 col-lg-4">
-                            <label for="id_jadwal" class="form-label mb-1">Jadwal dokter <span class="text-danger">*</span></label>
-                            <select name="id_jadwal" id="id_jadwal" class="form-select" required disabled>
-                                <option value="">Pilih tanggal dan poliklinik terlebih dahulu</option>
+                    </div>
+
+                    <!-- Dokter -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="id_dokter">
+                                <small>Dokter</small> <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-8">
+                            <select name="id_dokter" id="id_dokter" class="form-select" required>
+                                <option value="">Pilih Dokter</option>
                             </select>
                         </div>
-                        <!-- Bagian C berisi keterangan antrean dan status saat data diedit. -->
-                        <div class="col-12"><hr class="my-1"></div>
-                        <div class="col-12">
-                            <h6 class="fw-semibold text-primary mb-0">C. Informasi Antrian</h6>
+                    </div>
+
+                    <!-- Jadwal Praktek -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="id_jadwal">
+                                <small>Jadwal Praktek</small> <span class="text-danger">*</span>
+                            </label>
                         </div>
-                        <div class="col-6">
-                            <label for="pembayaran" class="form-label mb-1">Pembayaran <span class="text-danger">*</span></label>
+                        <div class="col-md-8">
+                            <select name="id_jadwal" id="id_jadwal" class="form-select" required>
+                                <option value="">Pilih Jadwal</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Metode Pembayaran -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="pembayaran">
+                                <small>Metode Pembayaran</small> <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-8">
                             <select name="pembayaran" id="pembayaran" class="form-select" required>
                                 <option value="UMUM">UMUM</option>
                                 <option value="BPJS">BPJS</option>
                                 <option value="ASURANSI">ASURANSI</option>
                             </select>
                         </div>
-                        <div class="col-6">
-                            <label for="nomor_referensi" class="form-label mb-1">Nomor referensi</label>
-                            <input type="text" name="nomor_referensi" id="nomor_referensi" class="form-control" maxlength="255" value="MANUAL">
+                    </div>
+
+                    <!-- Jenis Referensi -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="jenis_referensi">
+                                <small>Jenis Referensi</small>
+                            </label>
                         </div>
-                        <div class="col-12">
-                            <label for="keluhan_antrian" class="form-label mb-1">Keluhan <span class="text-danger">*</span></label>
+                        <div class="col-md-8">
+                            <select name="jenis_referensi" id="jenis_referensi" class="form-select">
+                                <option value="">Pilih Jenis Referensi</option>
+                                <option value="1">Rujukan FKTP</option>
+                                <option value="2">Rujukan Internal</option>
+                                <option value="3">Kontrol</option>
+                                <option value="4">Rujukan Antar RS</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Nomor Referensi -->
+                     <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="nomor_referensi">
+                                <small>Nomor Referensi</small>
+                            </label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" readonly name="nomor_referensi" id="nomor_referensi" class="form-control" maxlength="255">
+                        </div>
+                     </div>
+
+                     <!-- Keluhan Pasien -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="keluhan_antrian">
+                                <small>Keluhan</small> <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-8">
                             <textarea name="keluhan" id="keluhan_antrian" class="form-control" rows="3" required></textarea>
                         </div>
                     </div>
-                    <!-- Pesan validasi dan hasil penyimpanan ditampilkan di dalam modal form. -->
-                    <div class="row mt-2">
-                        <div class="col-12 js-antrian-notification" id="NotifikasiAntrian"></div>
+
+                    <!-- Notifikasi Tambah Antrian -->
+                    <div class="row mb-3">
+                        <div class="col-12" id="NotifikasiAntrian">
+                            <!-- Notifikasi Kesalahan Pada Proses Tambah Antrian Akan Ditampilkan Di Sini. -->
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary js-simpan-antrian" id="simpan_antrian"><i class="bi bi-check-circle"></i> Simpan</button>
+                    <button type="submit" class="btn btn-primary" id="ButtonTambahAntrian">
+                        <i class="bi bi-floppy"></i> Simpan
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </form>
@@ -255,24 +369,56 @@
     </div>
 </div>
 
-<!-- Isi form edit dikirim oleh FormEditAntrian.php setelah JavaScript mengirimkan ID antrean. -->
-<div class="modal fade" id="ModalEditAntrian" tabindex="-1" aria-labelledby="judul_edit_antrian" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-fullscreen-lg-down">
+<!-- MODAL DETAIL ANTRIAN -->
+<div class="modal fade" id="ModalDetail" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
-            <form id="FormEditAntrian" class="js-form-simpan-antrian" autocomplete="off">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-info-circle"></i> Detail Antrian
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12" id="FormDetail">
+                        <div class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Memuat data...</div>
+                        <!-- Detail Antrian Akan Ditampilkan Disini -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDIT -->
+<div class="modal fade" id="ModalEdit" tabindex="-1" aria-labelledby="judul_edit_antrian" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form action="javascript:void(0);" id="ProsesEdit" autocomplete="off">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="judul_edit_antrian"><i class="bi bi-pencil-square"></i> Ubah Data Antrian</h5>
+                    <h5 class="modal-title" id="judul_edit_antrian">
+                        <i class="bi bi-pencil-square"></i> Edit Data Antrian
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="KontenFormEditAntrian">
-                        <div class="text-center text-muted py-4">
-                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-label="Memuat"></span>
-                            Memuat form edit antrian...
+                    <div class="row">
+                        <div class="col-12" id="FormEdit">
+                            <div class="text-center text-muted py-4">
+                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-label="Memuat"></span>
+                                Memuat form edit antrian...
+                            </div>
+                            <!-- Form Edit Antrian Akan Ditampilkan Disini -->
                         </div>
                     </div>
-                    <div class="row mt-2">
-                        <div class="col-12 js-antrian-notification" id="NotifikasiEditAntrian"></div>
+                    <div class="row mb-2">
+                        <div class="col-12 js-antrian-notification" id="NotifikasiEdit">
+                            <!-- Notifikasi Proses Edit Antrian Akan Ditampilkan Disini Tanpa Menutup Modal. -->
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -286,27 +432,31 @@
     </div>
 </div>
 
-<!-- Isi modal hapus dimuat dari FormhapusAntrian.php berdasarkan ID yang dipilih. -->
-<div class="modal fade" id="ModalHapusAntrian" tabindex="-1" aria-labelledby="judul_hapus_antrian" aria-hidden="true">
+<!-- MODAL HAPUS -->
+<div class="modal fade" id="ModalHapus" tabindex="-1" aria-labelledby="judul_hapus_antrian" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form action="javascript:void(0);" method="POST" id="ProsesHapusAntrian" autocomplete="off">
+            <form action="javascript:void(0);" method="POST" id="ProsesHapus" autocomplete="off">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="judul_hapus_antrian"><i class="bi bi-trash"></i> Hapus Antrian</h5>
+                    <h5 class="modal-title" id="judul_hapus_antrian">
+                        <i class="bi bi-trash"></i> Hapus Antrian
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row mb-2">
-                        <div class="col-12" id="FormHapusAntrian">
+                        <div class="col-12" id="FormHapus">
                             <div class="text-center text-muted py-3">
                                 <span class="spinner-border spinner-border-sm me-2" role="status" aria-label="Memuat"></span>
                                 Memuat detail antrian...
                             </div>
+                            <!-- Form Hapus Antrian Akan Muncul Disini -->
                         </div>
                     </div>
-                    <!-- Pesan proses hapus ditampilkan tanpa menutup modal konfirmasi. -->
                     <div class="row mb-2">
-                        <div class="col-12" id="NotifikasiHapusAntrian"></div>
+                        <div class="col-12" id="NotifikasiHapusAntrian">
+                            <!-- Notifikasi Hapus AKan Muncul Disini -->
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -322,83 +472,172 @@
     </div>
 </div>
 
-<!-- Konten detail antrean, pasien, poliklinik, dan dokter dimuat oleh Antrian.js. -->
-<div class="modal fade" id="ModalDetailAntrian" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+<!-- MODAL DAFTAR PASIEN BARU -->
+<div class="modal fade" id="ModalPendaftaranPasien" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form action="javascript:void(0);" id="ProsesPendaftaranPasien" autocomplete="off">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-person-plus"></i> Pendaftaran Pasien Baru
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-2">
+                        <div class="col-12" id="FormPendaftaranPasien">
+                            <!-- Notifikasi Pendaftaran pasien Akan Muncul Disini -->
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-12" id="NotifikasiPendaftaranPasien">
+                            <!-- Notifikasi Pendaftaran pasien Akan Muncul Disini -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" disabled class="btn btn-primary" id="ButtonPendaftaranPasien">
+                        <i class="bi bi-save"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                       <i class="bi bi-x"></i> Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DETAIL PASIEN -->
+<div class="modal fade" id="ModalDetailPasien" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="judul_detail_antrian"><i class="bi bi-ticket-detailed"></i> Detail Antrian</h5>
+                <h5 class="modal-title">
+                    <i class="bi bi-info-circle"></i> Detail Pasien
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
-            <div class="modal-body" id="isi_detail_antrian">
-                <div class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Memuat data...</div>
+            <div class="modal-body">
+                <div class="row mb-2">
+                    <div class="col-12" id="FormDetailPasien">
+                        <!-- Detail Pasien Akan Muncul Disini -->
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer" id="aksi_detail_antrian">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x"></i> Batal
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Form ini melengkapi identitas antrean sebelum pasien baru dibuat sebagai rekam medis. -->
-<div class="modal fade" id="ModalDaftarPasienAntrian" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+<!-- MODAL PENDAFTARAN KUNJUNGAN -->
+<div class="modal fade" id="ModalPendaftaranKunjungan" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="FormDaftarPasienAntrian" autocomplete="off">
-                <input type="hidden" name="id_antrian" id="daftar_pasien_id_antrian">
+            <form action="javascript:void(0);" id="ProsesPendaftaranKunjungan" autocomplete="off">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-person-plus"></i> Daftarkan Pasien ke Rekam Medis</h5>
+                    <h5 class="modal-title">
+                        <i class="bi bi-person-plus"></i> Pendaftaran Kunjungan
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="small text-muted">Lengkapi data pasien. Sistem akan membuat nomor RM dan menghubungkannya dengan antrian.</p>
-                    <!-- Isian dikelompokkan menjadi identitas utama, tanggal lahir, dan alamat pasien. -->
-                    <div class="row g-3">
-                        <div class="col-md-8">
-                            <label for="daftar_nama_pasien" class="form-label">Nama lengkap <span class="text-danger">*</span></label>
-                            <input type="text" name="nama" id="daftar_nama_pasien" class="form-control" maxlength="255" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="daftar_gender_pasien" class="form-label">Jenis kelamin <span class="text-danger">*</span></label>
-                            <select name="gender" id="daftar_gender_pasien" class="form-select" required>
-                                <option value="">Pilih</option>
-                                <option value="Laki-laki">Laki-laki</option>
-                                <option value="Perempuan">Perempuan</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="daftar_nik_pasien" class="form-label">NIK</label>
-                            <input type="text" name="nik" id="daftar_nik_pasien" class="form-control" maxlength="16" inputmode="numeric">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="daftar_bpjs_pasien" class="form-label">Nomor BPJS</label>
-                            <input type="text" name="no_bpjs" id="daftar_bpjs_pasien" class="form-control" maxlength="13" inputmode="numeric">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="daftar_kontak_pasien" class="form-label">Kontak</label>
-                            <input type="text" name="kontak" id="daftar_kontak_pasien" class="form-control" maxlength="20" inputmode="tel">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="daftar_tempat_lahir" class="form-label">Tempat lahir</label>
-                            <input type="text" name="tempat_lahir" id="daftar_tempat_lahir" class="form-control" maxlength="255">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="daftar_tanggal_lahir" class="form-label">Tanggal lahir</label>
-                            <input type="date" name="tanggal_lahir" id="daftar_tanggal_lahir" class="form-control">
-                        </div>
-                        <div class="col-12">
-                            <label for="daftar_alamat_pasien" class="form-label">Alamat</label>
-                            <textarea name="street" id="daftar_alamat_pasien" class="form-control" rows="2"></textarea>
+                    <div class="row mb-2">
+                        <div class="col-12" id="FormPendaftaranKunjungan">
+                            <!-- Notifikasi Pendaftaran Kunjungan Akan Muncul Disini -->
                         </div>
                     </div>
-                    <!-- Pesan validasi pendaftaran rekam medis ditampilkan di bawah isian form. -->
-                    <div class="row mt-3">
-                        <div class="col-12" id="NotifikasiDaftarPasienAntrian"></div>
+                    <div class="row mb-2">
+                        <div class="col-12" id="NotifikasiPendaftaranKunjungan">
+                            <!-- Notifikasi Pendaftaran Kunjungan Akan Muncul Disini -->
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary"><i class="bi bi-person-check"></i> Buat Rekam Medis</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary" id="ButtonPendaftaranKunjungan">
+                        <i class="bi bi-save"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                       <i class="bi bi-x"></i> Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL DETAIL KUNJUNGAN -->
+<div class="modal fade" id="ModalDetailKunjungan" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-info-circle"></i> Detail Kunjungan
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-2">
+                    <div class="col-12" id="FormDetailKunjungan">
+                        <!-- Detail Pasien Akan Muncul Disini -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x"></i> Batal
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EXPORT ANTRIAN -->
+<div class="modal fade" id="ModalExportAntrian" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form action="_Page\Antrian\ProsesExportAntrian.php" method="POST" target="_blank" autocomplete="off">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-download"></i> Export Data Antrian
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="periode_data">
+                                <small>Periode Data</small>
+                            </label>
+                            <select name="periode_data" id="periode_data" class="form-control">
+                                <option selected value="Semua">Semua Periode</option>
+                                <option value="Tahun">Tahun</option>
+                                <option value="Bulan">Bulan</option>
+                                <option value="Periodik">Periodik</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="FormLanjutanExport">
+                        <!-- Form Lanjutan Filter Data Antrian Yang Akan Di export -->
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12" id="NotifikasiJumlahDataAntrian">
+                            <!-- Informasi Jumlah Data yang Akan Di Export Akan Ditampilkan Disini -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" disabled id="ButtonExport">
+                        <i class="bi bi-download"></i> Export
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                       <i class="bi bi-x"></i> Batal
+                    </button>
                 </div>
             </form>
         </div>

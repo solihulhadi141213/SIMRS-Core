@@ -100,40 +100,6 @@
 </div>
 
 <!--- Modal Tambah Observasi --->
-<style>
-    #ModalTambah #FormIdPasien .select2-container,
-    #ModalTambah #FormIdKunjungan .select2-container,
-    #ModalTambah #FormIdPraktisi .select2-container {
-        display: block;
-        width: 100% !important;
-    }
-
-    #ModalTambah #FormIdPasien .select2-selection--single,
-    #ModalTambah #FormIdKunjungan .select2-selection--single,
-    #ModalTambah #FormIdPraktisi .select2-selection--single {
-        height: auto;
-        min-height: calc(1.5em + .75rem + 2px);
-        display: flex;
-        align-items: center;
-    }
-
-    #ModalTambah #FormIdPasien .select2-selection--single .select2-selection__rendered,
-    #ModalTambah #FormIdKunjungan .select2-selection--single .select2-selection__rendered,
-    #ModalTambah #FormIdPraktisi .select2-selection--single .select2-selection__rendered {
-        height: auto;
-        white-space: normal;
-        overflow: visible;
-        text-overflow: clip;
-        line-height: 1.2;
-        padding: 0;
-    }
-
-    #ModalTambah #FormIdPasien .select2-selection__arrow,
-    #ModalTambah #FormIdKunjungan .select2-selection__arrow,
-    #ModalTambah #FormIdPraktisi .select2-selection__arrow {
-        height: 100%;
-    }
-</style>
 <div class="modal fade" id="ModalTambah" tabindex="-1" aria-labelledby="ModalTambah" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -291,6 +257,188 @@
                 <div class="modal-footer">
                     <button type="submit" disabled class="btn btn-md btn-primary" id="ButtonTambah">
                         <i class="bi bi-floppy"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--- Modal Detail Observasi --->
+<div class="modal fade" id="ModalDetail" tabindex="-1" aria-labelledby="ModalDetail" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-info-circle"></i> Detail Hasil Observasi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" id="FormDetail">
+                        <!-- Form Detail Dinamis Akan Muncul Disini -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i> Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--- Modal Edit Observasi --->
+<div class="modal fade" id="ModalEdit" tabindex="-1" aria-labelledby="ModalEdit" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="javascript:void(0);" method="POST" id="ProsesEdit" autocomplete="off">
+                <input type="hidden" name="id_observation" value="">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-pencil"></i> Edit Hasil Observasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-12" id="FormEdit">
+                            <!-- Form Edit Dinamis Akan Muncul Disini -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" id="NotifikasiEdit">
+                           <!-- Notifikasi Edit  Akan Muncul Disini -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" disabled class="btn btn-md btn-primary" id="ButtonEdit">
+                        <i class="bi bi-floppy"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--- Modal Hapus Observasi --->
+<div class="modal fade" id="ModalHapus" tabindex="-1" aria-labelledby="ModalHapus" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="javascript:void(0);" method="POST" id="ProsesHapus" autocomplete="off">
+                <input type="hidden" name="id_observation" value="">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-trash"></i> Hapus Observasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-12" id="FormHapus">
+                            <!-- Form Hapus Dinamis Akan Muncul Disini -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" id="NotifikasiHapus">
+                           <!-- Notifikasi Hapus  Akan Muncul Disini -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" disabled class="btn btn-md btn-danger" id="ButtonHapus">
+                        <i class="bi bi-check"></i> Ya, Hapus
+                    </button>
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--- Modal Kirim Observation --->
+<div class="modal fade" id="ModalKirimObservation" tabindex="-1" aria-labelledby="ModalKirimObservation" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="javascript:void(0);" method="POST" id="ProsesKirimObservation" autocomplete="off">
+                <input type="hidden" name="id_observation" value="">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-send"></i> Kirim Observation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-12" id="FormKirimObservation">
+                            <!-- Form Kirim Observation Dinamis Akan Muncul Disini -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" id="NotifikasiKirimObservation">
+                           <!-- Notifikasi Kirim Observation Akan Muncul Disini -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" disabled class="btn btn-md btn-primary" id="ButtonKirimObservation">
+                        <i class="bi bi-send"></i> Kirim Observation
+                    </button>
+                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i> Tutup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--- Modal Detail Observation --->
+<div class="modal fade" id="ModalDetailObservation" tabindex="-1" aria-labelledby="ModalDetailObservation" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-info-circle"></i> Detail <i>Observation</i></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" id="FormDetailObservation">
+                        <!-- Form Detail Observation Akan Muncul Disini -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i> Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--- Modal Eksport Data Observasi --->
+<div class="modal fade" id="ModalExport" tabindex="-1" aria-labelledby="ModalExport" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="_Page/Observasi/ProsesExport.php" method="GET" target="_blank" id="ProsesExportObservasi" autocomplete="off">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-download"></i> Export Observation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-12" id="FormExport">
+                            <!-- Form Export Observation Dinamis Akan Muncul Disini -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" disabled class="btn btn-md btn-primary" id="ButtonExport">
+                        <i class="bi bi-download"></i> Export
                     </button>
                     <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <i class="bi bi-x-lg"></i> Tutup

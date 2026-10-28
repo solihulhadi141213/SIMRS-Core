@@ -126,6 +126,29 @@
     // Tutup statement
     $stmt->close();
 
+    // Setiap parameter yang kosong menjadi '-'
+    $detailFields = [
+        'id_pasien', 'id_encounter', 'sep', 'prioritas', 'keluhan', 'jenis_kunjungan',
+        'id_dokter', 'kode_dokter', 'dokter', 'dpjp_id', 'dpjp_kode', 'dpjp_nama',
+        'id_poliklinik', 'kode_poliklinik', 'poliklinik', 'kelas', 'ruang_rawat',
+        'tempat_tidur', 'pembayaran_metode', 'pembayaran_penanggung', 'kontak_darurat_nomor',
+        'kontak_darurat_nama', 'kontak_darurat_hubungan', 'cara_keluar', 'status',
+        'petugas_id', 'petugas_nama', 'id_kunjungan', 'nama_pasien', 'nik', 'id_ihs',
+        'no_bpjs', 'gender', 'tempat_lahir', 'tanggal_lahir', 'usia_sekarang',
+        'usia_pelayanan', 'datetime_daftar', 'datetime_pelayanan', 'datetime_selesai'
+    ];
+    foreach ($detailFields as $field) {
+        if (!isset($$field) || $$field === null || $$field === '' || $$field === false) {
+            $$field = '-';
+        }
+    }
+
+    // Hindari tampilan ganda '-' pada kombinasi tempat & tanggal lahir
+    if ($tempat_lahir === '-' && $tanggal_lahir === '-') {
+        $tempat_tanggal_lahir = '-';
+    } else {
+        $tempat_tanggal_lahir = trim($tempat_lahir . ', ' . $tanggal_lahir, ', ');
+    }
     echo '
         <input type="hidden" name="id_kunjungan" id="put_id_kunjungan" value="'.$id_kunjungan.'">
 
@@ -165,7 +188,7 @@
         <div class="row mb-2">
             <div class="col-4"><small>Tempat, Tgl Lahir</small></div>
             <div class="col-1"><small>:</small></div>
-            <div class="col-7"><small class="text-muted">'.$tempat_lahir.', '.$tanggal_lahir.'</small></div>
+            <div class="col-7"><small class="text-muted">'.$tempat_tanggal_lahir.'</small></div>
         </div>
         <div class="row mb-2">
             <div class="col-4"><small>Usia Saat Pelayanan</small></div>

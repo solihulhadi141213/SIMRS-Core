@@ -75,11 +75,9 @@ try {
     $httpCode = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
     if ($apiResponse === false) {
         $curlError = curl_error($curl);
-        curl_close($curl);
         error_log('Akses IHS: request SATUSEHAT gagal: ' . $curlError);
         throw new RuntimeException('Koneksi ke SATUSEHAT gagal.');
     }
-    curl_close($curl);
 
     if ($httpCode !== 200) {
         error_log('Akses IHS: SATUSEHAT mengembalikan HTTP ' . $httpCode . '.');

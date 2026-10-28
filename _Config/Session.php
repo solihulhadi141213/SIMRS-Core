@@ -17,6 +17,7 @@
     $SessionUpdatetime       = "";
     $SessionDateExpired      = "";
     $SessionToken            = "";
+    $SessionUserTimezone     = "";
 
     // Ambil cookie
     $CookieIdAkses = $_COOKIE['id_akses'] ?? "";
@@ -31,7 +32,7 @@
         // Validasi token
         $stmtLogin = mysqli_prepare(
             $Conn,
-            "SELECT id_akses_login, expired_at 
+            "SELECT id_akses_login, expired_at, local_timezone_user
              FROM akses_login 
              WHERE id_akses = ? 
              AND login_token = ?
@@ -136,6 +137,7 @@
                         $SessionUpdatetime       = $DataSessionAkses['updatetime'];
                         $SessionDateExpired      = $date_expired_new;
                         $SessionToken            = $token;
+                        $SessionUserTimezone     = $DataAksesLogin['local_timezone_user'] ?? '';
                     }
 
                 }

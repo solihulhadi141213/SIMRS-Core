@@ -21,7 +21,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //ReferensiTtSirsOnline
@@ -46,7 +45,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //ReferensiTtSirsOnline
@@ -71,7 +69,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //ReferensiSdmSirsOnline
@@ -96,7 +93,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //CreatSdmSirsOnline
@@ -122,7 +118,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //CreatSdmSirsOnline
@@ -148,7 +143,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //ReferensiAlkesSirsOnline
@@ -173,7 +167,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //DataAlkesSirsOnline
@@ -198,7 +191,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //DataPcrNakes
@@ -224,7 +216,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //PostDataSirsOnline
@@ -250,7 +241,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //HapusDataPcrNakes
@@ -276,7 +266,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //ReferensiSdmSirsOnline
@@ -304,7 +293,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //CreatBookingAntrian
@@ -330,7 +318,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //UpdateBookingAntrian
@@ -356,7 +343,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //UpdateBookingAntrian
@@ -382,7 +368,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //CreatPasienShk
@@ -408,7 +393,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //UpdatePasienShk
@@ -434,7 +418,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function DetailPasienShk($x_id_rs,$password_sirs_online,$url_sirs_online,$id_shk,$tgl_ambil_sampel){
@@ -464,7 +447,6 @@
 
         $response = curl_exec($curl);
 
-        curl_close($curl);
         return $response;
     }
     function HapusPasienShk($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -491,7 +473,6 @@
 
         $response = curl_exec($curl);
 
-        curl_close($curl);
         return $response;
     }
     function DetailLabPasienShk($x_id_rs,$password_sirs_online,$url_sirs_online,$id_shk){
@@ -520,7 +501,6 @@
 
         $response = curl_exec($curl);
 
-        curl_close($curl);
         return $response;
     }
     function TambahHasilLabPasienShk($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -547,7 +527,6 @@
 
         $response = curl_exec($curl);
 
-        curl_close($curl);
         return $response;
     }
     function HapusLabPasienShk($x_id_rs,$password_sirs_online,$url_sirs_online,$id_shk,$id_hasil){
@@ -577,7 +556,6 @@
 
         $response = curl_exec($curl);
 
-        curl_close($curl);
         return $response;
     }
     function UpdateHasilLabPasienShk($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -602,7 +580,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function DataOksigenSirsOnline($x_id_rs,$password_sirs_online,$url_sirs_online,$tanggal){
@@ -627,7 +604,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function TambahLaporanOksigen($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -652,7 +628,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function UpdateLaporanOksigen($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -677,7 +652,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function TambahTempatTidur($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -702,7 +676,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function UpdateTempatTidur($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -727,7 +700,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function HapusTempatTidur($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -752,7 +724,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function TambahAlkes($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -777,7 +748,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function EditAlkes($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -802,7 +772,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function HapusAlkes($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -827,7 +796,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function AddNakesTerinfeksi($x_id_rs,$password_sirs_online,$url_sirs_online,$json_data){
@@ -852,7 +820,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function GetNakesTerinfeksi($x_id_rs,$password_sirs_online,$url_sirs_online,$tanggal){
@@ -877,7 +844,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
 ?>

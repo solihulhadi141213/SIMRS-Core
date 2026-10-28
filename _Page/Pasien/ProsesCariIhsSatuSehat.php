@@ -136,7 +136,6 @@
 
         $error_curl = curl_error($curl);
 
-        curl_close($curl);
 
         echo json_encode([
             "status"  => "Error",
@@ -148,7 +147,6 @@
     // HTTP CODE
     $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-    curl_close($curl);
 
     // =====================================================
     // DECODE JSON

@@ -429,7 +429,6 @@
         $http_code  = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $curl_error = curl_error($ch);
 
-        curl_close($ch);
 
         // =====================================================
         // CURL ERROR
@@ -654,7 +653,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         $data =json_decode($content, true);
         return $content;
     }
@@ -689,7 +687,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         $ambil_json =json_decode($content, true);
         return $content;
     }
@@ -725,7 +722,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         $ambil_json =json_decode($content, true);
         if(empty($content)){
             return $err;
@@ -762,7 +758,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         $data =json_decode($content, true);
         return $content;
     }
@@ -794,7 +789,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         $data =json_decode($content, true);
         return $content;
     }
@@ -830,7 +824,6 @@
         }else{
             $content=curl_exec($ch);
         }
-        curl_close($ch);
         return $content;
     }
     function PesertaByNik($url_vclaim,$consid,$secret_key,$user_key,$nik){
@@ -865,7 +858,6 @@
         }else{
             $content=curl_exec($ch);
         }
-        curl_close($ch);
         return $content;
     }
     function RujukanByKartu($url_vclaim,$consid,$secret_key,$user_key,$nomorkartu,$TipeRujukan){
@@ -910,7 +902,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function RujukanByNomorRujukan($url_vclaim,$consid,$secret_key,$user_key,$NoRujukan){
@@ -942,7 +933,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function SuratKontrolByKartu($url_vclaim,$consid,$secret_key,$user_key,$nomorkartu,$Bulan,$Tahun){
@@ -974,7 +964,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function DetailReferensi($url_vclaim,$consid,$secret_key,$user_key,$url,$nomorreferensi){
@@ -1004,7 +993,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function BridgingServiceGet($consid,$secret_key,$user_key,$url){
@@ -1034,7 +1022,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function BridgingServiceGetUrlencoded($consid,$secret_key,$user_key,$url){
@@ -1064,7 +1051,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function PencarianPpk($url_vclaim,$consid,$secret_key,$user_key,$url){
@@ -1094,7 +1080,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function PencarianSep($url_vclaim,$consid,$secret_key,$user_key,$url){
@@ -1124,7 +1109,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function DetailSep($url_vclaim,$consid,$secret_key,$user_key,$base_url,$sep){
@@ -1155,7 +1139,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function AntrianByTanggal($url_antrol,$consid,$secret_key,$user_key,$TanggalAntrianPencarian){
@@ -1187,7 +1170,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function AntrianByKodeBooking($url_antrol,$consid,$secret_key,$user_key,$PencarianKodeBooking){
@@ -1219,7 +1201,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function AntrianByPoli($url_antrol,$consid,$secret_key,$user_key,$KodePoli,$KodeDokter,$Hari,$JamPraktek){
@@ -1251,7 +1232,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function TaskIdByKodeBooking($url_antrol,$consid,$secret_key,$user_key,$KodeBooking){
@@ -1287,7 +1267,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function AntrianBelumDilayani($url_antrol,$consid,$secret_key,$user_key){
@@ -1319,7 +1298,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function BatalkanAntrian($url_antrol,$consid,$secret_key,$user_key,$kodebooking,$keterangan_pembatalan){
@@ -1356,7 +1334,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     function UpdateWaktuTaskId($url_antrol,$consid,$secret_key,$user_key,$kodebooking,$taskid,$jenisresep){
@@ -1407,7 +1384,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         return $content;
     }
     
@@ -1429,7 +1405,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function UpdateLocation($baseurl_satusehat,$Json,$Token,$id_location){
@@ -1461,7 +1436,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function locationSearchByName($baseurl_satusehat,$Token,$KeywordLocation){
@@ -1492,7 +1466,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function locationById($baseurl_satusehat,$Token,$KeywordLocation){
@@ -1523,7 +1496,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function organizationLocation($baseurl_satusehat,$Token,$ID_Org){
@@ -1553,7 +1525,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function PatchLocation($baseurl_satusehat,$id_location,$Json,$Token){
@@ -1585,7 +1556,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function PractitionerById($baseurl_satusehat,$Token,$id_practitioner){
@@ -1615,7 +1585,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function PractitionerByNik($baseurl_satusehat,$Token,$nik){
@@ -1645,7 +1614,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function PractitionerByIdentitas($baseurl_satusehat,$Token,$nama,$tanggal_lahir,$gender){
@@ -1675,7 +1643,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function PatientByNik($baseurl_satusehat,$Token,$nik){
@@ -1705,7 +1672,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function PatientById($baseurl_satusehat,$Token,$IdPasien){
@@ -1735,7 +1701,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     //Pencarian id ihas pakai titik dua
@@ -1766,7 +1731,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function PatientByName($baseurl_satusehat,$Token,$nama_pasien,$tanggal_lahir,$nik_pasien){
@@ -1796,7 +1760,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function PatientByNikIbu($baseurl_satusehat,$Token,$nik_ibu){
@@ -1826,7 +1789,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function CreatPatient($baseurl_satusehat,$Json,$Token){
@@ -1858,7 +1820,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function EncounterById($baseurl_satusehat,$Token,$id){
@@ -1889,7 +1850,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function EncounterBySubject($baseurl_satusehat,$Token,$id_subject){
@@ -1919,7 +1879,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function CreatEncounter($baseurl_satusehat,$Json,$Token){
@@ -1951,7 +1910,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function UpdateEncounter($baseurl_satusehat,$Json,$Token,$id_encounter){
@@ -1983,7 +1941,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function CreatCondition($baseurl_satusehat,$Json,$Token){
@@ -2015,7 +1972,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function EditCondition($baseurl_satusehat,$Json,$Token,$id){
@@ -2047,7 +2003,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function ConditionById($baseurl_satusehat,$Token,$id){
@@ -2076,7 +2031,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function CreatObservation($baseurl_satusehat,$Json,$Token){
@@ -2108,7 +2062,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function EditObservation($baseurl_satusehat,$Json,$Token,$id){
@@ -2140,7 +2093,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function ObservationById($baseurl_satusehat,$Token,$id){
@@ -2169,7 +2121,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function CreatComposition($baseurl_satusehat,$Json,$Token){
@@ -2199,7 +2150,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function UpdateComposition($baseurl_satusehat,$Json,$Token,$Id){
@@ -2229,7 +2179,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function CompositionById($baseurl_satusehat,$Token,$id){
@@ -2257,7 +2206,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function CreatProcedur($baseurl_satusehat,$Json,$Token){
@@ -2287,7 +2235,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function ProcedurByEncounter($baseurl_satusehat,$Token,$id){
@@ -2315,7 +2262,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function ProcedureById($baseurl_satusehat,$Token,$id){
@@ -2343,7 +2289,6 @@
         ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function EditProcedur($baseurl_satusehat,$Json,$Token,$id){
@@ -2373,7 +2318,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function DateFormatDinamis($tanggal,$format){
@@ -2420,7 +2364,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         
         return $response;
     }
@@ -2450,7 +2393,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         return $response;
     }
     function UpdateConsent($baseurl_consent_satusehat,$JsonEncode,$Token){
@@ -2480,7 +2422,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         
         return $response;
     }
@@ -2510,7 +2451,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         
         return $response;
     }
@@ -2541,7 +2481,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         
         return $response;
     }
@@ -2572,7 +2511,6 @@
             ),
         ));
         $response = curl_exec($curl);
-        curl_close($curl);
         
         return $response;
     }
@@ -2691,7 +2629,6 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         $err = curl_error($ch);
-        curl_close($ch);
         $get =json_decode($content, true);
         return $content;
     }

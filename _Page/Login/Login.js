@@ -29,7 +29,32 @@ function GenerateCaptchaId(length = 32){
     return result;
 }
 
+function GetBrowserTimezone() {
+    if (window.Intl && Intl.DateTimeFormat) {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (timezone) return timezone;
+    }
+
+    const offsetMinutes = -new Date().getTimezoneOffset();
+    const sign = offsetMinutes >= 0 ? '+' : '-';
+    const absoluteOffset = Math.abs(offsetMinutes);
+    const pad = value => String(value).padStart(2, '0');
+    return 'UTC' + sign + pad(Math.floor(absoluteOffset / 60)) + ':' + pad(absoluteOffset % 60);
+}
+
 $(document).ready(function() {
+
+    $('#timezone_user').val(GetBrowserTimezone());
+    $('#login_google').attr('href', function() {
+        const url = new URL(this.href, window.location.href);
+        url.searchParams.set('timezone_user', GetBrowserTimezone());
+        return url.toString();
+    });
+    $('#login_google').on('click', function() {
+        const url = new URL(this.href, window.location.href);
+        url.searchParams.set('timezone_user', GetBrowserTimezone());
+        this.href = url.toString();
+    });
 
     // Inisialisasi FeatureName dan id_captcha untuk Halaman Login
     let FeatureName                = "Login";
@@ -103,6 +128,8 @@ $(document).ready(function() {
 
     //Proses Login
     $('#ProsesLogin').submit(function(){
+        $('#timezone_user').val(GetBrowserTimezone());
+
         // Tangkap Data Login Dari Form
         var ProsesLogin = $(this).serialize();
 

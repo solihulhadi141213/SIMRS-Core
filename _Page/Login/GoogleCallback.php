@@ -14,8 +14,8 @@
     include "../../_Config/SimrsFunction.php";
     include "../../_Config/SettingGeneral.php";
 
-    // Zona waktu
-    date_default_timezone_set("Asia/Jakarta");
+    // Semua waktu yang disimpan selama login menggunakan UTC.
+    date_default_timezone_set('UTC');
 
 
     // CEK AUTHORIZATION CODE
@@ -90,25 +90,31 @@
     $deleteTokenStmt->execute();
 
     // BUAT TOKEN LOGIN BARU
-    $utc             = new DateTime('now', new DateTimeZone('UTC'));
+    $utc             = new DateTimeImmutable('now', new DateTimeZone('UTC'));
     $current_utc     = $utc->format('Y-m-d H:i:s');
     $expired_seconds = 60 * 60;
-    $date_expired    = date('Y-m-d H:i:s',strtotime($current_utc) + $expired_seconds);
+    $date_expired    = $utc->modify("+{$expired_seconds} seconds")->format('Y-m-d H:i:s');
     $token           = generateStrongCode(36);
+    $timezoneUser    = trim((string) ($_SESSION['LoginUserTimezone'] ?? 'UTC'));
+    if ($timezoneUser === '' || strlen($timezoneUser) > 255) {
+        $timezoneUser = 'UTC';
+    }
     $insertTokenStmt = $Conn->prepare("
         INSERT INTO akses_login (
             id_akses,
             login_token,
             creat_at,
-            expired_at
-        ) VALUES (?, ?, ?, ?)
+            expired_at,
+            local_timezone_user
+        ) VALUES (?, ?, ?, ?, ?)
     ");
     $insertTokenStmt->bind_param(
-        "isss",
+        "issss",
         $id_akses,
         $token,
         $current_utc,
-        $date_expired
+        $date_expired,
+        $timezoneUser
     );
 
     if (!$insertTokenStmt->execute()) {
@@ -127,6 +133,7 @@
 
     setcookie("id_akses", $id_akses, $cookieOptions);
     setcookie("login_token", $token, $cookieOptions);
+    unset($_SESSION['LoginUserTimezone']);
     $_SESSION['NotifikasiSwal'] = "Login Berhasil";
 
     // REDIRECT KE HALAMAN UTAMA

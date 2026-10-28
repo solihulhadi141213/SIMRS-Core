@@ -2,6 +2,18 @@
     // Mulai session
     session_start();
 
+    $timezoneUser = trim((string) ($_GET['timezone_user'] ?? ''));
+    if ($timezoneUser === '' || strlen($timezoneUser) > 255) {
+        $timezoneUser = 'UTC';
+    } else if (!preg_match('/^(?:UTC[+-](?:0\d|1[0-3]):[0-5]\d|UTC[+-]14:00)$/', $timezoneUser)) {
+        try {
+            new DateTimeZone($timezoneUser);
+        } catch (Throwable $exception) {
+            $timezoneUser = 'UTC';
+        }
+    }
+    $_SESSION['LoginUserTimezone'] = $timezoneUser;
+
     // Koneksi database dan setting umum aplikasi
     include "../../_Config/Connection.php";
     include "../../_Config/SettingGeneral.php";

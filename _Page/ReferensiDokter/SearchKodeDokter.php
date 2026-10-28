@@ -76,7 +76,6 @@
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $content = curl_exec($ch);
     $err = curl_error($ch);
-    curl_close($ch);
     $ambil_json =json_decode($content, true);
     $string=$ambil_json["response"];
     $metadata=$ambil_json["metadata"];

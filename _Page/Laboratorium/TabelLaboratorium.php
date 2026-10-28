@@ -119,7 +119,6 @@
 
         $response = curl_exec($curl);
         $curl_error = curl_error($curl);
-        curl_close($curl);
 
         // Validasi CURL Error
         if ($curl_error) {
@@ -256,7 +255,6 @@
     $response = curl_exec($curl);
     $curl_error = curl_error($curl);
     $http_code  = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-     curl_close($curl);
 
     // Apabila CURL Error
     if ($curl_error) {

@@ -178,7 +178,6 @@
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $response = curl_exec($ch);
             $err = curl_error($ch);
-            curl_close($ch);
 
             $response_arry   = json_decode($response, true);
             $response_string = $response_arry["response"];

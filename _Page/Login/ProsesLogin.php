@@ -10,8 +10,8 @@
     // Start session
     session_start();
 
-    // Zona waktu
-    date_default_timezone_set('Asia/Jakarta');
+    // Semua waktu yang disimpan oleh proses login menggunakan UTC.
+    date_default_timezone_set('UTC');
 
     // Connection dan function
     include "../../_Config/Connection.php";
@@ -52,15 +52,31 @@
         exit;
     }
 
+    if (!isset($_POST['timezone_user']) || trim((string) $_POST['timezone_user']) === '') {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Informasi zona waktu pengguna wajib dikirim!'
+        ]);
+        exit;
+    }
+
     $email      = trim($_POST["email"]);
     $password   = trim($_POST["password"]);
     $captcha    = trim($_POST["captcha"]);
     $id_captcha = trim($_POST["id_captcha"]);
+    $timezoneUser = trim((string) $_POST['timezone_user']);
+    if (strlen($timezoneUser) > 255) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Informasi zona waktu pengguna tidak valid!'
+        ]);
+        exit;
+    }
 
     // ==========================
     // VALIDASI CAPTCHA
     // ==========================
-    $utc = new DateTime('now', new DateTimeZone('UTC'));
+    $utc = new DateTimeImmutable('now', new DateTimeZone('UTC'));
     $current_utc = $utc->format('Y-m-d H:i:s');
 
     $queryCaptcha = $Conn->prepare("
@@ -161,7 +177,7 @@
     // GENERATE TOKEN BARU
     // ==========================
     $expired_seconds = 60 * 60; // 1 jam
-    $date_expired = date('Y-m-d H:i:s',strtotime($current_utc) + $expired_seconds);
+    $date_expired = $utc->modify("+{$expired_seconds} seconds")->format('Y-m-d H:i:s');
 
     $token = generateStrongCode(36);
 
@@ -170,16 +186,18 @@
             id_akses,
             login_token,
             creat_at,
-            expired_at
-        ) VALUES (?, ?, ?, ?)
+            expired_at,
+            local_timezone_user
+        ) VALUES (?, ?, ?, ?, ?)
     ");
 
     $insertTokenStmt->bind_param(
-        "isss",
+        "issss",
         $id_akses,
         $token,
         $current_utc,
-        $date_expired
+        $date_expired,
+        $timezoneUser
     );
 
     if (!$insertTokenStmt->execute()) {

@@ -102,7 +102,6 @@ if (curl_errno($curl)) {
 $http_code  = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 $time_total = curl_getinfo($curl, CURLINFO_TOTAL_TIME);
 
-curl_close($curl);
 
 $end = microtime(true);
 $duration = round(($end - $start), 3);

@@ -185,7 +185,6 @@
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     $err      = curl_error($ch);
-    curl_close($ch);
 
     // Build Response Variabel
     $response_json = json_decode($response, true);

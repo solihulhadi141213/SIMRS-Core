@@ -9,7 +9,7 @@
 
     // Session, Koneksi dan Function
     session_start();
-    date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('UTC');
     include "../../_Config/Connection.php";
     include "../../_Config/SimrsFunction.php";
 
@@ -50,12 +50,28 @@
         exit;
     }
 
+    if (!isset($_POST['timezone_user']) || trim((string) $_POST['timezone_user']) === '') {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Informasi zona waktu pengguna wajib dikirim!'
+        ]);
+        exit;
+    }
+
 
     // Ambil Input
     $email      = trim($_POST["email"]);
     $password   = trim($_POST["password"]);
     $captcha    = trim($_POST["captcha"]);
     $id_captcha = trim($_POST["id_captcha"]);
+    $timezoneUser = trim((string) $_POST['timezone_user']);
+    if (strlen($timezoneUser) > 255) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Informasi zona waktu pengguna tidak valid!'
+        ]);
+        exit;
+    }
 
     // Proses Validasi Captcha
     $utc = new DateTime('now', new DateTimeZone('UTC'));
@@ -152,12 +168,17 @@
     $deleteTokenStmt->execute();
 
     // Buat token baru dengan durasi 1 jam
-    $timestamp_now   = date('Y-m-d H:i:s');
+    $utcNow          = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+    $timestamp_now   = $utcNow->format('Y-m-d H:i:s');
     $expired_seconds = 60 * 60;
-    $date_expired    = date('Y-m-d H:i:s', strtotime($timestamp_now) + $expired_seconds);
+    $date_expired    = $utcNow->modify("+{$expired_seconds} seconds")->format('Y-m-d H:i:s');
     $token           = generateStrongCode(36);
-    $insertTokenStmt = $Conn->prepare("INSERT INTO akses_login (id_akses, login_token, creat_at, expired_at) VALUES (?, ?, ?, ?)");
-    $insertTokenStmt->bind_param("isss", $id_akses, $token, $timestamp_now, $date_expired);
+    $insertTokenStmt = $Conn->prepare(
+        "INSERT INTO akses_login (
+            id_akses, login_token, creat_at, expired_at, local_timezone_user
+        ) VALUES (?, ?, ?, ?, ?)"
+    );
+    $insertTokenStmt->bind_param("issss", $id_akses, $token, $timestamp_now, $date_expired, $timezoneUser);
 
     if (!$insertTokenStmt->execute()) {
         $response = [

@@ -12,19 +12,10 @@
                 </div>
 
                 <!-- Body -->
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12 text-center">
-                            <img src="assets/images/question.gif" class="img-fluid mb-3" alt="Konfirmasi Logout">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 text-center">
-                            <div class="alert alert-danger">
-                                <b>Apakah anda yakin ingin keluar dari akun ini?</b>
-                            </div>
-                        </div>
-                    </div>
+                <div class="modal-body text-center">
+                    <i class="bi bi-box-arrow-right display-4 text-danger mb-3" aria-hidden="true"></i>
+                    <p class="h5"><strong>Anda yakin ingin logout?</strong></p>
+                    <p>Pastikan semua data telah disimpan sebelum melanjutkan.</p>
                 </div>
 
                 <!-- Footer -->

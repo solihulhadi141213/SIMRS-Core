@@ -51,6 +51,7 @@
                             </div>
                             <form id="ProsesLogin" class="login-form" autocomplete="off" onsubmit="return false;">
                                 <input type="hidden" name="id_captcha" id="id_captcha" value="">
+                                <input type="hidden" name="timezone_user" id="timezone_user" value="">
                                 <div class="form-field">
                                     <label for="email" class="form-label">Email</label>
                                     <div class="input-group">
@@ -84,7 +85,7 @@
                                 <div id="NotifikasiLogin"></div>
                                 <button type="submit" class="btn btn-primary login-submit" id="button_login">Login</button>
                                 <div class="login-divider">Atau</div>
-                                <a href="_Page/Login/LoginGoogle.php" class="btn btn-google">
+                                <a href="_Page/Login/LoginGoogle.php" class="btn btn-google" id="login_google">
                                     <i class="bi bi-google"></i> Login Dengan Google
                                 </a>
                                 <button type="button" class="login-text-link access-link" id="modal_pengajuan_akses">

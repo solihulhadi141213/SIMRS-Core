@@ -1,643 +1,1427 @@
-/**
- * Memuat baris tabel antrean berdasarkan filter aktif dan menyelaraskan kontrol paginasi.
- */
-function loadTabelAntrian() {
-    const target = $('#tabel_antrian');
+// =========================================================================================
+/** BLOCK FUNCTION */
+// =========================================================================================
+
+/** Menampilkan Data Berdasarkan Filter */
+function TabelAntrian() {
+
+    // Menangkap Data Dari Form Filter
+    var ProsesFilter = $('#ProsesFilter').serialize();
+
+    // Tujuan Ajax
+    let target = $('#tabel_antrian');
+
     target.addClass('blur-loading');
-    // Minta tabel sesuai filter aktif; metadata halaman ikut dikirim pada baris pertama.
+
     $.ajax({
         type: 'POST',
         url: '_Page/Antrian/TabelAntrian.php',
-        data: $('#ProsesFilter').serialize(),
-        dataType: 'html'
-    }).done(function (html) {
-        const rows = $('<table>').html(html).find('tr');
-        const firstRow = rows.first();
-        const pageCount = parseInt(firstRow.attr('data-page-count'), 10) || 0;
-        const currentPage = parseInt(firstRow.attr('data-current-page'), 10) || 0;
-        target.html(rows);
-        $('#page_info').text(currentPage + ' / ' + pageCount);
-        $('#page_filter').val(currentPage || 1);
-        $('#previous_page').prop('disabled', currentPage <= 1);
-        $('#next_page').prop('disabled', currentPage === 0 || currentPage >= pageCount);
-        formatAntrianDates(target);
-    // Tampilkan kondisi gagal dan nonaktifkan paginasi jika server tidak merespons.
-    }).fail(function () {
-        target.html('<tr><td colspan="13" class="text-center text-danger">Gagal memuat data antrian. Silakan coba kembali.</td></tr>');
-        $('#page_info').text('0 / 0');
-        $('#previous_page, #next_page').prop('disabled', true);
-    // Hentikan indikator pemuatan baik request berhasil maupun gagal.
-    }).always(function () {
-        target.removeClass('blur-loading');
+        data: ProsesFilter,
+        success: function (data) {
+            let wrapper = $('<div>').html(data);
+            let rowHtml = wrapper.find('tr');
+            let firstRow = rowHtml.first();
+            let pageCount = parseInt(firstRow.attr('data-page-count'), 10);
+            let currentPage = parseInt(firstRow.attr('data-current-page'), 10);
+
+            if (isNaN(pageCount)) {
+                pageCount = 0;
+            }
+
+            if (isNaN(currentPage)) {
+                currentPage = 0;
+            }
+
+            target.css('opacity', '0');
+
+            setTimeout(function () {
+                target.html(rowHtml)
+                    .addClass('blur-loading')
+                    .css('opacity', '1');
+
+                $('#page_info').html(currentPage + ' / ' + pageCount);
+                $('#previous_page').prop('disabled', currentPage <= 1);
+                $('#next_page').prop('disabled', currentPage <= 0 || currentPage >= pageCount);
+
+                setTimeout(function () {
+                    target.removeClass('blur-loading');
+                }, 200);
+            }, 150);
+        }
     });
+
 }
 
-/**
- * Mengubah elemen tanggal di dalam kontainer ke format waktu lokal browser.
- * @param {jQuery} container Elemen yang berisi timestamp UTC atau tanggal lokal.
- */
-function formatAntrianDates(container) {
-    container.find('.js-date-time[data-utc]').each(function () {
-        const value = $(this).attr('data-utc');
-        const date = new Date(value);
-        const formattedDate = Number.isNaN(date.getTime())
-            ? '-'
-            : $(this).hasClass('js-date-only')
-                ? new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(date)
-                : date.toLocaleString();
-        $(this).text(formattedDate);
-    });
-    container.find('.js-local-date[data-date]').each(function () {
-        const parts = ($(this).attr('data-date') || '').split('-').map(Number);
-        const date = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : new Date(NaN);
-        $(this).text(Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString());
-    });
-}
+/** Select2 Pasien */
+const modalTambahAntrian = $('#ModalTambah');
+const selectPasien = $('#id_pasien');
+const parentSelectPasien = $('#select_id_pasien');
 
-/** Menampilkan toast singkat dengan pola Bootstrap yang digunakan fitur referensi. */
-function showAntrianToast(message, icon = 'success') {
-    const isWarning = icon === 'warning';
-    const colorClass = icon === 'success' ? 'bg-success' : isWarning ? 'bg-warning' : 'bg-danger';
-    const textClass = isWarning ? 'text-dark' : 'text-white';
-    const closeClass = isWarning ? '' : 'btn-close-white';
-    const toast = $('<div>', {
-        class: 'toast align-items-center ' + textClass + ' ' + colorClass + ' border-0 position-fixed top-0 end-0 m-3',
-        role: 'alert',
-        'aria-live': 'assertive',
-        'aria-atomic': 'true'
-    }).css('z-index', 9999);
-    const content = $('<div>', { class: 'd-flex' });
-
-    $('<div>', { class: 'toast-body' })
-        .text(message || 'Proses antrean selesai.')
-        .appendTo(content);
-    $('<button>', {
-        type: 'button',
-        class: 'btn-close ' + closeClass + ' me-2 m-auto',
-        'data-bs-dismiss': 'toast',
-        'aria-label': 'Tutup'
-    }).appendTo(content);
-    toast.append(content).appendTo('body');
-
-    toast.on('hidden.bs.toast', function () {
-        $(this).remove();
-    });
-    bootstrap.Toast.getOrCreateInstance(toast[0], { delay: 2000 }).show();
-}
-
-/** Menampilkan pesan server secara aman di area notifikasi modal. */
-function showAntrianNotification(target, message, variant = 'danger') {
-    const alert = $('<div>', { class: 'alert alert-' + variant + ' mb-0' });
-    $('<small>').text(message || 'Terjadi kesalahan saat memproses data antrean.').appendTo(alert);
-    $(target).empty().append(alert);
-}
-
-/**
- * Memuat jadwal aktif sesuai poliklinik dan tanggal pada form yang dipilih.
- * @param {jQuery|string} form Form antrean yang memuat pilihan poliklinik, tanggal, dan jadwal.
- * @param {string|number} [selectedId] ID jadwal yang perlu tetap terpilih.
- */
-function loadJadwalAntrian(form, selectedId) {
-    const formElement = $(form || '#FormAntrian');
-    const schedule = formElement.find('[name="id_jadwal"]');
-    const idPoli = formElement.find('[name="id_poliklinik"]').val();
-    const tanggal = formElement.find('[name="tanggal_kunjungan"]').val();
-    const notification = formElement.find('.js-antrian-notification');
-    // Hapus pesan sebelumnya saat petugas memperbarui pilihan jadwal.
-    notification.empty();
-    schedule.prop('disabled', true).html('<option value="">Memuat jadwal...</option>');
-    // Jadwal baru dapat dicari setelah poliklinik dan tanggal tersedia.
-    if (!idPoli || !tanggal) {
-        schedule.html('<option value="">Pilih tanggal dan poliklinik terlebih dahulu</option>');
+function Select2Pasien() {
+    if (!selectPasien.length || typeof $.fn.select2 !== 'function') {
         return;
     }
-    // Ambil jadwal aktif dari server untuk pilihan poliklinik dan tanggal tersebut.
-    $.ajax({
-        url: '_Page/Antrian/ListJadwal.php',
-        type: 'GET',
-        data: { id_poliklinik: idPoli, tanggal_kunjungan: tanggal, selected_id: selectedId || '' },
-        dataType: 'json'
-    }).done(function (response) {
-        // Isi pilihan jadwal aktif dan pertahankan pilihan saat form edit dibuka.
-        schedule.empty().append($('<option>', { value: '', text: 'Pilih jadwal dokter' }));
-        (response.results || []).forEach(function (item) {
-            const option = new Option(item.text, item.id, false, String(item.id) === String(selectedId || ''));
-            schedule.append(option);
-        });
-        schedule.prop('disabled', false);
-        if (!response.results || response.results.length === 0) {
-            schedule.html('<option value="">Tidak ada jadwal aktif pada tanggal ini</option>');
-            schedule.prop('disabled', true);
-        }
-    }).fail(function () {
-        schedule.html('<option value="">Gagal memuat jadwal dokter</option>').prop('disabled', true);
-        showAntrianNotification(notification, 'Jadwal dokter tidak dapat dimuat.');
-    });
-}
-
-/**
- * Menginisialisasi Select2 pada form untuk mencari pasien atau memasukkan pasien baru.
- * @param {string|jQuery} [selectElement] Elemen pilih pasien yang akan dipasangi Select2.
- * @param {string|jQuery} [modalElement] Modal induk dropdown Select2.
- * @param {string|jQuery} [notificationElement] Area untuk menampilkan pesan pencarian.
- */
-function initializeSelect2Antrian(selectElement, modalElement, notificationElement) {
-    const select = $(selectElement || '#pilih_pasien_antrian');
-    const modal = $(modalElement || '#ModalTambah');
-    const notification = notificationElement || '#NotifikasiAntrian';
-    // Hancurkan instance lama agar handler dan dropdown tidak terpasang ganda.
-    if (select.hasClass('select2-hidden-accessible')) {
-        select.select2('destroy');
+    if (selectPasien.hasClass('select2-hidden-accessible')) {
+        return;
     }
-    select.select2({
+
+    function templatePasien(item) {
+        if (item.loading || !item.id) {
+            return item.text || '';
+        }
+
+        const row = $('<div>', { class: 'antrian-select2-pasien' });
+        $('<div>', { class: 'antrian-select2-pasien-id' }).text(item.id_pasien || item.id).appendTo(row);
+        $('<div>', { class: 'antrian-select2-pasien-nama' }).text(item.nama || '').appendTo(row);
+        return row;
+    }
+
+    selectPasien.select2({
         theme: 'bootstrap-5',
-        dropdownParent: modal,
-        placeholder: 'Cari nama, RM, NIK, atau pasien baru',
+        dropdownParent: parentSelectPasien.length ? parentSelectPasien : modalTambahAntrian,
+        placeholder: 'Cari Pasien',
         allowClear: true,
-        tags: true,
         width: '100%',
-        createTag: function (params) {
-            // Izinkan teks pencarian yang bukan pasien terdaftar menjadi pilihan pasien baru.
-            const term = $.trim(params.term || '');
-            if (!term) {
-                return null;
-            }
-            return { id: 'new:' + term, text: term, isNew: true };
-        },
-        insertTag: function (results, tag) {
-            // Cegah opsi pasien baru menduplikasi nama yang sudah ditemukan dari server.
-            const tagText = tag.text.toLocaleLowerCase();
-            const exists = results.some(function (item) {
-                return item.text.toLocaleLowerCase() === tagText;
-            });
-            if (!exists) {
-                results.push(tag);
-            }
-        },
+        templateResult: templatePasien,
+        templateSelection: templatePasien,
         ajax: {
             url: '_Page/Antrian/ListPasien.php',
+            type: 'GET',
             dataType: 'json',
             delay: 250,
             data: function (params) {
-                return { term: params.term || '' };
+                return {
+                    term: params.term || '',
+                    page: params.page || 1
+                };
             },
             processResults: function (response) {
-                return response;
+                return {
+                    results: Array.isArray(response.results) ? response.results : [],
+                    pagination: {
+                        more: Boolean(response.pagination && response.pagination.more)
+                    }
+                };
             },
-            error: function () {
-                showAntrianNotification(notification, 'Pencarian pasien tidak dapat dimuat.');
-            }
+            cache: true
         }
     });
 }
 
-/**
- * Menyesuaikan visibilitas, nilai, dan status input berdasarkan jenis pasien.
- * @param {string} mode Gunakan `lama` untuk pasien terdaftar atau `baru` untuk pasien baru.
- * @param {string|jQuery} [form] Form antrean yang kontrolnya akan disesuaikan.
- */
-function setModePasienAntrian(mode, form) {
-    const formElement = $(form || '#FormAntrian');
-    const isRegistered = mode === 'lama';
-    const patientSelect = formElement.find('.js-pilih-pasien-antrian');
-    const patientInputs = formElement.find('[name="nama_pasien"], [name="gender"], [name="nik"], [name="no_bpjs"], [name="kontak"]');
-    formElement.find('.js-pilih-pasien-field').toggle(isRegistered);
-    formElement.find('.js-data-pasien-field').toggleClass('d-none', isRegistered);
-    formElement.find('.js-data-pasien-field :input').prop('disabled', isRegistered);
-    formElement.find('[name="id_pasien"]').val(isRegistered ? patientSelect.val() || '' : '');
-    patientInputs.prop('readonly', isRegistered);
-    if (!isRegistered) {
-        patientSelect.val(null).trigger('change');
-        formElement.find('[name="id_pasien"]').val('');
-        patientInputs.val('');
+// ID request mencegah respons lama mengisi pilihan setelah parent berubah cepat.
+const antrianSelectRequestId = { poliklinik: 0, dokter: 0, jadwal: 0 };
+const antrianSelectRequest = { poliklinik: null, dokter: null, jadwal: null };
+
+function ResetSelectAntrian(select, placeholder, disabled = true) {
+    select.empty().append(new Option(placeholder, '')).val('').prop('disabled', disabled);
+}
+
+function BatalkanRequestSelectAntrian(jenis) {
+    antrianSelectRequestId[jenis] += 1;
+    if (antrianSelectRequest[jenis]) {
+        antrianSelectRequest[jenis].abort();
+        antrianSelectRequest[jenis] = null;
     }
 }
 
-/**
- * Memuat konten detail antrean atau data terkait ke dalam modal detail bersama.
- * @param {string} title Judul modal yang sesuai dengan jenis detail.
- * @param {string} url Endpoint yang mengembalikan markup detail.
- * @param {Object} data Parameter POST untuk endpoint detail.
- */
-function showAntrianDetail(title, url, data) {
-    // Tampilkan indikator muat dan tombol tutup sebelum meminta markup detail ke server.
-    $('#judul_detail_antrian').html(title);
-    $('#isi_detail_antrian').html('<div class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Memuat data...</div>');
-    $('#aksi_detail_antrian').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>');
-    bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalDetailAntrian')).show();
-    $.ajax({ type: 'POST', url: url, data: data, dataType: 'html' })
-        .done(function (html) {
-            $('#isi_detail_antrian').html(html);
-            formatAntrianDates($('#isi_detail_antrian'));
-        })
-        .fail(function (xhr) {
-            showAntrianNotification('#isi_detail_antrian', 'Gagal memuat detail. Silakan coba kembali.');
-            if (xhr.status === 401) {
-                showAntrianToast('Sesi berakhir. Silakan login kembali.', 'warning');
+/** Mengisi semua halaman endpoint ke native select agar tidak ada opsi yang terpotong. */
+function MuatSemuaOptionAntrian(jenis, select, url, data, placeholder, emptyText) {
+    BatalkanRequestSelectAntrian(jenis);
+    const requestId = antrianSelectRequestId[jenis];
+    ResetSelectAntrian(select, 'Memuat...', true);
+
+    function muatHalaman(page) {
+        antrianSelectRequest[jenis] = $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            data: Object.assign({}, data, { page: page })
+        }).done(function (response) {
+            if (requestId !== antrianSelectRequestId[jenis]) {
+                return;
             }
+
+            const results = Array.isArray(response.results) ? response.results : [];
+            results.forEach(function (item) {
+                select.append(new Option(item.text || '', item.id || ''));
+            });
+
+            if (response.pagination && response.pagination.more) {
+                muatHalaman(page + 1);
+                return;
+            }
+
+            if (select.find('option').length > 1) {
+                select.find('option').first().text(placeholder);
+                select.prop('disabled', false);
+            } else {
+                ResetSelectAntrian(select, emptyText, true);
+            }
+            antrianSelectRequest[jenis] = null;
+        }).fail(function (xhr, status) {
+            if (status === 'abort' || requestId !== antrianSelectRequestId[jenis]) {
+                return;
+            }
+            ResetSelectAntrian(select, 'Gagal memuat pilihan', true);
+            antrianSelectRequest[jenis] = null;
         });
-}
-
-let editFormRequest = null;
-let editFormRequestId = 0;
-
-/**
- * Meminta markup form edit yang sudah diisi oleh PHP berdasarkan ID antrean.
- * @param {string|number} id ID antrean yang akan diedit.
- */
-function openEditAntrian(id) {
-    // Abaikan respons lama bila petugas memilih antrean lain sebelum form selesai dimuat.
-    editFormRequestId += 1;
-    const requestId = editFormRequestId;
-    if (editFormRequest) {
-        editFormRequest.abort();
     }
 
-    const container = $('#KontenFormEditAntrian');
-    container.html('<div class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm me-2" role="status" aria-label="Memuat"></span>Memuat form edit antrian...</div>');
-    $('#NotifikasiEditAntrian').empty();
-    $('#SimpanEditAntrian').prop('disabled', true);
-    bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalEditAntrian')).show();
+    muatHalaman(1);
+}
 
-    // Kirim ID ke PHP agar endpoint membaca data dan merender seluruh field edit.
-    editFormRequest = $.ajax({
-        type: 'POST',
-        url: '_Page/Antrian/FormEditAntrian.php',
-        data: { id_antrian: id },
-        dataType: 'html'
-    }).done(function (html) {
-        if (requestId !== editFormRequestId) {
+/** Select Option Poliklinik */
+function SelectOptionPoliklinik() {
+    const selectPoliklinik = $('#id_poliklinik');
+    if (!selectPoliklinik.length) {
+        return;
+    }
+
+    MuatSemuaOptionAntrian(
+        'poliklinik',
+        selectPoliklinik,
+        '_Page/Antrian/ListPoliklinik.php',
+        { term: '' },
+        'Pilih poliklinik',
+        'Poliklinik tidak tersedia'
+    );
+}
+
+/** Memuat dokter yang memiliki jadwal pada poliklinik terpilih. */
+function SelectOptionDokter(poliklinikId) {
+    const selectDokter = $('#id_dokter');
+    if (!selectDokter.length) {
+        return;
+    }
+
+    const idPoliklinik = poliklinikId === undefined ? $('#id_poliklinik').val() : poliklinikId;
+    if (!idPoliklinik) {
+        BatalkanRequestSelectAntrian('dokter');
+        ResetSelectAntrian(selectDokter, 'Pilih poliklinik terlebih dahulu', true);
+        return;
+    }
+
+    MuatSemuaOptionAntrian(
+        'dokter',
+        selectDokter,
+        '_Page/Antrian/ListDokter.php',
+        { id_poliklinik: idPoliklinik, term: '' },
+        'Pilih dokter',
+        'Dokter tidak tersedia pada poliklinik ini'
+    );
+}
+
+/** Memuat jadwal setelah dokter dan tanggal kunjungan tersedia. */
+function SelectOptionJadwal(dokterId, tanggalKunjungan) {
+    const selectJadwal = $('#id_jadwal');
+    if (!selectJadwal.length) {
+        return;
+    }
+
+    const idDokter = dokterId === undefined ? $('#id_dokter').val() : dokterId;
+    const tanggal = tanggalKunjungan === undefined ? $('#tanggal_kunjungan').val() : tanggalKunjungan;
+    const idPoliklinik = $('#id_poliklinik').val();
+
+    BatalkanRequestSelectAntrian('jadwal');
+    if (!idPoliklinik) {
+        ResetSelectAntrian(selectJadwal, 'Pilih poliklinik terlebih dahulu', true);
+        return;
+    }
+    if (!idDokter) {
+        ResetSelectAntrian(selectJadwal, 'Pilih dokter terlebih dahulu', true);
+        return;
+    }
+    if (!tanggal) {
+        ResetSelectAntrian(selectJadwal, 'Pilih tanggal kunjungan terlebih dahulu', true);
+        return;
+    }
+
+    const requestId = antrianSelectRequestId.jadwal;
+    ResetSelectAntrian(selectJadwal, 'Memuat jadwal...', true);
+    antrianSelectRequest.jadwal = $.ajax({
+        url: '_Page/Antrian/ListJadwal.php',
+        type: 'GET',
+        dataType: 'json',
+        data: {
+            id_poliklinik: idPoliklinik,
+            id_dokter: idDokter,
+            tanggal_kunjungan: tanggal
+        }
+    }).done(function (response) {
+        if (requestId !== antrianSelectRequestId.jadwal) {
             return;
         }
-        container.html(html);
-        initializeSelect2Antrian('#pilih_pasien_edit', '#ModalEditAntrian', '#NotifikasiEditAntrian');
-        $('#SimpanEditAntrian').prop('disabled', false);
-        if ($('#mode_pasien_edit_lama').is(':checked')) {
-            $('#pilih_pasien_edit').next('.select2').find('.select2-selection').trigger('focus');
-        } else {
-            $('#nama_pasien_edit').trigger('focus');
+
+        const jadwal = Array.isArray(response.results) ? response.results : [];
+        if (jadwal.length === 0) {
+            ResetSelectAntrian(selectJadwal, 'Jadwal tidak tersedia pada tanggal ini', true);
+            antrianSelectRequest.jadwal = null;
+            return;
         }
+
+        ResetSelectAntrian(selectJadwal, 'Pilih jadwal praktik', false);
+        jadwal.forEach(function (item) {
+            selectJadwal.append(new Option(item.text || '', item.id || ''));
+        });
+        antrianSelectRequest.jadwal = null;
     }).fail(function (xhr, status) {
-        if (requestId !== editFormRequestId || status === 'abort') {
+        if (status === 'abort' || requestId !== antrianSelectRequestId.jadwal) {
             return;
         }
-        container.empty();
-        showAntrianNotification(
-            '#NotifikasiEditAntrian',
-            xhr.status === 401
-                ? 'Sesi berakhir. Silakan login kembali.'
-                : xhr.status === 404
-                    ? 'Data antrian tidak ditemukan.'
-                    : 'Form edit antrian gagal dimuat.'
-        );
-    }).always(function () {
-        if (requestId === editFormRequestId) {
-            editFormRequest = null;
+        ResetSelectAntrian(selectJadwal, 'Gagal memuat jadwal', true);
+        antrianSelectRequest.jadwal = null;
+    });
+}
+
+// Show Select Option Province
+function loadProvince() {
+    $.ajax({
+        url: '_Page/Pasien/GetProvince.php',
+        type: 'GET',
+        success: function (res) {
+            $('#province').html(res);
         }
     });
 }
 
-/** Pasang handler halaman setelah elemen tabel, form, dan modal tersedia di DOM. */
+
+// =========================================================================================
+// BLOCK EVENT HANDLER
+// =========================================================================================
 $(document).ready(function () {
-    // Siapkan komponen pencarian pasien dan tampilkan data antrean pertama kali.
-    initializeSelect2Antrian();
-    loadTabelAntrian();
+    // Tampilkan data antrean pertama kali.
+    TabelAntrian();
 
-    // Bersihkan form dan isi nilai awal setiap modal tambah dibuka dari tombol tambah.
-    $('#ModalTambah').on('show.bs.modal', function (event) {
-        if ($(event.relatedTarget).is('[data-bs-target="#ModalTambah"]')) {
-            $('#FormAntrian')[0].reset();
-            $('#NotifikasiAntrian').empty();
-            $('#antrian_id, #antrian_id_pasien').val('');
-            $('#judul_form_antrian').html('<i class="bi bi-plus-circle"></i> Tambah Antrian Manual');
-            $('#data_pasien_field').addClass('d-none').find(':input').prop('disabled', true);
-            $('#mode_pasien_lama').prop('checked', true);
-            $('#pilih_pasien_antrian').val(null).trigger('change');
-            setModePasienAntrian('lama', '#FormAntrian');
-            $('#id_jadwal').html('<option value="">Pilih tanggal dan poliklinik terlebih dahulu</option>').prop('disabled', true);
-            const today = new Date();
-            const localToday = [
-                today.getFullYear(),
-                String(today.getMonth() + 1).padStart(2, '0'),
-                String(today.getDate()).padStart(2, '0')
-            ].join('-');
-            $('#tanggal_kunjungan').val(localToday);
-        }
+    //Pagging
+    $(document).on('click', '#next_page', function () {
+        var page_now = parseInt($('#page_filter').val(), 10); // Pastikan nilai diambil sebagai angka
+        var next_page = page_now + 1;
+        $('#page_filter').val(next_page);
+        TabelAntrian(0);
+    });
+    $(document).on('click', '#previous_page', function () {
+        var page_now = parseInt($('#page_filter').val(), 10); // Pastikan nilai diambil sebagai angka
+        var next_page = page_now - 1;
+        $('#page_filter').val(next_page);
+        TabelAntrian(0);
     });
 
-    // Pindahkan fokus ke kontrol utama setelah tiap modal tampil.
+    // Auto Focus Keyword
     $('#ModalFilter').on('shown.bs.modal', function () {
-        $('#NotifikasiFilter').empty();
-        $('#keyword_form').trigger('focus');
-    });
-    $('#ModalTambah').on('shown.bs.modal', function () {
-        if ($('#mode_pasien_lama').is(':checked')) {
-            $('#pilih_pasien_antrian').next('.select2').find('.select2-selection').trigger('focus');
-        } else {
-            $('#nama_pasien').trigger('focus');
-        }
-    });
-    $('#ModalEditAntrian').on('hidden.bs.modal', function () {
-        // Hentikan pemuatan yang masih berjalan dan kosongkan field edit saat modal ditutup.
-        editFormRequestId += 1;
-        if (editFormRequest) {
-            editFormRequest.abort();
-            editFormRequest = null;
-        }
-        const patientSelect = $('#pilih_pasien_edit');
-        if (patientSelect.hasClass('select2-hidden-accessible')) {
-            patientSelect.select2('destroy');
-        }
-        $('#KontenFormEditAntrian').empty();
-        $('#NotifikasiEditAntrian').empty();
-        $('#SimpanEditAntrian').prop('disabled', false);
-    });
-    $('#ModalDaftarPasienAntrian').on('shown.bs.modal', function () {
-        $('#daftar_nama_pasien').trigger('focus');
+        $('#keyword_form').focus();
     });
 
-    // Sinkronkan form dengan pilihan pasien terdaftar atau pasien baru.
-    $(document).on('change', '.js-mode-pasien', function () {
-        const form = $(this).closest('form');
-        form.find('.js-antrian-notification').empty();
-        setModePasienAntrian($(this).val(), form);
-    });
-
-    // Isi identitas pasien dari hasil pencarian, atau pindah ke mode pasien baru.
-    $(document).on('select2:select', '.js-pilih-pasien-antrian', function (event) {
-        const form = $(this).closest('form');
-        form.find('.js-antrian-notification').empty();
-        const patient = event.params.data;
-        if (patient.isNew) {
-            form.find('.js-mode-pasien[value="baru"]').prop('checked', true);
-            setModePasienAntrian('baru', form);
-            $(this).append(new Option(patient.text, patient.id, true, true)).trigger('change');
-            form.find('[name="nama_pasien"]').val(patient.text);
-            return;
-        }
-        form.find('[name="id_pasien"]').val(patient.id);
-        form.find('[name="nama_pasien"]').val(patient.nama).prop('readonly', true);
-        form.find('[name="gender"]').val(patient.gender || '').prop('readonly', Boolean(patient.gender));
-        form.find('[name="nik"]').val(patient.nik || '').prop('readonly', Boolean(patient.nik));
-        form.find('[name="no_bpjs"]').val(patient.no_bpjs || '').prop('readonly', Boolean(patient.no_bpjs));
-        form.find('[name="kontak"]').val(patient.kontak || '').prop('readonly', Boolean(patient.kontak));
-    });
-    $(document).on('select2:clear', '.js-pilih-pasien-antrian', function () {
-        const form = $(this).closest('form');
-        form.find('.js-antrian-notification').empty();
-        form.find('[name="id_pasien"]').val('');
-        if (form.find('.js-mode-pasien[value="lama"]').is(':checked')) {
-            form.find('[name="nama_pasien"], [name="gender"], [name="nik"], [name="no_bpjs"], [name="kontak"]').val('');
-            form.find('[name="nama_pasien"], [name="gender"], [name="nik"], [name="no_bpjs"], [name="kontak"]').prop('readonly', true);
-        }
-    });
-
-    // Perbarui pilihan jadwal saat poliklinik atau tanggal kunjungan berubah.
-    $(document).on('change', '.js-antrian-schedule-filter', function () {
-        loadJadwalAntrian($(this).closest('form'));
-    });
-
-    // Terapkan filter, ubah tanggal pencarian menjadi batas UTC, lalu muat tabel ulang.
-    $('#ProsesFilter').on('submit', function (event) {
-        event.preventDefault();
-        $('#NotifikasiFilter').empty();
-        if ($('#keyword_by').val() === 'datetime_creat') {
-            const parts = ($('#keyword_form').val() || '').split('-').map(Number);
-            if (parts.length === 3 && parts.every(Number.isFinite)) {
-                const start = new Date(parts[0], parts[1] - 1, parts[2]);
-                const end = new Date(parts[0], parts[1] - 1, parts[2] + 1);
-                $('#filter_utc_start').val(start.toISOString().slice(0, 19).replace('T', ' '));
-                $('#filter_utc_end').val(end.toISOString().slice(0, 19).replace('T', ' '));
-            }
-        } else {
-            $('#filter_utc_start, #filter_utc_end').val('');
-        }
-        $('#page_filter').val('1');
-        bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalFilter')).hide();
-        loadTabelAntrian();
-    });
-
-    // Muat jenis kontrol pencarian yang sesuai dengan kolom filter terpilih.
-    $('#keyword_by').on('change', function () {
-        $('#FormFilter').html('<div class="text-center py-2"><span class="spinner-border spinner-border-sm" role="status" aria-label="Memuat"></span></div>');
+    // Keyword By
+    $('#keyword_by').change(function () {
+        var keyword_by = $('#keyword_by').val();
         $.ajax({
             type: 'POST',
             url: '_Page/Antrian/FormFilter.php',
-            data: { keyword_by: $(this).val() },
-            dataType: 'html'
-        }).done(function (html) {
-            $('#FormFilter').html(html);
-        }).fail(function () {
-            $('#FormFilter').html('<input type="search" name="keyword" id="keyword_form" class="form-control" placeholder="Gagal memuat filter">');
-            showAntrianNotification('#NotifikasiFilter', 'Form pencarian tidak dapat dimuat.');
+            data: { keyword_by: keyword_by },
+            success: function (data) {
+                $('#FormFilter').html(data);
+            }
         });
     });
 
-    // Ganti halaman tabel dan ambil kembali data dari server.
-    $('#next_page').on('click', function () {
-        $('#page_filter').val(parseInt($('#page_filter').val(), 10) + 1);
-        loadTabelAntrian();
-    });
-    $('#previous_page').on('click', function () {
-        $('#page_filter').val(Math.max(1, parseInt($('#page_filter').val(), 10) - 1));
-        loadTabelAntrian();
+    // Submit Pencarian/Filter
+    $('#ProsesFilter').submit(function () {
+        $('#page_filter').val("1");
+        TabelAntrian();
+        $('#ModalFilter').modal('hide');
     });
 
-    // Validasi data pasien dan simpan form tambah/edit melalui endpoint yang sama.
-    $(document).on('submit', '.js-form-simpan-antrian', function (event) {
-        event.preventDefault();
-        const form = $(this);
-        const notification = form.find('.js-antrian-notification');
-        const button = form.find('.js-simpan-antrian');
-        notification.empty();
-        if (form.find('.js-mode-pasien[value="lama"]').is(':checked') && !form.find('[name="id_pasien"]').val()) {
-            showAntrianNotification(notification, 'Pilih pasien terdaftar atau pilih opsi pasien baru.', 'warning');
+    //------------------------------------
+    //  Tambah Antrian
+    //------------------------------------
+
+    // inisiasi Select2 untuk pencarian pasien lama
+    Select2Pasien();
+    SelectOptionPoliklinik();
+    SelectOptionDokter();
+    SelectOptionJadwal();
+
+    // Poli menentukan daftar dokter; perubahan atau pengosongan poli mereset dokter dan jadwal.
+    $('#id_poliklinik').on('change', function () {
+        const idPoliklinik = $(this).val();
+
+        $('#id_dokter').val(null).trigger('change');
+        $('#id_jadwal').val(null).trigger('change');
+        SelectOptionDokter(idPoliklinik);
+        SelectOptionJadwal('', '');
+    });
+
+    // Dokter menentukan daftar jadwal yang tersedia pada tanggal kunjungan.
+    $('#id_dokter').on('change', function () {
+        const idDokter = $(this).val();
+
+        $('#id_jadwal').val(null).trigger('change');
+        SelectOptionJadwal(idDokter, $('#tanggal_kunjungan').val());
+    });
+
+    // Jadwal harus dimuat ulang ketika tanggal kunjungan berubah.
+    $('#tanggal_kunjungan').on('change', function () {
+        $('#id_jadwal').val(null).trigger('change');
+        SelectOptionJadwal($('#id_dokter').val(), $(this).val());
+    });
+
+    // Nomor referensi hanya dapat diisi setelah jenis referensi dipilih.
+    const jenisReferensi = $('#FormAntrian').find('#jenis_referensi');
+    const nomorReferensi = $('#FormAntrian').find('#nomor_referensi');
+    function AturInputNomorReferensi() {
+        const jenisDipilih = Boolean(jenisReferensi.val());
+        nomorReferensi.prop('readonly', !jenisDipilih);
+
+        if (!jenisDipilih) {
+            nomorReferensi.val('');
+        }
+    }
+    jenisReferensi.on('change', AturInputNomorReferensi);
+    AturInputNomorReferensi();
+
+    // Reset pasien lama sebelum select dinonaktifkan untuk mode pasien baru.
+    $('#ModalTambah').on('change', 'input[name="jenis_request"]', function () {
+        const pasienBaru = $(this).val() === '1';
+
+        if (pasienBaru) {
+            selectPasien.val(null).trigger('change');
+            $('#antrian_id_pasien').val('');
+            $('#nama_pasien').val('');
+            $('#gender_antrian').val('').trigger('change');
+            $('#nik_antrian').val('');
+            $('#no_bpjs_antrian').val('');
+            $('#kontak_antrian').val('');
+        }
+
+        selectPasien.prop('disabled', pasienBaru);
+    });
+
+    // Ketika pasien dipilih dari Select2, ambil data pasien dan isi form
+    selectPasien.on('select2:select', function (e) {
+        const selectedData = e.params.data;
+        const idPasien = selectedData.id;
+
+        if (!idPasien) {
             return;
         }
-        button.prop('disabled', true);
-        // Kirim semua nilai form; respons sukses menutup modal dan menyegarkan tabel.
+
+        // Simpan ID pasien dan isi identitas dari data hasil pencarian.
+        $('#antrian_id_pasien').val(idPasien);
+        $('#nama_pasien').val(selectedData.nama || '');
+        $('#gender_antrian').val(selectedData.gender || '').trigger('change');
+        $('#nik_antrian').val(selectedData.nik || '');
+        $('#no_bpjs_antrian').val(selectedData.no_bpjs || '');
+        $('#kontak_antrian').val(selectedData.kontak || '');
+    });
+
+    // Kirim data form tambah antrian ke backend.
+    $('#FormAntrian').on('submit', function (e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const button = $('#ButtonTambahAntrian');
+        const notification = $('#NotifikasiAntrian');
+        const buttonHtml = button.html();
+        const jenisRequest = $('input[name="jenis_request"]:checked').val();
+        const modePasien = jenisRequest === '1' ? 'baru' : 'lama';
+
+        // Kirim satu nilai id_pasien yang sesuai dengan mode pasien dan kontrak endpoint.
+        const data = form.serializeArray().filter(function (field) {
+            return field.name !== 'id_pasien' && field.name !== 'mode_pasien';
+        });
+        data.push({
+            name: 'id_pasien',
+            value: modePasien === 'lama'
+                ? ($('#id_pasien').val() || '')
+                : ''
+        });
+        data.push({ name: 'mode_pasien', value: modePasien });
+
+        notification.empty();
+        button.prop('disabled', true).html(
+            '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...'
+        );
+
         $.ajax({
             type: 'POST',
-            url: '_Page/Antrian/ProsesSimpanAntrian.php',
-            data: form.serialize(),
+            url: '_Page/Antrian/ProsesTambahAntrian.php',
+            data: data,
             dataType: 'json'
         }).done(function (response) {
-            // Beri umpan balik sesuai hasil server dan muat ulang daftar bila berhasil.
-            if (response.status !== 'success') {
-                showAntrianNotification(notification, response.message || 'Data antrian gagal disimpan.');
+            if (!response || response.status !== 'success') {
+                const alert = $('<div>', { class: 'alert alert-danger mb-0' });
+                $('<small>').text(response && response.message ? response.message : 'Data antrian gagal disimpan.').appendTo(alert);
+                notification.empty().append(alert);
                 return;
             }
-            bootstrap.Modal.getOrCreateInstance(form.closest('.modal')[0]).hide();
-            showAntrianToast(response.message + ' Nomor antrian: ' + response.no_antrian + ' (' + response.kode_booking + ').');
-            loadTabelAntrian();
+
+            form[0].reset();
+            selectPasien.val(null).trigger('change').prop('disabled', false);
+            $('#antrian_id_pasien').val('');
+            $('#id_poliklinik').val('').trigger('change');
+            SelectOptionDokter('');
+            SelectOptionJadwal('', '');
+            notification.empty();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalTambah')).hide();
+            TabelAntrian();
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: response.message || 'Data antrian berhasil disimpan.'
+                });
+            } else {
+                window.alert(response.message || 'Data antrian berhasil disimpan.');
+            }
         }).fail(function (xhr) {
             const response = xhr.responseJSON;
-            showAntrianNotification(notification, response && response.message ? response.message : 'Data antrian gagal disimpan.');
+            const message = response && response.message
+                ? response.message
+                : 'Data antrian gagal disimpan. Silakan coba kembali.';
+            const alert = $('<div>', { class: 'alert alert-danger mb-0' });
+            $('<small>').text(message).appendTo(alert);
+            notification.empty().append(alert);
         }).always(function () {
-            button.prop('disabled', false);
+            button.prop('disabled', false).html(buttonHtml);
         });
     });
 
-    // Arahkan setiap tombol detail ke konten dan endpoint sesuai jenis datanya.
-    $(document).on('click', '.js-detail-antrian', function () {
-        showAntrianDetail('<i class="bi bi-ticket-detailed"></i> Detail Antrian', '_Page/Antrian/FormDetailAntrian.php', { id_antrian: $(this).data('id') });
-    });
-    $(document).on('click', '.js-edit-antrian', function () {
-        openEditAntrian($(this).data('id'));
-    });
-    $(document).on('click', '.js-detail-pasien', function () {
-        showAntrianDetail('<i class="bi bi-person-vcard"></i> Detail Rekam Medis', '_Page/Antrian/FormDetailPasien.php', { id_pasien: $(this).data('id') });
-    });
-    $(document).on('click', '.js-detail-poliklinik, .js-detail-dokter', function () {
-        const isPoli = $(this).hasClass('js-detail-poliklinik');
-        showAntrianDetail(
-            isPoli ? '<i class="bi bi-hospital"></i> Detail Poliklinik' : '<i class="bi bi-person-badge"></i> Detail Dokter',
-            '_Page/Antrian/FormDetailReferensi.php',
-            { jenis: isPoli ? 'poliklinik' : 'dokter', id: $(this).data('id') }
-        );
-    });
+    //------------------------------------
+    //  DETAIL ANTRIAN
+    //------------------------------------
+    let detailAntrianRequest = null;
+    let detailAntrianRequestId = 0;
 
-    // Simpan request dan nomor urut untuk mengabaikan respons detail yang sudah kedaluwarsa.
-    let hapusDetailRequest = null;
-    let hapusDetailRequestId = 0;
+    // Ambil ID dari tombol pemicu modal dan muat detail antrian ke FormDetail.
+    $('#ModalDetail').on('show.bs.modal', function (event) {
+        const trigger = $(event.relatedTarget);
+        const idAntrian = trigger.data('id');
+        const target = $('#FormDetail');
 
-    // Minta form hapus yang sudah dirender server dengan mengirim ID antrean terpilih.
-    $(document).on('click', '.js-hapus-antrian', function () {
-        const id = $(this).data('id');
-        hapusDetailRequestId += 1;
-        const requestId = hapusDetailRequestId;
-        if (hapusDetailRequest) {
-            hapusDetailRequest.abort();
+        detailAntrianRequestId += 1;
+        const requestId = detailAntrianRequestId;
+        if (detailAntrianRequest) {
+            detailAntrianRequest.abort();
+            detailAntrianRequest = null;
         }
 
-        $('#FormHapusAntrian').html('<div class="text-center text-muted py-3"><span class="spinner-border spinner-border-sm me-2" role="status" aria-label="Memuat"></span>Memuat detail antrian...</div>');
-        $('#NotifikasiHapusAntrian').empty();
-        $('#ButtonHapusAntrian').prop('disabled', true);
-        bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalHapusAntrian')).show();
-
-        // Endpoint mengambil antrean berdasarkan ID dan mengembalikan HTML form konfirmasi.
-        hapusDetailRequest = $.ajax({
-            type: 'POST',
-            url: '_Page/Antrian/FormhapusAntrian.php',
-            data: { id_antrian: id },
-            dataType: 'html'
-        }).done(function (html) {
-            if (requestId !== hapusDetailRequestId) {
-                return;
-            }
-            $('#FormHapusAntrian').html(html);
-            formatAntrianDates($('#FormHapusAntrian'));
-            $('#ButtonHapusAntrian').prop('disabled', true);
-        }).fail(function (xhr, status) {
-            if (requestId !== hapusDetailRequestId || status === 'abort') {
-                return;
-            }
-            $('#FormHapusAntrian').empty();
-            showAntrianNotification(
-                '#NotifikasiHapusAntrian',
-                xhr.status === 401 ? 'Sesi berakhir. Silakan login kembali.' : 'Form penghapusan antrean gagal dimuat.'
-            );
-        });
-    });
-
-    // Aktifkan tombol hapus hanya setelah checklist pernyataan petugas dicentang.
-    $(document).on('change', '#pernyataan_petugas_penghapus_antrian', function () {
-        const idAntrian = $('#hapus_antrian_id').val();
-        $('#ButtonHapusAntrian').prop('disabled', !idAntrian || !$(this).is(':checked'));
-    });
-
-    // Batalkan request dan reset modal jika ditutup sebelum atau sesudah konfirmasi.
-    $('#ModalHapusAntrian').on('hidden.bs.modal', function () {
-        hapusDetailRequestId += 1;
-        if (hapusDetailRequest) {
-            hapusDetailRequest.abort();
-            hapusDetailRequest = null;
-        }
-        $('#FormHapusAntrian').empty();
-        $('#NotifikasiHapusAntrian').empty();
-        $('#ButtonHapusAntrian').prop('disabled', true).html('<i class="bi bi-check"></i> Hapus');
-    });
-
-    // Kirim penghapusan setelah detail dimuat dan checklist persetujuan telah dicentang.
-    $('#ProsesHapusAntrian').on('submit', function (event) {
-        event.preventDefault();
-        const form = $(this);
-        const button = $('#ButtonHapusAntrian');
-        const buttonText = button.html();
-        const id = $('#hapus_antrian_id').val();
-        if (!id || !$('#pernyataan_petugas_penghapus_antrian').is(':checked')) {
+        if (!idAntrian) {
+            target.html('<div class="alert alert-warning mb-0">ID antrian tidak valid.</div>');
             return;
         }
 
-        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menghapus...');
+        target.html(
+            '<div class="text-center text-muted py-4">' +
+            '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>' +
+            'Memuat detail antrian...</div>'
+        );
+
+        detailAntrianRequest = $.ajax({
+            type: 'POST',
+            url: '_Page/Antrian/FormDetailAntrian.php',
+            data: { id_antrian: idAntrian },
+            dataType: 'html'
+        }).done(function (html) {
+            if (requestId === detailAntrianRequestId) {
+                target.html(html);
+            }
+        }).fail(function (xhr, status) {
+            if (status === 'abort' || requestId !== detailAntrianRequestId) {
+                return;
+            }
+
+            const message = xhr.status === 401
+                ? 'Sesi berakhir. Silakan login kembali.'
+                : 'Gagal memuat detail antrian. Silakan coba kembali.';
+            target.empty().append($('<div>', { class: 'alert alert-danger mb-0' }).text(message));
+        }).always(function () {
+            if (requestId === detailAntrianRequestId) {
+                detailAntrianRequest = null;
+            }
+        });
+    });
+
+    // Batalkan request bila modal ditutup sebelum respons diterima.
+    $('#ModalDetail').on('hidden.bs.modal', function () {
+        detailAntrianRequestId += 1;
+        if (detailAntrianRequest) {
+            detailAntrianRequest.abort();
+            detailAntrianRequest = null;
+        }
+    });
+
+    //------------------------------------
+    //  EDIT ANTRIAN
+    //------------------------------------
+    let editAntrianRequest = null;
+    let editAntrianRequestId = 0;
+
+    // Ambil data-id dari tombol edit dan muat form ke dalam modal.
+    $('#ModalEdit').on('show.bs.modal', function (event) {
+        const trigger = $(event.relatedTarget);
+        const idAntrian = trigger.data('id');
+        const target = $('#FormEdit');
+
+        $('#NotifikasiEdit').empty();
+
+        editAntrianRequestId += 1;
+        const requestId = editAntrianRequestId;
+        if (editAntrianRequest) {
+            editAntrianRequest.abort();
+            editAntrianRequest = null;
+        }
+
+        if (!idAntrian) {
+            target.html('<div class="alert alert-warning mb-0">ID antrian tidak valid.</div>');
+            return;
+        }
+
+        target.html(
+            '<div class="text-center text-muted py-4">' +
+            '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>' +
+            'Memuat form edit antrian...</div>'
+        );
+
+        editAntrianRequest = $.ajax({
+            type: 'POST',
+            url: '_Page/Antrian/FormEdit.php',
+            data: { id_antrian: idAntrian },
+            dataType: 'html'
+        }).done(function (html) {
+            if (requestId === editAntrianRequestId) {
+                target.html(html);
+            }
+        }).fail(function (xhr, status) {
+            if (status === 'abort' || requestId !== editAntrianRequestId) {
+                return;
+            }
+
+            const message = xhr.status === 401
+                ? 'Sesi berakhir. Silakan login kembali.'
+                : 'Gagal memuat form edit antrian. Silakan coba kembali.';
+            target.empty().append($('<div>', { class: 'alert alert-danger mb-0' }).text(message));
+        }).always(function () {
+            if (requestId === editAntrianRequestId) {
+                editAntrianRequest = null;
+            }
+        });
+    });
+
+    // Batalkan request jika modal ditutup sebelum form selesai dimuat.
+    $('#ModalEdit').on('hidden.bs.modal', function () {
+        editAntrianRequestId += 1;
+        if (editAntrianRequest) {
+            editAntrianRequest.abort();
+            editAntrianRequest = null;
+        }
+        $('#NotifikasiEdit').empty();
+    });
+
+    // Submit Proses Edit Antrian
+    $('#ProsesEdit').on('submit', function (e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const button = $('#SimpanEditAntrian');
+        const notification = $('#NotifikasiEdit');
+        const buttonHtml = button.html();
+        const jenisRequest = $('#ModalEdit input[name="jenis_request"]:checked').val();
+        const modePasien = jenisRequest === '1' ? 'baru' : 'lama';
+        const idPasien = modePasien === 'lama'
+            ? ($('#id_pasien_edit').val() || $('#antrian_id_pasien_edit').val() || '')
+            : '';
+
+        // Pastikan id_pasien dan mode_pasien terkirim secara konsisten
+        const data = form.serializeArray().filter(function (field) {
+            return field.name !== 'id_pasien' && field.name !== 'mode_pasien';
+        });
+        data.push({ name: 'id_pasien', value: idPasien });
+        data.push({ name: 'mode_pasien', value: modePasien });
+
+        notification.empty();
+        button.prop('disabled', true).html(
+            '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...'
+        );
+
         $.ajax({
             type: 'POST',
-            url: '_Page/Antrian/ProsesHapusAntrian.php',
+            url: '_Page/Antrian/ProsesEdit.php',
+            data: data,
+            dataType: 'json'
+        }).done(function (response) {
+            if (!response || response.status !== 'success') {
+                const alert = $('<div>', { class: 'alert alert-danger mb-0' });
+                $('<small>').text(response && response.message ? response.message : 'Perubahan data antrian gagal disimpan.').appendTo(alert);
+                notification.empty().append(alert);
+                return;
+            }
+
+            notification.empty();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalEdit')).hide();
+            TabelAntrian();
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: response.message || 'Perubahan data antrian berhasil disimpan.'
+                });
+            } else {
+                window.alert(response.message || 'Perubahan data antrian berhasil disimpan.');
+            }
+        }).fail(function (xhr) {
+            const response = xhr.responseJSON;
+            const message = response && response.message
+                ? response.message
+                : 'Perubahan data antrian gagal disimpan. Silakan coba kembali.';
+            const alert = $('<div>', { class: 'alert alert-danger mb-0' });
+            $('<small>').text(message).appendTo(alert);
+            notification.empty().append(alert);
+        }).always(function () {
+            button.prop('disabled', false).html(buttonHtml);
+        });
+    });
+
+
+    //------------------------------------
+    //  HAPUS ANTRIAN
+    //------------------------------------
+    let hapusAntrianRequest = null;
+    let hapusAntrianRequestId = 0;
+
+    // Ambil data-id dari tombol pemicu modal dan muat form konfirmasi hapus
+    $('#ModalHapus').on('show.bs.modal', function (event) {
+        const trigger = $(event.relatedTarget);
+        const idAntrian = trigger.data('id');
+        const target = $('#FormHapus');
+        const button = $('#ButtonHapusAntrian');
+
+        $('#NotifikasiHapusAntrian').empty();
+        button.prop('disabled', true);
+
+        hapusAntrianRequestId += 1;
+        const requestId = hapusAntrianRequestId;
+        if (hapusAntrianRequest) {
+            hapusAntrianRequest.abort();
+            hapusAntrianRequest = null;
+        }
+
+        if (!idAntrian) {
+            target.html('<div class="alert alert-warning mb-0">ID antrian tidak valid.</div>');
+            return;
+        }
+
+        target.html(
+            '<div class="text-center text-muted py-3">' +
+            '<span class="spinner-border spinner-border-sm me-2" role="status" aria-label="Memuat"></span>' +
+            'Memuat detail antrian...</div>'
+        );
+
+        hapusAntrianRequest = $.ajax({
+            type: 'POST',
+            url: '_Page/Antrian/FormHapus.php',
+            data: { id_antrian: idAntrian },
+            dataType: 'html'
+        }).done(function (html) {
+            if (requestId === hapusAntrianRequestId) {
+                target.html(html);
+                button.prop('disabled', !$('#pernyataan_petugas_penghapus_antrian').is(':checked'));
+            }
+        }).fail(function (xhr, status) {
+            if (status === 'abort' || requestId !== hapusAntrianRequestId) {
+                return;
+            }
+
+            const message = xhr.status === 401
+                ? 'Sesi berakhir. Silakan login kembali.'
+                : 'Gagal memuat detail antrian. Silakan coba kembali.';
+            target.empty().append($('<div>', { class: 'alert alert-danger mb-0' }).text(message));
+        }).always(function () {
+            if (requestId === hapusAntrianRequestId) {
+                hapusAntrianRequest = null;
+            }
+        });
+    });
+
+    // Batalkan request jika modal ditutup sebelum data selesai dimuat
+    $('#ModalHapus').on('hidden.bs.modal', function () {
+        hapusAntrianRequestId += 1;
+        if (hapusAntrianRequest) {
+            hapusAntrianRequest.abort();
+            hapusAntrianRequest = null;
+        }
+        $('#NotifikasiHapusAntrian').empty();
+        $('#ButtonHapusAntrian').prop('disabled', true);
+    });
+
+    // Aktifkan atau nonaktifkan tombol hapus sesuai centang pernyataan petugas
+    $(document).on('change', '#pernyataan_petugas_penghapus_antrian', function () {
+        $('#ButtonHapusAntrian').prop('disabled', !$(this).is(':checked'));
+    });
+    // Submit Proses Hapus Antrian
+    $('#ProsesHapus').on('submit', function (e) {
+        e.preventDefault();
+        const form = $(this);
+        const button = $('#ButtonHapusAntrian');
+        const notification = $('#NotifikasiHapusAntrian');
+        const buttonHtml = button.html();
+
+        notification.empty();
+        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menghapus...');
+
+        $.ajax({
+            type: 'POST',
+            url: '_Page/Antrian/ProsesHapus.php',
             data: form.serialize(),
             dataType: 'json'
         }).done(function (response) {
-            if (response.status === 'success') {
-                bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalHapusAntrian')).hide();
-                showAntrianToast(response.message);
-                loadTabelAntrian();
+            if (!response || response.status !== 'success') {
+                const alert = $('<div>', { class: 'alert alert-danger mb-0' });
+                $('<small>').text(response && response.message ? response.message : 'Gagal menghapus antrian.').appendTo(alert);
+                notification.empty().append(alert);
                 return;
             }
-            showAntrianNotification('#NotifikasiHapusAntrian', response.message || 'Data antrian gagal dihapus.');
+            notification.empty();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalHapus')).hide();
+            TabelAntrian();
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: response.message || 'Antrian berhasil dihapus.'
+                });
+            } else {
+                window.alert(response.message || 'Antrian berhasil dihapus.');
+            }
         }).fail(function (xhr) {
-            showAntrianNotification('#NotifikasiHapusAntrian', xhr.responseJSON?.message || 'Data antrian gagal dihapus.');
+            const response = xhr.responseJSON;
+            const message = response && response.message ? response.message : 'Gagal menghapus antrian. Silakan coba kembali.';
+            const alert = $('<div>', { class: 'alert alert-danger mb-0' });
+            $('<small>').text(message).appendTo(alert);
+            notification.empty().append(alert);
         }).always(function () {
-            button.html(buttonText).prop('disabled', !$('#pernyataan_petugas_penghapus_antrian').is(':checked'));
+            button.prop('disabled', false).html(buttonHtml);
         });
     });
 
-    // Pindahkan data antrean ke form pendaftaran pasien, lalu tampilkan modalnya.
-    $(document).on('click', '.js-daftarkan-pasien', function () {
-        const button = $(this);
-        const patientData = {
-            id: button.data('id'),
-            nama: button.data('nama'),
-            gender: button.data('gender'),
-            nik: button.data('nik'),
-            noBpjs: button.data('no-bpjs'),
-            kontak: button.data('kontak')
-        };
-        $('#FormDaftarPasienAntrian')[0].reset();
-        $('#NotifikasiDaftarPasienAntrian').empty();
-        $('#daftar_pasien_id_antrian').val(patientData.id);
-        $('#daftar_nama_pasien').val(patientData.nama);
-        $('#daftar_gender_pasien').val(patientData.gender);
-        $('#daftar_nik_pasien').val(patientData.nik);
-        $('#daftar_bpjs_pasien').val(patientData.noBpjs);
-        $('#daftar_kontak_pasien').val(patientData.kontak);
-        $('#ModalDetailAntrian').one('hidden.bs.modal', function () {
-            bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalDaftarPasienAntrian')).show();
-        });
-        bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalDetailAntrian')).hide();
-    });
-
-    // Buat rekam medis dari form pendaftaran dan muat ulang daftar antrean setelah sukses.
-    $('#FormDaftarPasienAntrian').on('submit', function (event) {
-        event.preventDefault();
-        const button = $(this).find('[type="submit"]').prop('disabled', true);
-        // Kirim data pasien yang sudah dipindahkan dari antrean untuk membuat rekam medis.
-        $.ajax({
+    //------------------------------------
+    //  PENDAFTARAN PASIEN
+    // Handle opening of patient registration modal and load form via AJAX
+    let pendaftaranRequest = null;
+    let pendaftaranRequestId = 0;
+    $('#ModalPendaftaranPasien').on('show.bs.modal', function (event) {
+        const trigger   = $(event.relatedTarget);
+        const idAntrian = trigger.data('id') || 0;
+        const target    = $('#FormPendaftaranPasien');
+        
+        // Reset any previous content
+        target.empty();
+        
+        // Show loading indicator
+        target.html('<div class="text-center text-muted py-3"><span class="spinner-border spinner-border-sm me-2" role="status" aria-label="Memuat"></span> Memuat form pendaftaran...</div>');
+       
+        // Abort previous request if any
+        pendaftaranRequestId++;
+        const requestId = pendaftaranRequestId;
+        if (pendaftaranRequest) {
+            pendaftaranRequest.abort();
+            pendaftaranRequest = null;
+        }
+        pendaftaranRequest = $.ajax({
             type: 'POST',
-            url: '_Page/Antrian/ProsesDaftarPasien.php',
-            data: $(this).serialize(),
+            url: '_Page/Antrian/FormPendaftaranPasien.php',
+            data: { id_antrian: idAntrian },
+            dataType: 'html'
+        }).done(function (html) {
+            if (requestId === pendaftaranRequestId) {
+                target.html(html);
+                // PANGGIL loadProvince DI SINI setelah form berhasil dimuat ke DOM!
+                loadProvince();
+            }
+        }).fail(function (xhr, status) {
+            if (status === 'abort' || requestId !== pendaftaranRequestId) {
+                return;
+            }
+            const message = xhr.status === 401 ? 'Sesi berakhir. Silakan login kembali.' : 'Gagal memuat form pendaftaran. Silakan coba kembali.';
+            target.empty().append($('<div>', { class: 'alert alert-danger mb-0' }).text(message));
+        }).always(function () {
+            if (requestId === pendaftaranRequestId) {
+                pendaftaranRequest = null;
+            }
+        });
+    });
+    
+    // Cancel request if modal closed before load completes
+    $('#ModalPendaftaranPasien').on('hidden.bs.modal', function () {
+        pendaftaranRequestId++;
+        if (pendaftaranRequest) {
+            pendaftaranRequest.abort();
+            pendaftaranRequest = null;
+        }
+        $('#FormPendaftaranPasien').empty();
+    });
+
+    // 3. Gunakan Event Delegation untuk elemen-elemen dinamis (Province, Regency, Subdistrict, dll)
+    // Ini aman digunakan meskipun elemennya baru dimuat melalui AJAX
+    $(document).on('change', '#province', function () {
+        let province = $(this).val();
+
+        $('#regency').html('<option>Loading...</option>');
+
+        $.ajax({
+            url: '_Page/Pasien/GetRegency.php',
+            type: 'POST',
+            data: { province: province },
+            success: function (res) {
+                $('#regency').html(res);
+                $('#subdistrict').html('<option value="">Pilih</option>');
+                $('#village').html('<option value="">Pilih</option>');
+            }
+        });
+    });
+
+    $(document).on('change', '#regency', function () {
+        let regency = $(this).val();
+
+        $('#subdistrict').html('<option>Loading...</option>');
+
+        $.ajax({
+            url: '_Page/Pasien/GetSubdistrict.php',
+            type: 'POST',
+            data: { regency: regency },
+            success: function (res) {
+                $('#subdistrict').html(res);
+                $('#village').html('<option value="">Pilih</option>');
+            }
+        });
+    });
+
+    $(document).on('change', '#subdistrict', function () {
+        let subdistrict = $(this).val();
+
+        $('#village').html('<option>Loading...</option>');
+
+        $.ajax({
+            url: '_Page/Pasien/GetVillage.php',
+            type: 'POST',
+            data: { subdistrict: subdistrict },
+            success: function (res) {
+                $('#village').html(res);
+            }
+        });
+    });
+
+    // Check Pernyataan (Sesuaikan ID tombol jika menggunakan #ButtonPendaftaranPasien sesuai HTML modal di atas)
+    $(document).on('change', '#pernyataan_petugas', function () {
+        if ($(this).is(':checked')) {
+            $('#ButtonPendaftaranPasien').prop('disabled', false); // Di HTML modal pakai id ButtonPendaftaranPasien
+        } else {
+            $('#ButtonPendaftaranPasien').prop('disabled', true);
+        }
+    });
+
+    // Submit Pendaftaran pasien
+    $('#ProsesPendaftaranPasien').on('submit', function (e) {
+        e.preventDefault();
+        const form         = $(this);
+        const button       = $('#ButtonPendaftaranPasien');
+        const notification = $('#NotifikasiPendaftaranPasien');
+        const buttonHtml   = button.html();
+
+        notification.empty();
+        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menambahkan...');
+
+        $.ajax({
+            type    : 'POST',
+            url     : '_Page/Antrian/ProsesPendaftaranPasien.php',
+            data    : form.serialize(),
             dataType: 'json'
         }).done(function (response) {
-            if (response.status !== 'success') {
-                showAntrianNotification('#NotifikasiDaftarPasienAntrian', response.message || 'Rekam medis gagal dibuat.');
+            if (!response || response.status !== 'success') {
+                const alert = $('<div>', { class: 'alert alert-danger mb-0' });
+                $('<small>').text(response && response.message ? response.message : 'Gagal menambahkan pasien.').appendTo(alert);
+                notification.empty().append(alert);
                 return;
             }
-            bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalDaftarPasienAntrian')).hide();
-            bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalDetailAntrian')).hide();
-            showAntrianToast(response.message + ' Nomor RM: ' + response.id_pasien);
-            loadTabelAntrian();
+            notification.empty();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalPendaftaranPasien')).hide();
+            TabelAntrian();
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: response.message || 'Pasien berhasil ditambahkan.'
+                });
+            } else {
+                window.alert(response.message || 'Pasien berhasil ditambahkan.');
+            }
         }).fail(function (xhr) {
-            showAntrianNotification('#NotifikasiDaftarPasienAntrian', xhr.responseJSON?.message || 'Rekam medis gagal dibuat.');
+            const response = xhr.responseJSON;
+            const message = response && response.message ? response.message : 'Gagal menambahkan pasien. Silakan coba kembali.';
+            const alert = $('<div>', { class: 'alert alert-danger mb-0' });
+            $('<small>').text(message).appendTo(alert);
+            notification.empty().append(alert);
         }).always(function () {
-            button.prop('disabled', false);
+            button.prop('disabled', false).html(buttonHtml);
         });
     });
+    
+    // ----------------------------------
+    // DETAIL PASIEN
+    // ----------------------------------
+    $(document).on('click', '.modal_detail_pasien', function () {
+
+        // Ambil ID Pasien
+        let id_pasien = $(this).data('id');
+
+        // Validasi
+        if (!id_pasien) {
+            console.error('ID Pasien tidak ditemukan');
+            return;
+        }
+
+        // Loading View
+        $('#FormDetail')
+            .html(`
+                <div class="text-center py-4">
+                    <div class="spinner-border spinner-border-sm text-primary mb-2"></div>
+                    <div>
+                        <small class="text-muted">Memuat detail pasien...</small>
+                    </div>
+                </div>
+            `)
+            .css({
+                opacity: 0,
+                filter: 'blur(6px)'
+            });
+
+        // Tampilkan Modal
+        $('#ModalDetail').modal('show');
+
+        // Smooth Loading Animation
+        $('#FormDetail').animate({
+            opacity: 1
+        }, 200);
+
+        // AJAX
+        $.ajax({
+            url    : '_Page/Pasien/FormDetail.php',
+            type   : 'POST',
+            data   : {id_pasien: id_pasien},
+            timeout: 10000,
+            success: function (response) {
+
+                // Fade Out Sebelum Replace
+                $('#FormDetail').animate({
+                    opacity: 0
+                }, 120, function () {
+
+                    // Replace Content
+                    $(this)
+                        .html(response)
+                        .css({
+                            filter: 'blur(6px)',
+                            opacity: 0
+                        });
+
+                    // Fade In + Blur Clear
+                    $({
+                        blur: 6
+                    }).animate({
+                        blur: 0
+                    }, {
+                        duration: 250,
+
+                        step: function () {
+                            $('#FormDetail').css('filter', `blur(${this.blur}px)`);
+                        }
+                    });
+
+                    $('#FormDetail').animate({
+                        opacity: 1
+                    }, 250);
+                });
+            },
+
+            error: function (xhr, status, error) {
+
+                console.error(error);
+
+                $('#FormDetail').html(`
+                    <div class="alert alert-danger mb-0">
+                        <small>
+                            Gagal memuat detail pasien!<br>
+                            Status : ${status}
+                        </small>
+                    </div>
+                `).css({
+                    opacity: 1,
+                    filter: 'blur(0)'
+                });
+            }
+        });
+    });
+
+    //------------------------------------
+    //  PENDAFTARAN KUNJUNGAN
+    //------------------------------------
+    // Menampilkan Pendaftaran Kunjungan
+    $(document).on('click', '.modal_pendaftaran_kunjungan', function () {
+
+        // Ambil ID Antrian
+        let id_antrian = $(this).data('id');
+
+        // Validasi
+        if (!id_antrian) {
+            console.error('ID Antrian tidak ditemukan');
+            return;
+        }
+
+        // Loading View
+        $('#FormPendaftaranKunjungan')
+            .html(`
+                <div class="text-center py-4">
+                    <div class="spinner-border spinner-border-sm text-primary mb-2"></div>
+                    <div>
+                        <small class="text-muted">Memuat Form Pendaftaran Kunjungan...</small>
+                    </div>
+                </div>
+            `)
+            .css({
+                opacity: 0,
+                filter: 'blur(6px)'
+            });
+
+        // Tampilkan Modal
+        $('#ModalPendaftaranKunjungan').modal('show');
+
+        // Smooth Loading Animation
+        $('#FormPendaftaranKunjungan').animate({
+            opacity: 1
+        }, 200);
+
+        // AJAX
+        $.ajax({
+            url    : '_Page/Antrian/FormPendaftaranKunjungan.php',
+            type   : 'POST',
+            data   : {id_antrian: id_antrian},
+            timeout: 10000,
+            success: function (response) {
+
+                // Fade Out Sebelum Replace
+                $('#FormPendaftaranKunjungan').animate({
+                    opacity: 0
+                }, 120, function () {
+
+                    // Replace Content
+                    $(this)
+                        .html(response)
+                        .css({
+                            filter: 'blur(6px)',
+                            opacity: 0
+                        });
+
+                    // Fade In + Blur Clear
+                    $({blur: 6}).animate({blur: 0}, {
+                        duration: 250,
+                        step: function () {
+                            $('#FormPendaftaranKunjungan').css('filter', `blur(${this.blur}px)`);
+                        }
+                    });
+
+                    $('#FormPendaftaranKunjungan').animate({
+                        opacity: 1
+                    }, 250);
+                });
+            },
+
+            // Apabila Terjadi Kesalahan
+            error: function (xhr, status, error) {
+                console.error(error);
+                $('#FormPendaftaranKunjungan').html(`
+                    <div class="alert alert-danger mb-0">
+                        <small>
+                            Gagal memuat form pendaftaran kunungan!<br>
+                            Status : ${status}
+                        </small>
+                    </div>
+                `).css({
+                    opacity: 1,
+                    filter: 'blur(0)'
+                });
+            }
+        });
+    });
+
+    //------------------------------------
+    // EXPORT DATA ANTRIAN
+    //------------------------------------
+    const modalExportAntrian = $('#ModalExportAntrian');
+
+    function currentYearAntrian() {
+        return new Date().getFullYear();
+    }
+
+    function buildExportLanjutan(periode) {
+        const year = currentYearAntrian();
+        if (periode === 'Semua') {
+            $('#FormLanjutanExport').empty();
+            return;
+        }
+        if (periode === 'Tahun') {
+            $('#FormLanjutanExport').html(
+                '<div class="row mb-3">' +
+                    '<div class="col-12">' +
+                        '<label><small>Tahun</small></label>' +
+                        '<input type="number" name="tahun" id="tahun_export" class="form-control" value="' + year + '" min="2000" max="2100">' +
+                    '</div>' +
+                '</div>'
+            );
+            return;
+        }
+        if (periode === 'Bulan') {
+            let options = '';
+            for (let m = 1; m <= 12; m++) {
+                const val = String(m).padStart(2, '0');
+                const names = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                options += '<option value="' + val + '">' + names[m - 1] + '</option>';
+            }
+            $('#FormLanjutanExport').html(
+                '<div class="row mb-3">' +
+                    '<div class="col-12">' +
+                        '<label><small>Tahun</small></label>' +
+                        '<input type="number" name="tahun" id="tahun_export" class="form-control" value="' + year + '" min="2000" max="2100">' +
+                    '</div>' +
+                '</div>' +
+                '<div class="row mb-3">' +
+                    '<div class="col-12">' +
+                        '<label><small>Bulan</small></label>' +
+                        '<select name="bulan" id="bulan_export" class="form-control">' + options + '</select>' +
+                    '</div>' +
+                '</div>'
+            );
+            return;
+        }
+        if (periode === 'Periodik') {
+            $('#FormLanjutanExport').html(
+                '<div class="row mb-3">' +
+                    '<div class="col-6">' +
+                        '<label><small>Periode Awal</small></label>' +
+                        '<input type="date" name="periode_awal" id="periode_awal_export" class="form-control">' +
+                    '</div>' +
+                    '<div class="col-6">' +
+                        '<label><small>Periode Akhir</small></label>' +
+                        '<input type="date" name="periode_akhir" id="periode_akhir_export" class="form-control">' +
+                    '</div>' +
+                '</div>'
+            );
+            return;
+        }
+        $('#FormLanjutanExport').empty();
+    }
+
+    function countExportAntrian() {
+        const periode = $('#periode_data').val() || 'Semua';
+        const data = { mode: 'count', periode_data: periode };
+        $('#FormLanjutanExport').find('input, select').each(function () {
+            if (this.name) {
+                data[this.name] = $(this).val();
+            }
+        });
+        $.ajax({
+            type: 'POST',
+            url: '_Page/Antrian/ProsesExportAntrian.php',
+            data: data,
+            dataType: 'json'
+        }).done(function (response) {
+            const jumlah = response && typeof response.jumlah !== 'undefined' ? parseInt(response.jumlah, 10) : 0;
+            if (jumlah > 0) {
+                $('#NotifikasiJumlahDataAntrian').html('<div class="alert alert-info mb-0"><small>Jumlah data antrian yang akan diexport: <b>' + jumlah + '</b></small></div>');
+                $('#ButtonExport').prop('disabled', false);
+            } else {
+                $('#NotifikasiJumlahDataAntrian').html('<div class="alert alert-warning mb-0"><small>Tidak ada data antrian pada periode tersebut.</small></div>');
+                $('#ButtonExport').prop('disabled', true);
+            }
+        }).fail(function () {
+            $('#NotifikasiJumlahDataAntrian').html('<div class="alert alert-danger mb-0"><small>Gagal menghitung jumlah data antrian.</small></div>');
+            $('#ButtonExport').prop('disabled', true);
+        });
+    }
+
+    // Saat modal export muncul pertama kali
+    modalExportAntrian.on('shown.bs.modal', function () {
+        $('#periode_data').val('Semua');
+        buildExportLanjutan('Semua');
+        countExportAntrian();
+    });
+
+    // Saat periode_data diubah
+    $(document).on('change', '#periode_data', function () {
+        const periode = $(this).val();
+        buildExportLanjutan(periode);
+        countExportAntrian();
+    });
+
+    // Hitung ulang saat input lanjutan berubah
+    $(document).on('change', '#FormLanjutanExport input, #FormLanjutanExport select', function () {
+        countExportAntrian();
+    });
+
+    // Submit Pendaftaran Kunjungan
+    $('#ProsesPendaftaranKunjungan').on('submit', function (e) {
+        e.preventDefault();
+
+        const form         = $(this);
+        const button       = $('#ButtonPendaftaranKunjungan');
+        const notification = $('#NotifikasiPendaftaranKunjungan');
+        const buttonHtml   = button.html();
+
+        notification.empty();
+        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...');
+
+        $.ajax({
+            type    : 'POST',
+            url     : '_Page/Antrian/ProsesPendaftaranKunjungan.php',
+            data    : form.serialize(),
+            dataType: 'json'
+        }).done(function (response) {
+            if (!response || response.status !== 'success') {
+                const alert = $('<div>', { class: 'alert alert-danger mb-0' });
+                $('<small>').text(response && response.message ? response.message : 'Gagal menyimpan pendaftaran kunjungan.').appendTo(alert);
+                if (response && response.debug) {
+                    $('<pre>', { class: 'small text-danger mt-2 mb-0' }).text(response.debug).appendTo(alert);
+                }
+                notification.empty().append(alert);
+                return;
+            }
+
+            notification.empty();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('ModalPendaftaranKunjungan')).hide();
+            TabelAntrian();
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon : 'success',
+                    title: 'Berhasil',
+                    text : response.message || 'Pendaftaran kunjungan berhasil disimpan.'
+                });
+            } else {
+                window.alert(response.message || 'Pendaftaran kunjungan berhasil disimpan.');
+            }
+        }).fail(function (xhr) {
+            const response = xhr.responseJSON;
+            const message  = response && response.message ? response.message : 'Gagal menyimpan pendaftaran kunjungan. Silakan coba kembali.';
+            const alert    = $('<div>', { class: 'alert alert-danger mb-0' });
+            $('<small>').text(message).appendTo(alert);
+            if (response && response.debug) {
+                $('<pre>', { class: 'small text-danger mt-2 mb-0' }).text(response.debug).appendTo(alert);
+            } else if (xhr.responseText) {
+                $('<pre>', { class: 'small text-danger mt-2 mb-0' }).text(xhr.responseText).appendTo(alert);
+            }
+            notification.empty().append(alert);
+        }).always(function () {
+            button.prop('disabled', false).html(buttonHtml);
+        });
+    });
+
+    // ----------------------------------
+    // DETAIL KUNJUNGAN
+    // ----------------------------------
+    $(document).on('click', '.modal_detail_kunjungan', function () {
+
+        // Ambil ID id_kunjungan
+        let id_kunjungan = $(this).data('id');
+
+        // Validasi
+        if (!id_kunjungan) {
+            console.error('ID Kunjungan tidak ditemukan');
+            return;
+        }
+
+        // Loading View
+        $('#FormDetailKunjungan')
+            .html(`
+                <div class="text-center py-4">
+                    <div class="spinner-border spinner-border-sm text-primary mb-2"></div>
+                    <div>
+                        <small class="text-muted">Memuat detail pasien...</small>
+                    </div>
+                </div>
+            `)
+            .css({
+                opacity: 0,
+                filter: 'blur(6px)'
+            });
+
+        // Tampilkan Modal
+        $('#ModalDetailKunjungan').modal('show');
+
+        // Smooth Loading Animation
+        $('#FormDetailKunjungan').animate({
+            opacity: 1
+        }, 200);
+
+        // AJAX
+        $.ajax({
+            url    : '_Page/Kunjungan/FormDetailKunjungan.php',
+            type   : 'POST',
+            data   : {id_kunjungan: id_kunjungan},
+            timeout: 10000,
+            success: function (response) {
+
+                // Fade Out Sebelum Replace
+                $('#FormDetailKunjungan').animate({
+                    opacity: 0
+                }, 120, function () {
+
+                    // Replace Content
+                    $(this)
+                        .html(response)
+                        .css({
+                            filter: 'blur(6px)',
+                            opacity: 0
+                        });
+
+                    // Fade In + Blur Clear
+                    $({
+                        blur: 6
+                    }).animate({
+                        blur: 0
+                    }, {
+                        duration: 250,
+
+                        step: function () {
+                            $('#FormDetailKunjungan').css('filter', `blur(${this.blur}px)`);
+                        }
+                    });
+
+                    $('#FormDetailKunjungan').animate({
+                        opacity: 1
+                    }, 250);
+                });
+            },
+
+            error: function (xhr, status, error) {
+
+                console.error(error);
+
+                $('#FormDetailKunjungan').html(`
+                    <div class="alert alert-danger mb-0">
+                        <small>
+                            Gagal memuat detail kunjungan!<br>
+                            Status : ${status}
+                        </small>
+                    </div>
+                `).css({
+                    opacity: 1,
+                    filter: 'blur(0)'
+                });
+            }
+        });
+    });
+
+    // ----------------------------------
+    // EXPORT DATA ANTRIAN
+    // ----------------------------------
 });

@@ -271,6 +271,68 @@ $(document).ready(function() {
     // menampilkan Data Petama Kali
     TabelObservasi();
 
+    // EXPORT DATA OBSERVASI
+    // ---------------------------------------
+    let exportObservasiRequest = null;
+    let exportObservasiRequestId = 0;
+    $('#ModalExport').on('shown.bs.modal', function() {
+        const requestId = ++exportObservasiRequestId;
+        const formExport = $('#FormExport');
+
+        if (exportObservasiRequest) {
+            exportObservasiRequest.abort();
+            exportObservasiRequest = null;
+        }
+        $('#ButtonExport').prop('disabled', true);
+        formExport.html('<div class="text-center text-muted py-3"><span class="spinner-border spinner-border-sm me-2"></span>Menghitung data observasi...</div>');
+
+        exportObservasiRequest = $.ajax({
+            type: 'GET',
+            url: '_Page/Observasi/FormExport.php',
+            dataType: 'html'
+        }).done(function(response) {
+            if (requestId === exportObservasiRequestId) {
+                formExport.html(response);
+                const total = Number(formExport.find('[data-export-count]').attr('data-export-count') || 0);
+                const confirmed = formExport.find('#ConfirmExportObservation').is(':checked');
+                $('#ButtonExport').prop('disabled', total < 1 || !confirmed);
+            }
+        }).fail(function(xhr, status) {
+            if (status !== 'abort' && requestId === exportObservasiRequestId) {
+                formExport.html('<div class="alert alert-danger mb-0">Gagal menghitung data observasi untuk export.</div>');
+            }
+        }).always(function() {
+            if (requestId === exportObservasiRequestId) {
+                exportObservasiRequest = null;
+            }
+        });
+    });
+
+    $(document).on('change', '#ConfirmExportObservation', function() {
+        const total = Number($('#FormExport [data-export-count]').attr('data-export-count') || 0);
+        $('#ButtonExport').prop('disabled', total < 1 || !this.checked);
+    });
+
+    $(document).on('submit', '#ProsesExportObservasi', function() {
+        const button = $('#ButtonExport');
+        const buttonHtml = button.html();
+        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Mengekspor...');
+        window.setTimeout(function() {
+            button.html(buttonHtml);
+            const confirmed = $('#ConfirmExportObservation').is(':checked');
+            const total = Number($('#FormExport [data-export-count]').attr('data-export-count') || 0);
+            button.prop('disabled', total < 1 || !confirmed);
+        }, 1800);
+    });
+
+    $('#ModalExport').on('hidden.bs.modal', function() {
+        exportObservasiRequestId++;
+        if (exportObservasiRequest) exportObservasiRequest.abort();
+        exportObservasiRequest = null;
+        $('#FormExport').empty();
+        $('#ButtonExport').prop('disabled', true).html('<i class="bi bi-download"></i> Export');
+    });
+
     //Pagging
     $(document).on('click', '#next_page', function() {
         var page_now = parseInt($('#page_filter').val(), 10); // Pastikan nilai diambil sebagai angka
@@ -417,6 +479,589 @@ $(document).ready(function() {
                 `);
             }
         });
+    });
+
+    // EDIT OBSERVASI
+    // ---------------------------------------
+    let editFormRequest = null;
+    let editFormRequestId = 0;
+    let editValueRequest = null;
+    let editValueRequestId = 0;
+
+    function destroyEditSelects() {
+        $('#FormEdit select.select2-hidden-accessible').each(function() {
+            $(this).select2('destroy');
+        });
+    }
+
+    function validateEditObservation() {
+        const selectors = [
+            '#edit_id_pasien', '#edit_id_kunjungan', '#edit_id_praktisi',
+            '#edit_category_name', '#edit_id_observation_reference'
+        ];
+        const selectsAreValid = selectors.every(function(selector) {
+            return Boolean($('#FormEdit ' + selector).val());
+        });
+        const timeAreValid = ['#edit_tanggal_observasi', '#edit_jam_observasi'].every(function(selector) {
+            const field = $('#FormEdit ' + selector);
+            return field.length && String(field.val() || '').trim() !== '' && field[0].checkValidity();
+        });
+        const wrapper = $('#FormEditObservationValue');
+        const checkedRadio = wrapper.find('input[name="observation_value"]:checked');
+        const valueControl = wrapper.find('[name="observation_value"]').first();
+        let valueIsValid = checkedRadio.length > 0;
+        if (!valueIsValid && valueControl.length && !valueControl.is(':radio')) {
+            valueIsValid = String(valueControl.val() || '').trim() !== '' && valueControl[0].checkValidity();
+        }
+        $('#ButtonEdit').prop('disabled', !(selectsAreValid && timeAreValid && valueIsValid));
+    }
+
+    function initEditRemoteSelect(selector, action, placeholder, extraData, templateResult, templateSelection) {
+        const select = $(selector);
+        if (!select.length || typeof $.fn.select2 !== 'function') return;
+        if (select.hasClass('select2-hidden-accessible')) {
+            select.select2('destroy');
+        }
+
+        select.select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#ModalEdit'),
+            placeholder: placeholder,
+            allowClear: true,
+            width: '100%',
+            templateResult: templateResult || function(item) { return item.text || ''; },
+            templateSelection: templateSelection || function(item) { return item.text || ''; },
+            ajax: {
+                url: '_Page/Observasi/ListDataTambah.php',
+                type: 'POST',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    const requestData = {
+                        action: action,
+                        search: params.term || '',
+                        page: params.page || 1
+                    };
+                    if (typeof extraData === 'function') {
+                        Object.assign(requestData, extraData());
+                    }
+                    return requestData;
+                },
+                processResults: function(data) {
+                    return {
+                        results: Array.isArray(data.results) ? data.results : [],
+                        pagination: {more: !!(data.pagination && data.pagination.more)}
+                    };
+                },
+                cache: true
+            }
+        });
+    }
+
+    function editSelectTemplate(titleCallback, detailCallback) {
+        return function(item) {
+            if (item.loading || !item.id) return item.text || '';
+            const row = $('<div>', {class: 'observasi-select2-option'});
+            $('<div>', {class: 'fw-normal'}).text(titleCallback(item) || item.text || '').appendTo(row);
+            const detail = detailCallback ? detailCallback(item) : '';
+            if (detail) $('<small>', {class: 'text-muted d-block'}).text(detail).appendTo(row);
+            return row;
+        };
+    }
+
+    function loadEditObservationValue() {
+        const referenceId = $('#edit_id_observation_reference').val();
+        const requestId = ++editValueRequestId;
+        const wrapper = $('#FormEditObservationValue');
+        if (editValueRequest) {
+            editValueRequest.abort();
+            editValueRequest = null;
+        }
+        if (!referenceId) {
+            wrapper.html('<small class="text-muted">Pilih jenis observasi untuk mengisi hasil.</small>');
+            validateEditObservation();
+            return;
+        }
+
+        wrapper.html('<small class="text-muted">Memuat form hasil...</small>');
+        validateEditObservation();
+        const requestData = {
+            id_observation_reference: referenceId,
+            form_prefix: 'edit'
+        };
+        if (String(referenceId) === String($('#edit_initial_reference_id').val() || '')) {
+            requestData.observation_value = $('#edit_initial_observation_value').val() || '';
+        }
+
+        editValueRequest = $.ajax({
+            type: 'POST',
+            url: '_Page/Observasi/FormObservationValue.php',
+            data: requestData,
+            dataType: 'html'
+        }).done(function(html) {
+            if (requestId === editValueRequestId && referenceId === $('#edit_id_observation_reference').val()) {
+                wrapper.html(html);
+            }
+        }).fail(function(xhr, status) {
+            if (status !== 'abort' && requestId === editValueRequestId) {
+                wrapper.html('<small class="text-danger">Gagal memuat form hasil observasi.</small>');
+            }
+        }).always(function() {
+            if (requestId === editValueRequestId) {
+                editValueRequest = null;
+                validateEditObservation();
+            }
+        });
+    }
+
+    function initializeEditForm() {
+        const templatePatient = editSelectTemplate(
+            function(item) { return item.nama || item.text; },
+            function(item) { return item.id_pasien ? 'No. RM: ' + item.id_pasien : ''; }
+        );
+        const templateVisit = editSelectTemplate(
+            function(item) { return item.tanggal_kunjungan || item.text; },
+            function(item) { return item.jenis_kunjungan ? 'Jenis: ' + item.jenis_kunjungan : ''; }
+        );
+        const templatePractitioner = editSelectTemplate(
+            function(item) { return item.nama_praktisi || item.text; },
+            function(item) { return item.profesi_praktisi ? 'Profesi: ' + item.profesi_praktisi : ''; }
+        );
+        const templateReference = editSelectTemplate(
+            function(item) { return item.observation_name || item.text; },
+            function(item) {
+                const detail = [];
+                if (item.unit_name) detail.push('Satuan: ' + item.unit_name);
+                if (item.result_type) detail.push('Tipe: ' + item.result_type);
+                return detail.join(' · ');
+            }
+        );
+
+        initEditRemoteSelect('#edit_id_pasien', 'pasien', 'Cari No. RM / nama pasien', null, templatePatient, templatePatient);
+        initEditRemoteSelect('#edit_id_kunjungan', 'kunjungan', 'Pilih kunjungan', function() {
+            return {id_pasien: $('#edit_id_pasien').val() || ''};
+        }, templateVisit, templateVisit);
+        initEditRemoteSelect('#edit_id_praktisi', 'praktisi', 'Cari nama petugas', null, templatePractitioner, templatePractitioner);
+        const templateCategory = editSelectTemplate(function(item) { return item.text; }, null);
+        initEditRemoteSelect('#edit_category_name', 'kategori', 'Cari kategori observasi', null, templateCategory, templateCategory);
+        initEditRemoteSelect('#edit_id_observation_reference', 'referensi', 'Cari jenis observasi', function() {
+            return {category_name: $('#edit_category_name').val() || ''};
+        }, templateReference, templateReference);
+
+        loadEditObservationValue();
+        validateEditObservation();
+    }
+
+    $(document).on('click', '.modal_edit', function(e) {
+        e.preventDefault();
+        const idObservation = Number($(this).attr('data-id'));
+        const requestId = ++editFormRequestId;
+        const modal = $('#ModalEdit');
+        const formEdit = $('#FormEdit');
+
+        if (editFormRequest) editFormRequest.abort();
+        if (editValueRequest) editValueRequest.abort();
+        destroyEditSelects();
+        $('#NotifikasiEdit').empty();
+        $('#ButtonEdit').prop('disabled', true);
+        $('#ProsesEdit [name="id_observation"]').val(idObservation || '');
+        modal.modal('show');
+
+        if (!Number.isInteger(idObservation) || idObservation < 1) {
+            formEdit.html('<div class="alert alert-danger mb-0">ID observasi tidak valid.</div>');
+            return;
+        }
+        formEdit.html('<div class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm me-2"></span>Memuat form edit...</div>');
+
+        editFormRequest = $.ajax({
+            type: 'POST',
+            url: '_Page/Observasi/FormEditObservasi.php',
+            data: {id_observation: idObservation},
+            dataType: 'html'
+        }).done(function(html) {
+            if (requestId !== editFormRequestId) return;
+            formEdit.html(html);
+            if (formEdit.find('#edit_id_pasien').length) {
+                try {
+                    initializeEditForm();
+                } catch (error) {
+                    console.error('Observasi edit: gagal menginisialisasi form.', error);
+                    $('#FormEditObservationValue').html('<small class="text-danger">Form edit gagal diinisialisasi. Tutup lalu buka kembali.</small>');
+                    $('#ButtonEdit').prop('disabled', true);
+                }
+            }
+        }).fail(function(xhr, status) {
+            if (status !== 'abort' && requestId === editFormRequestId) {
+                formEdit.html('<div class="alert alert-danger mb-0">Gagal memuat form edit observasi.</div>');
+            }
+        }).always(function() {
+            if (requestId === editFormRequestId) editFormRequest = null;
+        });
+    });
+
+    $(document).on('change', '#edit_id_pasien', function() {
+        $('#edit_id_kunjungan').val(null).trigger('change');
+        validateEditObservation();
+    });
+    $(document).on('change', '#edit_category_name', function() {
+        $('#edit_id_observation_reference').val(null).trigger('change');
+        validateEditObservation();
+    });
+    $(document).on('change', '#edit_id_observation_reference', loadEditObservationValue);
+    $(document).on(
+        'change input',
+        '#FormEdit select, #FormEdit input, #FormEditObservationValue [name="observation_value"]',
+        validateEditObservation
+    );
+
+    $(document).on('submit', '#ProsesEdit', function(e) {
+        e.preventDefault();
+        if ($('#ButtonEdit').prop('disabled')) return;
+
+        const form = $(this);
+        const button = $('#ButtonEdit');
+        const notification = $('#NotifikasiEdit');
+        const buttonText = button.html();
+        notification.empty();
+        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Memproses...');
+
+        $.ajax({
+            url: '_Page/Observasi/ProsesEditObservasi.php',
+            type: 'POST',
+            data: new FormData(this),
+            dataType: 'json',
+            processData: false,
+            contentType: false
+        }).done(function(response) {
+            if (response.status === 'success') {
+                $('#ModalEdit').modal('hide');
+                Swal.fire({toast: true, position: 'top-end', icon: 'success', title: 'Edit Observasi Berhasil', showConfirmButton: false, timer: 1200, timerProgressBar: true});
+                TabelObservasi();
+            } else {
+                notification.html('<div class="alert alert-danger mb-0"><small>' + $('<div>').text(response.message || 'Data observasi gagal diperbarui.').html() + '</small></div>');
+            }
+        }).fail(function() {
+            notification.html('<div class="alert alert-danger mb-0"><small>Terjadi kesalahan saat memperbarui observasi.</small></div>');
+        }).always(function() {
+            button.html(buttonText);
+            validateEditObservation();
+        });
+    });
+
+    $('#ModalEdit').on('hidden.bs.modal', function() {
+        editFormRequestId++;
+        editValueRequestId++;
+        if (editFormRequest) editFormRequest.abort();
+        if (editValueRequest) editValueRequest.abort();
+        destroyEditSelects();
+        $('#FormEdit').empty();
+        $('#NotifikasiEdit').empty();
+        $('#ProsesEdit [name="id_observation"]').val('');
+        $('#ButtonEdit').prop('disabled', true);
+    });
+
+    // HAPUS OBSERVASI
+    // ---------------------------------------
+    let deletePreviewRequest = null;
+    let deletePreviewRequestId = 0;
+    $(document).on('click', '.modal_hapus', function(e) {
+        e.preventDefault();
+        const idObservation = Number($(this).attr('data-id'));
+        const requestId = ++deletePreviewRequestId;
+        const formPreview = $('#FormHapus');
+
+        if (deletePreviewRequest) deletePreviewRequest.abort();
+        $('#NotifikasiHapus').empty();
+        $('#ButtonHapus').prop('disabled', true);
+        $('#ProsesHapus [name="id_observation"]').val(idObservation || '');
+        $('#ModalHapus').modal('show');
+
+        if (!Number.isInteger(idObservation) || idObservation < 1) {
+            formPreview.html('<div class="alert alert-danger mb-0">ID observasi tidak valid.</div>');
+            return;
+        }
+        formPreview.html('<div class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm me-2"></span>Memuat preview observasi...</div>');
+
+        deletePreviewRequest = $.ajax({
+            type: 'POST',
+            url: '_Page/Observasi/FormHapusObservasi.php',
+            data: {id_observation: idObservation},
+            dataType: 'html'
+        }).done(function(html) {
+            if (requestId === deletePreviewRequestId) formPreview.html(html);
+        }).fail(function(xhr, status) {
+            if (status !== 'abort' && requestId === deletePreviewRequestId) {
+                formPreview.html('<div class="alert alert-danger mb-0">Gagal memuat preview observasi.</div>');
+            }
+        }).always(function() {
+            if (requestId === deletePreviewRequestId) deletePreviewRequest = null;
+        });
+    });
+
+    $(document).on('change', '#pernyataan_petugas_penghapus', function() {
+        $('#ButtonHapus').prop('disabled', !$(this).is(':checked'));
+    });
+
+    $(document).on('submit', '#ProsesHapus', function(e) {
+        e.preventDefault();
+        if ($('#ButtonHapus').prop('disabled')) return;
+
+        const button = $('#ButtonHapus');
+        const notification = $('#NotifikasiHapus');
+        const buttonText = button.html();
+        notification.empty();
+        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Menghapus...');
+
+        $.ajax({
+            url: '_Page/Observasi/ProsesHapusObservasi.php',
+            type: 'POST',
+            data: new FormData(this),
+            dataType: 'json',
+            processData: false,
+            contentType: false
+        }).done(function(response) {
+            if (response.status === 'success') {
+                $('#ModalHapus').modal('hide');
+                Swal.fire({toast: true, position: 'top-end', icon: 'success', title: 'Hapus Observasi Berhasil', showConfirmButton: false, timer: 1200, timerProgressBar: true});
+                TabelObservasi();
+            } else {
+                notification.html('<div class="alert alert-danger mb-0"><small>' + $('<div>').text(response.message || 'Data observasi gagal dihapus.').html() + '</small></div>');
+            }
+        }).fail(function() {
+            notification.html('<div class="alert alert-danger mb-0"><small>Terjadi kesalahan saat menghapus observasi.</small></div>');
+        }).always(function() {
+            button.html(buttonText);
+            button.prop('disabled', !$('#pernyataan_petugas_penghapus').is(':checked'));
+        });
+    });
+
+    $('#ModalHapus').on('hidden.bs.modal', function() {
+        deletePreviewRequestId++;
+        if (deletePreviewRequest) deletePreviewRequest.abort();
+        deletePreviewRequest = null;
+        $('#FormHapus').empty();
+        $('#NotifikasiHapus').empty();
+        $('#ProsesHapus [name="id_observation"]').val('');
+        $('#ButtonHapus').prop('disabled', true);
+    });
+
+    // DETAIL OBSERVASI
+    // ---------------------------------------
+    let detailObservasiRequest = null;
+    let detailObservasiRequestId = 0;
+    $(document).on('click', '.modal_detail', function(e) {
+        e.preventDefault();
+
+        const idObservation = Number($(this).attr('data-id'));
+        const modalDetail   = $('#ModalDetail');
+        const formDetail    = $('#FormDetail');
+        const requestId     = ++detailObservasiRequestId;
+
+        if (detailObservasiRequest) {
+            detailObservasiRequest.abort();
+            detailObservasiRequest = null;
+        }
+
+        modalDetail.modal('show');
+
+        if (!Number.isInteger(idObservation) || idObservation < 1) {
+            formDetail.html('<div class="alert alert-danger mb-0">ID observasi tidak valid.</div>');
+            return;
+        }
+
+        formDetail.html('<div class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm me-2"></span>Memuat detail observasi...</div>');
+
+        detailObservasiRequest = $.ajax({
+            type    : 'POST',
+            url     : '_Page/Observasi/FormDetailObservasi.php',
+            data    : {id_observation: idObservation},
+            dataType: 'html'
+        }).done(function(response) {
+            if (requestId === detailObservasiRequestId) {
+                formDetail.html(response);
+            }
+        }).fail(function(xhr, status) {
+            if (status !== 'abort' && requestId === detailObservasiRequestId) {
+                formDetail.html('<div class="alert alert-danger mb-0">Gagal memuat detail observasi.</div>');
+            }
+        }).always(function() {
+            if (requestId === detailObservasiRequestId) {
+                detailObservasiRequest = null;
+            }
+        });
+    });
+
+    // DETAIL OBSERVATION SATUSEHAT
+    // ---------------------------------------
+    let detailObservationSatusehatRequest = null;
+    let detailObservationSatusehatRequestId = 0;
+    $(document).on('click', '.modal_detail_observation', function(e) {
+        e.preventDefault();
+
+        const observationId = String($(this).attr('data-id') || '').trim();
+        const requestId = ++detailObservationSatusehatRequestId;
+        const modal = $('#ModalDetailObservation');
+        const form = $('#FormDetailObservation');
+
+        if (detailObservationSatusehatRequest) {
+            detailObservationSatusehatRequest.abort();
+            detailObservationSatusehatRequest = null;
+        }
+
+        modal.modal('show');
+        if (!/^[A-Za-z0-9.-]{1,64}$/.test(observationId)) {
+            form.html('<div class="alert alert-danger mb-0">ID Observation SATUSEHAT tidak valid.</div>');
+            return;
+        }
+
+        form.html('<div class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm me-2"></span>Memuat detail Observation dari SATUSEHAT...</div>');
+        detailObservationSatusehatRequest = $.ajax({
+            type: 'POST',
+            url: '_Page/Observasi/FormDetailObservation.php',
+            data: {observation_id: observationId},
+            dataType: 'html'
+        }).done(function(response) {
+            if (requestId === detailObservationSatusehatRequestId) {
+                form.html(response);
+            }
+        }).fail(function(xhr, status) {
+            if (status !== 'abort' && requestId === detailObservationSatusehatRequestId) {
+                form.html('<div class="alert alert-danger mb-0">Gagal mengambil detail Observation dari SATUSEHAT.</div>');
+            }
+        }).always(function() {
+            if (requestId === detailObservationSatusehatRequestId) {
+                detailObservationSatusehatRequest = null;
+            }
+        });
+    });
+
+    $('#ModalDetailObservation').on('hidden.bs.modal', function() {
+        detailObservationSatusehatRequestId++;
+        if (detailObservationSatusehatRequest) detailObservationSatusehatRequest.abort();
+        detailObservationSatusehatRequest = null;
+        $('#FormDetailObservation').empty();
+    });
+
+    // KIRIM OBSERVATION
+    // ---------------------------------------
+    let observationPayloadRequest = null;
+    let observationPayloadRequestId = 0;
+    $(document).on('click', '.kirim_observation', function(e) {
+        e.preventDefault();
+
+        const idObservation = Number($(this).attr('data-id'));
+        const requestId = ++observationPayloadRequestId;
+        const modal = $('#ModalKirimObservation');
+        const payloadForm = $('#FormKirimObservation');
+
+        if (observationPayloadRequest) {
+            observationPayloadRequest.abort();
+            observationPayloadRequest = null;
+        }
+        $('#NotifikasiKirimObservation').empty();
+        $('#ButtonKirimObservation').prop('disabled', true);
+        $('#ProsesKirimObservation [name="id_observation"]').val(idObservation || '');
+        modal.modal('show');
+
+        if (!Number.isInteger(idObservation) || idObservation < 1) {
+            payloadForm.html('<div class="alert alert-danger mb-0">ID observasi tidak valid.</div>');
+            return;
+        }
+
+        payloadForm.html('<div class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm me-2"></span>Menyusun payload Observation...</div>');
+        observationPayloadRequest = $.ajax({
+            type: 'POST',
+            url: '_Page/Observasi/FormKirimObservation.php',
+            data: {id_observation: idObservation},
+            dataType: 'html'
+        }).done(function(html) {
+            if (requestId === observationPayloadRequestId) {
+                payloadForm.html(html);
+                const payloadReady = payloadForm.find('[data-observation-ready="1"]').length > 0;
+                $('#ButtonKirimObservation').prop('disabled', !payloadReady);
+            }
+        }).fail(function(xhr, status) {
+            if (status !== 'abort' && requestId === observationPayloadRequestId) {
+                payloadForm.html('<div class="alert alert-danger mb-0">Gagal memuat payload Observation.</div>');
+            }
+        }).always(function() {
+            if (requestId === observationPayloadRequestId) {
+                observationPayloadRequest = null;
+            }
+        });
+    });
+
+    let observationSubmitRequest = null;
+    $(document).on('submit', '#ProsesKirimObservation', function(e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const button = $('#ButtonKirimObservation');
+        const notification = $('#NotifikasiKirimObservation');
+        const payloadReady = $('#FormKirimObservation').find('[data-observation-ready="1"]').length > 0;
+        if (!payloadReady || button.prop('disabled') || observationSubmitRequest) {
+            return;
+        }
+
+        const originalButtonHtml = button.html();
+        notification.empty();
+        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Mengirim...');
+
+        observationSubmitRequest = $.ajax({
+            type: 'POST',
+            url: '_Page/Observasi/ProsesKirimObservation.php',
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            dataType: 'json'
+        }).done(function(response) {
+            if (response && response.status === 'success') {
+                $('#ModalKirimObservation').modal('hide');
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: response.message || 'Observation berhasil dikirim ke SATUSEHAT',
+                    showConfirmButton: false,
+                    timer: 1800,
+                    timerProgressBar: true
+                });
+                TabelObservasi();
+                return;
+            }
+
+            const message = response && response.message ? response.message : 'Pengiriman Observation gagal.';
+            notification.html('<div class="alert alert-danger mb-0"><small>' + $('<div>').text(message).html() + '</small></div>');
+        }).fail(function(xhr) {
+            const response = xhr.responseJSON || {};
+            const message = response.message || 'Terjadi kesalahan saat mengirim Observation ke SATUSEHAT.';
+            let missingHtml = '';
+            if (Array.isArray(response.missing) && response.missing.length) {
+                missingHtml = '<ul class="mb-0 mt-2">' + response.missing.map(function(item) {
+                    return '<li>' + $('<div>').text(item).html() + '</li>';
+                }).join('') + '</ul>';
+            }
+            notification.html('<div class="alert alert-danger mb-0"><small>' + $('<div>').text(message).html() + '</small>' + missingHtml + '</div>');
+            if (xhr.status === 422 || response.observation_id) {
+                $('#FormKirimObservation [data-observation-ready]').attr('data-observation-ready', '0');
+                button.prop('disabled', true);
+            }
+        }).always(function() {
+            observationSubmitRequest = null;
+            button.html(originalButtonHtml);
+            const stillReady = $('#FormKirimObservation').find('[data-observation-ready="1"]').length > 0;
+            button.prop('disabled', !stillReady);
+        });
+    });
+
+    $('#ModalKirimObservation').on('hidden.bs.modal', function() {
+        observationPayloadRequestId++;
+        if (observationPayloadRequest) observationPayloadRequest.abort();
+        observationPayloadRequest = null;
+        $('#FormKirimObservation').empty();
+        $('#NotifikasiKirimObservation').empty();
+        $('#ProsesKirimObservation [name="id_observation"]').val('');
+        $('#ButtonKirimObservation').prop('disabled', true);
     });
 
 });

@@ -34,7 +34,6 @@ function curlRequest($url, $headers, $payload){
 
         $result = curl_exec($ch);
         $err    = curl_error($ch);
-        curl_close($ch);
 
         if($result !== false){
             return $result;

@@ -192,7 +192,6 @@
     $httpcode      = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $curl_error    = curl_error($ch);
 
-    curl_close($ch);
 
     // CURL ERROR
     if (!empty($curl_error)) {

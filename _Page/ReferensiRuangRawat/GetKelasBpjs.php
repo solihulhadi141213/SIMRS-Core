@@ -90,7 +90,6 @@
     ]);
 
     $response_curl = curl_exec($ch);
-    curl_close($ch);
 
     if (empty($response_curl)) {
         echo json_encode($response);

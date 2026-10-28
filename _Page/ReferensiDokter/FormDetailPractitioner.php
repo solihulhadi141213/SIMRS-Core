@@ -304,5 +304,4 @@
             </div>
         </div>
     ';
-    curl_close($curl);
 ?>

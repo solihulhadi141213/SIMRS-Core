@@ -150,7 +150,6 @@
 
     $response = curl_exec($curl);
     $curl_error = curl_error($curl);
-    curl_close($curl);
 
     // Validasi CURL Error
     if ($curl_error) {

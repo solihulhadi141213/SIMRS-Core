@@ -87,7 +87,6 @@
 
     $content = curl_exec($ch);
     $curl_error = curl_error($ch);
-    curl_close($ch);
 
     if (!empty($curl_error) || empty($content)) {
         $response['message'] = 'Gagal mengambil data dokter HFIS/HFIZ.';

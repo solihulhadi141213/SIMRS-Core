@@ -270,5 +270,4 @@
     }
 
     // Tutup Curl
-    curl_close($ch);
 ?>

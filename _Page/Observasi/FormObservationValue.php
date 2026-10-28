@@ -52,18 +52,24 @@ if (!$reference) {
 $escape = static function ($value): string {
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 };
+$observationValue = $_POST['observation_value'] ?? '';
+if (!is_scalar($observationValue)) {
+    $observationValue = '';
+}
+$observationValue = (string) $observationValue;
+$inputId = (($_POST['form_prefix'] ?? '') === 'edit' ? 'edit_' : '') . 'observation_value';
 
 switch ($reference['result_type']) {
     case 'Numeric':
-        echo '<input type="number" step="1" required name="observation_value" id="observation_value" class="form-control" autocomplete="off">';
+        echo '<input type="number" step="1" required name="observation_value" id="' . $inputId . '" class="form-control" autocomplete="off" value="' . $escape($observationValue) . '">';
         break;
 
     case 'Decimal':
-        echo '<input type="number" step="0.001" inputmode="decimal" required name="observation_value" id="observation_value" class="form-control" autocomplete="off">';
+        echo '<input type="number" step="0.001" inputmode="decimal" required name="observation_value" id="' . $inputId . '" class="form-control" autocomplete="off" value="' . $escape($observationValue) . '">';
         break;
 
     case 'Coded':
-        echo '<select required name="observation_value" id="observation_value" class="form-control">';
+        echo '<select required name="observation_value" id="' . $inputId . '" class="form-control">';
         echo '<option value="">Pilih hasil</option>';
         $codedOptions = json_decode((string) ($reference['result_coded'] ?? ''), true);
         if (is_array($codedOptions)) {
@@ -71,7 +77,8 @@ switch ($reference['result_type']) {
                 if (!is_array($option) || !array_key_exists('value', $option) || !array_key_exists('label', $option)) {
                     continue;
                 }
-                echo '<option value="' . $escape($option['value']) . '">' . $escape($option['label']) . '</option>';
+                $selected = (string) $option['value'] === $observationValue ? ' selected' : '';
+                echo '<option value="' . $escape($option['value']) . '"' . $selected . '>' . $escape($option['label']) . '</option>';
             }
         }
         echo '</select>';
@@ -80,18 +87,18 @@ switch ($reference['result_type']) {
     case 'Boolean':
         echo '<div class="d-flex gap-3">';
         echo '<div class="form-check form-check-inline">'
-            . '<input type="radio" required name="observation_value" id="observation_value" value="1" class="form-check-input">'
-            . '<label for="observation_value" class="form-check-label">1</label>'
+            . '<input type="radio" required name="observation_value" id="' . $inputId . '" value="1" class="form-check-input"' . ($observationValue === '1' ? ' checked' : '') . '>'
+            . '<label for="' . $inputId . '" class="form-check-label">1</label>'
             . '</div>';
         echo '<div class="form-check form-check-inline">'
-            . '<input type="radio" required name="observation_value" id="observation_value_0" value="0" class="form-check-input">'
-            . '<label for="observation_value_0" class="form-check-label">0</label>'
+            . '<input type="radio" required name="observation_value" id="' . $inputId . '_0" value="0" class="form-check-input"' . ($observationValue === '0' ? ' checked' : '') . '>'
+            . '<label for="' . $inputId . '_0" class="form-check-label">0</label>'
             . '</div>';
         echo '</div>';
         break;
 
     case 'Text':
-        echo '<input type="text" required name="observation_value" id="observation_value" class="form-control" autocomplete="off">';
+        echo '<input type="text" required name="observation_value" id="' . $inputId . '" class="form-control" autocomplete="off" value="' . $escape($observationValue) . '">';
         break;
 
     default:

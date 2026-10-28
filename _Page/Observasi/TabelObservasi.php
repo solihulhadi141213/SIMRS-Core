@@ -135,6 +135,21 @@ if (!mysqli_stmt_execute($stmt)) {
 
 // Cetak baris tabel; nilai relasi yang kosong diberi penanda agar tetap mudah dibaca.
 $escape = static fn($value): string => htmlspecialchars((string) ($value ?? '-'), ENT_QUOTES, 'UTF-8');
+$timezoneName = trim((string) ($SessionUserTimezone ?? ''));
+
+// Browser lama dapat mengirim offset UTC, sedangkan DateTimeZone menerima offset tanpa awalan "UTC".
+if (preg_match('/^UTC([+-])(\\d{2}):(\\d{2})$/', $timezoneName, $timezoneOffset)) {
+    $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+}
+
+try {
+    $observationTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+} catch (Throwable $exception) {
+    // Data timezone lama/tidak valid tidak boleh membuat tabel gagal ditampilkan.
+    $observationTimezone = new DateTimeZone('UTC');
+}
+
+$utcTimezone = new DateTimeZone('UTC');
 $number = $offset + 1;
 $first = true;
 $result = mysqli_stmt_get_result($stmt);
@@ -145,13 +160,34 @@ while ($row = mysqli_fetch_assoc($result)) {
     $first = false;
     $category = $row['category_code'] ?: $row['category_name'];
     $petugas = $row['petugas_nama'] ?: (!empty($row['petugas_id']) ? 'ID ' . (int) $row['petugas_id'] : '-');
-    $observation_id = $row['observation_id'] ?? '-';
 
-    // Format tanggal
-    $datetime_observation = $row['datetime_observation'] ?? '';
-    if ($datetime_observation !== '') {
-       $datetime_observation = date('d/m/Y H:i T', strtotime($datetime_observation));
+    if(empty($row['observation_id'])) {
+        $observation_id = '
+            <a href="javascript:void(0);" class="kirim_observation text-danger" data-id="'.$row['id_observation'].'">
+                <small class="mp-2">
+                    <i class="bi bi-send"></i> Kirim Observation
+                </small>
+            </a>
+        ';
     }else{
+        $observation_id = '
+            <a href="javascript:void(0);" class="modal_detail_observation text-primary" data-id="'.$row['observation_id'].'">
+                <small><i class="bi bi-info-circle"></i> '.$escape($row['observation_id']).'</small>
+            </a>
+        ';
+    }
+
+    // Nilai database adalah UTC; konversi hanya untuk tampilan sesuai timezone pengguna.
+    $datetimeUtc = trim((string) ($row['datetime_observation'] ?? ''));
+    if ($datetimeUtc !== '') {
+        try {
+            $datetime_observation = (new DateTimeImmutable($datetimeUtc, $utcTimezone))
+                ->setTimezone($observationTimezone)
+                ->format('d/m/Y H:i T');
+        } catch (Throwable $exception) {
+            $datetime_observation = '-';
+        }
+    } else {
         $datetime_observation = '-';
     }
     echo '
@@ -160,10 +196,12 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <small class="text-muted">' . $number++ . '</small>
             </td>
             <td>
-                <small class="text-muted">' . (int) $row['id_pasien'] . '</small>
+                <a href="javascript:void(0);" class="modal_detail" data-id="'.$row['id_observation'].'">
+                    <small class="text-primary">' . (int) $row['id_pasien'] . '</small>
+                </a>
             </td>
             <td>
-                <small>' . $escape($row['nama_pasien']) . '</small>
+                <small class="text-muted">' . $escape($row['nama_pasien']) . '</small>
             </td>
             <td>
                 <small class="text-muted text-nowrap">
@@ -174,33 +212,32 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <small class="text-muted">' . $escape($category) . '</small>
             </td>
             <td>
-                <small>' . $escape($row['observation_name']) . '</small>
+                <small lass="text-muted">' . $escape($row['observation_name']) . '</small>
             </td>
             <td>
                 <small class="text-muted">' . $escape($petugas) . '</small>
             </td>
             <td>
-                <small class="text-muted">' . $escape($observation_id) . '</small>
+                ' . $observation_id . '
             </td>
             <td align="center" class="icon-btn">
-                <button class="btn btn-sm btn-floating" data-bs-toggle="dropdown">
+                <button class="btn btn-md btn-secondary btn-floating" data-bs-toggle="dropdown">
                     <i class="bi bi-three-dots-vertical"></i>
                 </button>
                 <ul class="dropdown-menu shadow">
                     <li>
                         <a href="javascript:void(0);" class="dropdown-item modal_detail" data-id="'.$row['id_observation'].'">
-                            <i class="bi bi-info-circle"></i> Detail Observasi
+                            <i class="bi bi-info-circle"></i> Detail
                         </a>
                     </li>
-                    <hr>
                     <li>
                         <a href="javascript:void(0);" class="dropdown-item modal_edit" data-id="'.$row['id_observation'].'">
-                            <i class="bi bi-pencil"></i> Edit Observasi
+                            <i class="bi bi-pencil"></i> Edit
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-item modal_hapus" data-id="'.$row['id_observation'].'">
-                            <i class="bi bi-trash"></i> Hapus Observasi
+                        <a href="javascript:void(0);" class="text-danger dropdown-item modal_hapus" data-id="'.$row['id_observation'].'">
+                            <i class="bi bi-trash"></i> Hapus
                         </a>
                     </li>
                 </ul>

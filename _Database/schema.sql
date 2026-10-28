@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Waktu pembuatan: 26 Okt 2026 pada 16.55
+-- Waktu pembuatan: 27 Okt 2026 pada 09.49
 -- Versi server: 8.4.7
 -- Versi PHP: 8.5.0
 
@@ -139,9 +139,10 @@ DROP TABLE IF EXISTS `akses_login`;
 CREATE TABLE IF NOT EXISTS `akses_login` (
   `id_akses_login` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_akses` int UNSIGNED NOT NULL,
-  `login_token` varchar(255) NOT NULL,
+  `login_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Token yang tercipta saat login',
   `creat_at` datetime NOT NULL COMMENT 'Token dibuat',
   `expired_at` datetime NOT NULL COMMENT 'Token Expired',
+  `local_timezone_user` varchar(255) NOT NULL COMMENT 'Informasi timezone pengguna',
   PRIMARY KEY (`id_akses_login`),
   KEY `akses_to_login` (`id_akses`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -586,12 +587,12 @@ CREATE TABLE IF NOT EXISTS `observation` (
   `id_pasien` int UNSIGNED NOT NULL COMMENT 'Dari tabel pasien',
   `id_kunjungan` int UNSIGNED NOT NULL COMMENT 'dari tabel kunjungan',
   `id_praktisi` int UNSIGNED DEFAULT NULL COMMENT 'dari tabel praktisi',
-  `nama_praktisi` varchar(255) NOT NULL,
-  `observation_value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nama_praktisi` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Nama praktisi sesuai tabel praktisi',
+  `observation_value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Nilai hasil observasi',
   `datetime_observation` datetime NOT NULL COMMENT 'Tanggal/Waktu pemeriksaan',
   `datetime_entry` datetime NOT NULL COMMENT 'Tanggal/Waktu entry',
   `petugas_id` int UNSIGNED DEFAULT NULL COMMENT 'dari tabel akses',
-  `petugas_nama` varchar(255) DEFAULT NULL,
+  `petugas_nama` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'nama petugas entry sesuai tabel akses',
   PRIMARY KEY (`id_observation`),
   KEY `observation_reference` (`id_observation_reference`),
   KEY `observation_pasien` (`id_pasien`)
@@ -607,18 +608,18 @@ DROP TABLE IF EXISTS `observation_reference`;
 CREATE TABLE IF NOT EXISTS `observation_reference` (
   `id_observation_reference` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `category_name` varchar(255) NOT NULL COMMENT 'Kategori observasi lokal',
-  `category_code` varchar(255) DEFAULT NULL,
-  `category_display` varchar(255) DEFAULT NULL,
-  `category_system` varchar(255) DEFAULT NULL,
+  `category_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Kode kategori sesuai referensi',
+  `category_display` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Nama Kategori sesuai referensi',
+  `category_system` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Referensi kategori yang digunakan',
   `observation_name` varchar(255) NOT NULL COMMENT 'Nama observasi lokal',
-  `observation_code` varchar(255) DEFAULT NULL,
-  `observation_display` varchar(255) DEFAULT NULL,
-  `observation_system` varchar(255) DEFAULT NULL,
+  `observation_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Kode observasi sesuai referensi',
+  `observation_display` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Nama observasi sesuai referensi',
+  `observation_system` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'System Referensi yang digunakan',
   `unit_name` varchar(255) NOT NULL COMMENT 'Nama satuan lokal',
-  `unit_code` varchar(255) DEFAULT NULL,
-  `unit_display` varchar(255) DEFAULT NULL,
-  `unit_system` varchar(255) DEFAULT NULL,
-  `result_type` enum('Numeric','Decimal','Coded','Text','Boolean') NOT NULL,
+  `unit_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Kode unit satuan sesuai referensi',
+  `unit_display` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'nama unit satuan sesuai referensi',
+  `unit_system` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'System referensi satuan yang digunakan ',
+  `result_type` enum('Numeric','Decimal','Coded','Text','Boolean') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Tipe data hasil',
   `result_coded` json DEFAULT NULL COMMENT '[{"label":"x","value":"Y"}]',
   PRIMARY KEY (`id_observation_reference`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Referensi observation atau pemeriksaan';

@@ -79,7 +79,6 @@
         ]);
 
         $singleResponse = curl_exec($curl);
-        curl_close($curl);
         $singleData = json_decode((string) $singleResponse, true);
 
         if (is_array($singleData) && ($singleData['resourceType'] ?? '') === 'Practitioner' && !empty($singleData['id'])) {
@@ -124,7 +123,6 @@
     ]);
 
     $bundleResponse = curl_exec($curl);
-    curl_close($curl);
     $bundle = json_decode((string) $bundleResponse, true);
 
     if (is_array($bundle) && !empty($bundle['entry']) && is_array($bundle['entry'])) {
