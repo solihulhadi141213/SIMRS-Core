@@ -38,6 +38,7 @@
         'ReferensiWilayah'      => '_Page/ReferensiWilayah/ModalReferensiWilayah.php',
         'ReferensiWilayahBpjs'  => '_Page/ReferensiWilayahBpjs/ModalReferensiWilayahBpjs.php',
         'ReferensiIcdBpjs'      => '_Page/ReferensiIcdBpjs/ModalReferensiIcdBpjs.php',
+        'ReferensiImunisasi'      => '_Page/ReferensiImunisasi/ModalReferensiImunisasi.php',
         'Pasien'                => '_Page/Pasien/ModalPasien.php',
         'Kunjungan'             => '_Page/Kunjungan/ModalKunjungan.php',
         'Antrian'             => '_Page/Antrian/ModalAntrian.php',
@@ -46,6 +47,7 @@
         'Diagnosis'             => '_Page/Diagnosis/ModalDiagnosis.php',
         'Tindakan'              => '_Page/Tindakan/ModalTindakan.php',
         'Alergi'                => '_Page/Alergi/ModalAlergi.php',
+        'Imunisasi'                => '_Page/Imunisasi/ModalImunisasi.php',
         'Laboratorium'          => '_Page/Laboratorium/ModalLaboratorium.php',
     ];
 

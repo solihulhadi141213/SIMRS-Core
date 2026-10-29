@@ -1,0 +1,2 @@
+# Membuat script PHP untuk '_Page\ReferensiImunisasi\TabelReferensiImunisasi.php'
+Buatkan script PHP untuk `_Page\ReferensiImunisasi\TabelReferensiImunisasi.php` yang berfungsi menampilkan basih data dari tabel 'imunisasi_referensi' berdasarkan filter yang ada pada `_Page\ReferensiImunisasi\ModalReferensiImunisasi.php`. Lihat table handdle pada `_Page\ReferensiImunisasi\ReferensiImunisasi.js` untuk memahami response yang diharapkan.

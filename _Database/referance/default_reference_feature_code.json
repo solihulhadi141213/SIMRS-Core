@@ -523,5 +523,19 @@
         "kategori": "Rekam Medis",
         "kode": "AF4RhT3jlD",
         "keterangan": "Untuk ijin download data kunjungan"
+    },
+    {
+        "id_akses_fitur": "80",
+        "nama_fitur": "Imuniasai",
+        "kategori": "Rekam Medis",
+        "kode": "IBmuvINj5T",
+        "keterangan": "Mengelola riwayat imuniasasi vaksinasi pasien"
+    },
+    {
+        "id_akses_fitur": "81",
+        "nama_fitur": "Referensi Imuniasai",
+        "kategori": "Referensi",
+        "kode": "tKhc9YiUXe",
+        "keterangan": "Mengelola daftar vaksin yang tersedia"
     }
 ]

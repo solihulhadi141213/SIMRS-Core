@@ -37,6 +37,7 @@ Section 2 : Master Data
   - [icon: bi bi-dot] Procedure -> (URL : `index.php?Page=ReferensiTindakan`)
   - [icon: bi bi-dot] Alergen -> (URL : `index.php?Page=ReferensiAlergen`)
   - [icon: bi bi-dot] Observation -> (URL : `index.php?Page=ReferensiObservation`)
+  - [icon: bi bi-dot] Imunisasi -> (URL : `index.php?Page=ReferensiImunisasi`)
   - [icon: bi bi-dot] Wilayah -> (URL : `index.php?Page=ReferensiWilayah`)
 
 Section 3 : Laporan & Monitoring

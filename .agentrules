@@ -59,6 +59,7 @@ Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan
   - `_Database\referance`        : Menyimpan data referensi default.
   - `_Database\icd.csv`          : Data ICD Standar (Default).
   - `_Database\wilayah.csv`      : Data referensi wilayah (default).
+  - `_Database\struktur-menu.md` : Data referensi struktur menu.
 
 3. Config dan Helper
   - `_Config\Connection.php`         : Koneksi database mysql.

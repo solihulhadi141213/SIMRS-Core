@@ -75,6 +75,7 @@
                                 ['label' => 'Procedure', 'url' => 'index.php?Page=ReferensiTindakan', 'page' => 'ReferensiTindakan'],
                                 ['label' => 'Alergen', 'url' => 'index.php?Page=ReferensiAlergen', 'page' => 'ReferensiAlergen'],
                                 ['label' => 'Observation', 'url' => 'index.php?Page=ReferensiObservation', 'page' => 'ReferensiObservation'],
+                                ['label' => 'Imunisasi', 'url' => 'index.php?Page=ReferensiImunisasi', 'page' => 'ReferensiImunisasi'],
                                 ['label' => 'Wilayah', 'url' => 'index.php?Page=ReferensiWilayah', 'page' => 'ReferensiWilayah'],
                             ],
                         ],

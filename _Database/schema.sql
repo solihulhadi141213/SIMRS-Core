@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Waktu pembuatan: 27 Okt 2026 pada 09.49
+-- Waktu pembuatan: 28 Okt 2026 pada 19.08
 -- Versi server: 8.4.7
 -- Versi PHP: 8.5.0
 
@@ -482,6 +482,64 @@ CREATE TABLE IF NOT EXISTS `icd` (
   UNIQUE KEY `kode_2` (`kode`),
   KEY `kode` (`kode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `imunisasi`
+--
+
+DROP TABLE IF EXISTS `imunisasi`;
+CREATE TABLE IF NOT EXISTS `imunisasi` (
+  `id_imunisasi` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id_immunization` varchar(255) DEFAULT NULL COMMENT 'ID Immunization dari SATUSEHAT',
+  `id_pasien` int UNSIGNED NOT NULL COMMENT 'Dari tabel pasien',
+  `id_kunjungan` int UNSIGNED NOT NULL COMMENT 'Dari tabel kunjungan (Encounter)',
+  `id_imunisasi_referensi` int UNSIGNED DEFAULT NULL COMMENT 'Dari tabel imunisasi_referensi',
+  `tanggal_pemberian` datetime NOT NULL COMMENT 'Waktu imunisasi diberikan',
+  `status_imunisasi` enum('completed','entered-in-error','not-done') NOT NULL DEFAULT 'completed',
+  `dosis_ke` int UNSIGNED DEFAULT NULL COMMENT 'Urutan dosis, misal: 1, 2, booster',
+  `nomor_batch` varchar(255) DEFAULT NULL COMMENT 'Nomor batch vaksin',
+  `produsen_vaksin` varchar(255) DEFAULT NULL COMMENT 'Nama pabrik/produsen vaksin',
+  `lokasi_pemberian` varchar(255) DEFAULT NULL COMMENT 'Anatomi tubuh penyuntikan, misal: Deltoid muscle',
+  `id_praktisi` int UNSIGNED DEFAULT NULL COMMENT 'Dari tabel praktisi (pemberi vaksin)',
+  `praktisi_ihs` varchar(255) DEFAULT NULL COMMENT 'ID Practitioner SatuSehat pemberi vaksin',
+  `praktisi_nama` varchar(255) NOT NULL COMMENT 'Nama praktisi',
+  `catatan` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT 'Catatan reaksi atau keterangan tambahan',
+  `author_id` int UNSIGNED DEFAULT NULL COMMENT 'ID akses petugas entry',
+  `author_name` varchar(255) NOT NULL COMMENT 'Nama petugas entry',
+  `datetime_creat` datetime NOT NULL,
+  `datetime_update` datetime NOT NULL,
+  PRIMARY KEY (`id_imunisasi`),
+  KEY `id_pasien` (`id_pasien`),
+  KEY `id_kunjungan` (`id_kunjungan`),
+  KEY `id_imunisasi_referensi` (`id_imunisasi_referensi`),
+  KEY `id_praktisi` (`id_praktisi`),
+  KEY `author_id` (`author_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Menyimpan data transaksi imunisasi pasien';
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `imunisasi_referensi`
+--
+
+DROP TABLE IF EXISTS `imunisasi_referensi`;
+CREATE TABLE IF NOT EXISTS `imunisasi_referensi` (
+  `id_imunisasi_referensi` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nama_vaksin` varchar(255) NOT NULL COMMENT 'Nama lokal vaksin, misal: BCG, Polio, Hepatitis B',
+  `kode_cvx` varchar(50) DEFAULT NULL COMMENT 'Kode CVX standar vaksin CDC/SatuSehat',
+  `kode_kemenkes` varchar(50) DEFAULT NULL COMMENT 'Kode referensi Kemenkes jika ada',
+  `display_vaksin` varchar(255) DEFAULT NULL COMMENT 'Deskripsi display standar SatuSehat',
+  `system_vaksin` text COMMENT 'System URI, misal: http://hl7.org/fhir/sid/cvx',
+  `target_penyakit` varchar(255) DEFAULT NULL COMMENT 'Penyakit sasaran, misal: Tuberculosis',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1: Aktif, 0: Non-aktif',
+  `datetime_creat` datetime NOT NULL,
+  `author_id` int UNSIGNED DEFAULT NULL,
+  `author_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id_imunisasi_referensi`),
+  KEY `author_id` (`author_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Master referensi jenis vaksin imunisasi';
 
 -- --------------------------------------------------------
 
@@ -1185,6 +1243,22 @@ ALTER TABLE `general_consent`
   ADD CONSTRAINT `gc_to_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Ketidakleluasaan untuk tabel `imunisasi`
+--
+ALTER TABLE `imunisasi`
+  ADD CONSTRAINT `imunisasi_akses` FOREIGN KEY (`author_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `imunisasi_kunjungan` FOREIGN KEY (`id_kunjungan`) REFERENCES `kunjungan` (`id_kunjungan`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `imunisasi_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `imunisasi_praktisi` FOREIGN KEY (`id_praktisi`) REFERENCES `praktisi` (`id_praktisi`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `imunisasi_to_referensi` FOREIGN KEY (`id_imunisasi_referensi`) REFERENCES `imunisasi_referensi` (`id_imunisasi_referensi`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `imunisasi_referensi`
+--
+ALTER TABLE `imunisasi_referensi`
+  ADD CONSTRAINT `imunisasi_ref_akses` FOREIGN KEY (`author_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
 -- Ketidakleluasaan untuk tabel `jadwal_dokter`
 --
 ALTER TABLE `jadwal_dokter`
@@ -1200,6 +1274,12 @@ ALTER TABLE `kunjungan`
   ADD CONSTRAINT `kunjungan_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `kunjungan_petugas_id` FOREIGN KEY (`petugas_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL,
   ADD CONSTRAINT `kunjungan_poliklinik` FOREIGN KEY (`id_poliklinik`) REFERENCES `poliklinik` (`id_poliklinik`) ON DELETE SET NULL;
+
+--
+-- Ketidakleluasaan untuk tabel `log`
+--
+ALTER TABLE `log`
+  ADD CONSTRAINT `log_to_akses` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
 -- Ketidakleluasaan untuk tabel `observation`

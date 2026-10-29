@@ -37,6 +37,7 @@
         "ReferensiWilayah"      => "_Page/ReferensiWilayah/ReferensiWilayah.js?v=A'.$version.'",
         "ReferensiWilayahBpjs"  => "_Page/ReferensiWilayahBpjs/ReferensiWilayahBpjs.js?v=A'.$version.'",
         "ReferensiIcdBpjs"      => "_Page/ReferensiIcdBpjs/ReferensiIcdBpjs.js?v=A'.$version.'",
+        "ReferensiImunisasi"      => "_Page/ReferensiImunisasi/ReferensiImunisasi.js?v=A'.$version.'",
         "Pasien"                => "_Page/Pasien/Pasien.js?v=A'.$version.'",
         "Kunjungan"             => "_Page/Kunjungan/Kunjungan.js?v=A'.$version.'",
         "Antrian"             => "_Page/Antrian/Antrian.js?v=A'.$version.'",
@@ -45,6 +46,7 @@
         "Diagnosis"             => "_Page/Diagnosis/Diagnosis.js?v=A'.$version.'",
         "Tindakan"              => "_Page/Tindakan/Tindakan.js?v=A'.$version.'",
         "Alergi"                => "_Page/Alergi/Alergi.js?v=A'.$version.'",
+        "Imunisasi"                => "_Page/Imunisasi/Imunisasi.js?v=A'.$version.'",
         "Laboratorium"          => "_Page/Laboratorium/Laboratorium.js?v=A'.$version.'",
     ];
 
