@@ -16177,6 +16177,35 @@ canvas{
 #ModalEdit #select_id_pasien_edit .select2-selection__arrow {
     height: 100%;
 }
+/* Select2 edit imunisasi: pastikan container tampil penuh */
+#ModalEdit #select_imunisasi_referensi_edit .select2-container,
+#ModalEdit #select_body_site_edit .select2-container,
+#ModalEdit #select_praktisi_edit .select2-container {
+    display: block;
+    width: 100% !important;
+}
+
+#ModalEdit #select_imunisasi_referensi_edit .select2-selection--single,
+#ModalEdit #select_body_site_edit .select2-selection--single,
+#ModalEdit #select_praktisi_edit .select2-selection--single {
+    min-height: 38px;
+}
+
+#ModalEdit #select_imunisasi_referensi_edit .select2-selection--single .select2-selection__rendered,
+#ModalEdit #select_body_site_edit .select2-selection--single .select2-selection__rendered,
+#ModalEdit #select_praktisi_edit .select2-selection--single .select2-selection__rendered {
+    height: auto;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    line-height: 1.5;
+}
+
+#ModalEdit #select_imunisasi_referensi_edit .select2-selection__arrow,
+#ModalEdit #select_body_site_edit .select2-selection__arrow,
+#ModalEdit #select_praktisi_edit .select2-selection__arrow {
+    height: 100%;
+}
+
 
 .antrian-select2-pasien-id {
     font-weight: 700;
@@ -16189,6 +16218,40 @@ canvas{
     font-size: .875rem;
     line-height: 1.25;
 }
+.imunisasi-select2-kunjungan-id {
+    font-weight: 700;
+    line-height: 1.25;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.imunisasi-select2-kunjungan-info {
+    font-weight: 400;
+    font-size: .875rem;
+    line-height: 1.25;
+    white-space: normal;
+    word-break: break-word;
+    color: #6c757d;
+}
+
+/* Batasi lebar teks terpilih agar tidak keluar dari form */
+#select_id_kunjungan .select2-selection__rendered {
+    white-space: normal !important;
+    word-break: break-word;
+    overflow: hidden;
+}
+
+#select_id_kunjungan .select2-container .select2-selection--single {
+    height: auto;
+    min-height: 38px;
+}
+
+#select_id_kunjungan .select2-selection__rendered {
+    line-height: 1.25;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
 
 /* Form readonly harus memiliki background abu-abu */
 input[readonly],

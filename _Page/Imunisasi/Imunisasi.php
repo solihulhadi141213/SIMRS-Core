@@ -29,7 +29,7 @@
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-12 text-end icon-btn">
-                                            <button type="button" class="btn btn-md btn-icon btn-outline-dark" data-bs-toggle="modal" data-bs-target="#ModalDownload" title="Download Data">
+                                            <button type="button" class="btn btn-md btn-icon btn-outline-dark" data-bs-toggle="modal" data-bs-target="#ModalExport" title="Download Data">
                                                 <i class="bi bi-filetype-xlsx"></i>
                                             </button>
                                             <button type="button" class="btn btn-md btn-icon btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalFilter" title="Filter Data">
@@ -51,17 +51,15 @@
                                                     <td align="left" class="align-middle"><small><b>Nama Pasien</b></small></td>
                                                     <td align="left" class="align-middle"><small><b>Tanggal</b></small></td>
                                                     <td align="left" class="align-middle"><small><b>Nama Vaksin</b></small></td>
-                                                    <td align="left" class="align-middle"><small><b>Dosis Ke</b></small></td>
-                                                    <td align="left" class="align-middle"><small><b><i>Body Site</i></b></small></td>
                                                     <td align="left" class="align-middle"><small><b><i>ID Imunization</i></b></small></td>
                                                     <td align="left" class="align-middle"><small><b>Status</b></small></td>
                                                     <td align="center" class="align-middle"><small><b>Opsi</b></small></td>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tabel_alergi">
+                                            <tbody id="tabel_imunisasi">
                                                 <!-- Baris Tabel Akan Tampil Disini -->
                                                 <tr>
-                                                    <td align="center" colspan="9">
+                                                    <td align="center" colspan="8">
                                                         <span class="spinner-border spinner-border-sm text-primary me-2" role="status" aria-label="Memuat"></span>
                                                         <small class="text text-muted">Memuat data antrian...</small>
                                                     </td>
