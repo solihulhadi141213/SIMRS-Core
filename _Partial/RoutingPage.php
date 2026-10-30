@@ -31,6 +31,7 @@
         'ReferensiIcdBpjs'      => '_Page/ReferensiIcdBpjs/ReferensiIcdBpjs.php',
         'ReferensiDpho'         => '_Page/ReferensiDpho/ReferensiDpho.php',
         'ReferensiImunisasi'    => '_Page/ReferensiImunisasi/ReferensiImunisasi.php',
+        'ReferensiBodySite'    => '_Page/ReferensiBodySite/ReferensiBodySite.php',
         'Pasien'                => '_Page/Pasien/Pasien.php',
         'Kunjungan'             => '_Page/Kunjungan/Kunjungan.php',
         'Antrian'               => '_Page/Antrian/Antrian.php',
@@ -75,6 +76,7 @@
         'ReferensiIcdBpjs'      => ['Referensi BPJS', 'ReferensiWilayahBpjs', 'ICD'],
         'ReferensiDpho'         => ['Referensi BPJS', 'ReferensiWilayahBpjs', 'DPHO'],
         'ReferensiImunisasi'    => ['Dashboard', 'Referensi Imunisasi', null],
+        'ReferensiBodySite'    => ['Dashboard', 'Referensi Body Site', null],
         'Pasien'                => ['Menu Utama', 'Dashboard', 'Pasien'],
         'Kunjungan'             => ['Menu Utama', 'Dashboard', 'Kunjungan'],
         'Antrian'               => ['Menu Utama', 'Dashboard', 'Antrian'],
@@ -83,7 +85,7 @@
         'Diagnosis'             => ['Rekam Medis', 'GeneralConsent', 'Diagnosis'],
         'Tindakan'              => ['Rekam Medis', 'GeneralConsent', 'Tindakan'],
         'Alergi'                => ['Rekam Medis', 'GeneralConsent', 'Alergi'],
-        'Imunisasi'             => ['Beranda', 'Imunisasi', null],
+        'Imunisasi'             => ['Imunisasi', 'Dashboard', null],
         'Laboratorium'          => ['Rekam Medis', 'GeneralConsent', 'Laboratorium'],
     ];
 

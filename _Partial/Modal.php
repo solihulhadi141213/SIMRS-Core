@@ -39,6 +39,7 @@
         'ReferensiWilayahBpjs'  => '_Page/ReferensiWilayahBpjs/ModalReferensiWilayahBpjs.php',
         'ReferensiIcdBpjs'      => '_Page/ReferensiIcdBpjs/ModalReferensiIcdBpjs.php',
         'ReferensiImunisasi'      => '_Page/ReferensiImunisasi/ModalReferensiImunisasi.php',
+        'ReferensiBodySite'      => '_Page/ReferensiBodySite/ModalReferensiBodySite.php',
         'Pasien'                => '_Page/Pasien/ModalPasien.php',
         'Kunjungan'             => '_Page/Kunjungan/ModalKunjungan.php',
         'Antrian'             => '_Page/Antrian/ModalAntrian.php',
