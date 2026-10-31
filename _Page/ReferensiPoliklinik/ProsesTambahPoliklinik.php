@@ -1,7 +1,7 @@
 <?php
     header('Content-Type: application/json');
 
-    date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('UTC');
 
     include "../../_Config/Connection.php";
     include "../../_Config/SimrsFunction.php";
@@ -77,29 +77,6 @@
         }
         mysqli_stmt_close($stmtCheckNama);
 
-        $stmtCheckKode = mysqli_prepare(
-            $Conn,
-            "SELECT id_poliklinik
-             FROM poliklinik
-             WHERE kode = ?"
-        );
-
-        if (!$stmtCheckKode) {
-            throw new Exception('Gagal menyiapkan validasi kode poli.');
-        }
-
-        mysqli_stmt_bind_param($stmtCheckKode, "s", $kode);
-        mysqli_stmt_execute($stmtCheckKode);
-        $resultCheckKode = mysqli_stmt_get_result($stmtCheckKode);
-
-        if ($resultCheckKode && mysqli_num_rows($resultCheckKode) > 0) {
-            mysqli_stmt_close($stmtCheckKode);
-            $response['message'] = 'Kode poli sudah digunakan.';
-            echo json_encode($response);
-            exit;
-        }
-        mysqli_stmt_close($stmtCheckKode);
-
         $stmtInsert = mysqli_prepare(
             $Conn,
             "INSERT INTO poliklinik (
@@ -129,6 +106,18 @@
         }
 
         mysqli_stmt_close($stmtInsert);
+
+        SaveLog(
+            $Conn,
+            (int)$SessionIdAkses,
+            (string)$SessionNama,
+            'Tambah Referensi Poliklinik',
+            [
+                'poliklinik' => $poliklinik,
+                'kode'       => $kode,
+                'status'     => $status
+            ]
+        );
 
         $response['status'] = 'success';
         $response['message'] = 'Data poliklinik berhasil disimpan.';

@@ -264,11 +264,15 @@ if ($totalData > 0) {
             ';
 
         } else {
-
+            if(empty($row['kode_poliklinik'])){
+                $kode_poli = "-";
+            }else{
+                $kode_poli = $row['kode_poliklinik'];
+            }
             $label_kode_poli = '
                 <small class="text-muted">
                     <a href="javascript:void(0);" class="text-muted">
-                        -
+                        '.$kode_poli.'
                     </a>
                 </small>
             ';

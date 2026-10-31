@@ -233,8 +233,8 @@ $(document).ready(function() {
                     // Reset form
                     form[0].reset();
 
-                    // Reset select2 kategori
-                    $('#kategori').val(null).trigger('change');
+                    // Reset select2 kode
+                    $("#kode").val(null).trigger("change");
 
                     // Kosongkan notifikasi
                     notifikasi.html('');
@@ -328,8 +328,6 @@ $(document).ready(function() {
     });
 
     
-    
-
     //==================================================================
     // EDIT POLIKLINIK
     //==================================================================

@@ -1,5 +1,7 @@
+
 <?php
-    header('Content-Type: application/json');
+    // Content Type
+    header('Content-Type: application/json; charset=utf-8');
 
     date_default_timezone_set('Asia/Jakarta');
 
@@ -7,79 +9,97 @@
     include "../../_Config/SimrsFunction.php";
     include "../../_Config/Session.php";
 
-    $response = [
-        'status' => 'error',
-        'message' => 'Terjadi kesalahan.'
-    ];
+    // Fungsi response JSON
+    function SendResponse($status, $message)
+    {
+        echo json_encode([
+            'status'  => $status,
+            'message' => $message
+        ], JSON_UNESCAPED_UNICODE);
 
+        exit;
+    }
+
+    // Validasi sesi
     if (empty($SessionIdAkses)) {
-        $response['message'] = 'Sesi akses berakhir, silakan login ulang.';
-        echo json_encode($response);
-        exit;
+        SendResponse('error', 'Sesi akses berakhir, silakan login ulang.');
     }
 
+    // Validasi metode request
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        $response['message'] = 'Metode request tidak valid.';
-        echo json_encode($response);
-        exit;
+        SendResponse('error', 'Metode request tidak valid.');
     }
 
+    // Validasi ID poliklinik
     $id_poliklinik = (int) ($_POST['id_poliklinik'] ?? 0);
 
-    if (empty($id_poliklinik)) {
-        $response['message'] = 'ID poliklinik tidak valid.';
-        echo json_encode($response);
-        exit;
+    if ($id_poliklinik <= 0) {
+        SendResponse('error', 'ID poliklinik tidak valid.');
     }
 
-    $stmtCheck = mysqli_prepare(
+    // Ambil data lama sekaligus validasi keberadaan data
+    $stmtData = mysqli_prepare(
         $Conn,
-        "SELECT id_poliklinik
-         FROM poliklinik
-         WHERE id_poliklinik = ?"
+        "SELECT poliklinik, kode
+        FROM poliklinik
+        WHERE id_poliklinik = ?
+        LIMIT 1"
     );
 
-    if (!$stmtCheck) {
-        $response['message'] = 'Gagal menyiapkan query validasi data.';
-        echo json_encode($response);
-        exit;
+    if (!$stmtData) {
+        SendResponse('error', 'Gagal menyiapkan query validasi data.');
     }
 
-    mysqli_stmt_bind_param($stmtCheck, "i", $id_poliklinik);
-    mysqli_stmt_execute($stmtCheck);
-    $resultCheck = mysqli_stmt_get_result($stmtCheck);
+    mysqli_stmt_bind_param($stmtData, "i", $id_poliklinik);
+    mysqli_stmt_execute($stmtData);
 
-    if (!$resultCheck || mysqli_num_rows($resultCheck) == 0) {
-        mysqli_stmt_close($stmtCheck);
-        $response['message'] = 'Data poliklinik tidak ditemukan.';
-        echo json_encode($response);
-        exit;
+    $resultData = mysqli_stmt_get_result($stmtData);
+    $dataLama = mysqli_fetch_assoc($resultData);
+
+    mysqli_stmt_close($stmtData);
+
+    if (!$dataLama) {
+        SendResponse('error', 'Data poliklinik tidak ditemukan.');
     }
 
-    mysqli_stmt_close($stmtCheck);
-
+    // Proses hapus data
     $stmtDelete = mysqli_prepare(
         $Conn,
         "DELETE FROM poliklinik
-         WHERE id_poliklinik = ?"
+        WHERE id_poliklinik = ?"
     );
 
     if (!$stmtDelete) {
-        $response['message'] = 'Gagal menyiapkan query hapus data.';
-        echo json_encode($response);
-        exit;
+        SendResponse('error', 'Gagal menyiapkan query hapus data.');
     }
 
     mysqli_stmt_bind_param($stmtDelete, "i", $id_poliklinik);
 
-    if (mysqli_stmt_execute($stmtDelete)) {
-        $response['status'] = 'success';
-        $response['message'] = 'Data poliklinik berhasil dihapus.';
-    } else {
-        $response['message'] = 'Gagal menghapus data poliklinik.';
+    if (!mysqli_stmt_execute($stmtDelete)) {
+        mysqli_stmt_close($stmtDelete);
+        SendResponse('error', 'Gagal menghapus data poliklinik.');
     }
+
+    $affectedRows = mysqli_stmt_affected_rows($stmtDelete);
 
     mysqli_stmt_close($stmtDelete);
 
-    echo json_encode($response);
-?>
+    if ($affectedRows <= 0) {
+        SendResponse('error', 'Data poliklinik gagal dihapus.');
+    }
+
+    // Simpan log
+    SaveLog(
+        $Conn,
+        (int) $SessionIdAkses,
+        (string) $SessionNama,
+        'Hapus Referensi Poliklinik',
+        [
+            'id_poliklinik' => $id_poliklinik,
+            'poliklinik'    => $dataLama['poliklinik'],
+            'kode'          => $dataLama['kode']
+        ]
+    );
+
+    // Response berhasil
+    SendResponse('success', 'Data poliklinik berhasil dihapus.');

@@ -1,5 +1,6 @@
+
 <?php
-    header('Content-Type: application/json');
+    header('Content-Type: application/json; charset=utf-8');
 
     date_default_timezone_set('Asia/Jakarta');
 
@@ -7,115 +8,118 @@
     include "../../_Config/SimrsFunction.php";
     include "../../_Config/Session.php";
 
-    $response = [
-        'status' => 'error',
-        'message' => 'Terjadi kesalahan.'
-    ];
+    // Fungsi response JSON
+    function SendResponse($status, $message)
+    {
+        echo json_encode([
+            'status'  => $status,
+            'message' => $message
+        ], JSON_UNESCAPED_UNICODE);
 
+        exit;
+    }
+
+    // Validasi sesi
     if (empty($SessionIdAkses)) {
-        $response['message'] = 'Sesi akses berakhir, silakan login ulang.';
-        echo json_encode($response);
-        exit;
+        SendResponse('error', 'Sesi akses berakhir, silakan login ulang.');
     }
 
+    // Validasi metode request
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        $response['message'] = 'Metode request tidak valid.';
-        echo json_encode($response);
-        exit;
+        SendResponse('error', 'Metode request tidak valid.');
     }
 
+    // Ambil data POST
     $id_poliklinik = (int) ($_POST['id_poliklinik'] ?? 0);
     $poliklinik    = trim($_POST['poliklinik'] ?? '');
     $kode          = trim($_POST['kode'] ?? '');
     $status        = isset($_POST['status']) ? 1 : 0;
     $updatetime    = date('Y-m-d H:i:s');
 
-    if (empty($id_poliklinik)) {
-        $response['message'] = 'ID poliklinik tidak valid.';
-        echo json_encode($response);
-        exit;
+    // Validasi input
+    if ($id_poliklinik <= 0) {
+        SendResponse('error', 'ID poliklinik tidak valid.');
     }
 
     if ($poliklinik === '') {
-        $response['message'] = 'Nama poliklinik tidak boleh kosong.';
-        echo json_encode($response);
-        exit;
+        SendResponse('error', 'Nama poliklinik tidak boleh kosong.');
     }
 
     if ($kode === '') {
-        $response['message'] = 'Kode poli tidak boleh kosong.';
-        echo json_encode($response);
-        exit;
+        SendResponse('error', 'Kode poli tidak boleh kosong.');
     }
 
     if (mb_strlen($poliklinik) > 255) {
-        $response['message'] = 'Nama poliklinik terlalu panjang.';
-        echo json_encode($response);
-        exit;
+        SendResponse('error', 'Nama poliklinik terlalu panjang.');
     }
 
     if (mb_strlen($kode) > 255) {
-        $response['message'] = 'Kode poli terlalu panjang.';
-        echo json_encode($response);
-        exit;
+        SendResponse('error', 'Kode poli terlalu panjang.');
     }
 
     try {
-        $stmtExist = mysqli_prepare(
+
+        // Ambil data lama sekaligus validasi keberadaan data
+        $stmtData = mysqli_prepare(
             $Conn,
-            "SELECT id_poliklinik
-             FROM poliklinik
-             WHERE id_poliklinik = ?"
+            "SELECT poliklinik, kode
+            FROM poliklinik
+            WHERE id_poliklinik = ?
+            LIMIT 1"
         );
 
-        if (!$stmtExist) {
+        if (!$stmtData) {
             throw new Exception('Gagal menyiapkan validasi data.');
         }
 
-        mysqli_stmt_bind_param($stmtExist, "i", $id_poliklinik);
-        mysqli_stmt_execute($stmtExist);
-        $resultExist = mysqli_stmt_get_result($stmtExist);
+        mysqli_stmt_bind_param($stmtData, "i", $id_poliklinik);
+        mysqli_stmt_execute($stmtData);
 
-        if (!$resultExist || mysqli_num_rows($resultExist) === 0) {
-            mysqli_stmt_close($stmtExist);
-            $response['message'] = 'Data poliklinik tidak ditemukan.';
-            echo json_encode($response);
-            exit;
+        $resultData = mysqli_stmt_get_result($stmtData);
+        $dataLama = mysqli_fetch_assoc($resultData);
+
+        mysqli_stmt_close($stmtData);
+
+        if (!$dataLama) {
+            SendResponse('error', 'Data poliklinik tidak ditemukan.');
         }
-        $dataLama = mysqli_fetch_assoc($resultExist);
-        mysqli_stmt_close($stmtExist);
 
-        $namaLama = trim($dataLama['poliklinik'] ?? '');
-        $kodeLama = trim($dataLama['kode'] ?? '');
+        // Validasi duplikasi nama poliklinik
+        if ($poliklinik !== trim($dataLama['poliklinik'])) {
 
-        if ($poliklinik !== $namaLama) {
-            $stmtCheckNama = mysqli_prepare(
+            $stmtCheck = mysqli_prepare(
                 $Conn,
                 "SELECT id_poliklinik
-                 FROM poliklinik
-                 WHERE poliklinik = ?
-                 AND id_poliklinik != ?"
+                FROM poliklinik
+                WHERE poliklinik = ?
+                AND id_poliklinik != ?
+                LIMIT 1"
             );
 
-            if (!$stmtCheckNama) {
+            if (!$stmtCheck) {
                 throw new Exception('Gagal menyiapkan validasi nama poliklinik.');
             }
 
-            mysqli_stmt_bind_param($stmtCheckNama, "si", $poliklinik, $id_poliklinik);
-            mysqli_stmt_execute($stmtCheckNama);
-            $resultCheckNama = mysqli_stmt_get_result($stmtCheckNama);
+            mysqli_stmt_bind_param(
+                $stmtCheck,
+                "si",
+                $poliklinik,
+                $id_poliklinik
+            );
 
-            if ($resultCheckNama && mysqli_num_rows($resultCheckNama) > 0) {
-                mysqli_stmt_close($stmtCheckNama);
-                $response['message'] = 'Nama poliklinik sudah digunakan.';
-                echo json_encode($response);
-                exit;
+            mysqli_stmt_execute($stmtCheck);
+
+            $resultCheck = mysqli_stmt_get_result($stmtCheck);
+            $duplikat = mysqli_num_rows($resultCheck) > 0;
+
+            mysqli_stmt_close($stmtCheck);
+
+            if ($duplikat) {
+                SendResponse('error', 'Nama poliklinik sudah digunakan.');
             }
-            mysqli_stmt_close($stmtCheckNama);
         }
 
-        
-
+        // Update data poliklinik
         $stmtUpdate = mysqli_prepare(
             $Conn,
             "UPDATE poliklinik SET
@@ -123,7 +127,7 @@
                 kode = ?,
                 status = ?,
                 updatetime = ?
-             WHERE id_poliklinik = ?"
+            WHERE id_poliklinik = ?"
         );
 
         if (!$stmtUpdate) {
@@ -147,11 +151,28 @@
 
         mysqli_stmt_close($stmtUpdate);
 
-        $response['status'] = 'success';
-        $response['message'] = 'Data poliklinik berhasil diperbarui.';
-    } catch (Exception $e) {
-        $response['message'] = $e->getMessage();
-    }
+        // Simpan log aktivitas
+        SaveLog(
+            $Conn,
+            (int) $SessionIdAkses,
+            (string) $SessionNama,
+            'Edit Referensi Poliklinik',
+            [
+                'id_poliklinik' => $id_poliklinik,
+                'poliklinik'    => $poliklinik,
+                'kode'          => $kode,
+                'status'        => $status
+            ]
+        );
 
-    echo json_encode($response);
-?>
+        // Response berhasil
+        SendResponse('success', 'Data poliklinik berhasil diperbarui.');
+
+    } catch (Throwable $e) {
+
+        error_log(
+            'Update Poliklinik Error: ' . $e->getMessage()
+        );
+
+        SendResponse('error', 'Terjadi kesalahan saat memperbarui data poliklinik.');
+    }

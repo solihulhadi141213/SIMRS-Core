@@ -1,5 +1,5 @@
 <?php
-    date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('UTC');
 
     include "../../_Config/Connection.php";
     include "../../_Config/SimrsFunction.php";
@@ -54,6 +54,35 @@
                     $types .= "i";
                 } else {
                     $where = " WHERE p.status LIKE ?";
+                    $params[] = $keyword_like;
+                    $types .= "s";
+                }
+            } elseif ($keyword_by === "updatetime") {
+                // keyword berupa tanggal lokal (input type date)
+                $localDate = DateTime::createFromFormat('Y-m-d', $keyword);
+                if ($localDate && $localDate->format('Y-m-d') === $keyword) {
+                    $timezoneName = trim((string)($SessionUserTimezone ?? ''));
+                    if (preg_match('/^UTC([+-])(\d{2}):(\d{2})$/', $timezoneName, $timezoneOffset)) {
+                        $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+                    }
+                    try {
+                        $userTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+                    } catch (Throwable $e) {
+                        $userTimezone = new DateTimeZone('UTC');
+                    }
+
+                    $startLocal = new DateTime($keyword . ' 00:00:00', $userTimezone);
+                    $endLocal   = (clone $startLocal)->modify('+1 day');
+
+                    $startUtc = $startLocal->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+                    $endUtc   = $endLocal->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+
+                    $where = " WHERE p.updatetime >= ? AND p.updatetime < ?";
+                    $params[] = $startUtc;
+                    $params[] = $endUtc;
+                    $types .= "ss";
+                } else {
+                    $where = " WHERE p.updatetime LIKE ?";
                     $params[] = $keyword_like;
                     $types .= "s";
                 }
@@ -185,19 +214,36 @@
         $kode            = htmlspecialchars($data['kode'] ?? '-');
         $jumlah_dokter   = (int) ($data['jumlah_dokter'] ?? 0);
         $jumlah_layanan  = (int) ($data['jumlah_layanan'] ?? 0);
-        $updatetime      = !empty($data['updatetime']) ? date('d/m/Y H:i', strtotime($data['updatetime'])) : '-';
+        $updatetime = '-';
+        if (!empty($data['updatetime'])) {
+            $timezoneName = trim((string)($SessionUserTimezone ?? ''));
+            if (preg_match('/^UTC([+-])(\d{2}):(\d{2})$/', $timezoneName, $timezoneOffset)) {
+                $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+            }
+            try {
+                $userTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+            } catch (Throwable $e) {
+                $userTimezone = new DateTimeZone('UTC');
+            }
+            try {
+                $dt = new DateTimeImmutable((string)$data['updatetime'], new DateTimeZone('UTC'));
+                $updatetime = $dt->setTimezone($userTimezone)->format('d/m/Y H:i T');
+            } catch (Throwable $e) {
+                $updatetime = date('d/m/Y H:i', strtotime((string)$data['updatetime']));
+            }
+        }
         $status          = (int) ($data['status'] ?? 0);
 
         if ($status === 1) {
             $label_status = '
                 <span class="px-2 py-1 bg-success-subtle text-success rounded-1" title="Active">
-                    <i class="bi bi-check"></i>
+                    <i class="bi bi-check"></i> Active
                 </span>
             ';
         } else {
             $label_status = '
                 <span class="px-2 py-1 bg-danger-subtle text-danger rounded-1" title="No Active">
-                    <i class="bi bi-x-circle"></i>
+                    <i class="bi bi-x-circle"></i> Inactive
                 </span>
             ';
         }
@@ -222,7 +268,7 @@
                     <small class="text-muted">' . $jumlah_dokter . ' Dokter</small>
                 </td>
                 <td>
-                    <small class="text-muted">' . $jumlah_layanan . ' Jadwal</small>
+                    <small class="text-muted">' . $jumlah_layanan . ' Pasien</small>
                 </td>
                 <td>
                     <small class="text-muted">' . $updatetime . '</small>

@@ -2674,4 +2674,42 @@
             return null;
         }
     }
-?>
+    // =========================================================
+    // FUNGSI MENYIMPAN LOG (STRUKTUR TABEL log)
+    // =========================================================
+    function SaveLog($Conn, $id_akses, $nama_petugas, $title_log, $metadata = []) {
+        $datetime_log = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+
+        $metadataJson = null;
+        if (!empty($metadata) && is_array($metadata)) {
+            $encoded = json_encode($metadata, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            if ($encoded !== false) {
+                $metadataJson = $encoded;
+            }
+        }
+
+        $stmt = mysqli_prepare(
+            $Conn,
+            "INSERT INTO log (id_akses, datetime_log, nama_petugas, title_log, metadata_log)
+             VALUES (?, ?, ?, ?, ?)"
+        );
+
+        if (!$stmt) {
+            return false;
+        }
+
+        mysqli_stmt_bind_param(
+            $stmt,
+            "issss",
+            $id_akses,
+            $datetime_log,
+            $nama_petugas,
+            $title_log,
+            $metadataJson
+        );
+
+        $result = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        return (bool)$result;
+    }

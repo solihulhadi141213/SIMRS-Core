@@ -1,5 +1,5 @@
 <?php
-    date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('UTC');
 
     include "../../_Config/Connection.php";
     include "../../_Config/SimrsFunction.php";
@@ -84,7 +84,24 @@
         ? '<span class="badge bg-success">Aktif</span>'
         : '<span class="badge bg-secondary">Tidak Aktif</span>';
 
-    $updatetime = !empty($data['updatetime']) ? date('d/m/Y H:i', strtotime($data['updatetime'])) : '-';
+    $updatetime = '-';
+    if (!empty($data['updatetime'])) {
+        $timezoneName = trim((string)($SessionUserTimezone ?? ''));
+        if (preg_match('/^UTC([+-])(\d{2}):(\d{2})$/', $timezoneName, $timezoneOffset)) {
+            $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+        }
+        try {
+            $userTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+        } catch (Throwable $e) {
+            $userTimezone = new DateTimeZone('UTC');
+        }
+        try {
+            $dt = new DateTimeImmutable((string)$data['updatetime'], new DateTimeZone('UTC'));
+            $updatetime = $dt->setTimezone($userTimezone)->format('d/m/Y H:i T');
+        } catch (Throwable $e) {
+            $updatetime = date('d/m/Y H:i', strtotime((string)$data['updatetime']));
+        }
+    }
 
     $stmtJadwal = mysqli_prepare(
         $Conn,
