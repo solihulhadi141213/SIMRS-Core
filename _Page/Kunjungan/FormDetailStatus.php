@@ -50,32 +50,45 @@
     // Routing Status
     if($status == "Terdaftar"){
         $status_terdaftar = 'bg-primary-subtle';
+        $status_dilayani  = 'bg-secondary-subtle';
         $status_selesai   = 'bg-secondary-subtle';
         $status_batal     = 'bg-secondary-subtle';
         $status_meninggal = 'bg-secondary-subtle';
     }else{
-        if($status == "Selesai"){
+        if($status == "Dilayani"){
             $status_terdaftar = 'bg-secondary-subtle';
-            $status_selesai   = 'bg-success-subtle';
+            $status_dilayani  = 'bg-info-subtle';
+            $status_selesai   = 'bg-secondary-subtle';
             $status_batal     = 'bg-secondary-subtle';
             $status_meninggal = 'bg-secondary-subtle';
         }else{
-            if($status == "Batal"){
+            if($status == "Selesai"){
                 $status_terdaftar = 'bg-secondary-subtle';
-                $status_selesai   = 'bg-secondary-subtle';
-                $status_batal     = 'bg-warning-subtle';
+                $status_dilayani  = 'bg-secondary-subtle';
+                $status_selesai   = 'bg-success-subtle';
+                $status_batal     = 'bg-secondary-subtle';
                 $status_meninggal = 'bg-secondary-subtle';
             }else{
-                if($status == "Meninggal"){
+                if($status == "Batal"){
                     $status_terdaftar = 'bg-secondary-subtle';
+                    $status_dilayani  = 'bg-secondary-subtle';
                     $status_selesai   = 'bg-secondary-subtle';
-                    $status_batal     = 'bg-secondary-subtle';
-                    $status_meninggal = 'bg-danger-subtle';
-                }else{
-                    $status_terdaftar = 'bg-secondary-subtle';
-                    $status_selesai   = 'bg-secondary-subtle';
-                    $status_batal     = 'bg-secondary-subtle';
+                    $status_batal     = 'bg-warning-subtle';
                     $status_meninggal = 'bg-secondary-subtle';
+                }else{
+                    if($status == "Meninggal"){
+                        $status_terdaftar = 'bg-secondary-subtle';
+                        $status_dilayani  = 'bg-secondary-subtle';
+                        $status_selesai   = 'bg-secondary-subtle';
+                        $status_batal     = 'bg-secondary-subtle';
+                        $status_meninggal = 'bg-danger-subtle';
+                    }else{
+                        $status_terdaftar = 'bg-secondary-subtle';
+                        $status_dilayani  = 'bg-secondary-subtle';
+                        $status_selesai   = 'bg-secondary-subtle';
+                        $status_batal     = 'bg-secondary-subtle';
+                        $status_meninggal = 'bg-secondary-subtle';
+                    }
                 }
             }
         }
@@ -94,6 +107,18 @@
         <div class="activity-desc">
             Pasien didaftarkan oleh petugas pada saat pertama kali kunjungan. 
             Status kunjungan tidak akan berubah sampai petugas melakukan update pada data kunjungan sesuai pelayanan yang diterima.
+        </div>
+    </li>
+
+    <!-- Dilayani -->
+    <li class="timeline-item">
+        <div class="timeline-icon <?php echo $status_dilayani; ?>">
+            <i class="bi bi-clock-history"></i>
+        </div>
+        <div class="activity-title">Dilayani</div>
+        <div class="activity-desc">
+            Pasien sedang menerima palayanan sesuai tujuan kunjungan. 
+            Petugas bisa mengisi informasi pemeriksaan, status diagnosa dan peresepan.
         </div>
     </li>
 

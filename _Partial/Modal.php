@@ -50,6 +50,7 @@
         'Alergi'                => '_Page/Alergi/ModalAlergi.php',
         'Imunisasi'                => '_Page/Imunisasi/ModalImunisasi.php',
         'Laboratorium'          => '_Page/Laboratorium/ModalLaboratorium.php',
+        'Encounter'          => '_Page/Encounter/ModalEncounter.php',
     ];
 
     foreach ($globalModals as $modalPath) {

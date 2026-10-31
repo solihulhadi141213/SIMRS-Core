@@ -34,6 +34,7 @@ Section 2 : Master Data
   - [icon: bi bi-dot] Tenaga Medis -> (URL : `index.php?Page=ReferensiPraktisi`)
   - [icon: bi bi-dot] Ruang Rawat -> (URL : `index.php?Page=ReferensiRuangRawat`)
   - [icon: bi bi-dot] ICD -> (URL : `index.php?Page=ReferensiIcd`)
+  - [icon: bi bi-dot] Body Site -> (URL : `index.php?Page=ReferensiBodySite`)
   - [icon: bi bi-dot] Procedure -> (URL : `index.php?Page=ReferensiTindakan`)
   - [icon: bi bi-dot] Alergen -> (URL : `index.php?Page=ReferensiAlergen`)
   - [icon: bi bi-dot] Observation -> (URL : `index.php?Page=ReferensiObservation`)

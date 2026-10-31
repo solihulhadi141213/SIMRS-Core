@@ -59,7 +59,7 @@ Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan
   - `_Database\referance`        : Menyimpan data referensi default.
   - `_Database\icd.csv`          : Data ICD Standar (Default).
   - `_Database\wilayah.csv`      : Data referensi wilayah (default).
-  - `_Database\struktur-menu.md` : Data referensi struktur menu.
+  
 
 3. Config dan Helper
   - `_Config\Connection.php`         : Koneksi database mysql.
@@ -84,6 +84,7 @@ Halaman utama `index.php` disusun berdasarkan beberapa komponen terpisah (modula
   - `_Partial\RoutingPage.php` : Melakukan routing halaman php yang digunakan pada masing-masing fitur halaman.
   - `_Partial\RoutingSwal.php` : Melakukan routing sweet alert.
   - `_Partial\Toast.php`       : Menampilkan toast.
+  - `_Partial\struktur-menu.md`: Data referensi struktur menu.
 ## Pengaturan Metadata
 1. Halaman tidak mengijinkan melakukan indexing mesin pencari.
 2. Halaman diharapkan optimal sehingga dapat digunakan oleh browser apapun.

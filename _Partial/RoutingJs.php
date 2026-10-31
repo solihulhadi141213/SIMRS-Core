@@ -49,6 +49,7 @@
         "Alergi"                => "_Page/Alergi/Alergi.js?v=A'.$version.'",
         "Imunisasi"                => "_Page/Imunisasi/Imunisasi.js?v=A'.$version.'",
         "Laboratorium"          => "_Page/Laboratorium/Laboratorium.js?v=A'.$version.'",
+        "Encounter"          => "_Page/Encounter/Encounter.js?v=A'.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif

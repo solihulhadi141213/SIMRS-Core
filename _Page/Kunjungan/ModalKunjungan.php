@@ -789,7 +789,7 @@
 
 <!-- Modal Update Status Kunjungan -->
 <div class="modal fade" id="ModalUpdateStatusKunjungan" tabindex="-1" aria-labelledby="ModalUpdateStatusKunjungan" aria-hidden="true">
-    <div class="modal-dialog modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form action="javascript:void(0);" id="ProsesUpdateStatusKunjungan" autocomplete="off">
                 <div class="modal-header">

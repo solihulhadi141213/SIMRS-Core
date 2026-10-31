@@ -69,7 +69,24 @@
     $kontak_darurat_nama       = validate($_POST['kontak_darurat_nama'] ?? '');
     $kontak_darurat_hubungan   = validate($_POST['kontak_darurat_hubungan'] ?? '');
 
-    $datetime_daftar = $date_daftar . ' ' . $time_daftar . ':00';
+    // Konversi tanggal & jam dari zona user ke UTC
+    $timezoneName = trim((string)($SessionUserTimezone ?? ''));
+    if (preg_match('/^UTC([+-])(\d{2}):(\d{2})$/', $timezoneName, $timezoneOffset)) {
+        $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+    }
+    try {
+        $userTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+    } catch (Throwable $e) {
+        $userTimezone = new DateTimeZone('UTC');
+    }
+
+    try {
+        $dtUser = new DateTime($date_daftar . ' ' . $time_daftar . ':00', $userTimezone);
+        $dtUser->setTimezone(new DateTimeZone('UTC'));
+        $datetime_daftar = $dtUser->format('Y-m-d H:i:s');
+    } catch (Throwable $e) {
+        $datetime_daftar = $date_daftar . ' ' . $time_daftar . ':00';
+    }
 
     // =============================================
     // NORMALISASI INTEGER NULL

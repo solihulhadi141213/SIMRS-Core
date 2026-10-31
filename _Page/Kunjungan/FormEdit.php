@@ -117,8 +117,24 @@
 
     // Waktu Pelayanan
     if(!empty($datetime_daftar)){
-        $tanggal_daftar = date('Y-m-d', strtotime($datetime_daftar));
-        $jam_daftar     = date('H:i', strtotime($datetime_daftar));
+        $timezoneName = trim((string)($SessionUserTimezone ?? ''));
+        if (preg_match('/^UTC([+-])(\d{2}):(\d{2})$/', $timezoneName, $timezoneOffset)) {
+            $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+        }
+        try {
+            $userTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+        } catch (Throwable $e) {
+            $userTimezone = new DateTimeZone('UTC');
+        }
+        try {
+            $dt = new DateTimeImmutable((string)$datetime_daftar, new DateTimeZone('UTC'));
+            $dt = $dt->setTimezone($userTimezone);
+            $tanggal_daftar = $dt->format('Y-m-d');
+            $jam_daftar     = $dt->format('H:i');
+        } catch (Throwable $e) {
+            $tanggal_daftar = date('Y-m-d', strtotime((string)$datetime_daftar));
+            $jam_daftar     = date('H:i', strtotime((string)$datetime_daftar));
+        }
     }else{
         $tanggal_daftar = "";
         $jam_daftar     = "";

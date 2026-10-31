@@ -898,5 +898,123 @@ $(document).ready(function () {
         });
     });
 
+    // ==============================
+    // HAPUS
+    // ==============================
+
 });
+    //------------------------------------
+    // EXPORT DATA IMUNISASI
+    //------------------------------------
+    const modalExportImunisasi = $('#ModalExport');
+
+    function currentYearImunisasi() {
+        return new Date().getFullYear();
+    }
+
+    function buildExportLanjutan(periode) {
+        const year = currentYearImunisasi();
+        if (periode === 'Semua') {
+            $('#FormLanjutanExport').empty();
+            return;
+        }
+        if (periode === 'Tahun') {
+            $('#FormLanjutanExport').html(
+                '<div class="row mb-3">' +
+                    '<div class="col-12">' +
+                        '<label><small>Tahun</small></label>' +
+                        '<input type="number" name="tahun" id="tahun_export" class="form-control" value="' + year + '" min="2000" max="2100">' +
+                    '</div>' +
+                '</div>'
+            );
+            return;
+        }
+        if (periode === 'Bulan') {
+            let options = '';
+            const names = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            for (let m = 1; m <= 12; m++) {
+                const val = String(m).padStart(2, '0');
+                options += '<option value="' + val + '">' + names[m - 1] + '</option>';
+            }
+            $('#FormLanjutanExport').html(
+                '<div class="row mb-3">' +
+                    '<div class="col-12">' +
+                        '<label><small>Tahun</small></label>' +
+                        '<input type="number" name="tahun" id="tahun_export" class="form-control" value="' + year + '" min="2000" max="2100">' +
+                    '</div>' +
+                '</div>' +
+                '<div class="row mb-3">' +
+                    '<div class="col-12">' +
+                        '<label><small>Bulan</small></label>' +
+                        '<select name="bulan" id="bulan_export" class="form-control">' + options + '</select>' +
+                    '</div>' +
+                '</div>'
+            );
+            return;
+        }
+        if (periode === 'Periodik') {
+            $('#FormLanjutanExport').html(
+                '<div class="row mb-3">' +
+                    '<div class="col-6">' +
+                        '<label><small>Periode Awal</small></label>' +
+                        '<input type="date" name="periode_awal" id="periode_awal_export" class="form-control">' +
+                    '</div>' +
+                    '<div class="col-6">' +
+                        '<label><small>Periode Akhir</small></label>' +
+                        '<input type="date" name="periode_akhir" id="periode_akhir_export" class="form-control">' +
+                    '</div>' +
+                '</div>'
+            );
+            return;
+        }
+        $('#FormLanjutanExport').empty();
+    }
+
+    function countExportImunisasi() {
+        const periode = $('#periode_data').val() || 'Semua';
+        const data = { mode: 'count', periode_data: periode };
+        $('#FormLanjutanExport').find('input, select').each(function () {
+            if (this.name) {
+                data[this.name] = $(this).val();
+            }
+        });
+        $.ajax({
+            type: 'POST',
+            url: '_Page/Imunisasi/ProsesExport.php',
+            data: data,
+            dataType: 'json'
+        }).done(function (response) {
+            const jumlah = response && typeof response.jumlah !== 'undefined' ? parseInt(response.jumlah, 10) : 0;
+            if (jumlah > 0) {
+                $('#NotifikasiJumlahData').html('<div class="alert alert-info mb-0"><small>Jumlah data imunisasi yang akan diexport: <b>' + jumlah + '</b></small></div>');
+                $('#ButtonExport').prop('disabled', false);
+            } else {
+                $('#NotifikasiJumlahData').html('<div class="alert alert-warning mb-0"><small>Tidak ada data imunisasi pada periode tersebut.</small></div>');
+                $('#ButtonExport').prop('disabled', true);
+            }
+        }).fail(function () {
+            $('#NotifikasiJumlahData').html('<div class="alert alert-danger mb-0"><small>Gagal menghitung jumlah data imunisasi.</small></div>');
+            $('#ButtonExport').prop('disabled', true);
+        });
+    }
+
+    // Saat modal export muncul pertama kali
+    modalExportImunisasi.on('shown.bs.modal', function () {
+        $('#periode_data').val('Semua');
+        buildExportLanjutan('Semua');
+        countExportImunisasi();
+    });
+
+    // Saat periode_data diubah
+    $(document).on('change', '#periode_data', function () {
+        const periode = $(this).val();
+        buildExportLanjutan(periode);
+        countExportImunisasi();
+    });
+
+    // Hitung ulang saat input lanjutan berubah
+    $(document).on('change', '#FormLanjutanExport input, #FormLanjutanExport select', function () {
+        countExportImunisasi();
+    });
+
 

@@ -61,32 +61,45 @@
     // Routing Status
     if($status == "Terdaftar"){
         $status_terdaftar = 'checked';
+        $status_dilayani = '';
         $status_selesai   = '';
         $status_batal     = '';
         $status_meninggal = '';
     }else{
-        if($status == "Selesai"){
+        if($status == "Dilayani"){
             $status_terdaftar = '';
-            $status_selesai   = 'checked';
+            $status_dilayani = 'checked';
+            $status_selesai   = '';
             $status_batal     = '';
             $status_meninggal = '';
         }else{
-            if($status == "Batal"){
+            if($status == "Selesai"){
                 $status_terdaftar = '';
-                $status_selesai   = '';
-                $status_batal     = 'checked';
+                $status_dilayani = '';
+                $status_selesai   = 'checked';
+                $status_batal     = '';
                 $status_meninggal = '';
             }else{
-                if($status == "Meninggal"){
+                if($status == "Batal"){
                     $status_terdaftar = '';
+                    $status_dilayani = '';
                     $status_selesai   = '';
-                    $status_batal     = '';
-                    $status_meninggal = 'checked';
-                }else{
-                    $status_terdaftar = '';
-                    $status_selesai   = '';
-                    $status_batal     = '';
+                    $status_batal     = 'checked';
                     $status_meninggal = '';
+                }else{
+                    if($status == "Meninggal"){
+                        $status_terdaftar = '';
+                        $status_dilayani = '';
+                        $status_selesai   = '';
+                        $status_batal     = '';
+                        $status_meninggal = 'checked';
+                    }else{
+                        $status_terdaftar = '';
+                        $status_dilayani = '';
+                        $status_selesai   = '';
+                        $status_batal     = '';
+                        $status_meninggal = '';
+                    }
                 }
             }
         }
@@ -118,11 +131,21 @@
     </label>
 </div>
 <div class="form-check mb-3">
+    <input class="form-check-input" type="radio" name="status" id="status_dilayani" value="Dilayani" <?php echo $status_dilayani; ?> >
+    <label class="form-check-label" for="status_dilayani">
+        <b>Dilayani</b><br>
+        <small class="text-muted">
+            Pasien sedang menerima pelayanan sesuai tujuan kunjungan. 
+            Pada kondisi ini petugas dapat mengisi informasi berkas rekam medis.
+        </small>
+    </label>
+</div>
+<div class="form-check mb-3">
     <input class="form-check-input" type="radio" name="status" id="status_selesai" value="Selesai" <?php echo $status_selesai; ?> >
     <label class="form-check-label" for="status_selesai">
         <b>Selesai</b><br>
         <small class="text-muted">
-            Pasien telah menerima pelayanan dan diijinkan pulang. 
+            Pasien telah selesai menerima pelayanan dan diijinkan pulang. 
             Untuk pasien rawat inap, petugas akan membuatkan resume pulang beserta keterangan status kepulangan pasien.
         </small>
     </label>

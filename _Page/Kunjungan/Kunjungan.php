@@ -56,14 +56,14 @@
                                             <thead>
                                                 <tr>
                                                     <td align="center"><small><b>No</b></small></td>
-                                                    <td align="left"><small><b>Nama</b></small></td>
-                                                    <td align="left"><small><b>RM</b></small></td>
-                                                    <td align="left"><small><b>Tanggal</b></small></td>
+                                                    <td align="left"><small><b>Nama Pasien</b></small></td>
+                                                    <td align="left"><small><b>No.RM</b></small></td>
+                                                    <td align="left"><small><b>Tanggal Daftar</b></small></td>
                                                     <td align="left"><small><b>Tujuan</b></small></td>
                                                     <td align="left"><small><b>Poli</b></small></td>
                                                     <td align="left"><small><b>Kelas</b></small></td>
                                                     <td align="left"><small><b>DPJP</b></small></td>
-                                                    <td align="left"><small><b>Bayar</b></small></td>
+                                                    <td align="left"><small><b>Penjamin</b></small></td>
                                                     <td align="center"><small><b>Perioritas</b></small></td>
                                                     <td align="center"><small><b>STTS</b></small></td>
                                                     <td align="center"><small><b>Opsi</b></small></td>

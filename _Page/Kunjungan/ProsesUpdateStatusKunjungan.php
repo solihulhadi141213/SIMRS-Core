@@ -53,7 +53,7 @@
     // =============================================
     // VALIDASI STATUS
     // =============================================
-    $allowed_status = ['Terdaftar', 'Selesai', 'Batal', 'Meninggal'];
+    $allowed_status = ['Terdaftar', 'Dilayani', 'Selesai', 'Batal', 'Meninggal'];
 
     if (!in_array($status, $allowed_status)) {
         echo json_encode([
@@ -87,25 +87,44 @@
 
     mysqli_stmt_close($check);
 
+    $datetime_pelayanan = null;
+
+    if ($status == "Dilayani") {
+        $datetime_pelayanan = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+    }
+
     // =============================================
     // DATETIME SELESAI
     // =============================================
     $datetime_selesai = null;
 
     if ($status == "Selesai" || $status == "Meninggal") {
-        $datetime_selesai = date('Y-m-d H:i:s');
+        $datetime_selesai = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
     }
 
     // =============================================
     // UPDATE STATUS
     // =============================================
-    $query = "
-        UPDATE kunjungan 
-        SET 
-            status = ?,
-            datetime_selesai = ?
-        WHERE id_kunjungan = ?
-    ";
+    $updates = ["status = ?"];
+    $params  = [$status];
+    $types   = "s";
+
+    if ($datetime_pelayanan !== null) {
+        $updates[] = "datetime_pelayanan = ?";
+        $params[]  = $datetime_pelayanan;
+        $types    .= "s";
+    }
+
+    if ($datetime_selesai !== null) {
+        $updates[] = "datetime_selesai = ?";
+        $params[]  = $datetime_selesai;
+        $types    .= "s";
+    }
+
+    $params[] = $id_kunjungan;
+    $types   .= "i";
+
+    $query = "UPDATE kunjungan SET " . implode(", ", $updates) . " WHERE id_kunjungan = ?";
 
     $stmt = mysqli_prepare($Conn, $query);
 
@@ -117,13 +136,7 @@
         exit;
     }
 
-    mysqli_stmt_bind_param(
-        $stmt,
-        "ssi",
-        $status,
-        $datetime_selesai,
-        $id_kunjungan
-    );
+    mysqli_stmt_bind_param($stmt, $types, ...$params);
 
     // =============================================
     // EKSEKUSI

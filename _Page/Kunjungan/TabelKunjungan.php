@@ -4,6 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 // Koneksi
 include "../../_Config/Connection.php";
 include "../../_Config/SimrsFunction.php";
+include "../../_Config/Session.php";
 
 // ==============================
 // PAGINATION
@@ -219,11 +220,11 @@ if ($totalData > 0) {
         $badge_jenis = '<span class="px-2 py-1 bg-secondary rounded-2"><small>UNK</small></span>';
 
         if ($row['jenis_kunjungan'] == "Rajal") {
-            $badge_jenis = '<span class="px-2 py-1 bg-primary rounded-2"><small>RJL</small></span>';
+            $badge_jenis = '<span class="text-info">RAJAL</span>';
         }
 
         if ($row['jenis_kunjungan'] == "Ranap") {
-            $badge_jenis = '<span class="px-2 py-1 bg-info rounded-2"><small>RNP</small></span>';
+            $badge_jenis = '<span class="text-warning">RANAP</span>';
         }
 
         // ==========================
@@ -232,7 +233,21 @@ if ($totalData > 0) {
         $datetime_daftar = '-';
 
         if (!empty($row['datetime_daftar'])) {
-            $datetime_daftar = date('d/m/Y', strtotime($row['datetime_daftar']));
+            $timezoneName = trim((string)($SessionUserTimezone ?? ''));
+            if (preg_match('/^UTC([+-])(\d{2}):(\d{2})$/', $timezoneName, $timezoneOffset)) {
+                $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+            }
+            try {
+                $userTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+            } catch (Throwable $e) {
+                $userTimezone = new DateTimeZone('UTC');
+            }
+            try {
+                $dt = new DateTimeImmutable((string)$row['datetime_daftar'], new DateTimeZone('UTC'));
+                $datetime_daftar = $dt->setTimezone($userTimezone)->format('d/m/Y H:i T');
+            } catch (Throwable $e) {
+                $datetime_daftar = date('d/m/Y H:i T', strtotime((string)$row['datetime_daftar']));
+            }
         }
 
         // ==========================
@@ -241,17 +256,21 @@ if ($totalData > 0) {
         if (!empty($row['kode_poli'])) {
 
             $label_kode_poli = '
-                <a href="javascript:void(0);" class="text-primary modal_detail_poliklinik" data-id="'.$row['id_poliklinik'].'">
-                    <small class="text-primary">'.$row['kode_poli'].'</small>
-                </a>
+                <small>
+                    <a href="javascript:void(0);" class="text-muted modal_detail_poliklinik" data-id="'.$row['id_poliklinik'].'">
+                        '.$row['kode_poli'].'
+                    </a>
+                </small>
             ';
 
         } else {
 
             $label_kode_poli = '
-                <a href="javascript:void(0);" class="text-muted">
-                    <small class="text-muted">-</small>
-                </a>
+                <small class="text-muted">
+                    <a href="javascript:void(0);" class="text-muted">
+                        -
+                    </a>
+                </small>
             ';
         }
 
@@ -279,11 +298,11 @@ if ($totalData > 0) {
         // ==========================
         if ($row['pembayaran_metode'] == "UMUM") {
 
-            $label_pembayaran = '<small class="text-success">UMM</small>';
+            $label_pembayaran = '<span class="text-secondary">UMUM</span>';
 
         } else {
 
-            $label_pembayaran = '<small class="text-secondary">ASR</small>';
+            $label_pembayaran = '<span class="text-secondary">ASURANSI</span>';
         }
 
         // ==========================
@@ -334,6 +353,10 @@ if ($totalData > 0) {
             $label_status = '<span class="px-2 py-1 bg-warning-subtle text-warning rounded-2" title="Terdaftar">REG</span>';
         }
 
+        if ($row['status'] == "Dilayani") {
+            $label_status = '<span class="px-2 py-1 bg-info-subtle text-info rounded-2" title="Dilayani">PRO</span>';
+        }
+
         if ($row['status'] == "Selesai") {
             $label_status = '<span class="px-2 py-1 bg-success-subtle text-success rounded-2" title="Selesai">DON</span>';
         }
@@ -363,14 +386,18 @@ if ($totalData > 0) {
             <td align="center"><small>'.$no.'</small></td>
 
             <td>
-                <a href="javascript:void(0);" class="text-primary text-decoration-underline modal_detail" data-id="'.$id_kunjungan.'">
-                    <small>'.$row['nama_pasien'].'</small>
-                </a>
+                <small>
+                    <a href="javascript:void(0);" class="text-primary text-decoration-underline modal_detail" data-id="'.$id_kunjungan.'">
+                        '.$row['nama_pasien'].'
+                    </a>
+                </small>
             </td>
             <td>
-                <a href="javascript:void(0);" class="text-primary modal_detail_pasien" data-id="'.$id_pasien.'">
-                    <small>'.$id_pasien.'</small>
-                </a>
+                <small>
+                    <a href="javascript:void(0);" class="text-info modal_detail_pasien" data-id="'.$id_pasien.'">
+                        '.$id_pasien.'
+                    </a>
+                </small>
             </td>
 
             <td>
