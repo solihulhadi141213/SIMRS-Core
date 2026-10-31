@@ -81,7 +81,7 @@ try {
     // HAPUS FILE FOTO (JIKA ADA)
     // =========================
     if (!empty($foto)) {
-        $path = "../../assets/images/Dokter/" . $foto;
+        $path = "../../assets/img/Dokter/" . $foto;
 
         if (file_exists($path)) {
             unlink($path);

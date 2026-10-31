@@ -363,10 +363,10 @@ $(document).ready(function() {
                     // Reset form
                     form[0].reset();
 
-                    $('#kode').val(null).trigger('change');
-                    $('#id_ihs_practitioner').val(null).trigger('change');
-                    $('#kategori').val(null).trigger('change');
-                    $('#kategori_identitas').val(null).trigger('change');
+                    $("#kode").val(null).trigger("change");
+                    $("#kategori").val(null).trigger("change");
+                    $("#id_ihs_practitioner").val("");
+                    $("#kategori_identitas").val("");
 
                     // Kosongkan notifikasi
                     notifikasi.html('');
@@ -392,7 +392,7 @@ $(document).ready(function() {
                         filterForm[0].reset();
 
                         // reset page ke halaman pertama
-                        $('#page').val('1');
+                        $('#page_filter').val('1');
 
                         // reset field keyword dinamis
                         $('#FormFilter').html(`

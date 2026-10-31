@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Waktu pembuatan: 28 Okt 2026 pada 19.08
+-- Waktu pembuatan: 31 Okt 2026 pada 20.46
 -- Versi server: 8.4.7
 -- Versi PHP: 8.5.0
 
@@ -346,6 +346,7 @@ CREATE TABLE IF NOT EXISTS `api_token` (
 DROP TABLE IF EXISTS `body_site`;
 CREATE TABLE IF NOT EXISTS `body_site` (
   `id_body_site` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `body_site_category` enum('Kepala dan leher','Dada dan toraks','Abdomen dan panggul','Punggung dan tulang belakang','Ekstremitas atas','Ekstremitas bawah','Kulit dan permukaan tubuh','Organ internal dan struktur spesifik','Seluruh tubuh atau lokasi umum') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `body_site_nama` varchar(255) NOT NULL COMMENT 'Nama Body Site Dalam istilah Lokal',
   `body_site_display` varchar(255) DEFAULT NULL COMMENT 'Nama Body Site Berdasarkan standar referensi yang digunakan',
   `body_site_code` varchar(255) DEFAULT NULL COMMENT 'Kode Body Site Berdasarkan standar referensi yang digunakan',
@@ -417,21 +418,29 @@ CREATE TABLE IF NOT EXISTS `dokter` (
   `id_dokter` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_ihs_practitioner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'id IHS Satu sehat (Jika ada)',
   `kode` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Kode unik dokter, bisa untuk BPJS',
-  `nama` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `gender` enum('Laki-laki','Perempuan') NOT NULL,
-  `tanggal_lahir` date NOT NULL,
+  `nama` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Nama lengkap',
+  `gender` enum('Laki-laki','Perempuan') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Jenis kelamin',
+  `tanggal_lahir` date NOT NULL COMMENT 'Tanggal lahir dokter',
   `kategori` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Ex: Spesialis Penyakit Dalam',
   `kategori_identitas` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'KTP, KK, Passport dll',
   `no_identitas` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Nomor identitas yg dipilih',
-  `alamat` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `alamat` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT 'Informasi alamat dokter',
   `kontak` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'untuk kirim notifikasi',
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'untuk kirim notifikasi',
-  `SIP` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL,
-  `foto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `SIP` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Nomor surat SIP',
+  `status` tinyint(1) NOT NULL COMMENT '0: Inactive | 1: Active',
+  `foto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Nama file foto',
+  `creat_by_id` int UNSIGNED DEFAULT NULL COMMENT 'ID akses yang membuat',
+  `creat_by_name` varchar(255) NOT NULL COMMENT 'Nama akses yang membuat',
+  `creat_at` datetime NOT NULL COMMENT 'Tanggal dan waktu Input data',
+  `update_by_id` int UNSIGNED DEFAULT NULL COMMENT 'ID akses yang update',
+  `update_by_name` varchar(255) NOT NULL COMMENT 'Nama akses yang melakukan update',
+  `update_at` datetime NOT NULL COMMENT 'Tanggal dan waktu diperbaharui',
   PRIMARY KEY (`id_dokter`),
-  KEY `nama` (`nama`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `nama` (`nama`),
+  KEY `dokter_to_akses_1` (`creat_by_id`),
+  KEY `dokter_to_akses_2` (`update_by_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Menyimpan referensi data dokter tanpa terikat dengan data akses';
 
 -- --------------------------------------------------------
 
@@ -501,7 +510,10 @@ CREATE TABLE IF NOT EXISTS `imunisasi` (
   `dosis_ke` int UNSIGNED DEFAULT NULL COMMENT 'Urutan dosis, misal: 1, 2, booster',
   `nomor_batch` varchar(255) DEFAULT NULL COMMENT 'Nomor batch vaksin',
   `produsen_vaksin` varchar(255) DEFAULT NULL COMMENT 'Nama pabrik/produsen vaksin',
-  `lokasi_pemberian` varchar(255) DEFAULT NULL COMMENT 'Anatomi tubuh penyuntikan, misal: Deltoid muscle',
+  `body_site_nama` varchar(255) DEFAULT NULL COMMENT 'Nama lokal lokasi tubuh',
+  `body_site_display` varchar(255) DEFAULT NULL COMMENT 'Nama lokasi tubuh berdasarkan referensi',
+  `body_site_code` varchar(255) DEFAULT NULL COMMENT 'Kode lokasi tubuh sesuai referensi',
+  `body_site_system` varchar(255) DEFAULT NULL COMMENT 'System referensi yang digunakan',
   `id_praktisi` int UNSIGNED DEFAULT NULL COMMENT 'Dari tabel praktisi (pemberi vaksin)',
   `praktisi_ihs` varchar(255) DEFAULT NULL COMMENT 'ID Practitioner SatuSehat pemberi vaksin',
   `praktisi_nama` varchar(255) NOT NULL COMMENT 'Nama praktisi',
@@ -597,7 +609,7 @@ CREATE TABLE IF NOT EXISTS `kunjungan` (
   `kontak_darurat_nama` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Nama Pemilik Kontak Darurat',
   `kontak_darurat_hubungan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Hubungan Kontak Darurat Dengan pasien',
   `cara_keluar` enum('Atas Permintaan Sendiri','Atas Persetujuan Dokter','Dirujuk','Meninggal','Lain-lain') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `status` enum('Terdaftar','Selesai','Batal','Meninggal') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Status kunjungan',
+  `status` enum('Terdaftar','Dilayani','Selesai','Batal','Meninggal') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Status kunjungan',
   `petugas_id` int UNSIGNED DEFAULT NULL COMMENT 'ID Akses Petugas Dari tabel akses',
   `petugas_nama` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Nama petugas yang input pertama kali',
   `datetime_daftar` datetime NOT NULL,
@@ -1233,6 +1245,13 @@ ALTER TABLE `diagnosis`
   ADD CONSTRAINT `diagnosis_dokter` FOREIGN KEY (`dokter_id`) REFERENCES `dokter` (`id_dokter`) ON DELETE SET NULL,
   ADD CONSTRAINT `diagnosis_kunjungan` FOREIGN KEY (`id_kunjungan`) REFERENCES `kunjungan` (`id_kunjungan`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `diagnosis_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `dokter`
+--
+ALTER TABLE `dokter`
+  ADD CONSTRAINT `dokter_to_akses_1` FOREIGN KEY (`creat_by_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `dokter_to_akses_2` FOREIGN KEY (`update_by_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
 -- Ketidakleluasaan untuk tabel `general_consent`

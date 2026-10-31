@@ -39,6 +39,7 @@
                                 <option value="nama">Nama Dokter</option>
                                 <option value="kode">Kode Dokter</option>
                                 <option value="id_ihs_practitioner">ID Practitioner</option>
+                                <option value="kategori">Kategori/Spesialis</option>
                                 <option value="status">Status</option>
                             </select>
                         </div>
@@ -68,6 +69,7 @@
                                 <option value="nama">Nama Dokter</option>
                                 <option value="kode">Kode Dokter</option>
                                 <option value="id_ihs_practitioner">ID Practitioner</option>
+                                <option value="kategori">Kategori/Spesialis</option>
                                 <option value="status">Status</option>
                             </select>
                         </div>
@@ -313,7 +315,7 @@
         <div class="modal-content">
             <form action="javascript:void(0);" method="POST" id="ProsesHapusDokter" autocomplete="off">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-clock-history"></i> Hapus Dokter</h5>
+                    <h5 class="modal-title"><i class="bi bi-trash"></i> Hapus Dokter</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

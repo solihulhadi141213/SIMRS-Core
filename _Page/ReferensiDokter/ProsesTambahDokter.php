@@ -1,6 +1,7 @@
 <?php
+    // Header Dan Time zone
     header('Content-Type: application/json');
-    date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('UTC');
 
     include "../../_Config/Connection.php";
     include "../../_Config/SimrsFunction.php";
@@ -114,7 +115,6 @@
             // Validasi MIME TYPE (AMAN)
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mime  = finfo_file($finfo, $fileTmp);
-            finfo_close($finfo);
 
             $allowedMime = [
                 'image/jpeg' => 'jpg',
@@ -130,7 +130,7 @@
             $ext  = $allowedMime[$mime];
             $foto = bin2hex(random_bytes(16)) . '.' . $ext;
 
-            $uploadPath = "../../assets/images/Dokter/" . $foto;
+            $uploadPath = "../../assets/img/Dokter/" . $foto;
 
             if (!move_uploaded_file($fileTmp, $uploadPath)) {
                 exit(json_encode(['status'=>'error','message'=>'Gagal upload foto']));
@@ -140,7 +140,9 @@
         // =============================
         // INSERT DATA
         // =============================
-        $kategori_identitas ="KTP";
+        $kategori_identitas = "KTP";
+        $datetime_now = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+
         $stmt = mysqli_prepare($Conn, "
             INSERT INTO dokter (
                 id_ihs_practitioner,
@@ -156,8 +158,14 @@
                 email,
                 SIP,
                 status,
-                foto
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                foto,
+                creat_by_id,
+                creat_by_name,
+                creat_at,
+                update_by_id,
+                update_by_name,
+                update_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
 
         if (!$stmt) {
@@ -166,7 +174,7 @@
 
         mysqli_stmt_bind_param(
             $stmt,
-            "ssssssssssssis",
+            str_repeat('s', 20),
             $id_ihs_practitioner,
             $kode,
             $nama,
@@ -180,9 +188,14 @@
             $email,
             $SIP,
             $status,
-            $foto
+            $foto,
+            $SessionIdAkses,
+            $SessionNama,
+            $datetime_now,
+            $SessionIdAkses,
+            $SessionNama,
+            $datetime_now
         );
-
         if (!mysqli_stmt_execute($stmt)) {
             throw new Exception('Gagal menyimpan data dokter');
         }

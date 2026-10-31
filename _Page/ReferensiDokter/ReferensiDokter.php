@@ -27,7 +27,7 @@
                                 <div class="row">
                                     <div class="col-12 text-end icon-btn">
                                         <button type="button" class="btn btn-md btn-icon btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalFilter" title="Filter Data">
-                                            <i class="bi bi-filter"></i>
+                                            <i class="bi bi-search"></i>
                                         </button>
                                         <button type="button" class="btn btn-md btn-icon btn-primary" data-bs-toggle="modal" data-bs-target="#ModalTambahDokter" title="Tambah Dokter">
                                             <i class="bi bi-plus"></i>
@@ -37,15 +37,15 @@
                             </div>
                             <div class="card-body">
                                 <div class="table table-responsive">
-                                    <table class="table table-hover table-sm">
+                                    <table class="table table-hover">
                                         <thead>
                                             <tr>
                                                 <td align="center"><small><b>No</b></small></td>
                                                 <td align="left"><small><b>Dokter</b></small></td>
                                                 <td align="left"><small><b>Kode</b></small></td>
                                                 <td align="left"><small><b><i>ID Practitioner</i></b></small></td>
+                                                <td align="left"><small><b>Kategori</b></small></td>
                                                 <td align="left"><small><b>Jadwal</b></small></td>
-                                                <td align="left"><small><b>Pelayanan DPJP</b></small></td>
                                                 <td align="center"><small><b><i>Status</i></b></small></td>
                                                 <td align="center"><small><b>Opsi</b></small></td>
                                             </tr>

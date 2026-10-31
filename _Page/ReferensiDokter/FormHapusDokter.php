@@ -45,13 +45,13 @@
     $SIP                 = val($data['SIP'] ?? '');
 
     // Default foto
-    $foto = "assets/images/no-image.png";
+    $foto = "assets/img/No-Image.png";
 
     if (!empty($data['foto'])) {
-        $path = "../../assets/images/Dokter/" . $data['foto'];
+        $path = "../../assets/img/Dokter/" . $data['foto'];
 
         if (file_exists($path)) {
-            $foto = "assets/images/Dokter/" . htmlspecialchars($data['foto']);
+            $foto = "assets/img/Dokter/" . htmlspecialchars($data['foto']);
         }
     }
 
@@ -102,66 +102,17 @@
     </div>
 </div>
 <div class="row mb-2">
-    <div class="col-5"><small>Gender</small></div>
-    <div class="col-1 text-center"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?php echo $gender; ?></small>
-    </div>
-</div>
-<div class="row mb-2">
-    <div class="col-5"><small>Tanggal Lahir</small></div>
-    <div class="col-1 text-center"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?php echo $tgl_lahir; ?></small>
-    </div>
-</div>
-<div class="row mb-2">
-    <div class="col-5"><small>Kategori</small></div>
+    <div class="col-5"><small>Kategori/Spesialis</small></div>
     <div class="col-1 text-center"><small>:</small></div>
     <div class="col-6">
         <small class="text text-muted"><?php echo $kategori; ?></small>
     </div>
 </div>
 <div class="row mb-2">
-    <div class="col-5"><small>Kategori Identitas</small></div>
+    <div class="col-5"><small>Gender</small></div>
     <div class="col-1 text-center"><small>:</small></div>
     <div class="col-6">
-        <small class="text text-muted"><?php echo $kategori_identitas; ?></small>
-    </div>
-</div>
-<div class="row mb-2">
-    <div class="col-5"><small>Nomor Identitas</small></div>
-    <div class="col-1 text-center"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?php echo $no_identitas; ?></small>
-    </div>
-</div>
-<div class="row mb-2">
-    <div class="col-5"><small>Alamat</small></div>
-    <div class="col-1 text-center"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?php echo $alamat; ?></small>
-    </div>
-</div>
-<div class="row mb-2">
-    <div class="col-5"><small>Nomor Kontak</small></div>
-    <div class="col-1 text-center"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?php echo $kontak; ?></small>
-    </div>
-</div>
-<div class="row mb-2">
-    <div class="col-5"><small>Alamat Email</small></div>
-    <div class="col-1 text-center"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?php echo $email; ?></small>
-    </div>
-</div>
-<div class="row mb-2">
-    <div class="col-5"><small>SIP</small></div>
-    <div class="col-1 text-center"><small>:</small></div>
-    <div class="col-6">
-        <small class="text text-muted"><?php echo $SIP; ?></small>
+        <small class="text text-muted"><?php echo $gender; ?></small>
     </div>
 </div>
 

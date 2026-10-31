@@ -27,9 +27,9 @@ function val($v){
 }
 
 // foto
-$foto = "assets/images/no-image.png";
-if (!empty($d['foto']) && file_exists("../../assets/images/Dokter/".$d['foto'])) {
-    $foto = "assets/images/Dokter/".$d['foto'];
+$foto = "assets/img/No-Image.png";
+if (!empty($d['foto']) && file_exists("../../assets/img/Dokter/".$d['foto'])) {
+    $foto = "assets/img/Dokter/".$d['foto'];
 }
 ?>
 

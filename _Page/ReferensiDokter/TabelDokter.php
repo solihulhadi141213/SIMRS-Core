@@ -8,7 +8,7 @@
     if (empty($SessionIdAkses)) {
         echo '
             <tr data-page-count="0" data-current-page="0">
-                <td align="center" colspan="7">
+                <td align="center" colspan="8">
                     <small class="text-danger">Sesi akses berakhir! Silakan login ulang!</small>
                 </td>
             </tr>
@@ -27,9 +27,9 @@
     $page  = max(1, $page);
     $posisi = ($page - 1) * $batas;
 
-    $allowed_order = ['id_dokter', 'nama', 'kode', 'id_ihs_practitioner', 'status'];
+    $allowed_order = ['id_dokter', 'nama', 'kode', 'id_ihs_practitioner', 'kategori', 'status'];
     $allowed_sort = ['ASC', 'DESC'];
-    $allowed_search = ['nama', 'kode', 'id_ihs_practitioner', 'status'];
+    $allowed_search = ['nama', 'kode', 'id_ihs_practitioner', 'kategori', 'status'];
 
     $OrderBy = in_array($OrderBy, $allowed_order) ? $OrderBy : 'id_dokter';
     $ShortBy = in_array($ShortBy, $allowed_sort) ? $ShortBy : 'DESC';
@@ -91,7 +91,7 @@
     if (!$stmt_count) {
         echo '
             <tr data-page-count="0" data-current-page="0">
-                <td align="center" colspan="7">
+                <td align="center" colspan="8">
                     <small class="text-danger">Gagal menyiapkan query hitung data.</small>
                 </td>
             </tr>
@@ -112,7 +112,7 @@
     if ($jml_data === 0) {
         echo '
             <tr data-page-count="0" data-current-page="0">
-                <td align="center" colspan="7">
+                <td align="center" colspan="8">
                     <small class="text-danger">Data dokter tidak ditemukan</small>
                 </td>
             </tr>
@@ -150,7 +150,7 @@
     if (!$stmt) {
         echo '
             <tr data-page-count="0" data-current-page="0">
-                <td align="center" colspan="7">
+                <td align="center" colspan="8">
                     <small class="text-danger">Gagal menyiapkan query data.</small>
                 </td>
             </tr>
@@ -172,23 +172,24 @@
     $result = mysqli_stmt_get_result($stmt);
 
     while ($data = mysqli_fetch_assoc($result)) {
-        $id_dokter = (int) $data['id_dokter'];
-        $nama = htmlspecialchars($data['nama'] ?? '');
-        $kode = htmlspecialchars($data['kode'] ?? '-');
+        $id_dokter           = (int) $data['id_dokter'];
+        $nama                = htmlspecialchars($data['nama'] ?? '');
+        $kode                = htmlspecialchars($data['kode'] ?? '-');
         $id_ihs_practitioner = htmlspecialchars($data['id_ihs_practitioner'] ?? '-');
-        $jumlah_jadwal = (int) ($data['jumlah_jadwal'] ?? 0);
-        $status = (int) ($data['status'] ?? 0);
+        $jumlah_jadwal       = (int) ($data['jumlah_jadwal'] ?? 0);
+        $status              = (int) ($data['status'] ?? 0);
 
+        // Routing Satatus
         if ($status === 1) {
             $label_status = '
                 <span class="px-2 py-1 bg-success-subtle text-success rounded-1" title="Active">
-                    <i class="bi bi-check"></i>
+                    <i class="bi bi-check"></i> Active
                 </span>
             ';
         } else {
             $label_status = '
                 <span class="px-2 py-1 bg-danger-subtle text-danger rounded-1" title="No Active">
-                    <i class="bi bi-x-circle"></i>
+                    <i class="bi bi-x-circle"></i> Inactive
                 </span>
             ';
         }
@@ -196,12 +197,26 @@
         // Routing ID Practitioner
         if(empty($data['id_ihs_practitioner'])){
             $label_practitioner = '
-                <small class="py-1 px-2 bg-secondary-subtle rounded-1"><small>None</small></small>
+                <span class="text-secondary">None</span>
             ';
         }else{
             $label_practitioner = '
-                <a href="javascript:void(0);" class="py-1 px-2 bg-info-subtle rounded-1 modal_detail_ihs" data-id="' . $id_ihs_practitioner . '">
-                    <small>' . $id_ihs_practitioner . '</small>
+                <a href="javascript:void(0);" class="text-info modal_detail_ihs" data-id="' . $id_ihs_practitioner . '">
+                    ' . $id_ihs_practitioner . '
+                </a>
+            ';
+        }
+
+        // Routing kategori
+        if(empty($data['kategori'])){
+            $kategori = '
+                <span class="text-secondary">None</span>
+            ';
+        }else{
+            $kategori           = htmlspecialchars($data['kategori']);
+            $kategori = '
+                <a href="javascript:void(0);" class="text-dark">
+                    ' . $kategori . '
                 </a>
             ';
         }
@@ -209,19 +224,17 @@
         // Routing Jadwal
         if(empty($jumlah_jadwal)){
             $label_jadwal = '
-                <a href="javascript:void(0);" class="py-1 px-2 bg-secondary-subtle modal_jadwal" data-id="' . $id_dokter . '">
-                    <small>None</small>
+                <a href="javascript:void(0);" class="text-secondary modal_jadwal" data-id="' . $id_dokter . '">
+                    None
                 </a>
             ';
         }else{
             $label_jadwal = '
-                <a href="javascript:void(0);" class="py-1 px-2 bg-success-subtle modal_jadwal" data-id="' . $id_dokter . '">
-                    <small>'.$jumlah_jadwal.' Sesi</small>
+                <a href="javascript:void(0);" class="text-info modal_jadwal" data-id="' . $id_dokter . '">
+                    '.$jumlah_jadwal.' Sesi
                 </a>
             ';
         }
-        // Menghitung Jumlah Layanan DPJP
-        $jumlah_layanan_dpjp =  mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan WHERE id_dokter='$id_dokter'"));
 
         echo '
             <tr data-page-count="' . $JmlHalaman . '" data-current-page="' . $page . '">
@@ -239,10 +252,8 @@
                     <small class="text-muted">' . $kode . '</small>
                 </td>
                 <td>' . $label_practitioner . '</td>
+                <td>' . $kategori . '</td>
                 <td>' . $label_jadwal . '</td>
-                <td>
-                    <small class="text-muted">' . $jumlah_layanan_dpjp . '</small>
-                </td>
                 <td class="text-center">
                     <small>' . $label_status . '</small>
                 </td>
@@ -276,3 +287,4 @@
 
     mysqli_stmt_close($stmt);
 ?>
+

@@ -148,7 +148,6 @@ try {
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mime  = finfo_file($finfo, $fileTmp);
-        finfo_close($finfo);
 
         $allowed = [
             'image/jpeg'=>'jpg',
@@ -163,7 +162,7 @@ try {
         $ext  = $allowed[$mime];
         $foto = bin2hex(random_bytes(16)) . '.' . $ext;
 
-        $path = "../../assets/images/Dokter/" . $foto;
+        $path = "../../assets/img/Dokter/" . $foto;
 
         if (!move_uploaded_file($fileTmp, $path)) {
             exit(json_encode(['status'=>'error','message'=>'Upload gagal']));
@@ -171,7 +170,7 @@ try {
 
         // hapus foto lama
         if (!empty($oldFoto)) {
-            $oldPath = "../../assets/images/Dokter/" . $oldFoto;
+            $oldPath = "../../assets/img/Dokter/" . $oldFoto;
             if (file_exists($oldPath)) {
                 unlink($oldPath);
             }
