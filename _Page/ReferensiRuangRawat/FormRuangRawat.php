@@ -1,6 +1,6 @@
 <?php
     // Zona Waktu
-    date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('UTC');
 
     // Koneksi Function dan Session
     include "../../_Config/Connection.php";
@@ -148,7 +148,24 @@
         ? '<span class="px-2 py-2 bg-success-subtle rounded-1" title="Active"><i class="bi bi-check"></i> Active</span>'
         : '<span class="px-2 py-2 bg-secondary-subtle rounded-1" title="No Active"><i class="bi bi-check"></i> No Active</span>';
 
-    $updatetime_format = date('d/m/Y H:i', strtotime($updatetime));
+    $updatetime_format = '-';
+    if (!empty($updatetime)) {
+        $timezoneName = trim((string)($SessionUserTimezone ?? ''));
+        if (preg_match('/^UTC([+-])(\d{2}):(\d{2})$/', $timezoneName, $timezoneOffset)) {
+            $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+        }
+        try {
+            $userTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+        } catch (Throwable $e) {
+            $userTimezone = new DateTimeZone('UTC');
+        }
+        try {
+            $dt = new DateTimeImmutable((string)$updatetime, new DateTimeZone('UTC'));
+            $updatetime_format = $dt->setTimezone($userTimezone)->format('d/m/Y H:i T');
+        } catch (Throwable $e) {
+            $updatetime_format = date('d/m/Y H:i', strtotime((string)$updatetime));
+        }
+    }
 ?>
 <!-- Tampilkan detail kelas -->
 <div class="row mb-2">
@@ -242,7 +259,24 @@
                             $ruang_rawat      = htmlspecialchars($ruang['ruang_rawat']);
                             $status_ruangan   = $ruang['status'];
                             $updatetime_ruang = $ruang['updatetime'];
-                            $updatetime_format_ruang = date('d/m/Y H:i:s', strtotime($updatetime_ruang));
+                            $updatetime_format_ruang = '-';
+    if (!empty($updatetime_ruang)) {
+        $timezoneName = trim((string)($SessionUserTimezone ?? ''));
+        if (preg_match('/^UTC([+-])(\d{2}):(\d{2})$/', $timezoneName, $timezoneOffset)) {
+            $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+        }
+        try {
+            $userTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+        } catch (Throwable $e) {
+            $userTimezone = new DateTimeZone('UTC');
+        }
+        try {
+            $dt = new DateTimeImmutable((string)$updatetime_ruang, new DateTimeZone('UTC'));
+            $updatetime_format_ruang = $dt->setTimezone($userTimezone)->format('d/m/Y H:i:s T');
+        } catch (Throwable $e) {
+            $updatetime_format_ruang = date('d/m/Y H:i:s', strtotime((string)$updatetime_ruang));
+        }
+    }
 
                             // Ambil data TT dari hasil agregat
                             $jml_pria   = $tt_counts[$id_ruang_rawat]['pria'] ?? 0;

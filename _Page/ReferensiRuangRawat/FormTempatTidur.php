@@ -1,6 +1,6 @@
 <?php
     // Zona Waktu
-    date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('UTC');
 
     // Koneksi Function dan Session
     include "../../_Config/Connection.php";
@@ -72,7 +72,24 @@
             ? '<span class="px-2 py-2 bg-success-subtle rounded-1" title="Active"><i  class="bi bi-check"></i> Active</span>'
             : '<span class="px-2 py-2 bg-secondary-subtle rounded-1" title="No Active"><i  class="bi bi-check"></i> No Active</span>';
 
-    $updatetime_format = date('d/m/Y H:i', strtotime($updatetime));
+    $updatetime_format = '-';
+    if (!empty($updatetime)) {
+        $timezoneName = trim((string)($SessionUserTimezone ?? ''));
+        if (preg_match('/^UTC([+-])(\d{2}):(\d{2})$/', $timezoneName, $timezoneOffset)) {
+            $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+        }
+        try {
+            $userTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+        } catch (Throwable $e) {
+            $userTimezone = new DateTimeZone('UTC');
+        }
+        try {
+            $dt = new DateTimeImmutable((string)$updatetime, new DateTimeZone('UTC'));
+            $updatetime_format = $dt->setTimezone($userTimezone)->format('d/m/Y H:i T');
+        } catch (Throwable $e) {
+            $updatetime_format = date('d/m/Y H:i', strtotime((string)$updatetime));
+        }
+    }
     $stmt->close();
 
     // Buka Kelas Dan Kode Kelas
@@ -176,7 +193,24 @@
                             $updatetime     = $data['updatetime'];
 
                             // Format Updatetime
-                            $updatetime_format     = date('d/m/Y H:i:s', strtotime($data['updatetime']));
+                            $updatetime_format = '-';
+                            if (!empty($data['updatetime'])) {
+                                $timezoneName = trim((string)($SessionUserTimezone ?? ''));
+                                if (preg_match('/^UTC([+-])(\d{2}):(\d{2})$/', $timezoneName, $timezoneOffset)) {
+                                    $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+                                }
+                                try {
+                                    $userTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+                                } catch (Throwable $e) {
+                                    $userTimezone = new DateTimeZone('UTC');
+                                }
+                                try {
+                                    $dt = new DateTimeImmutable((string)$data['updatetime'], new DateTimeZone('UTC'));
+                                    $updatetime_format = $dt->setTimezone($userTimezone)->format('d/m/Y H:i:s T');
+                                } catch (Throwable $e) {
+                                    $updatetime_format = date('d/m/Y H:i:s', strtotime((string)$data['updatetime']));
+                                }
+                            }
                             
                             // Routing Label Ruangan
                             $label_status_tt = ($status_tt == 1)

@@ -156,57 +156,59 @@ $(document).ready(function() {
     // TAMBAH KELAS
     // ==============================================================
     $('#ModalTambahKelas').on('shown.bs.modal', function () {
-        // Auto Fokus Ke kode_kelas
-        $('#kode_kelas').focus();
 
-        // Select2 Kode kelas
-        $('#kode_kelas').select2({
-            dropdownParent    : $('#ModalTambahKelas'),          // ✅ sesuai modal
-            theme             : 'bootstrap-5',
-            placeholder       : 'Pilih atau ketik kode kelas',
-            allowClear        : true,
-            tags              : true,
-            minimumInputLength: 0,
+        if (!$('#kode_kelas').hasClass('select2-hidden-accessible')) {
 
-            ajax: {
-                url: '_Page/ReferensiRuangRawat/GetKelasBpjs.php',
-                type: 'POST',
-                dataType: 'json',
-                delay: 250,
+            $('#kode_kelas').select2({
+                dropdownParent: $('#ModalTambahKelas'),
+                theme: 'bootstrap-5',
+                placeholder: 'Pilih atau ketik kode kelas',
+                allowClear: true,
+                tags: true,
+                width: '100%',
 
-                data: function (params) {
-                    return {
-                        search: params.term || '',
-                        page: params.page || 1
-                    };
-                },
+                ajax: {
+                    url: '_Page/ReferensiRuangRawat/GetKelasBpjs.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    delay: 250,
 
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
+                    data: function (params) {
+                        return {
+                            search: params.term || '',
+                            page: params.page || 1
+                        };
+                    },
 
-                    return {
-                        results: data.results,
-                        pagination: {
-                            more: data.pagination.more
+                    processResults: function (data, params) {
+
+                        let results = data.results || [];
+                        let keyword = (params.term || '').trim();
+
+                        // Tambahkan opsi manual jika pengguna mengetik
+                        if (keyword !== '') {
+                            results.unshift({
+                                id: keyword,
+                                text: keyword + ' (Manual)',
+                                newTag: true
+                            });
                         }
-                    };
-                },
 
-                cache: true
-            },
+                        return {
+                            results: results,
+                            pagination: {
+                                more: data.pagination?.more || false
+                            }
+                        };
+                    },
 
-            createTag: function (params) {
-                let term = $.trim(params.term);
+                    cache: true
+                }
+            });
+        }
 
-                if (term === '') return null;
-
-                return {
-                    id: term,
-                    text: term + ' (Manual)',
-                    newTag: true
-                };
-            }
-        });
+        // Fokus setelah Select2 selesai ditampilkan
+        $('#kode_kelas').select2('open');
     });
 
     // Submit Tambah Kelas

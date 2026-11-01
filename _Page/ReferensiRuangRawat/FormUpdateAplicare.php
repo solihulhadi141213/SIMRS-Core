@@ -1,6 +1,6 @@
 <?php
      // Zona Waktu
-    date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('UTC');
 
     // Koneksi, Function dan Session
     include "../../_Config/Connection.php";
@@ -66,14 +66,16 @@
         // Ketersediaan TT Untuk Pria
         $kapasitas_pria = 0;
         $tersedia_pria  = 0;
-        $query_tt_pria = mysqli_query($Conn, "SELECT id_tempat_tidur FROM rr_tempat_tidur WHERE id_ruang_rawat='$id_ruang_rawat' AND pria=1 AND status=1");
+        $query_tt_pria = mysqli_query($Conn, "SELECT id_tempat_tidur, tempat_tidur FROM rr_tempat_tidur WHERE id_ruang_rawat='$id_ruang_rawat' AND pria=1 AND status=1");
         while ($data_tt_pria = mysqli_fetch_array($query_tt_pria)) {
             if(!empty($data_tt_pria['id_tempat_tidur'])){
                 $kapasitas_pria  = $kapasitas_pria + 1;
                 $id_tempat_tidur = $data_tt_pria['id_tempat_tidur'];
+                $tempat_tidur_name = mysqli_real_escape_string($Conn, (string)$data_tt_pria['tempat_tidur']);
+                $ruang_rawat_name = mysqli_real_escape_string($Conn, (string)$ruang['ruang_rawat']);
 
                 // Cek Ada pasien Tidak
-                $pasien_pria     = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama WHERE id_kasur='$id_tempat_tidur' AND status='Pending'"));
+                $pasien_pria     = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan WHERE tempat_tidur='$tempat_tidur_name' AND ruang_rawat='$ruang_rawat_name' AND status IN ('Terdaftar','Dilayani')"));
                 if(empty($pasien_pria)){
                     $tersedia_pria = $tersedia_pria + 1;
                 }else{
@@ -85,14 +87,16 @@
         // Ketersediaan TT Untuk Wanita
         $kapasitas_wanita = 0;
         $tersedia_wanita  = 0;
-        $query_tt_wanita = mysqli_query($Conn, "SELECT id_tempat_tidur FROM rr_tempat_tidur WHERE id_ruang_rawat='$id_ruang_rawat' AND wanita=1 AND status=1");
+        $query_tt_wanita = mysqli_query($Conn, "SELECT id_tempat_tidur, tempat_tidur FROM rr_tempat_tidur WHERE id_ruang_rawat='$id_ruang_rawat' AND wanita=1 AND status=1");
         while ($data_tt_wanita = mysqli_fetch_array($query_tt_wanita)) {
             if(!empty($data_tt_wanita['id_tempat_tidur'])){
                 $kapasitas_wanita  = $kapasitas_wanita + 1;
                 $id_tempat_tidur = $data_tt_wanita['id_tempat_tidur'];
+                $tempat_tidur_name = mysqli_real_escape_string($Conn, (string)$data_tt_wanita['tempat_tidur']);
+                $ruang_rawat_name = mysqli_real_escape_string($Conn, (string)$ruang['ruang_rawat']);
 
                 // Cek Ada pasien Tidak
-                $pasien_wanita     = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama WHERE id_kasur='$id_tempat_tidur' AND status='Pending'"));
+                $pasien_wanita     = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan WHERE tempat_tidur='$tempat_tidur_name' AND ruang_rawat='$ruang_rawat_name' AND status IN ('Terdaftar','Dilayani')"));
                 if(empty($pasien_wanita)){
                     $tersedia_wanita = $tersedia_wanita + 1;
                 }else{
@@ -104,14 +108,16 @@
         // Ketersediaan TT Untuk Bebas
         $kapasitas_bebas = 0;
         $tersedia_bebas  = 0;
-        $query_tt_bebas = mysqli_query($Conn, "SELECT id_tempat_tidur FROM rr_tempat_tidur WHERE id_ruang_rawat='$id_ruang_rawat' AND bebas=1 AND status=1");
+        $query_tt_bebas = mysqli_query($Conn, "SELECT id_tempat_tidur, tempat_tidur FROM rr_tempat_tidur WHERE id_ruang_rawat='$id_ruang_rawat' AND bebas=1 AND status=1");
         while ($data_tt_bebas = mysqli_fetch_array($query_tt_bebas)) {
             if(!empty($data_tt_bebas['id_tempat_tidur'])){
                 $kapasitas_bebas  = $kapasitas_bebas + 1;
                 $id_tempat_tidur = $data_tt_bebas['id_tempat_tidur'];
+                $tempat_tidur_name = mysqli_real_escape_string($Conn, (string)$data_tt_bebas['tempat_tidur']);
+                $ruang_rawat_name = mysqli_real_escape_string($Conn, (string)$ruang['ruang_rawat']);
 
                 // Cek Ada pasien Tidak
-                $pasien_bebas     = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan_utama WHERE id_kasur='$id_tempat_tidur' AND status='Pending'"));
+                $pasien_bebas     = mysqli_num_rows(mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan WHERE tempat_tidur='$tempat_tidur_name' AND ruang_rawat='$ruang_rawat_name' AND status IN ('Terdaftar','Dilayani')"));
                 if(empty($pasien_bebas)){
                     $tersedia_bebas = $tersedia_bebas + 1;
                 }else{

@@ -1,6 +1,6 @@
 <?php
     // ================= ZONA WAKTU
-    date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('UTC');
 
     // ================= KONEKSI & SESSION
     include "../../_Config/Connection.php";

@@ -1,7 +1,7 @@
 <?php
     header('Content-Type: application/json');
 
-    date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('UTC');
 
     include "../../_Config/Connection.php";
     include "../../_Config/SimrsFunction.php";

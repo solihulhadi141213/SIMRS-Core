@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set('Asia/Jakarta');
+date_default_timezone_set('UTC');
 
 include "../../_Config/Connection.php";
 include "../../_Config/SimrsFunction.php";
@@ -157,3 +157,4 @@ echo json_encode([
     'html'=>$html,
     'total'=>$total
 ]);
+
