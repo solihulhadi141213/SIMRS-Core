@@ -3,7 +3,7 @@
         'Dashboard'             => '_Page/Dashboard/Dashboard.php',
         'Profile'               => '_Page/ProfileUser/ProfileUser.php',
         'Setting'               => '_Page/Setting/Setting.php',
-        'ApiKey'                => '_Page/ApiKey/ApiKey.php',
+        'Log'             => '_Page/Log/Log.php',
         'EmailGateway'          => '_Page/EmailGateway/EmailGateway.php',
         'GoogleCredential'      => '_Page/GoogleCredential/GoogleCredential.php',
         'AksesFitur'            => '_Page/AksesFitur/AksesFitur.php',
@@ -49,6 +49,7 @@
     // 'NamaHalaman' => ['NamaFitur', 'NamaHalamanFitur', 'NamaSubFitur']
     $breadcrumbRoutes = [
         'Setting'               => ['Pengaturan', 'Setting', null],
+        'Log'                   => ['Dashboard', 'Log', null],
         'ApiKey'                => ['Pengaturan', 'Setting', 'API Key'],
         'EmailGateway'          => ['Pengaturan', 'Setting', 'Email Gateway'],
         'GoogleCredential'      => ['Pengaturan', 'Setting', 'Google Credential'],

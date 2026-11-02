@@ -125,7 +125,7 @@
 
     // Rename file
     $NamaFileBaru = uniqid('foto_', true) . '.' . $ext;
-    $path = "../../assets/images/PengajuanAkses/" . $NamaFileBaru;
+    $path = "../../assets/img/PengajuanAkses/" . $NamaFileBaru;
 
     // Cek duplikat
     $stmt = $Conn->prepare("SELECT 1 FROM akses_pengajuan WHERE email=? OR nik=?");
@@ -160,6 +160,16 @@
     );
 
     if ($stmt->execute()) {
+        // Simpan log aktivitas pengajuan akses
+        // Note: id_akses adalah null karena pengguna belum login (ini permintaan baru akses)
+        SaveLog(
+            $Conn,
+            null,
+            $nama ?? 'User',
+            'Pengajuan Akses Baru',
+            'PengajuanAkses',
+            []
+        );
         respond('success', 'Berhasil dikirim.');
     }
 

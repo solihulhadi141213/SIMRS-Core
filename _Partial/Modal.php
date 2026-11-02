@@ -17,6 +17,7 @@
         'GoogleCredential'      => '_Page/GoogleCredential/ModalGoogleCredential.php',
         'AksesFitur'            => '_Page/AksesFitur/ModalAksesFitur.php',
         'AksesEntitas'          => '_Page/AksesEntitas/ModalAksesEntitas.php',
+        'Log'                 => '_Page/Log/ModalLog.php',
         'Akses'                 => '_Page/Akses/ModalAkses.php',
         'AksesPengajuan'        => '_Page/AksesPengajuan/ModalAksesPengajuan.php',
         'SettingSatuSehat'      => '_Page/SettingSatuSehat/ModalSettingSatuSehat.php',

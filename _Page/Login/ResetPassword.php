@@ -258,6 +258,16 @@
 
     $kirim_email = SendEmail($Conn, $id_setting_email_gateway, $subjek, $email, $nama_tujuan, $pesan);
 
+    // Simpan log aktivitas reset password
+    SaveLog(
+        $Conn,
+        (int) $id_akses,
+        $nama_tujuan,
+        'Reset Password Successfully',
+        'ResetPassword',
+        []
+    );
+
     // Hapus Token
     $stmtDelete = $Conn->prepare("DELETE FROM akses_reset WHERE id_akses = ?");
     $stmtDelete->bind_param("i", $id_akses);

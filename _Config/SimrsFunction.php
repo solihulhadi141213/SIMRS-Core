@@ -215,52 +215,6 @@
         return $input;
     }
     
-    //Fungsi Untuk Menyimpan Log
-    function getSaveLog($Conn,$waktu,$nama,$nama_log,$kategori,$id_akses,$JsonUrl){
-        date_default_timezone_set('Asia/Jakarta');
-        $strtotime=strtotime($waktu);
-        $Tanggal=date('Y-m-d H:i:s',$strtotime);
-        $EntryLog="INSERT INTO log (
-            waktu,
-            nama,
-            nama_log,
-            kategori,
-            id_akses
-        )VALUES (
-            '$Tanggal',
-            '$nama',
-            '$nama_log',
-            '$kategori',
-            '$id_akses'
-        )";
-        $SaveLog=mysqli_query($Conn, $EntryLog);
-        if($SaveLog){
-            $metadata= array();
-            for ( $i=0; $i<=23; $i++ ){
-                if($i==0){
-                    $Time ="00";
-                    $Jam="00:00";
-                }else{
-                    $Time = str_pad($i, 2, '0', STR_PAD_LEFT);
-                    $Jam = "$Time:00";
-                }
-                $KeywordTanggal="$Tanggal $Time";
-                //Jumlah Aktivitas
-                $JumlahAktivitas = mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM log WHERE waktu like '%$KeywordTanggal%'"));
-                $h['x'] = $Jam;
-                $h['y'] = $JumlahAktivitas;
-                array_push($metadata, $h);
-            }
-            $JsonData = json_encode($metadata);
-            file_put_contents($JsonUrl, $JsonData);
-            $Response="Berhasil";
-        }else{
-            $Response="Terjadi Kesalahan Saat Menyimpan Log";
-        }
-        return $Response;
-    }
-
-    
     function formatSizeUnits($bytes){
         if ($bytes >= 1073741824)
         {
@@ -2677,7 +2631,7 @@
     // =========================================================
     // FUNGSI MENYIMPAN LOG (STRUKTUR TABEL log)
     // =========================================================
-    function SaveLog($Conn, $id_akses, $nama_petugas, $title_log, $metadata = []) {
+    function SaveLog($Conn, $id_akses, $nama_petugas, $title_log, $category_log, $metadata = []) {
         $datetime_log = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
 
         $metadataJson = null;
@@ -2690,8 +2644,8 @@
 
         $stmt = mysqli_prepare(
             $Conn,
-            "INSERT INTO log (id_akses, datetime_log, nama_petugas, title_log, metadata_log)
-             VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO log (id_akses, datetime_log, nama_petugas, title_log, category_log, metadata_log)
+             VALUES (?, ?, ?, ?, ?, ?)"
         );
 
         if (!$stmt) {
@@ -2700,11 +2654,12 @@
 
         mysqli_stmt_bind_param(
             $stmt,
-            "issss",
+            "isssss",
             $id_akses,
             $datetime_log,
             $nama_petugas,
             $title_log,
+            $category_log,
             $metadataJson
         );
 

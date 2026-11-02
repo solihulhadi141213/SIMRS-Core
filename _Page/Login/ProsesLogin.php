@@ -222,6 +222,16 @@
     setcookie("id_akses", $id_akses, $cookieOptions);
     setcookie("login_token", $token, $cookieOptions);
 
+    // Simpan log aktivitas login berhasil
+    SaveLog(
+        $Conn,
+        (int) $id_akses,
+        $DataAkses['nama'] ?? 'User',
+        'Login Berhasil',
+        'Login',
+        []
+    );
+
     $_SESSION['NotifikasiSwal'] = "Login Berhasil";
 
     echo json_encode([
