@@ -207,6 +207,16 @@
         exit;
     }
 
+    // Simpan Log
+    $category_log = 'Pasien';
+    $title_log    = 'Edit Pasien';
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+        "id_pasien" => $id_pasien,
+        "nama"      => $nama,
+        "nik"       => $nik,
+        "no_bpjs"   => $no_bpjs
+    ]);
+
     // Success
     $response = [
         "status"  => "success",

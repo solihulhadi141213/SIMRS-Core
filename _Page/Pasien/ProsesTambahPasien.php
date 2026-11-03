@@ -403,7 +403,21 @@
         exit;
     }
 
+    $id_pasien_log = ($id_pasien_manual == 1) ? $id_pasien : mysqli_insert_id($Conn);
+
     mysqli_stmt_close($stmt);
+
+    // =====================================================
+    // SIMPAN LOG
+    // =====================================================
+    $category_log = 'Pasien';
+    $title_log    = 'Tambah Pasien';
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+        "id_pasien" => $id_pasien_log,
+        "nama"      => $nama,
+        "nik"       => $nik,
+        "no_bpjs"   => $no_bpjs
+    ]);
 
     // =========================================================
     // SUCCESS RESPONSE

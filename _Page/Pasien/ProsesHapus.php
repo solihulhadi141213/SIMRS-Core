@@ -117,36 +117,10 @@
         // =====================================================
         // SIMPAN LOG
         // =====================================================
-        $title_log   = "Hapus Data Pasien {$id_pasien}";
-        $datetime_log = date('Y-m-d H:i:s');
+        $category_log = 'Pasien';
+        $title_log    = "Hapus Data Pasien {$id_pasien}";
 
-        $query_log = "
-            INSERT INTO log (
-                id_akses,
-                datetime_log,
-                nama_petugas,
-                title_log,
-                metadata_log
-            ) VALUES (?, ?, ?, ?, ?)
-        ";
-
-        $stmt_log = mysqli_prepare($Conn, $query_log);
-
-        if (!$stmt_log) {
-            throw new Exception('Gagal mempersiapkan query log.');
-        }
-
-        mysqli_stmt_bind_param(
-            $stmt_log,
-            "issss",
-            $SessionIdAkses,
-            $datetime_log,
-            $SessionNama,
-            $title_log,
-            $metadata_log
-        );
-
-        if (!mysqli_stmt_execute($stmt_log)) {
+        if (!SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $data_pasien)) {
             throw new Exception('Gagal menyimpan log penghapusan.');
         }
 
@@ -207,9 +181,6 @@
         mysqli_stmt_close($stmt_pasien);
     }
 
-    if (!empty($stmt_log)) {
-        mysqli_stmt_close($stmt_log);
-    }
 
     if (!empty($stmt_delete)) {
         mysqli_stmt_close($stmt_delete);

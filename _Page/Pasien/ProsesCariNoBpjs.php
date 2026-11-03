@@ -121,6 +121,15 @@
         "raw"          => "$decompressed",
     ];
 
+    // Simpan Log
+    $category_log = 'Pasien';
+    $title_log    = 'Cari Pasien No BPJS';
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+        "no_bpjs" => $no_bpjs,
+        "nama"    => $nama,
+        "nik"     => $nik_bpjs
+    ]);
+
     // Response Success
     echo json_encode([
         "status"   => "Success",

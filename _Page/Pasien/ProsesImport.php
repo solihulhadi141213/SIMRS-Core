@@ -479,6 +479,18 @@
     // =========================================================
     // RESPONSE
     // =========================================================
+    // =========================================================
+    // SIMPAN LOG
+    // =========================================================
+    $category_log = 'Pasien';
+    $title_log    = 'Import Data Pasien';
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+        'file_name' => $fileName,
+        'inserted'  => $inserted,
+        'updated'   => $updated,
+        'failed'    => $failed
+    ]);
+
     sendResponse([
         'status'  => 'success',
         'message' => "

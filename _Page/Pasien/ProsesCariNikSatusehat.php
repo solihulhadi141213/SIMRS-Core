@@ -153,6 +153,15 @@
         "nik"  => $nik_pasien,
     ];
 
+    // Simpan Log
+    $category_log = 'Pasien';
+    $title_log    = 'Cari Pasien NIK SatuSehat';
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+        "nik"  => $nik,
+        "id"   => $id,
+        "name" => $name
+    ]);
+
     // Response Success
     echo json_encode([
         "status"   => "Success",

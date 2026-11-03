@@ -243,6 +243,17 @@
     ];
 
     // =====================================================
+    // SIMPAN LOG
+    // =====================================================
+    $category_log = 'Pasien';
+    $title_log    = 'Cari Pasien IHS SatuSehat';
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+        "id_ihs" => $ihs,
+        "name"   => $name,
+        "nik"    => $nik_pasien
+    ]);
+
+    // =====================================================
     // SUCCESS RESPONSE
     // =====================================================
     echo json_encode([

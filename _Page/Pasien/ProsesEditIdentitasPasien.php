@@ -262,6 +262,16 @@
     }
 
     mysqli_stmt_close($stmtUpdate);
+    // =========================================================
+    // SIMPAN LOG
+    // =========================================================
+    $category_log = 'Pasien';
+    $title_log    = 'Edit Identitas Pasien';
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+        "id_pasien" => $id_pasien,
+        "field"     => $field,
+        "value"     => $value_field
+    ]);
 
     // =========================================================
     // SUCCESS

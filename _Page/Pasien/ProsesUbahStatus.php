@@ -139,6 +139,16 @@
 
     mysqli_stmt_close($stmt_update);
 
+    // =====================================================
+    // SIMPAN LOG
+    // =====================================================
+    $category_log = 'Pasien';
+    $title_log    = 'Ubah Status Pasien';
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+        "id_pasien"     => $id_pasien,
+        "status_pasien" => $status_pasien
+    ]);
+
     // =========================================================
     // RESPONSE SUCCESS
     // =========================================================

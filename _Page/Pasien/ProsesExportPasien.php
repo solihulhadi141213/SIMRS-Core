@@ -88,6 +88,17 @@
     // =========================================================
     // OBJECT SPREADSHEET
     // =========================================================
+    // =========================================================
+    // SIMPAN LOG
+    // =========================================================
+    $category_log = 'Pasien';
+    $title_log    = 'Export Pasien';
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+        'periode_data'  => $periode_data,
+        'periode_awal'  => $periode_awal,
+        'periode_akhir' => $periode_akhir
+    ]);
+
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
 
