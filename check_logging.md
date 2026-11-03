@@ -1,0 +1,329 @@
+﻿# Hasil Pemeriksaan Implementasi Logging (SaveLog)
+
+Tanggal: 04/11/2026 04:08
+Total file dengan prefix Proses: 183 file
+
+## Ringkasan
+
+| Kategori | Jumlah |
+|----------|--------|
+| Total file Proses*.php | 183 |
+| File yang **tidak memiliki** include SimrsFunction.php | 36 |
+| File yang **tidak memiliki** pemanggilan SaveLog( | 145 |
+| File yang memiliki include tetapi **belum** menggunakan SaveLog( | 109 |
+
+---
+
+## 1. File yang Tidak Memiliki Include SimrsFunction.php
+
+File berikut tidak dapat menggunakan SaveLog karena belum include file fungsi:
+- _Page\Akses\ProsesEditAkses.php
+- _Page\Akses\ProsesHapusAkses.php
+- _Page\Akses\ProsesIjinAkses.php
+- _Page\Akses\ProsesTambahAkses.php
+- _Page\AksesPengajuan\ProsesEditPengajuanAkses.php
+- _Page\AksesPengajuan\ProsesHapusPengajuanAkses.php
+- _Page\AksesPengajuan\ProsesHubungkanAkun.php
+- _Page\Antrian\ProsesEdit.php
+- _Page\Antrian\ProsesHapus.php
+- _Page\Antrian\ProsesPendaftaranKunjungan.php
+- _Page\Antrian\ProsesPendaftaranPasien.php
+- _Page\Antrian\ProsesTambahAntrian.php
+- _Page\LaporanKesalahan\ProsesHapusLaporanKesalahan.php
+- _Page\LaporanKesalahan\ProsesKirimResponse.php
+- _Page\LaporanKesalahan\ProsesTandaiSudahDibaca.php
+- _Page\Observasi\ProsesEditObservasi.php
+- _Page\Observasi\ProsesExport.php
+- _Page\Observasi\ProsesHapusObservasi.php
+- _Page\Observasi\ProsesTambahObservasi.php
+- _Page\ReferensiIcd\ProsesDownload.php
+- _Page\ReferensiIcd\ProsesEditIcd.php
+- _Page\ReferensiIcd\ProsesHapusIcd.php
+- _Page\ReferensiIcd\ProsesUploadIcd.php
+- _Page\ReferensiTindakan\ProsesExport.php
+- _Page\ReferensiWilayah\ProsesChunk.php
+- _Page\ReferensiWilayah\ProsesDownload.php
+- _Page\ReferensiWilayah\ProsesTambahWilayah.php
+- _Page\Setting\ProsesEditSetting.php
+- _Page\Setting\ProsesHapusSetting.php
+- _Page\Setting\ProsesTambahSetting.php
+- _Page\SettingBpjs\ProsesHapusSettingBpjs.php
+- _Page\SettingSatuSehat\ProsesEditSettingSatuSehat.php
+- _Page\SettingSatuSehat\ProsesHapusSettingSatuSehat.php
+- _Page\SettingSirsOnline\ProsesEditSettingSirsOnline.php
+- _Page\SettingSirsOnline\ProsesHapusSettingSirsOnline.php
+- _Page\SettingSirsOnline\ProsesTambahSettingSirsOnline.php
+
+---
+
+## 2. File yang Tidak Memiliki Pemanggilan SaveLog(
+
+File berikut belum mencatat aktivitas ke tabel log melalui SaveLog:
+- _Page\Akses\ProsesEditAkses.php
+- _Page\Akses\ProsesHapusAkses.php
+- _Page\Akses\ProsesIjinAkses.php
+- _Page\Akses\ProsesTambahAkses.php
+- _Page\AksesEntitas\ProsesEditEntitas.php
+- _Page\AksesEntitas\ProsesHapusEntitiasAkses.php
+- _Page\AksesEntitas\ProsesTambahEntitas.php
+- _Page\AksesFitur\ProsesEditAksesFitur.php
+- _Page\AksesFitur\ProsesHapusAksesFitur.php
+- _Page\AksesFitur\ProsesTambahFitur.php
+- _Page\AksesFitur\ProsesUbahStatus.php
+- _Page\AksesPengajuan\ProsesEditPengajuanAkses.php
+- _Page\AksesPengajuan\ProsesHapusPengajuanAkses.php
+- _Page\AksesPengajuan\ProsesHubungkanAkun.php
+- _Page\AksesPengajuan\ProsesTerimaTolakPengajuan.php
+- _Page\Alergi\ProsesEdit.php
+- _Page\Alergi\ProsesHapus.php
+- _Page\Alergi\ProsesKirimAlergi.php
+- _Page\Alergi\ProsesTambahAlergi.php
+- _Page\Antrian\ProsesEdit.php
+- _Page\Antrian\ProsesExportAntrian.php
+- _Page\Antrian\ProsesHapus.php
+- _Page\Antrian\ProsesPendaftaranKunjungan.php
+- _Page\Antrian\ProsesPendaftaranPasien.php
+- _Page\Antrian\ProsesTambahAntrian.php
+- _Page\ApiKey\ProsesEditApiKey.php
+- _Page\ApiKey\ProsesHapusApiKey.php
+- _Page\ApiKey\ProsesHapusLogToken.php
+- _Page\ApiKey\ProsesRegenerateClientKey.php
+- _Page\ApiKey\ProsesTambahApiKey.php
+- _Page\Diagnosis\ProsesEditCondition.php
+- _Page\Diagnosis\ProsesEditDiagnosis.php
+- _Page\Diagnosis\ProsesExportDiagnosis.php
+- _Page\Diagnosis\ProsesHapusDiagnosis.php
+- _Page\Diagnosis\ProsesKirimCondition.php
+- _Page\Diagnosis\ProsesTambahDiagnosis.php
+- _Page\EmailGateway\ProsesEditEmailGateway.php
+- _Page\EmailGateway\ProsesHapusEmailGateway.php
+- _Page\EmailGateway\ProsesKirimEmail.php
+- _Page\EmailGateway\ProsesTambahEmailGateway.php
+- _Page\GeneralConsent\ProsesCetakGeneralConsent.php
+- _Page\GeneralConsent\ProsesDownload.php
+- _Page\GeneralConsent\ProsesHapusGeneralConsent.php
+- _Page\GeneralConsent\ProsesKirimConsent.php
+- _Page\GeneralConsent\ProsesTambahGeneralConsent.php
+- _Page\GoogleCredential\ProsesEditGoogleCredential.php
+- _Page\GoogleCredential\ProsesHapusGoogleCredential.php
+- _Page\GoogleCredential\ProsesTambahGoogleCredential.php
+- _Page\Imunisasi\ProsesEdit.php
+- _Page\Imunisasi\ProsesExport.php
+- _Page\Imunisasi\ProsesHapus.php
+- _Page\Imunisasi\ProsesTambah.php
+- _Page\Laboratorium\ProsesTambah.php
+- _Page\LaporanKesalahan\ProsesHapusLaporanKesalahan.php
+- _Page\LaporanKesalahan\ProsesKirimResponse.php
+- _Page\LaporanKesalahan\ProsesTandaiSudahDibaca.php
+- _Page\Log\ProsesExportLog.php
+- _Page\Login\ProsesLoginLama.php
+- _Page\Login\ProsesResetPassword.php
+- _Page\Logout\ProsesLogout.php
+- _Page\Logout\ProsesLogoutLama.php
+- _Page\Observasi\ProsesEditObservasi.php
+- _Page\Observasi\ProsesExport.php
+- _Page\Observasi\ProsesHapusObservasi.php
+- _Page\Observasi\ProsesKirimObservation.php
+- _Page\Observasi\ProsesTambahObservasi.php
+- _Page\ReferensiAlergen\ProsesEdit.php
+- _Page\ReferensiAlergen\ProsesExport.php
+- _Page\ReferensiAlergen\ProsesHapus.php
+- _Page\ReferensiAlergen\ProsesTambah.php
+- _Page\ReferensiAlergen\ProsesUpload.php
+- _Page\ReferensiBodySite\ProsesEdit.php
+- _Page\ReferensiBodySite\ProsesExport.php
+- _Page\ReferensiBodySite\ProsesHapus.php
+- _Page\ReferensiBodySite\ProsesImport.php
+- _Page\ReferensiBodySite\ProsesTambah.php
+- _Page\ReferensiIcd\ProsesDownload.php
+- _Page\ReferensiIcd\ProsesEditIcd.php
+- _Page\ReferensiIcd\ProsesHapusIcd.php
+- _Page\ReferensiIcd\ProsesTambahIcd.php
+- _Page\ReferensiIcd\ProsesUploadIcd.php
+- _Page\ReferensiImunisasi\ProsesEdit.php
+- _Page\ReferensiImunisasi\ProsesExport.php
+- _Page\ReferensiImunisasi\ProsesHapus.php
+- _Page\ReferensiImunisasi\ProsesImport.php
+- _Page\ReferensiImunisasi\ProsesTambah.php
+- _Page\ReferensiObservation\ProsesEdit.php
+- _Page\ReferensiObservation\ProsesHapus.php
+- _Page\ReferensiObservation\ProsesTambah.php
+- _Page\ReferensiRuangRawat\ProsesEditKelas.php
+- _Page\ReferensiRuangRawat\ProsesEditRuangan.php
+- _Page\ReferensiRuangRawat\ProsesEditTempatTidur.php
+- _Page\ReferensiRuangRawat\ProsesHapusKelas.php
+- _Page\ReferensiRuangRawat\ProsesHapusRuangan.php
+- _Page\ReferensiRuangRawat\ProsesHapusTempatTidur.php
+- _Page\ReferensiRuangRawat\ProsesTambahKelas.php
+- _Page\ReferensiRuangRawat\ProsesTambahRuangan.php
+- _Page\ReferensiRuangRawat\ProsesTambahTempatTidur.php
+- _Page\ReferensiRuangRawat\ProsesUpdateAplicare.php
+- _Page\ReferensiTindakan\ProsesEdit.php
+- _Page\ReferensiTindakan\ProsesExport.php
+- _Page\ReferensiTindakan\ProsesHapus.php
+- _Page\ReferensiTindakan\ProsesRecovery.php
+- _Page\ReferensiTindakan\ProsesTambah.php
+- _Page\ReferensiWilayah\ProsesChunk.php
+- _Page\ReferensiWilayah\ProsesDownload.php
+- _Page\ReferensiWilayah\ProsesEditDesa.php
+- _Page\ReferensiWilayah\ProsesEditKabupaten.php
+- _Page\ReferensiWilayah\ProsesEditKecamatan.php
+- _Page\ReferensiWilayah\ProsesEditProvinsi.php
+- _Page\ReferensiWilayah\ProsesHapusDesa.php
+- _Page\ReferensiWilayah\ProsesHapusKabupaten.php
+- _Page\ReferensiWilayah\ProsesHapusKecamatan.php
+- _Page\ReferensiWilayah\ProsesHapusProvinsi.php
+- _Page\ReferensiWilayah\ProsesTambahWilayah.php
+- _Page\ReferensiWilayahBpjs\ProsesTambahSimrs.php
+- _Page\Setting\ProsesEditSetting.php
+- _Page\Setting\ProsesHapusSetting.php
+- _Page\Setting\ProsesTambahSetting.php
+- _Page\SettingAnalyza\ProsesEditSettingAnalyza.php
+- _Page\SettingAnalyza\ProsesHapusSettingAnalyza.php
+- _Page\SettingAnalyza\ProsesTambahSettingAnalyza.php
+- _Page\SettingBpjs\ProsesEditSettingBpjs.php
+- _Page\SettingBpjs\ProsesHapusSettingBpjs.php
+- _Page\SettingBpjs\ProsesTambahSettingBpjs.php
+- _Page\SettingRadix\ProsesEditSettingRadix.php
+- _Page\SettingRadix\ProsesHapusSettingRadix.php
+- _Page\SettingRadix\ProsesTambahSettingRadix.php
+- _Page\SettingSatuSehat\ProsesEditSettingSatuSehat.php
+- _Page\SettingSatuSehat\ProsesHapusSettingSatuSehat.php
+- _Page\SettingSatuSehat\ProsesTambahSettingSatuSehat.php
+- _Page\SettingSifarma\ProsesEditSettingSifarma.php
+- _Page\SettingSifarma\ProsesHapusSettingSifarma.php
+- _Page\SettingSifarma\ProsesTambahSettingSifarma.php
+- _Page\SettingSirsOnline\ProsesEditSettingSirsOnline.php
+- _Page\SettingSirsOnline\ProsesHapusSettingSirsOnline.php
+- _Page\SettingSirsOnline\ProsesTambahSettingSirsOnline.php
+- _Page\Tindakan\ProsesDownloadTindakan.php
+- _Page\Tindakan\ProsesEditPerformer.php
+- _Page\Tindakan\ProsesEditTindakan.php
+- _Page\Tindakan\ProsesHapusPerformer.php
+- _Page\Tindakan\ProsesHapusTindakan.php
+- _Page\Tindakan\ProsesKirimProcedure.php
+- _Page\Tindakan\ProsesTambahPerformer.php
+- _Page\Tindakan\ProsesTambahTindakan.php
+
+---
+
+## 3. File yang Punya Include tapi Belum Menggunakan SaveLog(
+
+File berikut sudah include SimrsFunction.php sehingga fungsi SaveLog tersedia, tetapi belum memanggilnya:
+- _Page\AksesEntitas\ProsesEditEntitas.php
+- _Page\AksesEntitas\ProsesHapusEntitiasAkses.php
+- _Page\AksesEntitas\ProsesTambahEntitas.php
+- _Page\AksesFitur\ProsesEditAksesFitur.php
+- _Page\AksesFitur\ProsesHapusAksesFitur.php
+- _Page\AksesFitur\ProsesTambahFitur.php
+- _Page\AksesFitur\ProsesUbahStatus.php
+- _Page\AksesPengajuan\ProsesTerimaTolakPengajuan.php
+- _Page\Alergi\ProsesEdit.php
+- _Page\Alergi\ProsesHapus.php
+- _Page\Alergi\ProsesKirimAlergi.php
+- _Page\Alergi\ProsesTambahAlergi.php
+- _Page\Antrian\ProsesExportAntrian.php
+- _Page\ApiKey\ProsesEditApiKey.php
+- _Page\ApiKey\ProsesHapusApiKey.php
+- _Page\ApiKey\ProsesHapusLogToken.php
+- _Page\ApiKey\ProsesRegenerateClientKey.php
+- _Page\ApiKey\ProsesTambahApiKey.php
+- _Page\Diagnosis\ProsesEditCondition.php
+- _Page\Diagnosis\ProsesEditDiagnosis.php
+- _Page\Diagnosis\ProsesExportDiagnosis.php
+- _Page\Diagnosis\ProsesHapusDiagnosis.php
+- _Page\Diagnosis\ProsesKirimCondition.php
+- _Page\Diagnosis\ProsesTambahDiagnosis.php
+- _Page\EmailGateway\ProsesEditEmailGateway.php
+- _Page\EmailGateway\ProsesHapusEmailGateway.php
+- _Page\EmailGateway\ProsesKirimEmail.php
+- _Page\EmailGateway\ProsesTambahEmailGateway.php
+- _Page\GeneralConsent\ProsesCetakGeneralConsent.php
+- _Page\GeneralConsent\ProsesDownload.php
+- _Page\GeneralConsent\ProsesHapusGeneralConsent.php
+- _Page\GeneralConsent\ProsesKirimConsent.php
+- _Page\GeneralConsent\ProsesTambahGeneralConsent.php
+- _Page\GoogleCredential\ProsesEditGoogleCredential.php
+- _Page\GoogleCredential\ProsesHapusGoogleCredential.php
+- _Page\GoogleCredential\ProsesTambahGoogleCredential.php
+- _Page\Imunisasi\ProsesEdit.php
+- _Page\Imunisasi\ProsesExport.php
+- _Page\Imunisasi\ProsesHapus.php
+- _Page\Imunisasi\ProsesTambah.php
+- _Page\Laboratorium\ProsesTambah.php
+- _Page\Log\ProsesExportLog.php
+- _Page\Login\ProsesLoginLama.php
+- _Page\Login\ProsesResetPassword.php
+- _Page\Logout\ProsesLogout.php
+- _Page\Logout\ProsesLogoutLama.php
+- _Page\Observasi\ProsesKirimObservation.php
+- _Page\ReferensiAlergen\ProsesEdit.php
+- _Page\ReferensiAlergen\ProsesExport.php
+- _Page\ReferensiAlergen\ProsesHapus.php
+- _Page\ReferensiAlergen\ProsesTambah.php
+- _Page\ReferensiAlergen\ProsesUpload.php
+- _Page\ReferensiBodySite\ProsesEdit.php
+- _Page\ReferensiBodySite\ProsesExport.php
+- _Page\ReferensiBodySite\ProsesHapus.php
+- _Page\ReferensiBodySite\ProsesImport.php
+- _Page\ReferensiBodySite\ProsesTambah.php
+- _Page\ReferensiIcd\ProsesTambahIcd.php
+- _Page\ReferensiImunisasi\ProsesEdit.php
+- _Page\ReferensiImunisasi\ProsesExport.php
+- _Page\ReferensiImunisasi\ProsesHapus.php
+- _Page\ReferensiImunisasi\ProsesImport.php
+- _Page\ReferensiImunisasi\ProsesTambah.php
+- _Page\ReferensiObservation\ProsesEdit.php
+- _Page\ReferensiObservation\ProsesHapus.php
+- _Page\ReferensiObservation\ProsesTambah.php
+- _Page\ReferensiRuangRawat\ProsesEditKelas.php
+- _Page\ReferensiRuangRawat\ProsesEditRuangan.php
+- _Page\ReferensiRuangRawat\ProsesEditTempatTidur.php
+- _Page\ReferensiRuangRawat\ProsesHapusKelas.php
+- _Page\ReferensiRuangRawat\ProsesHapusRuangan.php
+- _Page\ReferensiRuangRawat\ProsesHapusTempatTidur.php
+- _Page\ReferensiRuangRawat\ProsesTambahKelas.php
+- _Page\ReferensiRuangRawat\ProsesTambahRuangan.php
+- _Page\ReferensiRuangRawat\ProsesTambahTempatTidur.php
+- _Page\ReferensiRuangRawat\ProsesUpdateAplicare.php
+- _Page\ReferensiTindakan\ProsesEdit.php
+- _Page\ReferensiTindakan\ProsesHapus.php
+- _Page\ReferensiTindakan\ProsesRecovery.php
+- _Page\ReferensiTindakan\ProsesTambah.php
+- _Page\ReferensiWilayah\ProsesEditDesa.php
+- _Page\ReferensiWilayah\ProsesEditKabupaten.php
+- _Page\ReferensiWilayah\ProsesEditKecamatan.php
+- _Page\ReferensiWilayah\ProsesEditProvinsi.php
+- _Page\ReferensiWilayah\ProsesHapusDesa.php
+- _Page\ReferensiWilayah\ProsesHapusKabupaten.php
+- _Page\ReferensiWilayah\ProsesHapusKecamatan.php
+- _Page\ReferensiWilayah\ProsesHapusProvinsi.php
+- _Page\ReferensiWilayahBpjs\ProsesTambahSimrs.php
+- _Page\SettingAnalyza\ProsesEditSettingAnalyza.php
+- _Page\SettingAnalyza\ProsesHapusSettingAnalyza.php
+- _Page\SettingAnalyza\ProsesTambahSettingAnalyza.php
+- _Page\SettingBpjs\ProsesEditSettingBpjs.php
+- _Page\SettingBpjs\ProsesTambahSettingBpjs.php
+- _Page\SettingRadix\ProsesEditSettingRadix.php
+- _Page\SettingRadix\ProsesHapusSettingRadix.php
+- _Page\SettingRadix\ProsesTambahSettingRadix.php
+- _Page\SettingSatuSehat\ProsesTambahSettingSatuSehat.php
+- _Page\SettingSifarma\ProsesEditSettingSifarma.php
+- _Page\SettingSifarma\ProsesHapusSettingSifarma.php
+- _Page\SettingSifarma\ProsesTambahSettingSifarma.php
+- _Page\Tindakan\ProsesDownloadTindakan.php
+- _Page\Tindakan\ProsesEditPerformer.php
+- _Page\Tindakan\ProsesEditTindakan.php
+- _Page\Tindakan\ProsesHapusPerformer.php
+- _Page\Tindakan\ProsesHapusTindakan.php
+- _Page\Tindakan\ProsesKirimProcedure.php
+- _Page\Tindakan\ProsesTambahPerformer.php
+- _Page\Tindakan\ProsesTambahTindakan.php
+
+---
+
+## Catatan
+
+- File yang tidak memiliki include SimrsFunction.php otomatis juga tidak dapat menggunakan SaveLog.
+- Untuk menambahkan logging, sertakan include "../../_Config/SimrsFunction.php"; dan panggil SaveLog(, , , , , ); setelah operasi berhasil.
+- Nilai $category_log harus disesuaikan dengan nama referensi/fitur yang bersangkutan.

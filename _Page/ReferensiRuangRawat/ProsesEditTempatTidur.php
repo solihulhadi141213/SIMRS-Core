@@ -170,6 +170,19 @@
 
         if ($stmt->execute()) {
 
+            // Simpan Log
+            $category_log = 'Referensi Ruang Rawat';
+            $title_log    = 'Edit Tempat Tidur';
+            $logMetadata  = json_encode([
+                'id_tempat_tidur' => $id,
+                'id_ruang_rawat'  => $ruang,
+                'id_kelas_rawat'  => $kelas,
+                'tempat_tidur'    => $nama,
+                'status'          => $status,
+                'kategori'        => $kategori
+            ]);
+            SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
             echo json_encode([
                 'status'          => 'success',
                 'message'         => 'Data tempat tidur berhasil diperbarui.',

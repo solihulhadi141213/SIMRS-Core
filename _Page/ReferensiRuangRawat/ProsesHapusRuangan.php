@@ -97,6 +97,15 @@
 
         if ($stmt->execute()) {
 
+            // Simpan Log
+            $category_log = 'Referensi Ruang Rawat';
+            $title_log    = 'Hapus Ruangan';
+            $logMetadata  = json_encode([
+                'id_ruang_rawat' => $id_ruang_rawat,
+                'id_kelas_rawat' => $id_kelas_rawat
+            ]);
+            SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
             echo json_encode([
                 'status'           => 'success',
                 'message'          => 'Data ruangan berhasil dihapus.',

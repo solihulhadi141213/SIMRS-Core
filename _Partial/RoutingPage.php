@@ -4,6 +4,7 @@
         'Profile'               => '_Page/ProfileUser/ProfileUser.php',
         'Setting'               => '_Page/Setting/Setting.php',
         'Log'             => '_Page/Log/Log.php',
+        'ApiKey'             => '_Page/ApiKey/ApiKey.php',
         'EmailGateway'          => '_Page/EmailGateway/EmailGateway.php',
         'GoogleCredential'      => '_Page/GoogleCredential/GoogleCredential.php',
         'AksesFitur'            => '_Page/AksesFitur/AksesFitur.php',

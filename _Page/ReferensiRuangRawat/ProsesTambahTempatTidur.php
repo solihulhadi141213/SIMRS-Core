@@ -172,6 +172,19 @@
 
         if ($stmt->execute()) {
 
+            // Simpan Log
+            $category_log = 'Referensi Ruang Rawat';
+            $title_log    = 'Tambah Tempat Tidur';
+            $logMetadata  = json_encode([
+                'id_tempat_tidur' => null,
+                'id_ruang_rawat'  => $id_ruang_rawat,
+                'id_kelas_rawat'  => $id_kelas_rawat,
+                'tempat_tidur'    => $tempat_tidur,
+                'kategori'        => $kategori,
+                'status'          => $status
+            ]);
+            SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
             echo json_encode([
                 'status'           => 'success',
                 'message'          => 'Tempat tidur berhasil ditambahkan.',

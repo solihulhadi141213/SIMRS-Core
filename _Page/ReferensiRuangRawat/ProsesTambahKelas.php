@@ -93,6 +93,16 @@
     $execute = mysqli_stmt_execute($stmt);
 
     if ($execute) {
+        // Simpan Log
+        $category_log = 'Referensi Ruang Rawat';
+        $title_log    = 'Tambah Kelas Rawat';
+        $logMetadata  = json_encode([
+            'kode_kelas' => $kode_kelas,
+            'kelas'      => $kelas,
+            'status'     => $status
+        ]);
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
         $response['status']  = 'success';
         $response['message'] = 'Data berhasil disimpan';
     } else {

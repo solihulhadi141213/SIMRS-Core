@@ -152,6 +152,16 @@ while($row = mysqli_fetch_assoc($q)){
 }
 
 // ================= RESPONSE
+// Simpan Log
+$category_log = 'Referensi Ruang Rawat';
+$title_log    = 'Update Aplicare';
+$logMetadata  = json_encode([
+    'offset'  => $offset,
+    'limit'   => $limit,
+    'total'   => $total
+]);
+SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
 echo json_encode([
     'status'=>'success',
     'html'=>$html,

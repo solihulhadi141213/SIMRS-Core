@@ -154,6 +154,17 @@
         // ================= COMMIT
         $Conn->commit();
 
+        // Simpan Log
+        $category_log = 'Referensi Ruang Rawat';
+        $title_log    = 'Edit Kelas Rawat';
+        $logMetadata  = json_encode([
+            'id_kelas_rawat' => $id_kelas_rawat,
+            'kode_kelas'     => $kode_kelas,
+            'kelas'          => $kelas,
+            'status'         => $status
+        ]);
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
         echo json_encode([
             'status'=>'success',
             'message'=>'Data berhasil diperbarui.'

@@ -113,6 +113,16 @@
 
         if ($stmt->execute()) {
 
+            // Simpan Log
+            $category_log = 'Referensi Ruang Rawat';
+            $title_log    = 'Tambah Ruangan';
+            $logMetadata  = json_encode([
+                'id_kelas_rawat' => $id_kelas_rawat,
+                'ruang_rawat'    => $ruang_rawat,
+                'status'         => $status
+            ]);
+            SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
             echo json_encode([
                 'status'  => 'success',
                 'message' => 'Data ruangan berhasil ditambahkan.',
