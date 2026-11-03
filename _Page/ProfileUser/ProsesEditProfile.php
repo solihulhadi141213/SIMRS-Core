@@ -90,6 +90,15 @@
         respond('error', 'Gagal update data');
     }
 
+    // Simpan Log
+    $category_log = 'Profil User';
+    $title_log    = 'Edit Profile';
+    $logMetadata  = json_encode([
+        'email'  => $email,
+        'kontak' => $kontak
+    ]);
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
     mysqli_stmt_close($stmtUpdate);
 
     // Success

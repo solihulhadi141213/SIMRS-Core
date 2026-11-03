@@ -82,6 +82,13 @@
 
     if ($update) {
         $_SESSION['NotifikasiSwal'] = 'Password Berhasil Diperbarui';
+
+        // Simpan Log
+        $category_log = 'Profil User';
+        $title_log    = 'Ganti Password';
+        $logMetadata  = json_encode([]);
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
         echo json_encode([
             'status' => 'success',
             'message' => 'Password berhasil diperbarui.'

@@ -68,6 +68,15 @@
 
         mysqli_stmt_close($stmt);
 
+        // Simpan Log
+        $category_log = 'Profil User';
+        $title_log    = 'Buat Laporan Pengguna';
+        $logMetadata  = json_encode([
+            'judul_laporan'  => $judul_laporan,
+            'status_laporan' => $status_laporan
+        ]);
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
         ob_clean();
         echo json_encode([
             'status' => 'success',

@@ -57,6 +57,15 @@
     );
 
     if (mysqli_stmt_execute($stmt)) {
+        // Simpan Log
+        $category_log = 'Profil User';
+        $title_log    = 'Edit Laporan Pengguna';
+        $logMetadata  = json_encode([
+            'id_akses_laporan' => $id_akses_laporan,
+            'judul'            => $judul,
+            'status'           => $status
+        ]);
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
         echo '
             <div class="alert alert-success success">
                 Data laporan berhasil diperbarui.

@@ -93,6 +93,14 @@
     if (mysqli_stmt_execute($stmt)) {
         $_SESSION['NotifikasiSwal'] = 'Foto Profile Berhasil Diperbarui';
 
+        // Simpan Log
+        $category_log = 'Profil User';
+        $title_log    = 'Ganti Foto Profile';
+        $logMetadata  = json_encode([
+            'filename' => $namabaru
+        ]);
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
         // Hapus foto lama jika ada dan bukan default
         if ($nama_gambar_lama !== '' && $nama_gambar_lama !== 'No-Image.png' && is_file($path_gambar_lama)) {
             @unlink($path_gambar_lama);
