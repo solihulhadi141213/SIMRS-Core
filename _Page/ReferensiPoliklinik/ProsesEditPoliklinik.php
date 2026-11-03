@@ -152,17 +152,21 @@
         mysqli_stmt_close($stmtUpdate);
 
         // Simpan log aktivitas
+        $category_log = 'Referensi Poliklinik';
+        $title_log    = 'Edit Referensi Poliklinik';
+        $logMetadata  = json_encode([
+            'id_poliklinik' => $id_poliklinik,
+            'poliklinik'    => $poliklinik,
+            'kode'          => $kode,
+            'status'        => $status
+        ]);
         SaveLog(
             $Conn,
             (int) $SessionIdAkses,
             (string) $SessionNama,
-            'Edit Referensi Poliklinik',
-            [
-                'id_poliklinik' => $id_poliklinik,
-                'poliklinik'    => $poliklinik,
-                'kode'          => $kode,
-                'status'        => $status
-            ]
+            $title_log,
+            $category_log,
+            $logMetadata
         );
 
         // Response berhasil

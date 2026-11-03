@@ -112,11 +112,12 @@
             (int)$SessionIdAkses,
             (string)$SessionNama,
             'Tambah Referensi Poliklinik',
-            [
+            'Referensi Poliklinik',
+            json_encode([
                 'poliklinik' => $poliklinik,
                 'kode'       => $kode,
                 'status'     => $status
-            ]
+            ])
         );
 
         $response['status'] = 'success';

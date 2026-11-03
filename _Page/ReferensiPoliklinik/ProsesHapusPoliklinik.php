@@ -89,16 +89,20 @@
     }
 
     // Simpan log
+    $category_log = 'Referensi Poliklinik';
+    $title_log    = 'Hapus Referensi Poliklinik';
+    $logMetadata  = json_encode([
+        'id_poliklinik' => $id_poliklinik,
+        'poliklinik'    => $dataLama['poliklinik'],
+        'kode'          => $dataLama['kode']
+    ]);
     SaveLog(
         $Conn,
         (int) $SessionIdAkses,
         (string) $SessionNama,
-        'Hapus Referensi Poliklinik',
-        [
-            'id_poliklinik' => $id_poliklinik,
-            'poliklinik'    => $dataLama['poliklinik'],
-            'kode'          => $dataLama['kode']
-        ]
+        $title_log,
+        $category_log,
+        $logMetadata
     );
 
     // Response berhasil
