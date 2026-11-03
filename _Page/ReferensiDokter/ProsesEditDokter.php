@@ -229,6 +229,20 @@ try {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
+    // Simpan Log
+    $category_log = 'Referensi Dokter';
+    $title_log    = 'Edit Dokter';
+    $logMetadata  = json_encode([
+        'id_dokter'           => $id_dokter,
+        'kode'                => $kode,
+        'nama'                => $nama,
+        'gender'              => $gender,
+        'tanggal_lahir'       => $tanggal_lahir,
+        'kategori'            => $kategori,
+        'id_ihs_practitioner' => $id_ihs_practitioner
+    ]);
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
     echo json_encode([
         'status' => 'success',
         'message' => 'Data berhasil diupdate'

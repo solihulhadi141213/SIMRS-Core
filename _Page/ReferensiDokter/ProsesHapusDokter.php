@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 date_default_timezone_set('Asia/Jakarta');
 
 include "../../_Config/Connection.php";
+include "../../_Config/SimrsFunction.php";
 include "../../_Config/Session.php";
 
 $response = [
@@ -76,6 +77,14 @@ try {
     }
 
     mysqli_stmt_close($stmt);
+
+    // Simpan Log
+    $category_log = 'Referensi Dokter';
+    $title_log    = 'Hapus Dokter';
+    $logMetadata  = json_encode([
+        'id_dokter' => $id_dokter
+    ]);
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
 
     // =========================
     // HAPUS FILE FOTO (JIKA ADA)
