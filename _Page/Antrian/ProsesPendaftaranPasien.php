@@ -264,20 +264,21 @@
         mysqli_stmt_close($stmtUpdate);
 
         // Catat petugas dan identitas antrean/pasien pada log aplikasi.
-        $logTitle = 'Mendaftarkan pasien dari antrian';
+        $category_log = 'Antrian';
+        $logTitle     = 'Mendaftarkan pasien dari antrian';
         $logMetadata = json_encode([
             'id_antrian' => $idAntrian,
             'id_pasien' => $idPasien,
         ], JSON_UNESCAPED_UNICODE);
         $stmtAudit = mysqli_prepare(
             $Conn,
-            "INSERT INTO log (id_akses, datetime_log, nama_petugas, title_log, metadata_log)
-            VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO log (id_akses, datetime_log, nama_petugas, category_log, title_log, metadata_log)
+            VALUES (?, ?, ?, ?, ?, ?)"
         );
         if (!$stmtAudit || $logMetadata === false) {
             throw new RuntimeException('Gagal menyiapkan INSERT log: ' . mysqli_error($Conn));
         }
-        mysqli_stmt_bind_param($stmtAudit, 'issss', $SessionIdAkses, $utcNow, $SessionNama, $logTitle, $logMetadata);
+        mysqli_stmt_bind_param($stmtAudit, 'isssss', $SessionIdAkses, $utcNow, $SessionNama, $category_log, $logTitle, $logMetadata);
         if (!mysqli_stmt_execute($stmtAudit)) {
             $err = mysqli_stmt_error($stmtAudit);
             mysqli_stmt_close($stmtAudit);

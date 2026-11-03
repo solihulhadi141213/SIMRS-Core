@@ -142,6 +142,11 @@ Routing modal pada `_Partial\Modal.php` berfungsi agar setiap halaman memiliki k
 Setiap aktivitas user pada sistem (aplikasi) akan dicatat pada database di tabel 'log' dengan parameter berikut :
 1. `id_akses` adalah id akses user yang melakukan aktivitas.
 2. `datetime_log` adalah informasi tanggal dan waktu user melakukan aktivitas.
+3. `nama_petugas` adalah nama user (sesuai session) yang memiliki session akses login pada saat itu.
+4. `id_akses` adalah id_akses user (sesuai session) yang memiliki session akses login pada saat itu.
+5. `category_log` adalah nama fitur atau directory yang digunakan untuk memproses perintah (Contoh : Akses, Pasien, Kunjungan, Dokter Dll.).
+6. `title_log` adalah nama proses yang dilakukan sesuai tujuan script (Contoh : Proses Tambah Akses, Proses Login, Proses Edit Akses, Dll).
+
 ## User Flow/Onboarding
 Berikut ini adalah catatan langkah-langkah wajib dilakukan user untuk menggunakan aplikasi dengan benar secara berurutan.
 1. Kelola Pengguna

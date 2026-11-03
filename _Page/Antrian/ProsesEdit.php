@@ -323,8 +323,9 @@
         $bookingCode = (string) $current['kode_booking'];
 
         // Catat aktivitas ke tabel log audit sistem
-        $logTitle = 'Mengubah data antrian';
-        $logMetadata = json_encode([
+        $category_log = 'Antrian';
+        $logTitle     = 'Mengubah data antrian';
+        $logMetadata  = json_encode([
             'id_antrian'     => $idAntrian,
             'kode_booking'   => $bookingCode,
             'no_antrian'     => $numberQueue,
@@ -333,13 +334,13 @@
 
         $stmtAudit = mysqli_prepare(
             $Conn,
-            "INSERT INTO log (id_akses, datetime_log, nama_petugas, title_log, metadata_log)
-             VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO log (id_akses, datetime_log, nama_petugas, category_log, title_log, metadata_log)
+             VALUES (?, ?, ?, ?, ?, ?)"
         );
         if (!$stmtAudit || $logMetadata === false) {
             throw new RuntimeException('Gagal menyiapkan pencatatan log audit antrian.');
         }
-        mysqli_stmt_bind_param($stmtAudit, 'issss', $SessionIdAkses, $utcNow, $SessionNama, $logTitle, $logMetadata);
+        mysqli_stmt_bind_param($stmtAudit, 'isssss', $SessionIdAkses, $utcNow, $SessionNama, $category_log, $logTitle, $logMetadata);
         if (!mysqli_stmt_execute($stmtAudit)) {
             mysqli_stmt_close($stmtAudit);
             throw new RuntimeException('Gagal mencatat aktivitas ke log audit.');

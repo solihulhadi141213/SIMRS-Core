@@ -5,7 +5,14 @@
 .env
 
 # DEPENDENCIES
-/vendor/
+/vendor/*
+!/vendor/bin/
+/vendor/bin/*
+!/vendor/bin/phpcs
+!/vendor/bin/phpcs.bat
+!/vendor/bin/phpcbf
+!/vendor/bin/phpcbf.bat
+!/vendor/squizlabs/
 /node_modules/
 
 # File Image

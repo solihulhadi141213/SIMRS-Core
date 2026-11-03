@@ -25,5 +25,9 @@ jobs:
 
     - name: Run PHP CodeSniffer
       run: |
-        # Jalankan PHPCS berdasarkan aturan phpcs.xml di root project
-        vendor/bin/phpcs --standard=phpcs.xml .
+        # Jalankan PHPCS berdasarkan aturan tests/phpcs.xml
+        if [ -f vendor/bin/phpcs ]; then
+          php vendor/bin/phpcs --standard=tests/phpcs.xml .
+        else
+          phpcs --standard=tests/phpcs.xml .
+        fi

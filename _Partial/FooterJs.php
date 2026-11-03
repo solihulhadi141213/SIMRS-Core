@@ -12,7 +12,7 @@
 <!-- apexcharts -->
 <?php
     // Agar aplikasi lebih ringan maka apexcharts hanya dipanggil pada halaman tertentu
-    if($Page==""||$Page=="Dashboard"||$Page=="Profile"){
+    if($Page==""||$Page=="Dashboard"||$Page=="Profile"||$Page=="Log"){
         echo '<script src="node_modules/apexcharts/dist/apexcharts.min.js"></script>';
     }
 ?>

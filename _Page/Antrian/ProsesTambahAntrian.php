@@ -21,26 +21,26 @@
     }
 
     // Ambil nilai form dan normalisasi teks agar validasi memakai bentuk yang konsisten.
-    $idAntrian = (int) ($_POST['id_antrian'] ?? 0);
-    $isNewAntrian = $idAntrian === 0;
-    $idPasien = (int) ($_POST['id_pasien'] ?? 0);
-    $idPoliklinik = (int) ($_POST['id_poliklinik'] ?? 0);
-    $idJadwal = (int) ($_POST['id_jadwal'] ?? 0);
-    $modePasien = (string) ($_POST['mode_pasien'] ?? 'lama');
-    $namaPasien = trim((string) ($_POST['nama_pasien'] ?? ''));
-    $gender = (string) ($_POST['gender'] ?? '');
-    $nik = trim((string) ($_POST['nik'] ?? ''));
-    $noBpjs = trim((string) ($_POST['no_bpjs'] ?? ''));
-    $kontak = trim((string) ($_POST['kontak'] ?? ''));
-    $tanggalKunjungan = trim((string) ($_POST['tanggal_kunjungan'] ?? ''));
-    $pembayaran = (string) ($_POST['pembayaran'] ?? '');
-    $nomorReferensi = trim((string) ($_POST['nomor_referensi'] ?? 'MANUAL'));
+    $idAntrian           = (int) ($_POST['id_antrian'] ?? 0);
+    $isNewAntrian        = $idAntrian           === 0;
+    $idPasien            = (int) ($_POST['id_pasien'] ?? 0);
+    $idPoliklinik        = (int) ($_POST['id_poliklinik'] ?? 0);
+    $idJadwal            = (int) ($_POST['id_jadwal'] ?? 0);
+    $modePasien          = (string) ($_POST['mode_pasien'] ?? 'lama');
+    $namaPasien          = trim((string) ($_POST['nama_pasien'] ?? ''));
+    $gender              = (string) ($_POST['gender'] ?? '');
+    $nik                 = trim((string) ($_POST['nik'] ?? ''));
+    $noBpjs              = trim((string) ($_POST['no_bpjs'] ?? ''));
+    $kontak              = trim((string) ($_POST['kontak'] ?? ''));
+    $tanggalKunjungan    = trim((string) ($_POST['tanggal_kunjungan'] ?? ''));
+    $pembayaran          = (string) ($_POST['pembayaran'] ?? '');
+    $nomorReferensi      = trim((string) ($_POST['nomor_referensi'] ?? 'MANUAL'));
     $jenisReferensiInput = $_POST['jenis_referensi'] ?? '';
     $jenisReferensiInput = is_scalar($jenisReferensiInput) ? trim((string) $jenisReferensiInput) : '';
-    $jenisReferensi = $jenisReferensiInput !== '' ? $jenisReferensiInput : null;
-    $keluhan = trim((string) ($_POST['keluhan'] ?? ''));
-    $status = (string) ($_POST['status_antrian'] ?? 'Terdaftar');
-    $statusAllowed = ['Terdaftar', 'Batal', 'Checkin', 'Panggil Admisi', 'Tunggu Poli', 'Layanan Poli', 'Tunggu Farmasi', 'Layanan Farmasi', 'Selesai'];
+    $jenisReferensi      = $jenisReferensiInput !== '' ? $jenisReferensiInput : null;
+    $keluhan             = trim((string) ($_POST['keluhan'] ?? ''));
+    $status              = (string) ($_POST['status_antrian'] ?? 'Terdaftar');
+    $statusAllowed       = ['Terdaftar', 'Batal', 'Checkin', 'Panggil Admisi', 'Tunggu Poli', 'Layanan Poli', 'Tunggu Farmasi', 'Layanan Farmasi', 'Selesai'];
 
     // Validasi relasi, jenis pasien, identitas wajib, format tanggal, dan batas panjang kolom.
     if (!$idPoliklinik || !$idJadwal) {
@@ -332,7 +332,8 @@
         }
 
         // Catat aktivitas utama agar perubahan dapat ditelusuri melalui log aplikasi.
-        $logTitle = $isNewAntrian ? 'Membuat antrian manual' : 'Mengubah data antrian';
+        $category_log = 'Antrian';
+        $logTitle     = $isNewAntrian ? 'Membuat antrian manual' : 'Mengubah data antrian';
         $logMetadata = json_encode([
             'id_antrian' => $idAntrian,
             'kode_booking' => $bookingCode,
@@ -341,13 +342,13 @@
         ], JSON_UNESCAPED_UNICODE);
         $stmtAudit = mysqli_prepare(
             $Conn,
-            "INSERT INTO log (id_akses, datetime_log, nama_petugas, title_log, metadata_log)
-            VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO log (id_akses, datetime_log, nama_petugas, category_log, title_log, metadata_log)
+            VALUES (?, ?, ?, ?, ?, ?)"
         );
         if (!$stmtAudit || $logMetadata === false) {
             throw new RuntimeException('Gagal menyiapkan pencatatan aktivitas antrian.');
         }
-        mysqli_stmt_bind_param($stmtAudit, 'issss', $SessionIdAkses, $utcNow, $SessionNama, $logTitle, $logMetadata);
+        mysqli_stmt_bind_param($stmtAudit, 'isssss', $SessionIdAkses, $utcNow, $SessionNama, $category_log, $logTitle, $logMetadata);
         if (!mysqli_stmt_execute($stmtAudit)) {
             mysqli_stmt_close($stmtAudit);
             throw new RuntimeException('Gagal mencatat aktivitas antrian.');

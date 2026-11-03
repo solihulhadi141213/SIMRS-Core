@@ -269,7 +269,8 @@
         mysqli_stmt_close($stmtUpdateAntrian);
 
         // Catat aktivitas pada log aplikasi.
-        $logTitle = 'Pendaftaran kunjungan dari antrian';
+        $category_log = 'Antrian';
+        $logTitle     = 'Pendaftaran kunjungan dari antrian';
         $logMetadata = json_encode([
             'id_antrian'   => $idAntrian,
             'id_kunjungan' => $idKunjungan,
@@ -277,13 +278,13 @@
         ], JSON_UNESCAPED_UNICODE);
         $stmtLog = mysqli_prepare(
             $Conn,
-            "INSERT INTO log (id_akses, datetime_log, nama_petugas, title_log, metadata_log)
-             VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO log (id_akses, datetime_log, nama_petugas, category_log, title_log, metadata_log)
+             VALUES (?, ?, ?, ?, ?, ?)"
         );
         if (!$stmtLog || $logMetadata === false) {
             throw new RuntimeException('Gagal menyiapkan INSERT log: ' . mysqli_error($Conn));
         }
-        mysqli_stmt_bind_param($stmtLog, 'issss', $SessionIdAkses, $utcNow, $SessionNama, $logTitle, $logMetadata);
+        mysqli_stmt_bind_param($stmtLog, 'isssss', $SessionIdAkses, $utcNow, $SessionNama, $category_log, $logTitle, $logMetadata);
         if (!mysqli_stmt_execute($stmtLog)) {
             $err = mysqli_stmt_error($stmtLog);
             mysqli_stmt_close($stmtLog);

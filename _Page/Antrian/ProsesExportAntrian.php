@@ -114,6 +114,40 @@
     }
 
     // =========================================================
+    // VALIDASI METHOD (EXPORT)
+    // =========================================================
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        stopExportAntrian('Metode request tidak valid!');
+    }
+
+    // =========================================================
+    // PENCATATAN LOG AUDIT SISTEM
+    // =========================================================
+    $utcNow = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+    $category_log = 'Antrian';
+    $logTitle     = 'Mengexport data antrian';
+    
+    // Kumpulkan informasi filter ke dalam metadata log
+    $logMetadata  = json_encode([
+        'periode_data'  => $periodeData,
+        'tahun'         => $_POST['tahun'] ?? null,
+        'bulan'         => $_POST['bulan'] ?? null,
+        'periode_awal'  => $_POST['periode_awal'] ?? null,
+        'periode_akhir' => $_POST['periode_akhir'] ?? null,
+    ], JSON_UNESCAPED_UNICODE);
+
+    $stmtAudit = mysqli_prepare(
+        $Conn,
+        "INSERT INTO log (id_akses, datetime_log, nama_petugas, category_log, title_log, metadata_log)
+         VALUES (?, ?, ?, ?, ?, ?)"
+    );
+    if ($stmtAudit && $logMetadata !== false) {
+        mysqli_stmt_bind_param($stmtAudit, 'isssss', $SessionIdAkses, $utcNow, $SessionNama, $category_log, $logTitle, $logMetadata);
+        mysqli_stmt_execute($stmtAudit);
+        mysqli_stmt_close($stmtAudit);
+    }
+
+    // =========================================================
     // QUERY DATA
     // =========================================================
     $sql = "
@@ -153,13 +187,6 @@
     // Header
     $headers = [
         'No', 'ID Antrian', 'No Antrian', 'Kode Booking', 'ID Pasien', 'Nama Pasien',
-        'NIK', 'No BPJS', 'Gender', 'Kontak', 'Pembayaran', 'Keluhan', 'Jenis Referensi',
-        'Nomor Referensi', 'Nama Dokter', 'Nama Poliklinik', 'Tanggal Kunjungan',
-        'Tanggal Daftar (UTC)', 'Status Antrian', 'Sumber Antrian', 'No. Antrian BPJS?'
-    ];
-    // Actually keep simple columns
-    $headers = [
-        'No', 'ID Antrian', 'No Antrian', 'Kode Booking', 'ID Pasien', 'Nama Pasien',
         'NIK', 'No BPJS', 'Gender', 'Pembayaran', 'Keluhan', 'Nama Dokter',
         'Nama Poliklinik', 'Tanggal Kunjungan', 'Tanggal Daftar', 'Status Antrian',
         'Sumber Antrian'
@@ -175,13 +202,9 @@
     $lastHeaderCol = chr(ord('A') + count($headers) - 1);
     $sheet->getStyle('A4:' . $lastHeaderCol . '4')->applyFromArray([
         'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
-        'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => '4472C4']],
         'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER, 'wrapText' => true],
         'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
     ]);
-    // Need Fill import
-    // We'll skip Fill if not imported; but imported? not yet. Add use above? We'll handle by removing fill or import.
-    // To avoid missing class, use PhpOffice\\PhpSpreadsheet\\Style\\Fill fully qualified.
     $sheet->getStyle('A4:' . $lastHeaderCol . '4')->applyFromArray([
         'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => '4472C4']]
     ]);
@@ -266,19 +289,3 @@
     $writer->save('php://output');
     exit;
 ?>
-
-        $result = mysqli_stmt_get_result($stmt);
-        $row = mysqli_fetch_assoc($result);
-        mysqli_stmt_close($stmt);
-
-        echo json_encode(['jumlah' => (int) ($row['total'] ?? 0)]);
-        exit;
-    }
-
-    // =========================================================
-    // VALIDASI METHOD (EXPORT)
-    // =========================================================
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        stopExportAntrian('Metode request tidak valid!');
-    }
-
