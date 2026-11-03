@@ -143,6 +143,14 @@
     // =============================================
     if (mysqli_stmt_execute($stmt)) {
 
+        // Simpan Log
+        $category_log = 'Kunjungan';
+        $title_log    = 'Update Status Kunjungan';
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+            "id_kunjungan" => $id_kunjungan,
+            "status"       => $status
+        ]);
+
         echo json_encode([
             "status"  => "success",
             "message" => "Status kunjungan berhasil diperbaharui.",

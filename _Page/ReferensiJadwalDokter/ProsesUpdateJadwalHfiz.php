@@ -200,6 +200,15 @@
     }
 
     // Jika Berhasil
+    // Simpan Log
+    $category_log = 'Referensi Jadwal Dokter';
+    $title_log    = 'Update Jadwal Dokter ke HFIZ';
+    $logMetadata  = json_encode([
+        'id_dokter'     => $id_dokter,
+        'id_poliklinik' => $id_poliklinik
+    ]);
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
     $response = [
         'status' => 'success',
         'message' => 'Update Jadwal Berhasil!'

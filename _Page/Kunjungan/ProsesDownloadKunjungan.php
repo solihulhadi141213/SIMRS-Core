@@ -91,6 +91,16 @@
     // =========================================================
     // SPREADSHEET
     // =========================================================
+    // =========================================================
+    // SIMPAN LOG
+    // =========================================================
+    $category_log = 'Kunjungan';
+    $title_log    = 'Export Kunjungan';
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+        'periode_awal'  => $periode_awal,
+        'periode_akhir' => $periode_akhir
+    ]);
+
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
 

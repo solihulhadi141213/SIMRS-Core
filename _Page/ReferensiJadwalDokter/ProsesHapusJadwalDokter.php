@@ -62,6 +62,14 @@ $delete = mysqli_prepare($Conn, "DELETE FROM jadwal_dokter WHERE id_jadwal=?");
 mysqli_stmt_bind_param($delete, "i", $id_jadwal);
 
 if (mysqli_stmt_execute($delete)) {
+    // Simpan Log
+    $category_log = 'Referensi Jadwal Dokter';
+    $title_log    = 'Hapus Jadwal Dokter';
+    $logMetadata  = json_encode([
+        'id_jadwal' => $id_jadwal
+    ]);
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
     $response['status'] = 'success';
     $response['message'] = 'Data berhasil dihapus.';
 } else {

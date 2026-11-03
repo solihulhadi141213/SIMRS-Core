@@ -281,20 +281,21 @@ if ($totalData > 0) {
         // ==========================
         // LABEL DPJP
         // ==========================
-        if (!empty($row['kode_dpjp'])) {
-
-            $label_dpjp = '
-                <a href="javascript:void(0);" class="text-primary modal_detail_dokter" data-id="'.$row['id_kunjungan'].'">
-                    <small class="text-primary">'.$row['kode_dpjp'].'</small>
-                </a>
-            ';
-
+        $dpjp_nama = $row['dpjp_nama'] ?? '';
+        if (mb_strlen($dpjp_nama, 'UTF-8') > 15) {
+            $nama_dpjp_tampil = mb_substr($dpjp_nama, 0, 15, 'UTF-8') . '...';
         } else {
+            $nama_dpjp_tampil = $dpjp_nama;
+        }
+
+        if (!empty($dpjp_nama)) {
             $label_dpjp = '
-                <a href="javascript:void(0);" class="text-muted">
-                    <small class="text-muted">-</small>
+                <a href="javascript:void(0);" class="text-primary modal_detail_dokter" data-id="'.$row['id_kunjungan'].'" title="'.htmlspecialchars($dpjp_nama, ENT_QUOTES, 'UTF-8').'">
+                    '.$nama_dpjp_tampil.'
                 </a>
             ';
+        } else {
+            $label_dpjp = '-';
         }
 
         // ==========================

@@ -153,6 +153,21 @@
     );
 
     if (mysqli_stmt_execute($stmt)) {
+        $id_jadwal = mysqli_insert_id($Conn);
+
+        // Simpan Log
+        $category_log = 'Referensi Jadwal Dokter';
+        $title_log    = 'Tambah Jadwal Dokter';
+        $logMetadata  = json_encode([
+            'id_jadwal'     => $id_jadwal,
+            'id_dokter'     => $id_dokter,
+            'id_poliklinik' => $id_poliklinik,
+            'hari'          => $hari,
+            'jam_mulai'     => $jam_mulai,
+            'jam_selesai'   => $jam_selesai
+        ]);
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
         $response['status'] = 'success';
         $response['message'] = 'Data berhasil ditambahkan.';
     } else {

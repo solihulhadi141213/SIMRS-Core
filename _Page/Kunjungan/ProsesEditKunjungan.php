@@ -406,6 +406,17 @@
     // =============================================
     if (mysqli_stmt_execute($stmt)) {
 
+        // Simpan Log
+        $category_log = 'Kunjungan';
+        $title_log    = 'Edit Kunjungan';
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+            "id_kunjungan" => $id_kunjungan,
+            "id_pasien"    => $id_pasien,
+            "nama"         => $nama,
+            "dokter"       => $dokter,
+            "poliklinik"   => $poliklinik
+        ]);
+
         echo json_encode([
             "status"  => "success",
             "message" => "Data kunjungan berhasil diperbarui.",

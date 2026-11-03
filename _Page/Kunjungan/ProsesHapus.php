@@ -45,10 +45,7 @@
     // VALIDASI DATA KUNJUNGAN
     // =============================================
     $check = mysqli_prepare($Conn, "
-        SELECT 
-            id_kunjungan,
-            status
-        FROM kunjungan
+        SELECT * FROM kunjungan
         WHERE id_kunjungan = ?
     ");
 
@@ -112,6 +109,11 @@
     // EKSEKUSI
     // =============================================
     if (mysqli_stmt_execute($stmt)) {
+
+        // Simpan Log
+        $category_log = 'Kunjungan';
+        $title_log    = "Hapus Kunjungan {$id_kunjungan}";
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $data_kunjungan);
 
         echo json_encode([
             "status"  => "success",

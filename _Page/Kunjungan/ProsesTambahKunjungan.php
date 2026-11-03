@@ -66,7 +66,47 @@
     $kontak_darurat_nama       = validate($_POST['kontak_darurat_nama'] ?? '');
     $kontak_darurat_hubungan   = validate($_POST['kontak_darurat_hubungan'] ?? '');
 
-    $datetime_daftar = $date_daftar . ' ' . $time_daftar . ':00';
+    // =============================================
+    // KONVERSI DATETIME DAFTAR KE UTC
+    // =============================================
+    if (empty($date_daftar)) {
+        echo json_encode([
+            "status" => "error",
+            "message" => "Tanggal daftar wajib diisi."
+        ]);
+        exit;
+    }
+
+    if (empty($time_daftar)) {
+        echo json_encode([
+            "status" => "error",
+            "message" => "Waktu daftar wajib diisi."
+        ]);
+        exit;
+    }
+
+    $datetime_local = $date_daftar . ' ' . $time_daftar . ':00';
+
+    $timezoneName = trim((string)($SessionUserTimezone ?? ''));
+    if (preg_match('/^UTC([+-])(\d{2}):(\d{2})$/', $timezoneName, $timezoneOffset)) {
+        $timezoneName = $timezoneOffset[1] . $timezoneOffset[2] . ':' . $timezoneOffset[3];
+    }
+    try {
+        $userTimezone = new DateTimeZone($timezoneName !== '' ? $timezoneName : 'UTC');
+    } catch (Throwable $e) {
+        $userTimezone = new DateTimeZone('UTC');
+    }
+
+    try {
+        $dt = new DateTimeImmutable($datetime_local, $userTimezone);
+        $datetime_daftar = $dt->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+    } catch (Throwable $e) {
+        echo json_encode([
+            "status" => "error",
+            "message" => "Format tanggal atau waktu tidak valid."
+        ]);
+        exit;
+    }
 
     // =============================================
     // DEFAULT STATUS
@@ -272,6 +312,19 @@
     // EKSEKUSI
     // =============================================
     if (mysqli_stmt_execute($stmt)) {
+
+        $id_kunjungan = mysqli_insert_id($Conn);
+
+        // Simpan Log
+        $category_log = 'Kunjungan';
+        $title_log    = 'Tambah Kunjungan';
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+            "id_kunjungan" => $id_kunjungan,
+            "id_pasien"    => $id_pasien,
+            "nama"         => $nama,
+            "dokter"       => $dokter,
+            "poliklinik"   => $poliklinik
+        ]);
 
         echo json_encode([
             "status" => "success",

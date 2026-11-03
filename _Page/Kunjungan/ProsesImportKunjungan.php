@@ -75,6 +75,8 @@
     // =========================================================
     $html = '';
     $no = 0;
+    $berhasil = 0;
+    $gagal = 0;
 
     foreach($rows as $row){
         if(empty(array_filter($row))){ continue; }
@@ -220,6 +222,12 @@
             $status_import = implode(', ', $keterangan);
         }
 
+        if ($status_import === 'Berhasil') {
+            $berhasil++;
+        } else {
+            $gagal++;
+        }
+
         // =====================================================
         // OUTPUT (Tetap Sama)
         // =====================================================
@@ -238,6 +246,18 @@
                 <td><span class="badge bg-'.$badge.'">'.$status_import.'</span></td>
             </tr>';
     }
+
+    // =========================================================
+    // SIMPAN LOG
+    // =========================================================
+    $category_log = 'Kunjungan';
+    $title_log    = 'Import Kunjungan';
+    SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, [
+        'file_name' => $_FILES['file_excel']['name'] ?? '',
+        'total'     => $no,
+        'berhasil'  => $berhasil,
+        'gagal'     => $gagal
+    ]);
 
     if(empty($html)){
         $html = '<tr><td colspan="11" class="text-center text-muted">Tidak ada data yang diproses</td></tr>';
