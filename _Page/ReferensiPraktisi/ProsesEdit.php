@@ -292,6 +292,23 @@
     // =========================================================================
     if ($update) {
 
+        // Simpan Log
+        $category_log = 'Referensi Tenaga Medis';
+        $title_log    = 'Edit Praktisi';
+        $logMetadata  = json_encode([
+            'id_praktisi'       => $id_praktisi,
+            'nama_praktisi'     => $nama_praktisi,
+            'nik_praktisi'      => $nik_praktisi,
+            'tipe_praktisi'     => $tipe_praktisi,
+            'profesi_praktisi'  => $profesi_praktisi,
+            'kontak_praktisi'   => $kontak_praktisi,
+            'email_praktisi'    => $email_praktisi,
+            'id_practitioner'   => $id_practitioner,
+            'id_akses'          => $id_akses,
+            'id_dokter'         => $id_dokter
+        ]);
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
         $response['status'] = 'success';
         $response['message'] = 'Data praktisi berhasil diperbarui.';
 

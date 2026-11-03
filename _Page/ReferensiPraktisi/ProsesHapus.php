@@ -119,6 +119,14 @@
     // =========================================================================
     if ($delete) {
 
+        // Simpan Log
+        $category_log = 'Referensi Tenaga Medis';
+        $title_log    = 'Hapus Praktisi';
+        $logMetadata  = json_encode([
+            'id_praktisi' => $id_praktisi
+        ]);
+        SaveLog($Conn, $SessionIdAkses, $SessionNama, $title_log, $category_log, $logMetadata);
+
         $response['status'] = 'success';
         $response['message'] = 'Data praktisi berhasil dihapus.';
 
