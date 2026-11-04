@@ -2,6 +2,7 @@
     header('Content-Type: application/json');
 
     include "../../_Config/Connection.php";
+    include "../../_Config/SimrsFunction.php";
     include "../../_Config/Session.php";
 
     function response($status, $message){
@@ -48,4 +49,7 @@
         mysqli_stmt_close($stmt);
         response("error", "Gagal menghapus data.");
     }
-?>
+    
+    // ===================== LOGGING ====================
+    SaveLog($Conn, $id_icd, 'User', 'Hapus ICD', 'Referensi ICD');
+    ?>

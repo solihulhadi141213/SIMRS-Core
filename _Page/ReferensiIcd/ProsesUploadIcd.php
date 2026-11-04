@@ -2,7 +2,8 @@
 // Mengimpor file XLSX ICD secara langsung tanpa menyimpan status unggahan pada tabel terpisah.
 header('Content-Type: application/json; charset=utf-8');
 include "../../_Config/Connection.php";
-include "../../_Config/Session.php";
+    include "../../_Config/SimrsFunction.php";
+    include "../../_Config/Session.php";
 
 /** Mengirim respons JSON error lalu menghentikan proses impor. */
 function icdImportError(string $message, int $statusCode = 400): void
@@ -108,4 +109,7 @@ try {
     mysqli_rollback($Conn);
     error_log('Import ICD: ' . $exception->getMessage());
     icdImportError('Import data ICD gagal diproses.', 500);
-}
+    }
+    
+    // ===================== LOGGING ====================
+    SaveLog($Conn, $SessionIdAkses, 'User', 'Upload ICD', 'Referensi ICD');

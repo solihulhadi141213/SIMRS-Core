@@ -11,7 +11,7 @@
         echo json_encode([
             "status"  => $status,
             "message" => $message
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit;
     }
 
@@ -71,6 +71,7 @@
     $result = mysqli_stmt_get_result($stmt);
 
     if (mysqli_num_rows($result) > 0) {
+        mysqli_stmt_close($stmt);
         response("error", "Kode ICD sudah terdaftar untuk versi ini.");
     }
 
@@ -87,7 +88,30 @@
     mysqli_stmt_bind_param($stmt, "ssss", $kode, $long_des, $short_des, $icd);
 
     if (mysqli_stmt_execute($stmt)) {
+        $inserted_id = mysqli_insert_id($Conn);
         mysqli_stmt_close($stmt);
+
+        // ===================== LOGGING ====================
+        $utcNow = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+        $category_log = 'Referensi ICD';
+        $logTitle     = 'Tambah ICD';
+        $logMetadata  = json_encode([
+            'id_icd' => $inserted_id,
+            'kode'   => $kode,
+            'icd'    => $icd
+        ], JSON_UNESCAPED_UNICODE);
+
+        $stmtAudit = mysqli_prepare(
+            $Conn,
+            "INSERT INTO log (id_akses, datetime_log, nama_petugas, category_log, title_log, metadata_log)
+             VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        if ($stmtAudit && $logMetadata !== false) {
+            mysqli_stmt_bind_param($stmtAudit, 'isssss', $SessionIdAkses, $utcNow, $SessionNama, $category_log, $logTitle, $logMetadata);
+            mysqli_stmt_execute($stmtAudit);
+            mysqli_stmt_close($stmtAudit);
+        }
+
         response("success", "Data ICD berhasil ditambahkan.");
     } else {
         mysqli_stmt_close($stmt);

@@ -77,6 +77,7 @@
                                 ['label' => 'Alergen', 'url' => 'index.php?Page=ReferensiAlergen', 'page' => 'ReferensiAlergen'],
                                 ['label' => 'Observation', 'url' => 'index.php?Page=ReferensiObservation', 'page' => 'ReferensiObservation'],
                                 ['label' => 'Imunisasi/Vaksin', 'url' => 'index.php?Page=ReferensiImunisasi', 'page' => 'ReferensiImunisasi'],
+                                ['label' => 'Kode Episode', 'url' => 'index.php?Page=ReferensiEpisodePerawatan', 'page' => 'ReferensiEpisodePerawatan'],
                                 ['label' => 'Wilayah', 'url' => 'index.php?Page=ReferensiWilayah', 'page' => 'ReferensiWilayah'],
                             ],
                         ],

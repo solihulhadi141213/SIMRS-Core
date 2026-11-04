@@ -203,6 +203,11 @@
         $response["status"]  = "success";
         $response["message"] = "Import selesai. Berhasil: " . $berhasil . ", Gagal: " . $gagal;
 
+        // Log aktivitas import data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Import Body Site', 'Referensi Body Site', ['berhasil' => $berhasil, 'gagal' => $gagal]);
+
         echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
 

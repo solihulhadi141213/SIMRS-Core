@@ -3,6 +3,7 @@
 
     // Koneksi & Session
     include "../../_Config/Connection.php";
+    include "../../_Config/SimrsFunction.php";
     include "../../_Config/Session.php";
 
     // ===================== HELPER RESPONSE =====================
@@ -110,4 +111,7 @@
         mysqli_stmt_close($stmt);
         response("error", "Gagal memperbarui data ICD.");
     }
-?>
+    
+    // ===================== LOGGING ====================
+    SaveLog($Conn, $id_icd, 'User', 'Edit ICD', 'Referensi ICD');
+    ?>

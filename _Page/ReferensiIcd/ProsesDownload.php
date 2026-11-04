@@ -12,6 +12,7 @@
 
     // ===================== CONNECTION =====================
     include "../../_Config/Connection.php";
+    include "../../_Config/SimrsFunction.php";
     include "../../_Config/Session.php";
 
     // ===================== VALIDASI SESSION =====================
@@ -135,4 +136,7 @@
 
         exit;
     }
-?>
+    
+    // ===================== LOGGING ====================
+    SaveLog($Conn, $SessionIdAkses, 'User', 'Download ICD', 'Referensi ICD');
+    ?>

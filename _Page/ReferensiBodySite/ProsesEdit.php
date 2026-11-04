@@ -224,6 +224,11 @@
         mysqli_stmt_close($stmtUpdate);
         mysqli_commit($Conn);
 
+        // Log aktivitas editing data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Edit Body Site', 'Referensi Body Site', ['body_site_nama' => $body_site_nama]);
+
         $response['status']  = 'success';
         $response['message'] = 'Data referensi body site berhasil diperbarui.';
 

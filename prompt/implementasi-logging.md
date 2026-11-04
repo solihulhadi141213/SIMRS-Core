@@ -1,6 +1,6 @@
 # Implementasi Logging
-Periksa semua file PHP pada directory `_Page\ReferensiRuangRawat` yang menggunakan perfix 'Proses'. 
-Implementasikan logging dengan menggunakan function 'SaveLog' dengan nilai parameter $category_log='Referensi Ruang Rawat';
+Periksa semua file PHP pada directory `_Page\ReferensiBodySite` yang menggunakan perfix 'Proses'. 
+Implementasikan logging dengan menggunakan function 'SaveLog' dengan nilai parameter $category_log='Referensi Body Site';
 Pastikan setiap file sudah ada perintah include "../../_Config/SimrsFunction.php" sebelum function SaveLog dipanggil";
 
 # Validasi Logging Seluruh Fitur

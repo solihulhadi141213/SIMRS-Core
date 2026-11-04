@@ -115,6 +115,11 @@
         $response["status"]  = "success";
         $response["message"] = "Referensi body site berhasil dihapus";
 
+        // Log aktivitas penghapusan data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Hapus Body Site', 'Referensi Body Site', ['body_site_nama' => $body_site_nama ?? '']);
+
         echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
 

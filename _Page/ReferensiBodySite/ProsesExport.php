@@ -127,6 +127,12 @@
     // Output
     $writer = new Xlsx($spreadsheet);
     $writer->save('php://output');
+    
+    // Log aktivitas export
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Export Body Site', 'Referensi Body Site', ['filename' => $filename]);
+    
     exit;
 ?>
 
