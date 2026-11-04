@@ -100,6 +100,11 @@
 
     mysqli_stmt_close($stmt_delete);
 
+    // Logaktivitas hapus data
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Hapus Wilayah', 'Referensi Wilayah', ['id_wilayah' => $id_wilayah, 'province' => $province]);
+
     echo json_encode([
         "status"  => "success",
         "message" => "Wilayah provinsi berhasil dihapus."

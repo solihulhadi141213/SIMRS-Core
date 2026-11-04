@@ -131,5 +131,11 @@
     // Output
     $writer = new Xlsx($spreadsheet);
     $writer->save('php://output');
+
+    // Log aktivitas export data
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Export Alergen', 'Referensi Alergen', ['filename' => $filename]);
+
     exit;
 ?>

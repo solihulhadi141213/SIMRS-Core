@@ -1,6 +1,7 @@
 <?php
 require '../../vendor/autoload.php';
 include "../../_Config/Connection.php";
+include "../../_Config/SimrsFunction.php";
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -149,4 +150,10 @@ header('Cache-Control: max-age=0');
 
 $writer = new Xlsx($spreadsheet);
 $writer->save('php://output');
+
+// Logaktivitas export data
+$id_akses = (int)$SessionIdAkses;
+$nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+SaveLog($Conn, $id_akses, $nama_petugas, 'Export Wilayah', 'Referensi Wilayah', ['filename' => 'wilayah.xlsx']);
+
 exit;

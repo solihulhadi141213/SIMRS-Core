@@ -157,6 +157,11 @@
             'message' => 'Hapus referensi tindakan berhasil'
         ];
 
+        // Log aktivitas penghapusan data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Hapus Tindakan', 'Referensi Tindakan', ['id_tindakan_referensi' => $id_tindakan_referensi]);
+
         echo json_encode(
             $response,
             JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES

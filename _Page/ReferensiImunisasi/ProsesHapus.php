@@ -78,6 +78,11 @@
         $response["status"] = "success";
         $response["message"] = "Referensi imunisasi berhasil dihapus";
 
+        // Logaktivitas hapus data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Hapus Imunisasi', 'Referensi Imunisasi', ['id_imunisasi_referensi' => $id_imunisasi_referensi]);
+
         echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
 

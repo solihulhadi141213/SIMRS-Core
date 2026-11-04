@@ -9,6 +9,7 @@
     // LOAD CONNECTION & SESSION
     // =========================================================
     include "../../_Config/Connection.php";
+    include "../../_Config/SimrsFunction.php";
     include "../../_Config/Session.php";
 
     // =========================================================
@@ -200,6 +201,11 @@
     // =========================================================
     $writer = new Xlsx($spreadsheet);
     $writer->save('php://output'); // Menulis output ke browser
+
+    // Log aktivitas export data
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Export Tindakan', 'Referensi Tindakan', ['filename' => $filename]);
 
     exit;
 ?>

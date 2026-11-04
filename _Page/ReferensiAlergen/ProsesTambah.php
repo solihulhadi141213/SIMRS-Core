@@ -228,6 +228,11 @@
         $response["status"]  = "success";
         $response["message"] = "Data referensi alergen berhasil disimpan";
 
+        // Log aktivitas penambahan data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Tambah Alergen', 'Referensi Alergen', ['nama_alergen' => $nama_alergen]);
+
         echo json_encode(
             $response,
             JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES

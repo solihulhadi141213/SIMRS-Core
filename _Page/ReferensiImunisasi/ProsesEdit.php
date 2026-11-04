@@ -187,6 +187,11 @@
         mysqli_stmt_close($stmtUpdate);
         mysqli_commit($Conn);
 
+        // Logaktivitas edit data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Edit Imunisasi', 'Referensi Imunisasi', ['nama_vaksin' => $nama_vaksin]);
+
         $response['status']  = 'success';
         $response['message'] = 'Data referensi imunisasi berhasil diperbarui.';
 

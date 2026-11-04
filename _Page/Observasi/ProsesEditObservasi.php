@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 include "../../_Config/Connection.php";
+include "../../_Config/SimrsFunction.php";
 include "../../_Config/Session.php";
 
 function observasiEditResponse(string $status, string $message): void
@@ -211,6 +212,10 @@ try {
     $stmt->close();
 
     observasiEditResponse('success', 'Data observasi berhasil diperbarui.');
+    // Logaktivitas edit data
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Edit Observasi', 'Observasi', ['id_observation' => $idObservation]);
 } catch (ObservasiEditRequestException $exception) {
     observasiEditResponse('error', $exception->getMessage());
 } catch (Throwable $exception) {

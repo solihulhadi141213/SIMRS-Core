@@ -164,6 +164,11 @@
         $response["status"] = "success";
         $response["message"] = "Edit referensi alergen berhasil";
 
+        // Log aktivitas edit data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Edit Alergen', 'Referensi Alergen', ['nama_alergen' => $nama_alergen]);
+
         echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
 

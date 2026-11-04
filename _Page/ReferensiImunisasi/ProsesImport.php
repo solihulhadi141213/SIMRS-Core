@@ -155,4 +155,9 @@
     }
 
     sendResponse(['status'=>'success','message'=>"Insert : $inserted | Gagal : $failed",'detail'=>$detail]);
+
+        // Logaktivitas import data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Import Imunisasi', 'Referensi Imunisasi', ['berhasil' => $inserted, 'gagal' => $failed]);
 ?>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Waktu pembuatan: 31 Okt 2026 pada 20.41
+-- Waktu pembuatan: 04 Nov 2026 pada 11.32
 -- Versi server: 8.4.7
 -- Versi PHP: 8.5.0
 
@@ -253,28 +253,28 @@ CREATE TABLE IF NOT EXISTS `antrian` (
   `id_dokter` int UNSIGNED DEFAULT NULL COMMENT 'Jika kosong maka dokter dihapus',
   `id_jadwal` int UNSIGNED DEFAULT NULL COMMENT 'Jika kosong maka jadwal dihapus',
   `no_antrian` int UNSIGNED NOT NULL COMMENT 'Nomor urutan antrian',
-  `kode_booking` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'kode acak booking',
-  `nama_pasien` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nama lengkap pasien',
-  `nik` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Identitas KTP',
-  `no_bpjs` varchar(13) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Nomor BPJS',
-  `kontak` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Kontak pasien',
-  `gender` enum('Laki-laki','Perempuan') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Jenis Kelamin',
-  `nomor_referensi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nomor dokumen yang mereferensikan',
-  `jenis_referensi` enum('1','2','3','4') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT ' 	1.Rujukan FKTP 2.Rujukan Internal 3.Kontrol 4.Rujukan Antar RS ',
+  `kode_booking` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'kode acak booking',
+  `nama_pasien` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nama lengkap pasien',
+  `nik` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Identitas KTP',
+  `no_bpjs` varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Nomor BPJS',
+  `kontak` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Kontak pasien',
+  `gender` enum('Laki-laki','Perempuan') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Jenis Kelamin',
+  `nomor_referensi` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nomor dokumen yang mereferensikan',
+  `jenis_referensi` enum('1','2','3','4') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT ' 	1.Rujukan FKTP 2.Rujukan Internal 3.Kontrol 4.Rujukan Antar RS ',
   `jenis_request` tinyint(1) NOT NULL COMMENT 'Pasien Baru? 0=Tidak, 1=Ya ',
   `poli_eksekutif` tinyint(1) NOT NULL COMMENT 'Apakah Polieksekutif? 0. Tidak 1. Ya ',
-  `pembayaran` enum('UMUM','BPJS','ASURANSI') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Metode pembayaran yang digunakan',
-  `keluhan` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Keluhan yang dirasakan pasien',
-  `nama_dokter` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nama dokter sesuai tabel dokter',
-  `nama_poliklinik` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'nama poli sesuai poliklinik',
+  `pembayaran` enum('UMUM','BPJS','ASURANSI') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Metode pembayaran yang digunakan',
+  `keluhan` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Keluhan yang dirasakan pasien',
+  `nama_dokter` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nama dokter sesuai tabel dokter',
+  `nama_poliklinik` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'nama poli sesuai poliklinik',
   `tanggal_kunjungan` date NOT NULL COMMENT 'Tanggal Rencana Kunjungan',
   `datetime_creat` datetime NOT NULL COMMENT 'Tanggal & Jam Pendaftaran antrian dibuat (UTC)',
   `status_antrian` enum('Terdaftar','Batal','Checkin','Panggil Admisi','Tunggu Poli','Layanan Poli','Tunggu Farmasi','Layanan Farmasi','Selesai') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Posisi status pelayanan pasien',
-  `sumber_antrian` enum('JKN Mobile','Website','Mesin Antrian','Manual') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Dari mana data ini berasal',
+  `sumber_antrian` enum('JKN Mobile','Website','Mesin Antrian','Manual') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Dari mana data ini berasal',
   `ws_bpjs` tinyint(1) NOT NULL COMMENT 'Apakahh antrian sudah dikirim ke antrol BPJS',
-  `keterangan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Misalnya keterangan penyebab pembatalan',
+  `keterangan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Misalnya keterangan penyebab pembatalan',
   `update_by_id` int UNSIGNED DEFAULT NULL COMMENT 'ID Akses yang melakukan update',
-  `update_by_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Nama akses yang melakukan update',
+  `update_by_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Nama akses yang melakukan update',
   `update_at` datetime DEFAULT NULL COMMENT 'Waktu update (kosong, jika belum pernah diubah)',
   PRIMARY KEY (`id_antrian`),
   KEY `antrian_pasien` (`id_pasien`),
@@ -283,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `antrian` (
   KEY `antrian_dokter` (`id_dokter`),
   KEY `antrian_to_jadwal` (`id_jadwal`),
   KEY `antrian_to_akses` (`update_by_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -295,11 +295,11 @@ DROP TABLE IF EXISTS `antrian_log`;
 CREATE TABLE IF NOT EXISTS `antrian_log` (
   `id_antrian_log` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_antrian` int UNSIGNED NOT NULL COMMENT 'Dari tabel antrian',
-  `status_antrian` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Sesuai Enum status antrian',
+  `status_antrian` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Sesuai Enum status antrian',
   `datetime_rs` datetime NOT NULL COMMENT 'Tanggal & Jam Rumah Sakit',
   `datetime_bpjs` datetime DEFAULT NULL COMMENT 'Tanggal & Jam BPJS',
   PRIMARY KEY (`id_antrian_log`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Catatan layanan antrian';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Catatan layanan antrian';
 
 -- --------------------------------------------------------
 
@@ -318,7 +318,7 @@ CREATE TABLE IF NOT EXISTS `api_key` (
   `datetime_creat` datetime NOT NULL COMMENT 'Kapan API Key Dibuat',
   `datetime_update` datetime NOT NULL COMMENT 'Kapan Terakhir Kali API Key Diubah',
   PRIMARY KEY (`id_api_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -441,6 +441,29 @@ CREATE TABLE IF NOT EXISTS `dokter` (
   KEY `dokter_to_akses_1` (`creat_by_id`),
   KEY `dokter_to_akses_2` (`update_by_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Menyimpan referensi data dokter tanpa terikat dengan data akses';
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `episode_perawatan_kode`
+--
+
+DROP TABLE IF EXISTS `episode_perawatan_kode`;
+CREATE TABLE IF NOT EXISTS `episode_perawatan_kode` (
+  `id_episode_perawatan_kode` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID Induk referensi episode perawatan',
+  `episode_category` varchar(255) NOT NULL COMMENT 'Kategori episode perawatan (ex: TB)',
+  `episode_name` varchar(255) NOT NULL COMMENT 'Nama episode perawatan (istilah lokal, Ex: TB Paru Sensitif Obat)',
+  `episode_display` varchar(255) NOT NULL COMMENT 'Nama episode perawatan (istilah standar, Ex: Tuberkulosis Sensitif Obat)',
+  `episode_code` varchar(255) NOT NULL COMMENT 'Kode episode berdasarkan referensi',
+  `episode_system` varchar(255) NOT NULL COMMENT 'System referensi yang digunakan (ex: http://terminology.kemkes.go.id/CodeSystem/episodeofcare-type)',
+  `source` varchar(255) NOT NULL COMMENT 'Sumber data (Ex:Dokumentasi Satusehat)',
+  `status` tinyint(1) NOT NULL COMMENT '0:Inactive|1:Active',
+  `creat_by_id` int UNSIGNED DEFAULT NULL COMMENT 'ID Akses Pembuat',
+  `creat_by_name` varchar(255) NOT NULL COMMENT 'Nama User Pembuat',
+  `creat_at` datetime NOT NULL COMMENT 'Datetime Dibuat (UTC)',
+  PRIMARY KEY (`id_episode_perawatan_kode`),
+  KEY `episode_perawatan_kode_to_akses` (`creat_by_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Referensi kode episode of care';
 
 -- --------------------------------------------------------
 
@@ -637,6 +660,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `id_akses` int UNSIGNED DEFAULT NULL COMMENT 'ID akses pengguna yang melakukan aktivitas',
   `datetime_log` datetime NOT NULL COMMENT 'tanggal dan waktu kejadian',
   `nama_petugas` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Sesuai Tabel Akses Pada saat kejadian',
+  `category_log` varchar(255) NOT NULL COMMENT 'Kategori Log / Nama Fitur',
   `title_log` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'diisi dengan informasi fitur atau nama aktifitas',
   `metadata_log` json DEFAULT NULL COMMENT 'Untuk aktifitas yang melibatkan penghapusan data sensitif',
   PRIMARY KEY (`id_log`),
@@ -862,7 +886,7 @@ CREATE TABLE IF NOT EXISTS `ruang_rawat` (
 DROP TABLE IF EXISTS `setting`;
 CREATE TABLE IF NOT EXISTS `setting` (
   `id_setting` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `setting_name` enum('Development','Staging','Production') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Lingkungan pengaturan',
+  `setting_name` enum('Development','Staging','Production') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Lingkungan pengaturan',
   `base_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Base URL Aplikasi',
   `hospital_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Nama Faskes',
   `hospital_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Alamat Faskes',
@@ -873,7 +897,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Nama File Logo RS/Faskes',
   `status` tinyint(1) NOT NULL COMMENT '0: Inactive|1:Active',
   PRIMARY KEY (`id_setting`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Pengaturan umum aplikasi';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Pengaturan umum aplikasi';
 
 -- --------------------------------------------------------
 
@@ -1029,39 +1053,6 @@ CREATE TABLE IF NOT EXISTS `setting_sirs_online` (
   `status` tinyint(1) NOT NULL COMMENT '0/1',
   PRIMARY KEY (`id_setting_sirs_online`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `setting_sisrute`
---
-
-DROP TABLE IF EXISTS `setting_sisrute`;
-CREATE TABLE IF NOT EXISTS `setting_sisrute` (
-  `id_setting_sisrute` int NOT NULL AUTO_INCREMENT,
-  `nama_setting` text NOT NULL,
-  `id_rs` varchar(20) NOT NULL,
-  `password_sisrute` varchar(20) NOT NULL,
-  `url_sisrute` text NOT NULL,
-  `status` varchar(20) NOT NULL COMMENT 'Aktiv/Non-Aktiv',
-  PRIMARY KEY (`id_setting_sisrute`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `setting_web`
---
-
-DROP TABLE IF EXISTS `setting_web`;
-CREATE TABLE IF NOT EXISTS `setting_web` (
-  `id_setting_web` int NOT NULL AUTO_INCREMENT,
-  `user_key` varchar(36) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `access_key` varchar(36) NOT NULL,
-  `base_url_service` text NOT NULL,
-  `last_update` varchar(30) NOT NULL,
-  PRIMARY KEY (`id_setting_web`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1252,6 +1243,12 @@ ALTER TABLE `diagnosis`
 ALTER TABLE `dokter`
   ADD CONSTRAINT `dokter_to_akses_1` FOREIGN KEY (`creat_by_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL ON UPDATE RESTRICT,
   ADD CONSTRAINT `dokter_to_akses_2` FOREIGN KEY (`update_by_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Ketidakleluasaan untuk tabel `episode_perawatan_kode`
+--
+ALTER TABLE `episode_perawatan_kode`
+  ADD CONSTRAINT `episode_perawatan_kode_to_akses` FOREIGN KEY (`creat_by_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
 -- Ketidakleluasaan untuk tabel `general_consent`

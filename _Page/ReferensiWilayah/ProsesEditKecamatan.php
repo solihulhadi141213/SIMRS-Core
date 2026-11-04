@@ -215,6 +215,11 @@
 
     mysqli_stmt_close($stmt_update);
 
+    // Logaktivitas edit data
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Edit Wilayah', 'Referensi Wilayah', ['id_wilayah' => $id_wilayah, 'subdistrict' => $subdistrict_new, 'kode_mendagri_3' => $kode_new]);
+
     // ======================================================
     // SUCCESS
     // ======================================================

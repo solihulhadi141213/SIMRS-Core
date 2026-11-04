@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 include "../../_Config/Connection.php";
+include "../../_Config/SimrsFunction.php";
 
 // ================== RESPONSE DEFAULT ==================
 $response = [
@@ -106,6 +107,11 @@ if ($insert->execute()) {
 
     $response['message'] = "Gagal menyimpan data: " . $Conn->error;
 }
+
+// Logaktivitas penambahan data
+$id_akses = (int)$SessionIdAkses;
+$nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+SaveLog($Conn, $id_akses, $nama_petugas, 'Tambah Wilayah', 'Referensi Wilayah', ['province' => $province, 'regency' => $regency, 'subdistrict' => $subdistrict, 'village' => $village]);
 
 // ================== OUTPUT ==================
 echo json_encode($response);

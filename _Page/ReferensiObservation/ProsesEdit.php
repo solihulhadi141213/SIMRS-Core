@@ -216,10 +216,15 @@ $stmt->bind_param(
 
 if ($stmt->execute()) {
 
-    echo json_encode([
-        "status"  => "success",
-        "message" => "Referensi observation berhasil diperbarui."
-    ]);
+        // Log aktivitas edit data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Edit Observasi', 'Referensi Observation', ['observation_name' => $observation_name]);
+
+        echo json_encode([
+            "status"  => "success",
+            "message" => "Referensi observation berhasil diperbarui."
+        ]);
 
 } else {
 

@@ -199,6 +199,11 @@
         mysqli_stmt_close($stmtInsert);
         mysqli_commit($Conn);
 
+        // Log aktivitas penambahan data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Tambah Imunisasi', 'Referensi Imunisasi', ['nama_vaksin' => $nama_vaksin]);
+
         $response['status']  = 'success';
         $response['message'] = 'Data referensi imunisasi berhasil disimpan.';
 

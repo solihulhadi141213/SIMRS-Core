@@ -220,6 +220,11 @@
 
     mysqli_stmt_close($stmt_update);
 
+    // Logaktivitas edit data
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Edit Wilayah', 'Referensi Wilayah', ['id_wilayah' => $id_wilayah, 'village' => $village, 'tipe_level4' => $tipe_level4]);
+
     // ======================================================
     // SUCCESS RESPONSE
     // ======================================================

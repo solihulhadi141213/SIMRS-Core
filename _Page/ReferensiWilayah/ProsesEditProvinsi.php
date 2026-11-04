@@ -152,6 +152,11 @@
 
     mysqli_stmt_close($stmt_update);
 
+    // Logaktivitas edit data
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Edit Wilayah', 'Referensi Wilayah', ['id_wilayah' => $id_wilayah, 'province' => $province_new]);
+
     echo json_encode([
         "status"  => "success",
         "message" => "Wilayah provinsi berhasil diupdate."

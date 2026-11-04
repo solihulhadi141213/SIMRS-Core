@@ -158,6 +158,8 @@ try {
         throw new Exception($stmt->error);
     }
 
+    SaveLog($category_log='Alergi');
+
     $response = [
         'status' => 'success',
         'message' => 'Edit alergi berhasil',

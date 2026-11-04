@@ -200,6 +200,11 @@
 
         mysqli_commit($Conn);
 
+        // Log aktivitas editing data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Edit Tindakan', 'Referensi Tindakan', ['nama_tindakan' => $nama_tindakan]);
+
         echo json_encode([
             "status"  => "success",
             "message" => "Edit Referensi Tindakan Berhasil!"

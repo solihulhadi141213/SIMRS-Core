@@ -97,6 +97,8 @@
         // Tutup statement
         $stmt_delete->close();
 
+        SaveLog($category_log='Alergi');
+
         // =========================================================
         // RESPONSE SUCCESS
         // =========================================================

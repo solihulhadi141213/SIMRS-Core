@@ -323,6 +323,11 @@
     // =====================================================
     if ($queryInsert) {
 
+        // Log aktivitas penambahan data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Tambah Observasi', 'Referensi Observation', ['observation_name' => $observation_name]);
+
         response(
             'success',
             'Referensi observation berhasil ditambahkan!'

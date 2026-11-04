@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 include "../../_Config/Connection.php";
+include "../../_Config/SimrsFunction.php";
 include "../../_Config/Session.php";
 
 function observasiInsertResponse(string $status, string $message, array $extra = []): void
@@ -217,6 +218,10 @@ try {
     observasiInsertResponse('success', 'Data observasi berhasil ditambahkan.', [
         'id_observation' => $idObservation,
     ]);
+    // Logaktivitas penambahan data
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Tambah Observasi', 'Observasi', ['id_pasien' => $idPasien, 'id_observasi' => $idObservation]);
 } catch (ObservasiRequestException $exception) {
     observasiInsertResponse('error', $exception->getMessage());
 } catch (Throwable $exception) {

@@ -268,4 +268,8 @@ observationSendResponse(
     ['observation_id' => $observationId],
     200
 );
+    // Logaktivitas kirim data
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Kirim Observasi', 'Observasi', ['observation_id' => $observationId]);
 ?>

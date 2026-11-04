@@ -176,6 +176,8 @@ try {
         throw new Exception($stmt->error);
     }
 
+    SaveLog($category_log='Alergi');
+
     $response = [
         'status' => 'success',
         'message' => 'Tambah alergi berhasil',

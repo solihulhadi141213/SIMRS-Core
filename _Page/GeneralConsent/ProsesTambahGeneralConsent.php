@@ -192,6 +192,11 @@
         // Ambil ID Insert
         $id_general_consent = $stmt->insert_id;
 
+        // Logaktivitas penambahan data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Tambah General Consent', 'General Consent', ['id_pasien' => $id_pasien, 'metode_consent' => $metode_consent]);
+
         echo json_encode([
             'status' => 'success',
             'message' => 'General Consent berhasil dibuat.',

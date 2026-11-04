@@ -110,6 +110,11 @@
         $response["status"] = "success";
         $response["message"] = "Referensi alergen berhasil dihapus";
 
+        // Log aktivitas hapus data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Hapus Alergen', 'Referensi Alergen', ['id_alergi_alergen' => $id_alergi_alergen]);
+
         // Output
         echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;

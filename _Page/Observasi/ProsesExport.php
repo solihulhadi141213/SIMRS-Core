@@ -14,6 +14,7 @@ ini_set('max_execution_time', '300');
 ini_set('memory_limit', '512M');
 
 include "../../_Config/Connection.php";
+include "../../_Config/SimrsFunction.php";
 include "../../_Config/Session.php";
 require '../../vendor/autoload.php';
 
@@ -311,4 +312,10 @@ header('Pragma: public');
 $writer = new Xlsx($spreadsheet);
 $writer->save('php://output');
 $spreadsheet->disconnectWorksheets();
+
+// Logaktivitas export data
+$id_akses = (int)$SessionIdAkses;
+$nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+SaveLog($Conn, $id_akses, $nama_petugas, 'Export Observasi', 'Observasi', ['filename' => 'Data_Observasi_*.xlsx']);
+
 exit;

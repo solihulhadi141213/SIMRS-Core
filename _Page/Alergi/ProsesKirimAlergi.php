@@ -250,6 +250,8 @@
     }
 
     // SUCCESS
+    SaveLog($category_log='Alergi');
+
     echo json_encode([
         'status'        => 'success',
         'message'       => 'Kirim Alergi SATUSEHAT berhasil',

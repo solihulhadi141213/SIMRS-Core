@@ -86,6 +86,11 @@
             "message" => "Data referensi Observation berhasil dihapus."
         ];
 
+        // Log aktivitas hapus data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Hapus Observasi', 'Referensi Observation', ['id_observation_reference' => $id_observation_reference]);
+
         echo json_encode($response);
         exit;
     } catch (Throwable $e) {

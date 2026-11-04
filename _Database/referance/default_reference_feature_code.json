@@ -537,5 +537,12 @@
         "kategori": "Referensi",
         "kode": "tKhc9YiUXe",
         "keterangan": "Mengelola daftar vaksin yang tersedia"
+    },
+    {
+        "id_akses_fitur": "82",
+        "nama_fitur": "Referensi Episode Perawatan",
+        "kategori": "Referensi",
+        "kode": "JrJZ0Vsdkl",
+        "keterangan": "Mengelola data referensi episode perawatan"
     }
 ]

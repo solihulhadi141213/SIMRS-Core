@@ -172,6 +172,11 @@
             'message' => 'Recovery referensi tindakan berhasil'
         ];
 
+        // Log aktivitas recovery data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Recovery Tindakan', 'Referensi Tindakan', ['id_tindakan_referensi' => $id_tindakan_referensi]);
+
         echo json_encode(
             $response,
             JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES

@@ -234,6 +234,10 @@
             "status"  => "success",
             "message" => "Consent Berhasil Disimpan"
         ]);
+        // Logaktivitas kirim data
+        $id_akses = (int)$SessionIdAkses;
+        $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+        SaveLog($Conn, $id_akses, $nama_petugas, 'Kirim General Consent', 'General Consent', ['id_general_consent' => $id_general_consent]);
     }
     exit;
 ?>

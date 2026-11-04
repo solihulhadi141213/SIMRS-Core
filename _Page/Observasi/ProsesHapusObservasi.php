@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 include "../../_Config/Connection.php";
+include "../../_Config/SimrsFunction.php";
 include "../../_Config/Session.php";
 
 function observasiDeleteResponse(string $status, string $message): void
@@ -95,6 +96,10 @@ try {
     }
     $transactionStarted = false;
     observasiDeleteResponse('success', 'Data observasi berhasil dihapus.');
+    // Logaktivitas hapus data
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Hapus Observasi', 'Observasi', ['id_observation' => $idObservation]);
 } catch (ObservasiDeleteRequestException $exception) {
     if ($transactionStarted) {
         mysqli_rollback($Conn);

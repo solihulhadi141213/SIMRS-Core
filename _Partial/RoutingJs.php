@@ -40,6 +40,7 @@
         "ReferensiIcdBpjs"      => "_Page/ReferensiIcdBpjs/ReferensiIcdBpjs.js?v=A'.$version.'",
         "ReferensiImunisasi"      => "_Page/ReferensiImunisasi/ReferensiImunisasi.js?v=A'.$version.'",
         "ReferensiBodySite"      => "_Page/ReferensiBodySite/ReferensiBodySite.js?v=A'.$version.'",
+        "ReferensiEpisodePerawatan"      => "_Page/ReferensiEpisodePerawatan/ReferensiEpisodePerawatan.js?v=A'.$version.'",
         "Pasien"                => "_Page/Pasien/Pasien.js?v=A'.$version.'",
         "Kunjungan"             => "_Page/Kunjungan/Kunjungan.js?v=A'.$version.'",
         "Antrian"             => "_Page/Antrian/Antrian.js?v=A'.$version.'",

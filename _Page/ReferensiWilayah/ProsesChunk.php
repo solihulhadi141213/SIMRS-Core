@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 include "../../_Config/Connection.php";
+include "../../_Config/SimrsFunction.php";
 require '../../vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -133,6 +134,11 @@ if ($end >= $highestRow) {
     ]);
 
 } else {
+
+    // Logaktivitas import data
+    $id_akses = (int)$SessionIdAkses;
+    $nama_petugas = validateAndSanitizeInput($SessionNama ?? 'Unknown');
+    SaveLog($Conn, $id_akses, $nama_petugas, 'Import Wilayah', 'Referensi Wilayah', ['progress' => $progress, 'status' => 'lanjut']);
 
     echo json_encode([
         "status" => "lanjut",

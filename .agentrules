@@ -6,6 +6,7 @@ Project ini adalah kode warisan yang menggunakan struktur lama, kurang rapih dan
 3. Simpan dalam memori, ingatan agent bagaimana modul dan fitur bekerja.
 4. Simpan setiap bagian yang konsisten dalam skill.
 5. Jangan pernah melakukan perubahan reverse berdasarkan commit.
+6. Jangan pernah membuat folder baru.
 ## Aturan Utama
 1. Jangan pernah generate atau membuat gambar, vidio atau media lainnya.
 2. Jangan pernah menggunakan pustaka / dependensi dengan CDN tanpa ijin.
