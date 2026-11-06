@@ -5,6 +5,7 @@
   - Other
   - workflows
     - ci.yml
+    - phpcs.yml
 - .gitignore
 - assets
   - css
@@ -24,155 +25,85 @@
       - KFOmCnqEu92Fr1Mu7GxKOzY.woff2
       - KFOmCnqEu92Fr1Mu7mxKOzY.woff2
       - KFOmCnqEu92Fr1Mu7WxKOzY.woff2
+    - layout.css
     - LoginStyle.css
     - style.css
-  - images
-    - 90bffa00c004c97f63a0470d1aed1e47.png
-    - avatar-1.jpg
-    - avatar-2.jpg
-    - avatar-3.jpg
-    - avatar-4.jpg
-    - avatar-5.jpg
-    - avatar-blank.jpg
-    - Bantuan
-      - blobid1639844055913.png
-      - blobid1639844688056.jpg
-      - blobid1639844848562.gif
-      - PanduanMateri1.gif
-      - PanduanMateri2.gif
-      - PanduanMateri3.gif
-      - PanduanMateri4.gif
-      - PanduanMateri5.gif
-      - RegistrasiSiswa.png
-    - bpjs.png
-    - breadcrumb-bg.jpg
-    - breadcrumb-bg2.jpg
-    - browser
-      - chrome.png
-      - firefox.png
-      - ie.png
-      - opera.png
-      - safari.png
-    - check-mark-verified.gif
-    - check.gif
-    - CheckNotification.png
-    - d4efe0b8e92c30c3e53a59bd4bf22dce.png
-    - details_close.png
-    - details_open.png
-    - Dokter
-      - 03af5312a48960e88f7dea6667f1239939dd.png
-      - 0a3c6d4b32277de3aed6ab9d5f286bfbb36d.png
-      - 0e2cf8306a64a6df2fbc6bbe58380255b297.png
-      - 1639833453768.jpg
-      - 1639833536487.jpg
-      - 1639835082194.jpg
-      - 1700677030058.jpg
-      - 179dd497d4ea0c0a3825bda65c6eaf7b3918.png
-      - 375dfcc12579938ce80bf05eaf73a4465b86.png
-      - 410bf3bba0cfae581c919ee73409aa34.jpg
-      - 485da79a4a76d987bb17b5b6c726f547fff5.png
-      - 4d8c1dcbbd1140421f23e18349561f2a394a.png
-      - 525f04821b0f97d89a2c8c072aa3b4fc0d96.png
-      - 63f914718fcc7c7c7c3f40323a6c182f9816.png
-      - 712286d1385a0bac30867fff7e6b61f74051.png
-      - 775ccd42d358a593d36bc156278ca2cd906d.png
-      - 9012285cdaebe2bb4eb7ca8828e25bf2e979.png
-      - b5acdf9745b6cbb9a699595317f218b3f418.png
-      - c36ca1f14fe0f49399a43a07ad91d2a3ec4a.png
-      - c8a2ddbbdea1458add98fc356bf1bcaa0a70.png
-      - ccec60b761739fe6628afbcf35ec405be3a8.png
-      - eeca03fe424627a1d761480fdb83c4c463bc.png
-      - ef3c6c818446283b6aa365296e9666cf9141.png
-      - ef5f236dab71093498f6a5381f90229d0d9d.png
-    - elsyfa.png
-    - faq_man.png
+  - img
+    - dokter
+      - 12337ccc72bcd659784ee8bbb5231e4d.png
+      - 352d61a5f35392d1d07b9844882fe343.jpg
+      - 4690a50b4be2d0a4f45ef362106a6847.jpg
+      - afd571178fa6964f1e7a48b018976111.png
+      - c679e802072ddbc64a66cb5022655bd9.png
+      - e2e06b544167c85dd5fa83bebdc4c3b8.png
+      - No-Image.png
     - favicon
-    - Favicon-1688582547855.png
-    - Favicon-1688583517923.png
-    - favicon.ico
-    - favicon.png
-    - gambar-depan.png
-    - icon.png
-    - kopi-logo.jpg
-    - loading.gif
-    - login-ilustration.png
-    - logo el syifa.png
-    - Logo-1688582547861.png
-    - Logo-1688583517923.png
-    - logo-blue.png
-    - logo-compact.png
-    - logo.png
-    - mCSB_buttons.png
-    - MyMath.png
-    - newEmail.png
-    - newJobAplication.png
-    - newmessege.jpg
-    - NewRegister.png
-    - newTestimonial.png
-    - No-Image.png
-    - noacces.png
-    - noimage.jpg
-    - no_access.webp
-    - poliklinik
-      - blobid1639762154229.png
-    - question.gif
-    - rsu elsyifa.png
-    - select-arrow.png
-    - tooltip
-      - Euclid.png
-      - shape1.svg
-      - tooltip1.svg
+      - android-chrome-192x192.png
+      - android-chrome-512x512.png
+      - apple-touch-icon.png
+      - favicon-16x16.png
+      - favicon-32x32.png
+      - favicon.ico
+      - no_image.jpg
+      - site.webmanifest
+    - logo
+      - b9114e0123bd05d2af597d32ed94a499.png
+      - no-image.jpg
+    - PengajuanAkses
+      - foto_6ae8bae91ebbe6.22563392.jpg
+      - foto_6ae8bb64d14c05.33035766.jpg
     - ui
-    - User
-    - user-bg.jpg
-    - warningicon.png
-    - widget
-      - AUSTRALIA.jpg
-      - BRAZIL.jpg
-      - DIGITALPEN.jpg
-      - GERMANY.jpg
-      - IPAD.jpg
-      - PHONE1.jpg
-      - PHONE2.jpg
-      - PHONE3.jpg
-      - PHONE4.jpg
-      - prod1.jpg
-      - prod2.jpg
-      - prod3.jpg
-      - prod4.jpg
-      - TABLET.jpg
-      - UK.jpg
-      - USA.jpg
-      - wather2bottom.png
-      - wather2m.png
-      - wather2star1.png
-      - wather2star2.png
-      - watherbottom.png
-      - wathernature.png
-      - watherstar1.png
-      - watherstar2.png
+      - app-logo.png
+    - user
+      - 009bfd25dd2f0cce57d5580aa11b8e19.jpg
+      - 1793737357996.jpg
+      - avatar-blank.jpg
+      - No-Image.png
   - js
     - main.js
   - lib
     - Barcode
       - Barcode.php
     - readme.text
+- check_logging.md
 - composer.json
 - composer.lock
+- design
+  - dashboard-prompt.md
+  - dashboard.png
+  - Drop-Down-Profile.png
+  - Login-design-prompt.md
+  - Login-Page.png
+  - menu-icon.png
+  - menu.png
+  - mobile.png
+  - profil-Rs.png
+  - rekap-data.png
 - index.php
 - instal.php
 - LICENSE
 - package-lock.json
 - package.json
+- project_structure.text
 - prompt
+  - antrian_prompt.md
+  - implementasi-logging.md
+  - log.md
   - prompt-1.md
   - readme.text
+  - Referensi-Imunisasi.md
+  - user-log-update.md
 - README.md
 - tests
+  - phpcs.xml
   - run.php
-- tree.text
 - vendor
   - autoload.php
+  - bin
+    - phpcbf
+    - phpcbf.bat
+    - phpcs
+    - phpcs.bat
   - composer
     - autoload_classmap.php
     - autoload_files.php
@@ -639,34 +570,6 @@
   - maennchen
     - zipstream-php
       - .editorconfig
-      - .gitattributes
-      - .github
-        - CODE_OF_CONDUCT.md
-        - CONTRIBUTING.md
-        - dependabot.yml
-        - FUNDING.yml
-        - ISSUE_TEMPLATE
-          - BUG.yml
-          - FEATURE.yml
-        - PULL_REQUEST_TEMPLATE
-          - FAILING_TEST.md
-          - FIX.md
-          - IMPROVEMENT.md
-          - NEW_FEATURE.md
-        - PULL_REQUEST_TEMPLATE.md
-        - scorecard.yml
-        - SECURITY.md
-        - workflows
-          - branch_main.yml
-          - part_dependabot.yml
-          - part_docs.yml
-          - part_release.yml
-          - part_test.yml
-          - pr.yml
-          - scorecard.yml
-          - tag-beta.yml
-          - tag-stable.yml
-      - .gitignore
       - .phive
         - phars.xml
       - .php-cs-fixer.dist.php
@@ -679,6 +582,7 @@
         - ContentLength.rst
         - FlySystem.rst
         - index.rst
+        - LargeFilesToS3.rst
         - Nginx.rst
         - Options.rst
         - PSR7Streams.rst
@@ -711,6 +615,8 @@
         - LocalFileHeader.php
         - OperationMode.php
         - PackField.php
+        - Stream
+          - CallbackStreamWrapper.php
         - Time.php
         - Version.php
         - Zip64
@@ -724,6 +630,7 @@
       - test
         - Assertions.php
         - bootstrap.php
+        - CallbackOutputTest.php
         - CentralDirectoryFileHeaderTest.php
         - DataDescriptorTest.php
         - EndlessCycleStream.php
@@ -1479,7 +1386,6 @@
       - psalm.xml
   - phpoffice
     - phpspreadsheet
-      - .readthedocs.yaml
       - CHANGELOG.md
       - composer.json
       - CONTRIBUTING.md
@@ -1506,8 +1412,6 @@
               - DSum.php
               - DVar.php
               - DVarP.php
-            - Database.php
-            - DateTime.php
             - DateTimeExcel
               - Constants.php
               - Current.php
@@ -1556,7 +1460,6 @@
               - EngineeringValidations.php
               - Erf.php
               - ErfC.php
-            - Engineering.php
             - Exception.php
             - ExceptionHandler.php
             - Financial
@@ -1588,7 +1491,6 @@
                 - SecurityValidations.php
                 - Yields.php
               - TreasuryBill.php
-            - Financial.php
             - FormulaParser.php
             - FormulaToken.php
             - Functions.php
@@ -1659,7 +1561,6 @@
               - Boolean.php
               - Conditional.php
               - Operations.php
-            - Logical.php
             - LookupRef
               - Address.php
               - ExcelMatch.php
@@ -1679,7 +1580,6 @@
               - Sort.php
               - Unique.php
               - VLookup.php
-            - LookupRef.php
             - MathTrig
               - Absolute.php
               - Angle.php
@@ -1714,7 +1614,6 @@
                 - Sine.php
                 - Tangent.php
               - Trunc.php
-            - MathTrig.php
             - Statistical
               - AggregateBase.php
               - Averages
@@ -1754,7 +1653,6 @@
               - Trends.php
               - VarianceBase.php
               - Variances.php
-            - Statistical.php
             - TextData
               - CaseConvert.php
               - CharacterConvert.php
@@ -1766,12 +1664,10 @@
               - Search.php
               - Text.php
               - Trim.php
-            - TextData.php
             - Token
               - Stack.php
             - Web
               - Service.php
-            - Web.php
           - Cell
             - AddressHelper.php
             - AddressRange.php
@@ -1972,6 +1868,7 @@
             - ConditionalFormatting
               - CellMatcher.php
               - CellStyleAssessor.php
+              - ConditionalColorScale.php
               - ConditionalDataBar.php
               - ConditionalDataBarExtension.php
               - ConditionalFormattingRuleExtension.php
@@ -2041,6 +1938,8 @@
             - PageBreak.php
             - PageMargins.php
             - PageSetup.php
+            - Pane.php
+            - ProtectedRange.php
             - Protection.php
             - Row.php
             - RowCellIterator.php
@@ -2244,6 +2143,592 @@
         - phpstan
           - composer.json
           - composer.lock
+  - squizlabs
+    - php_codesniffer
+      - autoload.php
+      - bin
+        - phpcbf
+        - phpcbf.bat
+        - phpcs
+        - phpcs.bat
+      - CHANGELOG-3.x.md
+      - CHANGELOG-4.x.md
+      - CodeSniffer.conf.dist
+      - composer.json
+      - licence.txt
+      - phpcs.xsd
+      - README.md
+      - requirements.php
+      - src
+        - Config.php
+        - Exceptions
+          - DeepExitException.php
+          - GeneratorException.php
+          - RuntimeException.php
+          - TokenizerException.php
+        - Files
+          - DummyFile.php
+          - File.php
+          - FileList.php
+          - LocalFile.php
+        - Filters
+          - ExactMatch.php
+          - Filter.php
+          - GitModified.php
+          - GitStaged.php
+        - Fixer.php
+        - Generators
+          - Generator.php
+          - HTML.php
+          - Markdown.php
+          - Text.php
+        - Reporter.php
+        - Reports
+          - Cbf.php
+          - Checkstyle.php
+          - Code.php
+          - Csv.php
+          - Diff.php
+          - Emacs.php
+          - Full.php
+          - Gitblame.php
+          - Hgblame.php
+          - Info.php
+          - Json.php
+          - Junit.php
+          - Notifysend.php
+          - Performance.php
+          - Report.php
+          - Source.php
+          - Summary.php
+          - Svnblame.php
+          - VersionControl.php
+          - Xml.php
+        - Ruleset.php
+        - Runner.php
+        - Sniffs
+          - AbstractArraySniff.php
+          - AbstractPatternSniff.php
+          - AbstractScopeSniff.php
+          - AbstractVariableSniff.php
+          - DeprecatedSniff.php
+          - Sniff.php
+        - Standards
+          - Generic
+            - Docs
+              - Arrays
+                - ArrayIndentStandard.xml
+                - DisallowLongArraySyntaxStandard.xml
+                - DisallowShortArraySyntaxStandard.xml
+              - Classes
+                - DuplicateClassNameStandard.xml
+                - OpeningBraceSameLineStandard.xml
+              - CodeAnalysis
+                - AssignmentInConditionStandard.xml
+                - EmptyPHPStatementStandard.xml
+                - EmptyStatementStandard.xml
+                - ForLoopShouldBeWhileLoopStandard.xml
+                - ForLoopWithTestFunctionCallStandard.xml
+                - JumbledIncrementerStandard.xml
+                - RequireExplicitBooleanOperatorPrecedenceStandard.xml
+                - UnconditionalIfStatementStandard.xml
+                - UnnecessaryFinalModifierStandard.xml
+                - UnusedFunctionParameterStandard.xml
+                - UselessOverridingMethodStandard.xml
+              - Commenting
+                - DocCommentStandard.xml
+                - FixmeStandard.xml
+                - TodoStandard.xml
+              - ControlStructures
+                - DisallowYodaConditionsStandard.xml
+                - InlineControlStructureStandard.xml
+              - Files
+                - ByteOrderMarkStandard.xml
+                - EndFileNewlineStandard.xml
+                - EndFileNoNewlineStandard.xml
+                - ExecutableFileStandard.xml
+                - InlineHTMLStandard.xml
+                - LineEndingsStandard.xml
+                - LineLengthStandard.xml
+                - LowercasedFilenameStandard.xml
+                - OneClassPerFileStandard.xml
+                - OneInterfacePerFileStandard.xml
+                - OneObjectStructurePerFileStandard.xml
+                - OneTraitPerFileStandard.xml
+              - Formatting
+                - DisallowMultipleStatementsStandard.xml
+                - MultipleStatementAlignmentStandard.xml
+                - SpaceAfterCastStandard.xml
+                - SpaceAfterNotStandard.xml
+                - SpaceBeforeCastStandard.xml
+              - Functions
+                - FunctionCallArgumentSpacingStandard.xml
+                - OpeningFunctionBraceBsdAllmanStandard.xml
+                - OpeningFunctionBraceKernighanRitchieStandard.xml
+              - Metrics
+                - CyclomaticComplexityStandard.xml
+                - NestingLevelStandard.xml
+              - NamingConventions
+                - AbstractClassNamePrefixStandard.xml
+                - CamelCapsFunctionNameStandard.xml
+                - ConstructorNameStandard.xml
+                - InterfaceNameSuffixStandard.xml
+                - TraitNameSuffixStandard.xml
+                - UpperCaseConstantNameStandard.xml
+              - PHP
+                - BacktickOperatorStandard.xml
+                - CharacterBeforePHPOpeningTagStandard.xml
+                - ClosingPHPTagStandard.xml
+                - DeprecatedFunctionsStandard.xml
+                - DisallowAlternativePHPTagsStandard.xml
+                - DisallowRequestSuperglobalStandard.xml
+                - DisallowShortOpenTagStandard.xml
+                - DiscourageGotoStandard.xml
+                - ForbiddenFunctionsStandard.xml
+                - LowerCaseConstantStandard.xml
+                - LowerCaseKeywordStandard.xml
+                - LowerCaseTypeStandard.xml
+                - NoSilencedErrorsStandard.xml
+                - RequireStrictTypesStandard.xml
+                - SAPIUsageStandard.xml
+                - SyntaxStandard.xml
+                - UpperCaseConstantStandard.xml
+              - Strings
+                - UnnecessaryHeredocStandard.xml
+                - UnnecessaryStringConcatStandard.xml
+              - VersionControl
+                - SubversionPropertiesStandard.xml
+              - WhiteSpace
+                - ArbitraryParenthesesSpacingStandard.xml
+                - DisallowSpaceIndentStandard.xml
+                - DisallowTabIndentStandard.xml
+                - GotoTargetSpacingStandard.xml
+                - HereNowdocIdentifierSpacingStandard.xml
+                - IncrementDecrementSpacingStandard.xml
+                - LanguageConstructSpacingStandard.xml
+                - ScopeIndentStandard.xml
+                - SpreadOperatorSpacingAfterStandard.xml
+            - ruleset.xml
+            - Sniffs
+              - Arrays
+                - ArrayIndentSniff.php
+                - DisallowLongArraySyntaxSniff.php
+                - DisallowShortArraySyntaxSniff.php
+              - Classes
+                - DuplicateClassNameSniff.php
+                - OpeningBraceSameLineSniff.php
+              - CodeAnalysis
+                - AssignmentInConditionSniff.php
+                - EmptyPHPStatementSniff.php
+                - EmptyStatementSniff.php
+                - ForLoopShouldBeWhileLoopSniff.php
+                - ForLoopWithTestFunctionCallSniff.php
+                - JumbledIncrementerSniff.php
+                - RequireExplicitBooleanOperatorPrecedenceSniff.php
+                - UnconditionalIfStatementSniff.php
+                - UnnecessaryFinalModifierSniff.php
+                - UnusedFunctionParameterSniff.php
+                - UselessOverridingMethodSniff.php
+              - Commenting
+                - DocCommentSniff.php
+                - FixmeSniff.php
+                - TodoSniff.php
+              - ControlStructures
+                - DisallowYodaConditionsSniff.php
+                - InlineControlStructureSniff.php
+              - Files
+                - ByteOrderMarkSniff.php
+                - EndFileNewlineSniff.php
+                - EndFileNoNewlineSniff.php
+                - ExecutableFileSniff.php
+                - InlineHTMLSniff.php
+                - LineEndingsSniff.php
+                - LineLengthSniff.php
+                - LowercasedFilenameSniff.php
+                - OneClassPerFileSniff.php
+                - OneInterfacePerFileSniff.php
+                - OneObjectStructurePerFileSniff.php
+                - OneTraitPerFileSniff.php
+              - Formatting
+                - DisallowMultipleStatementsSniff.php
+                - MultipleStatementAlignmentSniff.php
+                - SpaceAfterCastSniff.php
+                - SpaceAfterNotSniff.php
+                - SpaceBeforeCastSniff.php
+              - Functions
+                - FunctionCallArgumentSpacingSniff.php
+                - OpeningFunctionBraceBsdAllmanSniff.php
+                - OpeningFunctionBraceKernighanRitchieSniff.php
+              - Metrics
+                - CyclomaticComplexitySniff.php
+                - NestingLevelSniff.php
+              - NamingConventions
+                - AbstractClassNamePrefixSniff.php
+                - CamelCapsFunctionNameSniff.php
+                - ConstructorNameSniff.php
+                - InterfaceNameSuffixSniff.php
+                - TraitNameSuffixSniff.php
+                - UpperCaseConstantNameSniff.php
+              - PHP
+                - BacktickOperatorSniff.php
+                - CharacterBeforePHPOpeningTagSniff.php
+                - ClosingPHPTagSniff.php
+                - DeprecatedFunctionsSniff.php
+                - DisallowAlternativePHPTagsSniff.php
+                - DisallowRequestSuperglobalSniff.php
+                - DisallowShortOpenTagSniff.php
+                - DiscourageGotoSniff.php
+                - ForbiddenFunctionsSniff.php
+                - LowerCaseConstantSniff.php
+                - LowerCaseKeywordSniff.php
+                - LowerCaseTypeSniff.php
+                - NoSilencedErrorsSniff.php
+                - RequireStrictTypesSniff.php
+                - SAPIUsageSniff.php
+                - SyntaxSniff.php
+                - UpperCaseConstantSniff.php
+              - Strings
+                - UnnecessaryHeredocSniff.php
+                - UnnecessaryStringConcatSniff.php
+              - VersionControl
+                - GitMergeConflictSniff.php
+                - SubversionPropertiesSniff.php
+              - WhiteSpace
+                - ArbitraryParenthesesSpacingSniff.php
+                - DisallowSpaceIndentSniff.php
+                - DisallowTabIndentSniff.php
+                - GotoTargetSpacingSniff.php
+                - HereNowdocIdentifierSpacingSniff.php
+                - IncrementDecrementSpacingSniff.php
+                - LanguageConstructSpacingSniff.php
+                - ScopeIndentSniff.php
+                - SpreadOperatorSpacingAfterSniff.php
+          - PEAR
+            - Docs
+              - Classes
+                - ClassDeclarationStandard.xml
+              - Commenting
+                - ClassCommentStandard.xml
+                - FileCommentStandard.xml
+                - FunctionCommentStandard.xml
+                - InlineCommentStandard.xml
+              - ControlStructures
+                - ControlSignatureStandard.xml
+                - MultiLineConditionStandard.xml
+              - Files
+                - IncludingFileStandard.xml
+              - Formatting
+                - MultiLineAssignmentStandard.xml
+              - Functions
+                - FunctionCallSignatureStandard.xml
+                - FunctionDeclarationStandard.xml
+                - ValidDefaultValueStandard.xml
+              - NamingConventions
+                - ValidClassNameStandard.xml
+                - ValidFunctionNameStandard.xml
+                - ValidVariableNameStandard.xml
+              - WhiteSpace
+                - ObjectOperatorIndentStandard.xml
+                - ScopeClosingBraceStandard.xml
+                - ScopeIndentStandard.xml
+            - ruleset.xml
+            - Sniffs
+              - Classes
+                - ClassDeclarationSniff.php
+              - Commenting
+                - ClassCommentSniff.php
+                - FileCommentSniff.php
+                - FunctionCommentSniff.php
+                - InlineCommentSniff.php
+              - ControlStructures
+                - ControlSignatureSniff.php
+                - MultiLineConditionSniff.php
+              - Files
+                - IncludingFileSniff.php
+              - Formatting
+                - MultiLineAssignmentSniff.php
+              - Functions
+                - FunctionCallSignatureSniff.php
+                - FunctionDeclarationSniff.php
+                - ValidDefaultValueSniff.php
+              - NamingConventions
+                - ValidClassNameSniff.php
+                - ValidFunctionNameSniff.php
+                - ValidVariableNameSniff.php
+              - WhiteSpace
+                - ObjectOperatorIndentSniff.php
+                - ScopeClosingBraceSniff.php
+                - ScopeIndentSniff.php
+          - PSR1
+            - Docs
+              - Classes
+                - ClassDeclarationStandard.xml
+              - Files
+                - SideEffectsStandard.xml
+              - Methods
+                - CamelCapsMethodNameStandard.xml
+            - ruleset.xml
+            - Sniffs
+              - Classes
+                - ClassDeclarationSniff.php
+              - Files
+                - SideEffectsSniff.php
+              - Methods
+                - CamelCapsMethodNameSniff.php
+          - PSR12
+            - Docs
+              - Classes
+                - ClassInstantiationStandard.xml
+                - ClosingBraceStandard.xml
+                - OpeningBraceSpaceStandard.xml
+              - ControlStructures
+                - BooleanOperatorPlacementStandard.xml
+                - ControlStructureSpacingStandard.xml
+              - Files
+                - ImportStatementStandard.xml
+                - OpenTagStandard.xml
+              - Functions
+                - NullableTypeDeclarationStandard.xml
+                - ReturnTypeDeclarationStandard.xml
+              - Keywords
+                - ShortFormTypeKeywordsStandard.xml
+              - Namespaces
+                - CompoundNamespaceDepthStandard.xml
+              - Operators
+                - OperatorSpacingStandard.xml
+              - Properties
+                - ConstantVisibilityStandard.xml
+            - ruleset.xml
+            - Sniffs
+              - Classes
+                - AnonClassDeclarationSniff.php
+                - ClassInstantiationSniff.php
+                - ClosingBraceSniff.php
+                - OpeningBraceSpaceSniff.php
+              - ControlStructures
+                - BooleanOperatorPlacementSniff.php
+                - ControlStructureSpacingSniff.php
+              - Files
+                - DeclareStatementSniff.php
+                - FileHeaderSniff.php
+                - ImportStatementSniff.php
+                - OpenTagSniff.php
+              - Functions
+                - NullableTypeDeclarationSniff.php
+                - ReturnTypeDeclarationSniff.php
+              - Keywords
+                - ShortFormTypeKeywordsSniff.php
+              - Namespaces
+                - CompoundNamespaceDepthSniff.php
+              - Operators
+                - OperatorSpacingSniff.php
+              - Properties
+                - ConstantVisibilitySniff.php
+              - Traits
+                - UseDeclarationSniff.php
+          - PSR2
+            - Docs
+              - Classes
+                - ClassDeclarationStandard.xml
+                - PropertyDeclarationStandard.xml
+              - ControlStructures
+                - ControlStructureSpacingStandard.xml
+                - ElseIfDeclarationStandard.xml
+                - SwitchDeclarationStandard.xml
+              - Files
+                - ClosingTagStandard.xml
+                - EndFileNewlineStandard.xml
+              - Methods
+                - FunctionCallSignatureStandard.xml
+                - FunctionClosingBraceStandard.xml
+                - MethodDeclarationStandard.xml
+              - Namespaces
+                - NamespaceDeclarationStandard.xml
+                - UseDeclarationStandard.xml
+            - ruleset.xml
+            - Sniffs
+              - Classes
+                - ClassDeclarationSniff.php
+                - PropertyDeclarationSniff.php
+              - ControlStructures
+                - ControlStructureSpacingSniff.php
+                - ElseIfDeclarationSniff.php
+                - SwitchDeclarationSniff.php
+              - Files
+                - ClosingTagSniff.php
+                - EndFileNewlineSniff.php
+              - Methods
+                - FunctionCallSignatureSniff.php
+                - FunctionClosingBraceSniff.php
+                - MethodDeclarationSniff.php
+              - Namespaces
+                - NamespaceDeclarationSniff.php
+                - UseDeclarationSniff.php
+          - Squiz
+            - Docs
+              - Arrays
+                - ArrayBracketSpacingStandard.xml
+                - ArrayDeclarationStandard.xml
+              - Classes
+                - ClassFileNameStandard.xml
+                - LowercaseClassKeywordsStandard.xml
+                - SelfMemberReferenceStandard.xml
+                - ValidClassNameStandard.xml
+              - Commenting
+                - BlockCommentStandard.xml
+                - DocCommentAlignmentStandard.xml
+                - FunctionCommentThrowTagStandard.xml
+              - ControlStructures
+                - ForEachLoopDeclarationStandard.xml
+                - ForLoopDeclarationStandard.xml
+                - LowercaseDeclarationStandard.xml
+              - Functions
+                - LowercaseFunctionKeywordsStandard.xml
+              - PHP
+                - HeredocStandard.xml
+              - Scope
+                - StaticThisUsageStandard.xml
+              - Strings
+                - EchoedStringsStandard.xml
+              - WhiteSpace
+                - CastSpacingStandard.xml
+                - FunctionClosingBraceSpaceStandard.xml
+                - FunctionOpeningBraceSpaceStandard.xml
+                - MemberVarSpacingStandard.xml
+                - ObjectOperatorSpacingStandard.xml
+                - ScopeClosingBraceStandard.xml
+                - ScopeKeywordSpacingStandard.xml
+                - SemicolonSpacingStandard.xml
+                - SuperfluousWhitespaceStandard.xml
+            - ruleset.xml
+            - Sniffs
+              - Arrays
+                - ArrayBracketSpacingSniff.php
+                - ArrayDeclarationSniff.php
+              - Classes
+                - ClassDeclarationSniff.php
+                - ClassFileNameSniff.php
+                - LowercaseClassKeywordsSniff.php
+                - SelfMemberReferenceSniff.php
+                - ValidClassNameSniff.php
+              - Commenting
+                - BlockCommentSniff.php
+                - ClassCommentSniff.php
+                - ClosingDeclarationCommentSniff.php
+                - DocCommentAlignmentSniff.php
+                - EmptyCatchCommentSniff.php
+                - FileCommentSniff.php
+                - FunctionCommentSniff.php
+                - FunctionCommentThrowTagSniff.php
+                - InlineCommentSniff.php
+                - LongConditionClosingCommentSniff.php
+                - PostStatementCommentSniff.php
+                - VariableCommentSniff.php
+              - ControlStructures
+                - ControlSignatureSniff.php
+                - ElseIfDeclarationSniff.php
+                - ForEachLoopDeclarationSniff.php
+                - ForLoopDeclarationSniff.php
+                - InlineIfDeclarationSniff.php
+                - LowercaseDeclarationSniff.php
+                - SwitchDeclarationSniff.php
+              - Files
+                - FileExtensionSniff.php
+              - Formatting
+                - OperatorBracketSniff.php
+              - Functions
+                - FunctionDeclarationArgumentSpacingSniff.php
+                - FunctionDeclarationSniff.php
+                - FunctionDuplicateArgumentSniff.php
+                - GlobalFunctionSniff.php
+                - LowercaseFunctionKeywordsSniff.php
+                - MultiLineFunctionDeclarationSniff.php
+              - NamingConventions
+                - ValidFunctionNameSniff.php
+                - ValidVariableNameSniff.php
+              - Objects
+                - ObjectInstantiationSniff.php
+              - Operators
+                - ComparisonOperatorUsageSniff.php
+                - IncrementDecrementUsageSniff.php
+                - ValidLogicalOperatorsSniff.php
+              - PHP
+                - CommentedOutCodeSniff.php
+                - DisallowBooleanStatementSniff.php
+                - DisallowComparisonAssignmentSniff.php
+                - DisallowInlineIfSniff.php
+                - DisallowMultipleAssignmentsSniff.php
+                - DisallowSizeFunctionsInLoopsSniff.php
+                - DiscouragedFunctionsSniff.php
+                - EmbeddedPhpSniff.php
+                - EvalSniff.php
+                - GlobalKeywordSniff.php
+                - HeredocSniff.php
+                - InnerFunctionsSniff.php
+                - LowercasePHPFunctionsSniff.php
+                - NonExecutableCodeSniff.php
+              - Scope
+                - MemberVarScopeSniff.php
+                - MethodScopeSniff.php
+                - StaticThisUsageSniff.php
+              - Strings
+                - ConcatenationSpacingSniff.php
+                - DoubleQuoteUsageSniff.php
+                - EchoedStringsSniff.php
+              - WhiteSpace
+                - CastSpacingSniff.php
+                - ControlStructureSpacingSniff.php
+                - FunctionClosingBraceSpaceSniff.php
+                - FunctionOpeningBraceSpaceSniff.php
+                - FunctionSpacingSniff.php
+                - LogicalOperatorSpacingSniff.php
+                - MemberVarSpacingSniff.php
+                - ObjectOperatorSpacingSniff.php
+                - OperatorSpacingSniff.php
+                - ScopeClosingBraceSniff.php
+                - ScopeKeywordSpacingSniff.php
+                - SemicolonSpacingSniff.php
+                - SuperfluousWhitespaceSniff.php
+          - Zend
+            - Docs
+              - Files
+                - ClosingTagStandard.xml
+              - NamingConventions
+                - ValidVariableNameStandard.xml
+            - ruleset.xml
+            - Sniffs
+              - Files
+                - ClosingTagSniff.php
+              - NamingConventions
+                - ValidVariableNameSniff.php
+        - Tokenizers
+          - Comment.php
+          - PHP.php
+          - Tokenizer.php
+        - Util
+          - Cache.php
+          - Common.php
+          - ExitCode.php
+          - Help.php
+          - IgnoreList.php
+          - MessageCollector.php
+          - Standards.php
+          - Timing.php
+          - Tokens.php
+          - Writers
+            - StatusWriter.php
+      - tests
+        - bootstrap.php
+        - ConfigDouble.php
+        - Core
+          - AbstractMethodTestCase.php
+        - EndToEndBash
+          - exit_code_test.sh
+          - outofmemory_test.sh
+          - phpcbf_test.sh
+          - phpcs_test.sh
+        - Standards
+          - AbstractSniffTestCase.php
   - symfony
     - polyfill-ctype
       - bootstrap.php
@@ -2345,6 +2830,7 @@
   - SettingGeneral.php
   - SimrsFunction.php
 - _Database
+  - generate_wilayah.php
   - icd.csv
   - readme.text
   - referance
@@ -2356,11 +2842,16 @@
     - orderableDrugForm.json
     - ucum_med_ind_strength.json
   - schema.sql
+  - update_schema.bat
   - wilayah.csv
+- _FileUpload
+  - ICD_20261026_210228_4956.xlsx
+  - ICD_20261026_210235_5792.xlsx
 - _Page
   - Akses
     - Akses.js
     - Akses.php
+    - AksesHelper.php
     - FormDetailAkses.php
     - FormEditAkses.php
     - FormFilter.php
@@ -2440,6 +2931,31 @@
     - SelectAlergen.php
     - SelectPraktisi.php
     - TabelAlergi.php
+  - Antrian
+    - Antrian.js
+    - Antrian.php
+    - export-data-antrian.md
+    - FormDetailAntrian.php
+    - FormDetailPasien.php
+    - FormDetailReferensi.php
+    - FormEdit.php
+    - FormFilter.php
+    - FormHapus.php
+    - FormPendaftaranKunjungan.php
+    - FormPendaftaranPasien.php
+    - ListDokter.php
+    - ListJadwal.php
+    - ListPasien.php
+    - ListPoliklinik.php
+    - ModalAntrian.php
+    - pendaftaran-kunjungan.md
+    - ProsesEdit.php
+    - ProsesExportAntrian.php
+    - ProsesHapus.php
+    - ProsesPendaftaranKunjungan.php
+    - ProsesPendaftaranPasien.php
+    - ProsesTambahAntrian.php
+    - TabelAntrian.php
   - ApiKey
     - ApiKey.js
     - ApiKey.php
@@ -2456,16 +2972,13 @@
     - ProsesTambahApiKey.php
     - TabelApiKey.php
   - Dashboard
-    - CekSession.php
     - Dashboard.js
     - Dashboard.php
-    - DashboardAntrianOnline.php
-    - FormLanjutan.php
     - GetCount.php
     - GrafikDashboard.php
-    - ListTahun.php
+    - GrafikKategoriPelayanan.php
+    - GrafikPembiayaan.php
     - ModalDashboard.php
-    - StatusKoneksi.php
     - TabelPasienExisting.php
   - Diagnosis
     - Diagnosis.js
@@ -2504,7 +3017,14 @@
     - ProsesKirimEmail.php
     - ProsesTambahEmailGateway.php
     - TabelEmailGateway.php
+  - Encounter
+    - Encounter.js
+    - Encounter.php
+    - FormFilter.php
+    - ModalEncounter.php
+    - TabelEncounter.php
   - Error
+    - no_access_permission.php
     - PageNotFound.php
   - GeneralConsent
     - FormDetailConsent.php
@@ -2533,6 +3053,24 @@
     - ProsesHapusGoogleCredential.php
     - ProsesTambahGoogleCredential.php
     - TabelGoogleCredential.php
+  - Imunisasi
+    - datetime_now.php
+    - FormDetail.php
+    - FormEdit.php
+    - FormHapus.php
+    - get_body_site.php
+    - get_imunisasi_referensi.php
+    - get_kunjungan.php
+    - get_pasien.php
+    - get_praktisi.php
+    - Imunisasi.js
+    - Imunisasi.php
+    - ModalImunisasi.php
+    - ProsesEdit.php
+    - ProsesExport.php
+    - ProsesHapus.php
+    - ProsesTambah.php
+    - TabelImunisasi.php
   - Kunjungan
     - CekIjinDownload.php
     - FormCetaklabel.php
@@ -2590,6 +3128,19 @@
     - ProsesKirimResponse.php
     - ProsesTandaiSudahDibaca.php
     - TabelLaporanKesalahan.php
+  - Log
+    - FormDetail.php
+    - FormDetailLog.php
+    - FormFilter.php
+    - FormPeriode.php
+    - GrafikLog.php
+    - ListLogKategori.php
+    - ListLogPengguna.php
+    - Log.js
+    - Log.php
+    - ModalLog.php
+    - ProsesExportLog.php
+    - TabelLog.php
   - Login
     - GenerateCaptcha.php
     - GoogleCallback.php
@@ -2606,6 +3157,27 @@
     - ModalLogout.php
     - ProsesLogout.php
     - ProsesLogoutLama.php
+  - Observasi
+    - example-payload.json
+    - FormDetailObservasi.php
+    - FormDetailObservation.php
+    - FormEditObservasi.php
+    - FormExport.php
+    - FormFilter.php
+    - FormHapusObservasi.php
+    - FormKirimObservation.php
+    - FormObservationValue.php
+    - ListDataTambah.php
+    - ModalObservasi.php
+    - Observasi.js
+    - Observasi.php
+    - ObservationPayload.php
+    - ProsesEditObservasi.php
+    - ProsesExport.php
+    - ProsesHapusObservasi.php
+    - ProsesKirimObservation.php
+    - ProsesTambahObservasi.php
+    - TabelObservasi.php
   - Pasien
     - CekIjinDownload.php
     - FormDetail.php
@@ -2681,10 +3253,27 @@
     - ReferensiAlergen.php
     - TabelReferensiAlergen.php
     - TemplateAlergen.xlsx
+  - ReferensiBodySite
+    - body_site_category.php
+    - FormDetail.php
+    - FormEdit.php
+    - FormFilter.php
+    - FormHapus.php
+    - ModalReferensiBodySite.php
+    - ProsesEdit.php
+    - ProsesExport.php
+    - ProsesHapus.php
+    - ProsesImport.php
+    - ProsesTambah.php
+    - ReferensiBodySite.js
+    - ReferensiBodySite.php
+    - TabelReferensiBodySite.php
+    - template-body-site.xlsx
   - ReferensiDokter
     - FormDetailDokter.php
     - FormDetailPractitioner.php
     - FormEditDokter.php
+    - FormFilter.php
     - FormHapusDokter.php
     - FormJadwalDokter.php
     - GetKategori.php
@@ -2700,6 +3289,22 @@
     - ReferensiDokter.php
     - SearchKodeDokter.php
     - TabelDokter.php
+  - ReferensiEpisodePerawatan
+    - FormDetail.php
+    - FormEdit.php
+    - FormFilter.php
+    - FormHapus.php
+    - GetCategory.php
+    - ModalReferensiEpisodePerawatan.php
+    - ProsesEdit.php
+    - ProsesExport.php
+    - ProsesHapus.php
+    - ProsesImport.php
+    - ProsesTambah.php
+    - ReferensiEpisodePerawatan.js
+    - ReferensiEpisodePerawatan.php
+    - TabelReferensiEpisodePerawatan.php
+    - TemplateEpisodePerawatan.xlsx
   - ReferensiIcd
     - FormDetailIcd.php
     - FormDownload.php
@@ -2707,7 +3312,6 @@
     - FormHapusIcd.php
     - icd_tmp.xlsx
     - ModalReferensiIcd.php
-    - ProsesChunk.php
     - ProsesDownload.php
     - ProsesEditIcd.php
     - ProsesHapusIcd.php
@@ -2716,12 +3320,27 @@
     - ReferensiIcd.js
     - ReferensiIcd.php
     - TabelIcd.php
-    - UploadFile.php
   - ReferensiIcdBpjs
     - ModalReferensiIcdBpjs.php
     - ReferensiIcdBpjs.js
     - ReferensiIcdBpjs.php
     - TabelIcdBpjs.php
+  - ReferensiImunisasi
+    - FormDetail.php
+    - FormEdit.php
+    - FormExport.php
+    - FormFilter.php
+    - FormHapus.php
+    - ModalReferensiImunisasi.php
+    - ProsesEdit.php
+    - ProsesExport.php
+    - ProsesHapus.php
+    - ProsesImport.php
+    - ProsesTambah.php
+    - Referensi-imunisasi.xlsx
+    - ReferensiImunisasi.js
+    - ReferensiImunisasi.php
+    - TabelReferensiImunisasi.php
   - ReferensiJadwalDokter
     - CalculateJadwal.php
     - DataUpdateJadwalHfiz.php
@@ -2847,6 +3466,7 @@
     - GetKodeKecamatan.php
     - GetKodeProvinsi.php
     - GetProvinsi.php
+    - ListGroupWilayah.php
     - ModalReferensiWilayah.php
     - ProsesChunk.php
     - ProsesDownload.php
@@ -3000,4 +3620,5 @@
   - RoutingJs.php
   - RoutingPage.php
   - RoutingSwal.php
+  - struktur-menu.md
   - Toast.php

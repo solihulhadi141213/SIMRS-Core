@@ -1,4 +1,9 @@
 <?php
+// ============================================================================
+// FUNGSI UMUM
+// Helper, akses dan utilitas yang digunakan secara umum.
+// ============================================================================
+
     //Generate UID dengan sparator
     function GenerateRandomeToken($length) {
         $characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Menghindari karakter ambigu
@@ -242,6 +247,275 @@
         }
         return $bytes;
     }
+
+    
+    function getNamaBulan($GetTahun, $GetBulan){
+        $namaBulan = date("F", mktime(0, 0, 0, $GetBulan, 1, $GetTahun));
+        return $namaBulan;
+    }
+    function getEmailSetting($Conn,$NamaKolom){
+        $QrySettingEmail = mysqli_query($Conn,"SELECT * FROM setting_email_gateway WHERE status='Active'")or die(mysqli_error($Conn));
+        $DataEmail = mysqli_fetch_array($QrySettingEmail);
+        if(empty($DataEmail[$NamaKolom])){
+            $Response="";
+        }else{
+            $Response=$DataEmail[$NamaKolom];
+        }
+        return $Response;
+    }
+    function generateStrongCode($length) {
+        $characters = '23456789abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+    function saveAccData($Conn,$id_akses,$id_akses_ref,$status){
+        //Cek apakah data sudah ada?
+        $CekData = mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM akses_acc WHERE id_akses='$id_akses' AND id_akses_ref='$id_akses_ref'"));
+        if(empty($CekData)){
+            $entry="INSERT INTO akses_acc (
+                id_akses,
+                id_akses_ref,
+                status
+            )VALUES (
+                '$id_akses',
+                '$id_akses_ref',
+                '$status'
+            )";
+            $hasil=mysqli_query($Conn, $entry);
+            if($hasil){
+                $response="Berhasil";
+            }else{
+                $response="Insert Gagal";
+            }
+        }else{
+            $Update= mysqli_query($Conn,"UPDATE akses_acc SET 
+                status='$status'
+            WHERE id_akses='$id_akses' AND id_akses_ref='$id_akses_ref'") or die(mysqli_error($Conn));
+            if($Update){
+                $response="Berhasil";
+            }else{
+                $response="Update Gagal";
+            }
+        }
+        return $response;
+    }
+
+
+    function DateFormatDinamis($tanggal,$format){
+        $strtotime=strtotime($tanggal);
+        $response=date(''.$format.'',$strtotime);
+        return $response;
+    }
+    
+    
+    // Generate Token Dinamis
+    function GenerateToken($length){
+        $token = "";
+        $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+        $codeAlphabet.= "0123456789";
+        $max = strlen($codeAlphabet); // edited
+        
+        for ($i=0; $i < $length; $i++) {
+            $token .= $codeAlphabet[random_int(0, $max-1)];
+        }
+        return $token;
+    }
+
+    function calculateExpirationTimeFromDateTime($dateTime, $milliseconds) {
+        // Membuat objek DateTime dari string input
+        $date = new DateTime($dateTime);
+    
+        // Mengonversi milidetik ke detik dan mikrodetik
+        $seconds = floor($milliseconds / 1000);
+        $microseconds = ($milliseconds % 1000) * 1000;
+    
+        // Menambahkan detik dan mikrodetik ke objek DateTime
+        $date->add(new DateInterval("PT{$seconds}S"));
+        // Menambahkan mikrodetik menggunakan metode modify
+        $date->modify("+{$microseconds} microseconds");
+    
+        // Mengembalikan waktu kedaluwarsa dalam format YYYY-mm-dd HH:ii:ss.uuu
+        return $date->format('Y-m-d H:i:s');
+    }
+
+    // Mencari Nama Hari Berdasarkan Tanggal
+    function NamaHariJadwal($tanggal) {
+        if(empty($tanggal)){
+            $tanggal=date('Y-m-d');
+        }
+    // Mengubah tanggal menjadi objek DateTime
+        $datetime = new DateTime($tanggal);
+        // Array nama hari dalam Bahasa Indonesia
+        $nama_hari = array(
+            "Sunday" => "Minggu",
+            "Monday" => "Senin",
+            "Tuesday" => "Selasa",
+            "Wednesday" => "Rabu",
+            "Thursday" => "Kamis",
+            "Friday" => "Jumat",
+            "Saturday" => "Sabtu"
+        );
+        // Mendapatkan nama hari dalam bahasa Inggris terlebih dahulu
+        $hari_english = $datetime->format('l');
+        // Mengambil nama hari dalam Bahasa Indonesia
+        $nama_hari_indonesia = $nama_hari[$hari_english];
+        // Menampilkan nama hari
+        return $nama_hari_indonesia; // Output: Sabtu
+    }
+
+
+    // Kirim Email
+    function SendEmail($Conn, $id_setting_email_gateway, $subjek, $email_tujuan, $nama_tujuan, $pesan){
+        // Buka Data Dengan Prepared Statment
+        $sql  = "SELECT * FROM  setting_email_gateway WHERE id_setting_email_gateway = ?";
+        $stmt = $Conn->prepare($sql);
+
+        // Bind parameter (tipe data integer "i")
+        $stmt->bind_param("i", $id_setting_email_gateway);
+
+        // Eksekusi statement
+        $stmt->execute();
+
+        // Ambil hasil query
+        $result = $stmt->get_result();
+        $SettingEmail = $result->fetch_assoc();
+
+        // Simpan hasil ke variabel
+        $email_gateway    = $SettingEmail['email_gateway'] ?? null;
+        $password_gateway = $SettingEmail['password_gateway'] ?? null;
+        $url_provider     = $SettingEmail['url_provider'] ?? null;
+        $port_gateway     = $SettingEmail['port_gateway'] ?? null;
+        $nama_pengirim    = $SettingEmail['nama_pengirim'] ?? null;
+        $url_service      = $SettingEmail['url_service'] ?? null;
+        $status           = $SettingEmail['status'] ?? null;
+        
+        //Kirim email
+        $ch = curl_init();
+        $headers = array(
+            'Content-Type: Application/JSON',          
+            'Accept: Application/JSON'     
+        );
+
+        // Payload
+        $payload = array(
+            "subjek"              => "$subjek",
+            "email_asal"          => "$email_gateway",
+            "password_email_asal" => "$password_gateway",
+            "url_provider"        => "$url_provider",
+            "nama_pengirim"       => "$nama_pengirim",
+            "email_tujuan"        => "$email_tujuan",
+            "nama_tujuan"         => "$nama_tujuan",
+            "pesan"               => "$pesan",
+            "port"                => "$port_gateway"
+        );
+
+
+        $json = json_encode($payload);
+        curl_setopt($ch, CURLOPT_URL, "$url_service/index.php");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1000); 
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $content = curl_exec($ch);
+        $err = curl_error($ch);
+        $get =json_decode($content, true);
+        return $content;
+    }
+
+    function hitungUsia($tanggal_lahir, $tanggal_pembanding = null){
+        if (empty($tanggal_lahir)) {
+            return null;
+        }
+
+        try {
+            $lahir = new DateTime($tanggal_lahir);
+
+            // Jika tanggal pembanding kosong gunakan sekarang
+            $compare = !empty($tanggal_pembanding)
+                ? new DateTime($tanggal_pembanding)
+                : new DateTime();
+
+            // Validasi jika tanggal lahir lebih besar
+            if ($lahir > $compare) {
+                return null;
+            }
+
+            $diff = $lahir->diff($compare);
+
+            // ==================================================
+            // LOGIKA FORMAT USIA
+            // ==================================================
+
+            // Kurang dari 1 bulan => hari
+            if ($diff->y == 0 && $diff->m == 0) {
+                return $diff->d . ' Hari';
+            }
+
+            // Kurang dari 1 tahun => bulan
+            if ($diff->y == 0) {
+                return $diff->m . ' Bulan';
+            }
+
+            // 1 tahun ke atas => tahun
+            return $diff->y . ' Tahun';
+
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+    // =========================================================
+    // FUNGSI MENYIMPAN LOG (STRUKTUR TABEL log)
+    // =========================================================
+    function SaveLog($Conn, $id_akses, $nama_petugas, $title_log, $category_log, $metadata = []) {
+        $datetime_log = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+
+        $metadataJson = null;
+        if (!empty($metadata) && is_array($metadata)) {
+            $encoded = json_encode($metadata, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            if ($encoded !== false) {
+                $metadataJson = $encoded;
+            }
+        }
+
+        $stmt = mysqli_prepare(
+            $Conn,
+            "INSERT INTO log (id_akses, datetime_log, nama_petugas, title_log, category_log, metadata_log)
+             VALUES (?, ?, ?, ?, ?, ?)"
+        );
+
+        if (!$stmt) {
+            return false;
+        }
+
+        mysqli_stmt_bind_param(
+            $stmt,
+            "isssss",
+            $id_akses,
+            $datetime_log,
+            $nama_petugas,
+            $title_log,
+            $category_log,
+            $metadataJson
+        );
+
+        $result = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        return (bool)$result;
+    }
+// ============================================================================
+// BRIDGING SATUSEHAT
+// Autentikasi dan komunikasi resource FHIR SATUSEHAT.
+// ============================================================================
+
+
 
     // =========================================
     // Fungsi Untuk Generate Token Satu Sehat
@@ -498,62 +772,1531 @@
             'datetime_expired' => $datetime_expired
         ];
     }
-
     
-    function getNamaBulan($GetTahun, $GetBulan){
-        $namaBulan = date("F", mktime(0, 0, 0, $GetBulan, 1, $GetTahun));
-        return $namaBulan;
-    }
-    function getEmailSetting($Conn,$NamaKolom){
-        $QrySettingEmail = mysqli_query($Conn,"SELECT * FROM setting_email_gateway WHERE status='Active'")or die(mysqli_error($Conn));
-        $DataEmail = mysqli_fetch_array($QrySettingEmail);
-        if(empty($DataEmail[$NamaKolom])){
-            $Response="";
-        }else{
-            $Response=$DataEmail[$NamaKolom];
-        }
-        return $Response;
-    }
-    function generateStrongCode($length) {
-        $characters = '23456789abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
-    function saveAccData($Conn,$id_akses,$id_akses_ref,$status){
-        //Cek apakah data sudah ada?
-        $CekData = mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM akses_acc WHERE id_akses='$id_akses' AND id_akses_ref='$id_akses_ref'"));
-        if(empty($CekData)){
-            $entry="INSERT INTO akses_acc (
-                id_akses,
-                id_akses_ref,
-                status
-            )VALUES (
-                '$id_akses',
-                '$id_akses_ref',
-                '$status'
-            )";
-            $hasil=mysqli_query($Conn, $entry);
-            if($hasil){
-                $response="Berhasil";
-            }else{
-                $response="Insert Gagal";
-            }
-        }else{
-            $Update= mysqli_query($Conn,"UPDATE akses_acc SET 
-                status='$status'
-            WHERE id_akses='$id_akses' AND id_akses_ref='$id_akses_ref'") or die(mysqli_error($Conn));
-            if($Update){
-                $response="Berhasil";
-            }else{
-                $response="Update Gagal";
-            }
-        }
+    function CreatLocation($baseurl_satusehat,$Json,$Token){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/Location',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
         return $response;
     }
+    function UpdateLocation($baseurl_satusehat,$Json,$Token,$id_location){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/Location/'.$id_location.'',
+            //For New Version
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function locationSearchByName($baseurl_satusehat,$Token,$KeywordLocation){
+        $KeywordLocation = str_replace(" ", "%20", $KeywordLocation);
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Location?name='.$KeywordLocation.'',
+       //For New Version
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function locationById($baseurl_satusehat,$Token,$KeywordLocation){
+        $KeywordLocation = str_replace(" ", "%20", $KeywordLocation);
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Location/'.$KeywordLocation.'',
+        //For New Version
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function organizationLocation($baseurl_satusehat,$Token,$ID_Org){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Location?organization='.$ID_Org.'',
+       //For New Version
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function PatchLocation($baseurl_satusehat,$id_location,$Json,$Token){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/Location/'.$id_location.'',
+            //For New Version
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+
+            CURLOPT_CUSTOMREQUEST => 'PATCH',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json-patch+json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function PractitionerById($baseurl_satusehat,$Token,$id_practitioner){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Practitioner/'.$id_practitioner.'',
+        //For New Version
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function PractitionerByNik($baseurl_satusehat,$Token,$nik){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Practitioner?identifier=https://fhir.kemkes.go.id/id/nik|'.$nik.'',
+        //For New Version
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function PractitionerByIdentitas($baseurl_satusehat,$Token,$nama,$tanggal_lahir,$gender){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Practitioner?name='.$nama.'&gender='.$gender.'&birthdate='.$tanggal_lahir.'',
+        //For New Version
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function PatientByNik($baseurl_satusehat,$Token,$nik){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Patient?identifier=https://fhir.kemkes.go.id/id/nik|'.$nik.'',
+        //For New Version
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function PatientById($baseurl_satusehat,$Token,$IdPasien){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Patient/'.$IdPasien.'',
+        //For New Version
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    //Pencarian id ihas pakai titik dua
+    function PatientByIhs($baseurl_satusehat,$Token,$IdPasien){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Patient:'.$IdPasien.'',
+        //For New Version
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function PatientByName($baseurl_satusehat,$Token,$nama_pasien,$tanggal_lahir,$nik_pasien){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Patient?name='.$nama_pasien.'&birthdate='.$tanggal_lahir.'&identifier=https://fhir.kemkes.go.id/id/nik|'.$nik_pasien.'',
+        //For New Version
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function PatientByNikIbu($baseurl_satusehat,$Token,$nik_ibu){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Patient?identifier=https://fhir.kemkes.go.id/id/nik-ibu|'.$nik_ibu.'',
+        //For New Version
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function CreatPatient($baseurl_satusehat,$Json,$Token){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/Patient',
+            //For New Version 7.4
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function EncounterById($baseurl_satusehat,$Token,$id){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter/'.$id.'',
+        
+        //For New Version 7.4
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function EncounterBySubject($baseurl_satusehat,$Token,$id_subject){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter?subject='.$id_subject.'',
+       //For New Version 7.4
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function CreatEncounter($baseurl_satusehat,$Json,$Token){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter',
+            //For New Version 7.4
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function UpdateEncounter($baseurl_satusehat,$Json,$Token,$id_encounter){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter/'.$id_encounter.'',
+           //For New Version 7.4
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function CreatCondition($baseurl_satusehat,$Json,$Token){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Condition',
+            //For New Version 7.4
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function EditCondition($baseurl_satusehat,$Json,$Token,$id){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Condition/'.$id.'',
+            //For New Version 7.4
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function ConditionById($baseurl_satusehat,$Token,$id){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Condition/'.$id.'',
+        //For New Version 7.4
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function CreatObservation($baseurl_satusehat,$Json,$Token){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Observation',
+           //For New Version 7.4
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function EditObservation($baseurl_satusehat,$Json,$Token,$id){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Observation/'.$id.'',
+            //For New Version 7.4
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function ObservationById($baseurl_satusehat,$Token,$id){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Observation/'.$id.'',
+        //For New Version 7.4
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function CreatComposition($baseurl_satusehat,$Json,$Token){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Composition',
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function UpdateComposition($baseurl_satusehat,$Json,$Token,$Id){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Composition/'.$Id.'',
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function CompositionById($baseurl_satusehat,$Token,$id){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Composition/'.$id.'',
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function CreatProcedur($baseurl_satusehat,$Json,$Token){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Procedure',
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function ProcedurByEncounter($baseurl_satusehat,$Token,$id){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Procedure?encounter='.$id.'',
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function ProcedureById($baseurl_satusehat,$Token,$id){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Procedure/'.$id.'',
+        // CURLOPT_RETURNTRANSFER => true,
+        // CURLOPT_ENCODING => '',
+        // CURLOPT_MAXREDIRS => 10,
+        // CURLOPT_TIMEOUT => 0,
+        // CURLOPT_FOLLOWLOCATION => true,
+        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        
+        //For Old Version 7.3
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => 0,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$Token.''
+        ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function EditProcedur($baseurl_satusehat,$Json,$Token,$id){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Procedure/'.$id.'',
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    /**
+     * CREATE EPISODE OF CARE SATUSEHAT
+     */
+    
+    function CreatEpisodeOfCare($baseurl_satusehat, $Json, $Token){
+        $url = rtrim($baseurl_satusehat, '/') . '/fhir-r4/v1/EpisodeOfCare';
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => false,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 60,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $Json,
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $Token,
+                'Content-Type: application/json'
+            ]
+        ]);
+        $response = curl_exec($curl);
+        $curlError = curl_error($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $effectiveUrl = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
+        $contentType = curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
+        return [
+            'success' => ($response !== false),
+            'http_code' => $httpCode,
+            'curl_error' => $curlError,
+            'body' => ($response !== false) ? $response : '',
+            'request_url' => $effectiveUrl,
+            'content_type' => $contentType
+        ];
+    }
+
+    /**
+     * Mengambil detail EpisodeOfCare langsung dari Server SATUSEHAT (GET Request)
+     * 
+     * @param mysqli $Conn Koneksi database aktif
+     * @param string $IdEpisodeOfCare UUID EpisodeOfCare SATUSEHAT
+     * @return array Mengembalikan array associative ['status' => 'success'/'error', 'message' => '...', 'data' => [...]]
+     */
+    function GetDetailEpisodeOfCareSatuSehat($Conn, $IdEpisodeOfCare) {
+        if (empty($IdEpisodeOfCare)) {
+            return [
+                'status'  => 'error',
+                'message' => 'ID EpisodeOfCare SATUSEHAT tidak boleh kosong.'
+            ];
+        }
+
+        // 1. Baca Pengaturan Koneksi SATUSEHAT dari Database
+        $status_setting_satusehat = 1;
+        $stmtSet = $Conn->prepare("SELECT * FROM setting_satusehat WHERE status_setting_satusehat = ? LIMIT 1");
+        if (!$stmtSet) {
+            return [
+                'status'  => 'error',
+                'message' => 'Gagal menyiapkan query pengaturan SATUSEHAT.'
+            ];
+        }
+
+        $stmtSet->bind_param("i", $status_setting_satusehat);
+        $stmtSet->execute();
+        $resultSet = $stmtSet->get_result();
+        $setting = $resultSet->fetch_assoc();
+        $stmtSet->close();
+
+        if (empty($setting)) {
+            return [
+                'status'  => 'error',
+                'message' => 'Setting Koneksi SATUSEHAT tidak ditemukan di database.'
+            ];
+        }
+
+        $baseurl_satusehat = rtrim($setting['url_satusehat'] ?? '', '/');
+        if (empty($baseurl_satusehat)) {
+            return [
+                'status'  => 'error',
+                'message' => 'URL SATUSEHAT tidak terkonfigurasi dengan benar.'
+            ];
+        }
+
+        // 2. Validasi & Generate Token SATUSEHAT jika Expired
+        $token = $setting['token'] ?? '';
+        $datetime_expired = $setting['datetime_expired'] ?? '';
+
+        if (empty($token) || empty($datetime_expired) || strtotime($datetime_expired) <= time()) {
+            $tokenResult = generateTokenSatuSehat($Conn);
+            if (($tokenResult['status'] ?? '') !== 'success') {
+                return [
+                    'status'  => 'error',
+                    'message' => 'Generate Token SATUSEHAT Gagal: ' . ($tokenResult['message'] ?? '')
+                ];
+            }
+            $token = $tokenResult['token'] ?? '';
+        }
+
+        if (empty($token)) {
+            return [
+                'status'  => 'error',
+                'message' => 'Token SATUSEHAT tidak tersedia.'
+            ];
+        }
+
+        // 3. Susun Endpoint GET dengan benar (Mencegah duplikasi path fhir-r4/v1)
+        // Jika $baseurl_satusehat sudah mencakup '/fhir-r4/v1', kita cukup append '/EpisodeOfCare/{id}'
+        if (strpos($baseurl_satusehat, 'fhir-r4') === false) {
+            $endpoint = $baseurl_satusehat . "/fhir-r4/v1/EpisodeOfCare/" . urlencode($IdEpisodeOfCare);
+        } else {
+            $endpoint = $baseurl_satusehat . "/EpisodeOfCare/" . urlencode($IdEpisodeOfCare);
+        }
+
+        $ch = curl_init($endpoint);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer " . $token,
+            "Content-Type: application/json"
+        ]);
+
+        $responseBody = curl_exec($ch);
+        $curlError    = curl_error($ch);
+        $httpCode     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if ($curlError) {
+            return [
+                'status'  => 'error',
+                'message' => 'cURL Error: ' . $curlError
+            ];
+        }
+
+        $responseData = json_decode($responseBody, true);
+
+        if ($httpCode != 200 || empty($responseData) || ($responseData['resourceType'] ?? '') === 'OperationOutcome') {
+            $errorMsg = $responseData['issue'][0]['diagnostics'] ?? $responseData['issue'][0]['details']['text'] ?? 'Gagal mengambil data dari server SATUSEHAT.';
+            return [
+                'status'  => 'error',
+                'message' => 'HTTP Code ' . $httpCode . ': ' . $errorMsg
+            ];
+        }
+
+        return [
+            'status'  => 'success',
+            'message' => 'Berhasil mengambil detail EpisodeOfCare dari SATUSEHAT',
+            'data'    => $responseData
+        ];
+    }
+
+    /**
+     * Memperbarui resource EpisodeOfCare SATUSEHAT berdasarkan data lokal.
+     *
+     * @param mysqli $Conn Koneksi database aktif
+     * @param int $id_episode_perawatan ID Episode Perawatan lokal
+     * @param string $IdEpisodeOfCare ID resource EpisodeOfCare SATUSEHAT
+     * @return array Status dan pesan hasil pembaruan
+     */
+    function UpdateEpisodeOfCareSatuSehat($Conn, $id_episode_perawatan, $IdEpisodeOfCare) {
+        $id_episode_perawatan = filter_var($id_episode_perawatan, FILTER_VALIDATE_INT);
+        $IdEpisodeOfCare = trim((string)$IdEpisodeOfCare);
+
+        if (!$id_episode_perawatan || $id_episode_perawatan < 1 || $IdEpisodeOfCare === '') {
+            return [
+                'status' => 'error',
+                'message' => 'ID Episode Perawatan atau ID EpisodeOfCare SATUSEHAT tidak valid.'
+            ];
+        }
+
+        $sql = "
+            SELECT
+                ep.IdEpisodeOfCare,
+                ep.status,
+                ep.episode_system,
+                ep.episode_code,
+                ep.episode_display,
+                ep.date_start,
+                ep.date_end,
+                p.id_ihs,
+                p.nama AS nama_pasien,
+                d.id_ihs_practitioner,
+                d.nama AS nama_dokter,
+                dg.id_condition,
+                dg.icd_deskripsi
+            FROM episode_perawatan ep
+            LEFT JOIN pasien p ON p.id_pasien = ep.id_pasien
+            LEFT JOIN dokter d ON d.id_dokter = ep.id_dokter
+            LEFT JOIN diagnosis dg ON dg.id_diagnosis = ep.id_diagnosis
+            WHERE ep.id_episode_perawatan = ?
+            LIMIT 1
+        ";
+        $stmt = mysqli_prepare($Conn, $sql);
+
+        if (!$stmt) {
+            error_log('Prepare EpisodeOfCare Update Data Error: ' . mysqli_error($Conn));
+            return [
+                'status' => 'error',
+                'message' => 'Gagal menyiapkan data EpisodeOfCare untuk update.'
+            ];
+        }
+
+        mysqli_stmt_bind_param($stmt, 'i', $id_episode_perawatan);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            error_log('Execute EpisodeOfCare Update Data Error: ' . mysqli_stmt_error($stmt));
+            mysqli_stmt_close($stmt);
+            return [
+                'status' => 'error',
+                'message' => 'Gagal mengambil data EpisodeOfCare dari database.'
+            ];
+        }
+
+        $result = mysqli_stmt_get_result($stmt);
+        $episode = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+
+        if (!$episode || (string)$episode['IdEpisodeOfCare'] !== $IdEpisodeOfCare) {
+            return [
+                'status' => 'error',
+                'message' => 'ID EpisodeOfCare SATUSEHAT tidak cocok dengan data lokal.'
+            ];
+        }
+
+        $requiredFields = [
+            'id_ihs' => 'Patient IHS',
+            'nama_pasien' => 'Nama pasien',
+            'id_ihs_practitioner' => 'Practitioner IHS',
+            'nama_dokter' => 'Nama dokter',
+            'id_condition' => 'ID Condition SATUSEHAT',
+            'icd_deskripsi' => 'Deskripsi diagnosis',
+            'episode_system' => 'Episode system',
+            'episode_code' => 'Episode code',
+            'episode_display' => 'Episode display'
+        ];
+
+        foreach ($requiredFields as $field => $label) {
+            if (empty($episode[$field])) {
+                return [
+                    'status' => 'error',
+                    'message' => $label . ' belum tersedia untuk update SATUSEHAT.'
+                ];
+            }
+        }
+
+        $detailResult = GetDetailEpisodeOfCareSatuSehat($Conn, $IdEpisodeOfCare);
+        if (($detailResult['status'] ?? '') !== 'success') {
+            return [
+                'status' => 'error',
+                'message' => 'Gagal mengambil resource SATUSEHAT: ' .
+                    ($detailResult['message'] ?? 'Kesalahan tidak diketahui.')
+            ];
+        }
+
+        $resource = $detailResult['data'];
+        if (($resource['id'] ?? '') !== $IdEpisodeOfCare) {
+            return [
+                'status' => 'error',
+                'message' => 'ID resource SATUSEHAT yang diterima tidak sesuai.'
+            ];
+        }
+
+        $stmtSetting = mysqli_prepare(
+            $Conn,
+            "SELECT url_satusehat, organization_id, nama_setting_satusehat
+             FROM setting_satusehat
+             WHERE status_setting_satusehat = 1
+             LIMIT 1"
+        );
+
+        if (!$stmtSetting || !mysqli_stmt_execute($stmtSetting)) {
+            if ($stmtSetting) {
+                error_log('Execute EpisodeOfCare Setting Error: ' . mysqli_stmt_error($stmtSetting));
+                mysqli_stmt_close($stmtSetting);
+            } else {
+                error_log('Prepare EpisodeOfCare Setting Error: ' . mysqli_error($Conn));
+            }
+            return [
+                'status' => 'error',
+                'message' => 'Gagal membaca pengaturan SATUSEHAT.'
+            ];
+        }
+
+        $resultSetting = mysqli_stmt_get_result($stmtSetting);
+        $setting = mysqli_fetch_assoc($resultSetting);
+        mysqli_stmt_close($stmtSetting);
+
+        if (empty($setting['url_satusehat']) || empty($setting['organization_id'])) {
+            return [
+                'status' => 'error',
+                'message' => 'URL atau Organization SATUSEHAT belum dikonfigurasi.'
+            ];
+        }
+
+        $tokenResult = generateTokenSatuSehat($Conn);
+        if (($tokenResult['status'] ?? '') !== 'success' || empty($tokenResult['token'])) {
+            return [
+                'status' => 'error',
+                'message' => 'Token SATUSEHAT gagal diperoleh: ' .
+                    ($tokenResult['message'] ?? 'Token tidak tersedia.')
+            ];
+        }
+
+        $timestampStart = strtotime($episode['date_start']);
+        if ($timestampStart === false) {
+            return [
+                'status' => 'error',
+                'message' => 'Tanggal mulai tidak valid untuk SATUSEHAT.'
+            ];
+        }
+
+        $resource['status'] = $episode['status'];
+        $resource['type'] = $resource['type'] ?? [];
+        $resource['type'][0]['coding'] = $resource['type'][0]['coding'] ?? [];
+        $resource['type'][0]['coding'][0] = [
+            'system' => $episode['episode_system'],
+            'code' => $episode['episode_code'],
+            'display' => $episode['episode_display']
+        ];
+        $resource['diagnosis'] = $resource['diagnosis'] ?? [];
+        $resource['diagnosis'][0]['condition'] = [
+            'reference' => 'Condition/' . $episode['id_condition'],
+            'display' => $episode['icd_deskripsi']
+        ];
+        $resource['patient'] = [
+            'reference' => 'Patient/' . $episode['id_ihs'],
+            'display' => $episode['nama_pasien']
+        ];
+        $resource['managingOrganization'] = [
+            'reference' => 'Organization/' . $setting['organization_id'],
+            'display' => $setting['nama_setting_satusehat']
+        ];
+        $resource['careManager'] = [
+            'reference' => 'Practitioner/' . $episode['id_ihs_practitioner'],
+            'display' => $episode['nama_dokter']
+        ];
+        $resource['period'] = $resource['period'] ?? [];
+        $resource['period']['start'] = date('Y-m-d\TH:i:sP', $timestampStart);
+
+        if (empty($episode['date_end'])) {
+            unset($resource['period']['end']);
+        } else {
+            $timestampEnd = strtotime($episode['date_end']);
+            if ($timestampEnd === false || $timestampEnd < $timestampStart) {
+                return [
+                    'status' => 'error',
+                    'message' => 'Tanggal selesai tidak valid untuk SATUSEHAT.'
+                ];
+            }
+            $resource['period']['end'] = date('Y-m-d\TH:i:sP', $timestampEnd);
+        }
+
+        $jsonResource = json_encode(
+            $resource,
+            JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+        );
+
+        if ($jsonResource === false) {
+            return [
+                'status' => 'error',
+                'message' => 'Gagal membuat payload SATUSEHAT: ' . json_last_error_msg()
+            ];
+        }
+
+        $baseUrl = rtrim($setting['url_satusehat'], '/');
+        if (strpos($baseUrl, 'fhir-r4') === false) {
+            $baseUrl .= '/fhir-r4/v1';
+        }
+        $url = $baseUrl . '/EpisodeOfCare/' . rawurlencode($IdEpisodeOfCare);
+        $curl = curl_init($url);
+
+        if ($curl === false) {
+            return [
+                'status' => 'error',
+                'message' => 'Koneksi update SATUSEHAT gagal disiapkan.'
+            ];
+        }
+
+        curl_setopt_array($curl, [
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => false,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_TIMEOUT => 60,
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS => $jsonResource,
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $tokenResult['token'],
+                'Content-Type: application/json'
+            ]
+        ]);
+
+        $responseBody = curl_exec($curl);
+        $curlError = curl_error($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        if ($responseBody === false) {
+            return [
+                'status' => 'error',
+                'message' => 'Update SATUSEHAT gagal: ' . $curlError
+            ];
+        }
+
+        $responseData = json_decode($responseBody, true);
+        if (
+            json_last_error() !== JSON_ERROR_NONE ||
+            ($responseData['resourceType'] ?? '') === 'OperationOutcome' ||
+            $httpCode < 200 ||
+            $httpCode >= 300
+        ) {
+            $apiMessage = $responseData['issue'][0]['diagnostics'] ??
+                $responseData['issue'][0]['details']['text'] ??
+                'HTTP Code ' . $httpCode;
+            if (!is_string($apiMessage)) {
+                $apiMessage = 'HTTP Code ' . $httpCode;
+            }
+
+            if (
+                stripos($apiMessage, 'consent') !== false ||
+                stripos($apiMessage, 'privacy') !== false
+            ) {
+                $apiMessage = 'SATUSEHAT menolak pembaruan karena aturan consent atau privasi. ' .
+                    'Periksa persetujuan pasien dan kebijakan akses yang berlaku sebelum mencoba kembali.';
+            }
+
+            return [
+                'status' => 'error',
+                'message' => 'Update SATUSEHAT gagal: ' . $apiMessage
+            ];
+        }
+
+        return [
+            'status' => 'success',
+            'message' => 'EpisodeOfCare berhasil diperbarui di SATUSEHAT.',
+            'data' => $responseData
+        ];
+    }
+
+    function GetConsent($baseurl,$Token,$id){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl.'/consent/v1/Consent?patient_id='.$id.'',
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+    }
+    function UpdateConsent($baseurl_consent_satusehat,$JsonEncode,$Token){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_consent_satusehat.'/consent/v1/Consent',
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>''.$JsonEncode.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        
+        return $response;
+    }
+    function DetailConsent($baseurl_consent_satusehat,$Token,$id_consent){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_consent_satusehat.'/consent/v1/Consent?id='.$id_consent.'',
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        
+        return $response;
+    }
+    function CreatMedication($baseurl_satusehat,$Json,$Token){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/Medication',
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        
+        return $response;
+    }
+    function EditMedication($baseurl_satusehat,$Json,$Token,$id_medication){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => ''.$baseurl_satusehat.'/Medication/'.$id_medication.'',
+            // CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_ENCODING => '',
+            // CURLOPT_MAXREDIRS => 10,
+            // CURLOPT_TIMEOUT => 0,
+            // CURLOPT_FOLLOWLOCATION => true,
+            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            
+            //For Old Version 7.3
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS =>''.$Json.'',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer '.$Token.'',
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        
+        return $response;
+    }
+// ============================================================================
+// BRIDGING BPJS
+// VClaim, Aplicare, Antrean, iCare, dan utilitas payload BPJS.
+// ============================================================================
+
+
     
     //FUNGSI ENCRYPT DAN DECRYPT BRIDGING BPJS
     function stringDecrypt($key, $string){
@@ -1340,945 +3083,6 @@
         $err = curl_error($ch);
         return $content;
     }
-    
-    function CreatLocation($baseurl_satusehat,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Location',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function UpdateLocation($baseurl_satusehat,$Json,$Token,$id_location){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Location/'.$id_location.'',
-            //For New Version
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function locationSearchByName($baseurl_satusehat,$Token,$KeywordLocation){
-        $KeywordLocation = str_replace(" ", "%20", $KeywordLocation);
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Location?name='.$KeywordLocation.'',
-       //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function locationById($baseurl_satusehat,$Token,$KeywordLocation){
-        $KeywordLocation = str_replace(" ", "%20", $KeywordLocation);
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Location/'.$KeywordLocation.'',
-        //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function organizationLocation($baseurl_satusehat,$Token,$ID_Org){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Location?organization='.$ID_Org.'',
-       //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function PatchLocation($baseurl_satusehat,$id_location,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Location/'.$id_location.'',
-            //For New Version
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'PATCH',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json-patch+json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function PractitionerById($baseurl_satusehat,$Token,$id_practitioner){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Practitioner/'.$id_practitioner.'',
-        //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function PractitionerByNik($baseurl_satusehat,$Token,$nik){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Practitioner?identifier=https://fhir.kemkes.go.id/id/nik|'.$nik.'',
-        //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function PractitionerByIdentitas($baseurl_satusehat,$Token,$nama,$tanggal_lahir,$gender){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Practitioner?name='.$nama.'&gender='.$gender.'&birthdate='.$tanggal_lahir.'',
-        //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function PatientByNik($baseurl_satusehat,$Token,$nik){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Patient?identifier=https://fhir.kemkes.go.id/id/nik|'.$nik.'',
-        //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function PatientById($baseurl_satusehat,$Token,$IdPasien){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Patient/'.$IdPasien.'',
-        //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    //Pencarian id ihas pakai titik dua
-    function PatientByIhs($baseurl_satusehat,$Token,$IdPasien){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Patient:'.$IdPasien.'',
-        //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function PatientByName($baseurl_satusehat,$Token,$nama_pasien,$tanggal_lahir,$nik_pasien){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Patient?name='.$nama_pasien.'&birthdate='.$tanggal_lahir.'&identifier=https://fhir.kemkes.go.id/id/nik|'.$nik_pasien.'',
-        //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function PatientByNikIbu($baseurl_satusehat,$Token,$nik_ibu){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Patient?identifier=https://fhir.kemkes.go.id/id/nik-ibu|'.$nik_ibu.'',
-        //For New Version
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function CreatPatient($baseurl_satusehat,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Patient',
-            //For New Version 7.4
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function EncounterById($baseurl_satusehat,$Token,$id){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter/'.$id.'',
-        
-        //For New Version 7.4
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function EncounterBySubject($baseurl_satusehat,$Token,$id_subject){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter?subject='.$id_subject.'',
-       //For New Version 7.4
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function CreatEncounter($baseurl_satusehat,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter',
-            //For New Version 7.4
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function UpdateEncounter($baseurl_satusehat,$Json,$Token,$id_encounter){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter/'.$id_encounter.'',
-           //For New Version 7.4
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function CreatCondition($baseurl_satusehat,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Condition',
-            //For New Version 7.4
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function EditCondition($baseurl_satusehat,$Json,$Token,$id){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Condition/'.$id.'',
-            //For New Version 7.4
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            
-            CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function ConditionById($baseurl_satusehat,$Token,$id){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Condition/'.$id.'',
-        //For New Version 7.4
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function CreatObservation($baseurl_satusehat,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Observation',
-           //For New Version 7.4
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function EditObservation($baseurl_satusehat,$Json,$Token,$id){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Observation/'.$id.'',
-            //For New Version 7.4
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-
-            CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function ObservationById($baseurl_satusehat,$Token,$id){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Observation/'.$id.'',
-        //For New Version 7.4
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function CreatComposition($baseurl_satusehat,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Composition',
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function UpdateComposition($baseurl_satusehat,$Json,$Token,$Id){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Composition/'.$Id.'',
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function CompositionById($baseurl_satusehat,$Token,$id){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Composition/'.$id.'',
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function CreatProcedur($baseurl_satusehat,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Procedure',
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function ProcedurByEncounter($baseurl_satusehat,$Token,$id){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Procedure?encounter='.$id.'',
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function ProcedureById($baseurl_satusehat,$Token,$id){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Procedure/'.$id.'',
-        // CURLOPT_RETURNTRANSFER => true,
-        // CURLOPT_ENCODING => '',
-        // CURLOPT_MAXREDIRS => 10,
-        // CURLOPT_TIMEOUT => 0,
-        // CURLOPT_FOLLOWLOCATION => true,
-        // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        
-        //For Old Version 7.3
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => 0,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$Token.''
-        ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function EditProcedur($baseurl_satusehat,$Json,$Token,$id){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Procedure/'.$id.'',
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function DateFormatDinamis($tanggal,$format){
-        $strtotime=strtotime($tanggal);
-        $response=date(''.$format.'',$strtotime);
-        return $response;
-    }
     function ProsesiCare($url_icare,$timestamp,$consid,$secret_key,$user_key,$nomor_kartu,$kode_dokter){
         //Creat Signature
         $signature = hash_hmac('sha256', $consid."&".$timestamp, $secret_key, true);
@@ -2321,350 +3125,7 @@
         
         return $response;
     }
-    function GetConsent($baseurl,$Token,$id){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl.'/consent/v1/Consent?patient_id='.$id.'',
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        return $response;
-    }
-    function UpdateConsent($baseurl_consent_satusehat,$JsonEncode,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_consent_satusehat.'/consent/v1/Consent',
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>''.$JsonEncode.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        
-        return $response;
-    }
-    function DetailConsent($baseurl_consent_satusehat,$Token,$id_consent){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_consent_satusehat.'/consent/v1/Consent?id='.$id_consent.'',
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        
-        return $response;
-    }
-    function CreatMedication($baseurl_satusehat,$Json,$Token){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Medication',
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        
-        return $response;
-    }
-    function EditMedication($baseurl_satusehat,$Json,$Token,$id_medication){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Medication/'.$id_medication.'',
-            // CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_ENCODING => '',
-            // CURLOPT_MAXREDIRS => 10,
-            // CURLOPT_TIMEOUT => 0,
-            // CURLOPT_FOLLOWLOCATION => true,
-            // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            
-            //For Old Version 7.3
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => 0,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS =>''.$Json.'',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$Token.'',
-                'Content-Type: application/json'
-            ),
-        ));
-        $response = curl_exec($curl);
-        
-        return $response;
-    }
-    
-    
-    // Generate Token Dinamis
-    function GenerateToken($length){
-        $token = "";
-        $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
-        $codeAlphabet.= "0123456789";
-        $max = strlen($codeAlphabet); // edited
-        
-        for ($i=0; $i < $length; $i++) {
-            $token .= $codeAlphabet[random_int(0, $max-1)];
-        }
-        return $token;
-    }
-
-    function calculateExpirationTimeFromDateTime($dateTime, $milliseconds) {
-        // Membuat objek DateTime dari string input
-        $date = new DateTime($dateTime);
-    
-        // Mengonversi milidetik ke detik dan mikrodetik
-        $seconds = floor($milliseconds / 1000);
-        $microseconds = ($milliseconds % 1000) * 1000;
-    
-        // Menambahkan detik dan mikrodetik ke objek DateTime
-        $date->add(new DateInterval("PT{$seconds}S"));
-        // Menambahkan mikrodetik menggunakan metode modify
-        $date->modify("+{$microseconds} microseconds");
-    
-        // Mengembalikan waktu kedaluwarsa dalam format YYYY-mm-dd HH:ii:ss.uuu
-        return $date->format('Y-m-d H:i:s');
-    }
-
-    // Mencari Nama Hari Berdasarkan Tanggal
-    function NamaHariJadwal($tanggal) {
-        if(empty($tanggal)){
-            $tanggal=date('Y-m-d');
-        }
-    // Mengubah tanggal menjadi objek DateTime
-        $datetime = new DateTime($tanggal);
-        // Array nama hari dalam Bahasa Indonesia
-        $nama_hari = array(
-            "Sunday" => "Minggu",
-            "Monday" => "Senin",
-            "Tuesday" => "Selasa",
-            "Wednesday" => "Rabu",
-            "Thursday" => "Kamis",
-            "Friday" => "Jumat",
-            "Saturday" => "Sabtu"
-        );
-        // Mendapatkan nama hari dalam bahasa Inggris terlebih dahulu
-        $hari_english = $datetime->format('l');
-        // Mengambil nama hari dalam Bahasa Indonesia
-        $nama_hari_indonesia = $nama_hari[$hari_english];
-        // Menampilkan nama hari
-        return $nama_hari_indonesia; // Output: Sabtu
-    }
-
-
-    // Kirim Email
-    function SendEmail($Conn, $id_setting_email_gateway, $subjek, $email_tujuan, $nama_tujuan, $pesan){
-        // Buka Data Dengan Prepared Statment
-        $sql  = "SELECT * FROM  setting_email_gateway WHERE id_setting_email_gateway = ?";
-        $stmt = $Conn->prepare($sql);
-
-        // Bind parameter (tipe data integer "i")
-        $stmt->bind_param("i", $id_setting_email_gateway);
-
-        // Eksekusi statement
-        $stmt->execute();
-
-        // Ambil hasil query
-        $result = $stmt->get_result();
-        $SettingEmail = $result->fetch_assoc();
-
-        // Simpan hasil ke variabel
-        $email_gateway    = $SettingEmail['email_gateway'] ?? null;
-        $password_gateway = $SettingEmail['password_gateway'] ?? null;
-        $url_provider     = $SettingEmail['url_provider'] ?? null;
-        $port_gateway     = $SettingEmail['port_gateway'] ?? null;
-        $nama_pengirim    = $SettingEmail['nama_pengirim'] ?? null;
-        $url_service      = $SettingEmail['url_service'] ?? null;
-        $status           = $SettingEmail['status'] ?? null;
-        
-        //Kirim email
-        $ch = curl_init();
-        $headers = array(
-            'Content-Type: Application/JSON',          
-            'Accept: Application/JSON'     
-        );
-
-        // Payload
-        $payload = array(
-            "subjek"              => "$subjek",
-            "email_asal"          => "$email_gateway",
-            "password_email_asal" => "$password_gateway",
-            "url_provider"        => "$url_provider",
-            "nama_pengirim"       => "$nama_pengirim",
-            "email_tujuan"        => "$email_tujuan",
-            "nama_tujuan"         => "$nama_tujuan",
-            "pesan"               => "$pesan",
-            "port"                => "$port_gateway"
-        );
-
-
-        $json = json_encode($payload);
-        curl_setopt($ch, CURLOPT_URL, "$url_service/index.php");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 1000); 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $content = curl_exec($ch);
-        $err = curl_error($ch);
-        $get =json_decode($content, true);
-        return $content;
-    }
-
-    function hitungUsia($tanggal_lahir, $tanggal_pembanding = null){
-        if (empty($tanggal_lahir)) {
-            return null;
-        }
-
-        try {
-            $lahir = new DateTime($tanggal_lahir);
-
-            // Jika tanggal pembanding kosong gunakan sekarang
-            $compare = !empty($tanggal_pembanding)
-                ? new DateTime($tanggal_pembanding)
-                : new DateTime();
-
-            // Validasi jika tanggal lahir lebih besar
-            if ($lahir > $compare) {
-                return null;
-            }
-
-            $diff = $lahir->diff($compare);
-
-            // ==================================================
-            // LOGIKA FORMAT USIA
-            // ==================================================
-
-            // Kurang dari 1 bulan => hari
-            if ($diff->y == 0 && $diff->m == 0) {
-                return $diff->d . ' Hari';
-            }
-
-            // Kurang dari 1 tahun => bulan
-            if ($diff->y == 0) {
-                return $diff->m . ' Bulan';
-            }
-
-            // 1 tahun ke atas => tahun
-            return $diff->y . ' Tahun';
-
-        } catch (Exception $e) {
-            return null;
-        }
-    }
-    // =========================================================
-    // FUNGSI MENYIMPAN LOG (STRUKTUR TABEL log)
-    // =========================================================
-    function SaveLog($Conn, $id_akses, $nama_petugas, $title_log, $category_log, $metadata = []) {
-        $datetime_log = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
-
-        $metadataJson = null;
-        if (!empty($metadata) && is_array($metadata)) {
-            $encoded = json_encode($metadata, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-            if ($encoded !== false) {
-                $metadataJson = $encoded;
-            }
-        }
-
-        $stmt = mysqli_prepare(
-            $Conn,
-            "INSERT INTO log (id_akses, datetime_log, nama_petugas, title_log, category_log, metadata_log)
-             VALUES (?, ?, ?, ?, ?, ?)"
-        );
-
-        if (!$stmt) {
-            return false;
-        }
-
-        mysqli_stmt_bind_param(
-            $stmt,
-            "isssss",
-            $id_akses,
-            $datetime_log,
-            $nama_petugas,
-            $title_log,
-            $category_log,
-            $metadataJson
-        );
-
-        $result = mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        return (bool)$result;
-    }
+// ============================================================================
+// SIRS ONLINE
+// Belum ada function SIRS Online yang didefinisikan di file ini.
+// ============================================================================
