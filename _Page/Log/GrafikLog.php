@@ -22,11 +22,39 @@ try {
     $id_akses = isset($SessionIdAkses) ? intval($SessionIdAkses) : 0;
 
     $periode_data = $_POST['periode_data'] ?? 'Tahun';
-    $kategori_log = isset($_POST['kategori_log']) ? mysqli_real_escape_string($Conn, $_POST['kategori_log']) : '';
+    $kategori_log = isset($_POST['kategori_log']) ? $_POST['kategori_log'] : '';
     $tahun_grafik = isset($_POST['tahun_grafik']) ? intval($_POST['tahun_grafik']) : intval(date('Y'));
     $bulan_grafik = isset($_POST['bulan_grafik']) ? intval($_POST['bulan_grafik']) : intval(date('m'));
 
     $data = [];
+
+    // Prepared Statement: hitung log untuk periode dan kategori yang dipilih.
+    $fetchLogTotal = static function ($keyword, $category, $idAkses) use ($Conn) {
+        if (empty($category)) {
+            $sql = "SELECT COUNT(*) AS total FROM log WHERE datetime_log LIKE ? AND id_akses=?";
+            $stmt = mysqli_prepare($Conn, $sql);
+            if (!$stmt) {
+                throw new Exception("Query Error: " . mysqli_error($Conn));
+            }
+            mysqli_stmt_bind_param($stmt, "si", $keyword, $idAkses);
+        } else {
+            $sql = "SELECT COUNT(*) AS total FROM log WHERE title_log=? AND datetime_log LIKE ? AND id_akses=?";
+            $stmt = mysqli_prepare($Conn, $sql);
+            if (!$stmt) {
+                throw new Exception("Query Error: " . mysqli_error($Conn));
+            }
+            mysqli_stmt_bind_param($stmt, "ssi", $category, $keyword, $idAkses);
+        }
+
+        if (!mysqli_stmt_execute($stmt)) {
+            throw new Exception("Query Error: " . mysqli_error($Conn));
+        }
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+
+        return $row ? intval($row['total']) : 0;
+    };
 
     // 1. MODE TAHUN
     if ($periode_data === "Tahun") {
@@ -37,17 +65,8 @@ try {
         ];
         foreach ($BulanList as $BulanNomor => $BulanNama) {
             $KeywordGrafik = "$tahun_grafik-$BulanNomor";
-            $KeywordEsc = mysqli_real_escape_string($Conn, $KeywordGrafik);
-
-            if (empty($kategori_log)) {
-                $sql = "SELECT COUNT(*) AS total FROM log WHERE datetime_log LIKE '$KeywordEsc%' AND id_akses='$id_akses'";
-            } else {
-                $sql = "SELECT COUNT(*) AS total FROM log WHERE title_log='$kategori_log' AND datetime_log LIKE '$KeywordEsc%' AND id_akses='$id_akses'";
-            }
-            $query = mysqli_query($Conn, $sql);
-            if (!$query) throw new Exception("Query Error: " . mysqli_error($Conn) . " | SQL: $sql");
-            $row = mysqli_fetch_assoc($query);
-            $data[] = ['x' => $BulanNama, 'y' => $row ? intval($row['total']) : 0];
+            $totalLog = $fetchLogTotal($KeywordGrafik . '%', $kategori_log, $id_akses);
+            $data[] = ['x' => $BulanNama, 'y' => $totalLog];
         }
     } 
     // 2. MODE BULAN
@@ -58,17 +77,8 @@ try {
         for ($i = 1; $i <= $total_hari; $i++) {
             $HariNomor = sprintf("%02d", $i);
             $KeywordGrafik = "$tahun_grafik-$bulan_nomor-$HariNomor";
-            $KeywordEsc = mysqli_real_escape_string($Conn, $KeywordGrafik);
-
-            if (empty($kategori_log)) {
-                $sql = "SELECT COUNT(*) AS total FROM log WHERE datetime_log LIKE '$KeywordEsc%' AND id_akses='$id_akses'";
-            } else {
-                $sql = "SELECT COUNT(*) AS total FROM log WHERE title_log='$kategori_log' AND datetime_log LIKE '$KeywordEsc%' AND id_akses='$id_akses'";
-            }
-            $query = mysqli_query($Conn, $sql);
-            if (!$query) throw new Exception("Query Error: " . mysqli_error($Conn));
-            $row = mysqli_fetch_assoc($query);
-            $data[] = ['x' => $HariNomor, 'y' => $row ? intval($row['total']) : 0];
+            $totalLog = $fetchLogTotal($KeywordGrafik . '%', $kategori_log, $id_akses);
+            $data[] = ['x' => $HariNomor, 'y' => $totalLog];
         }
     } 
     // 3. MODE HARI
@@ -77,17 +87,8 @@ try {
         for ($i = 0; $i < 24; $i++) {
             $JamNomor = sprintf("%02d", $i);
             $KeywordGrafik = "$tanggal_sekarang $JamNomor";
-            $KeywordEsc = mysqli_real_escape_string($Conn, $KeywordGrafik);
-
-            if (empty($kategori_log)) {
-                $sql = "SELECT COUNT(*) AS total FROM log WHERE datetime_log LIKE '$KeywordEsc%' AND id_akses='$id_akses'";
-            } else {
-                $sql = "SELECT COUNT(*) AS total FROM log WHERE title_log='$kategori_log' AND datetime_log LIKE '$KeywordEsc%' AND id_akses='$id_akses'";
-            }
-            $query = mysqli_query($Conn, $sql);
-            if (!$query) throw new Exception("Query Error: " . mysqli_error($Conn));
-            $row = mysqli_fetch_assoc($query);
-            $data[] = ['x' => $JamNomor . ":00", 'y' => $row ? intval($row['total']) : 0];
+            $totalLog = $fetchLogTotal($KeywordGrafik . '%', $kategori_log, $id_akses);
+            $data[] = ['x' => $JamNomor . ":00", 'y' => $totalLog];
         }
     }
 

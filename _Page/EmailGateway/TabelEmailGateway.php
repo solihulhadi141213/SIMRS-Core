@@ -27,8 +27,12 @@
     }
     
     // Jumlah Data
-    $QryEmailGateway = mysqli_query($Conn, "SELECT id_setting_email_gateway FROM setting_email_gateway");
+    // Prepared Statement: count Email Gateway records.
+    $stmtCount = mysqli_prepare($Conn, "SELECT id_setting_email_gateway FROM setting_email_gateway");
+    mysqli_stmt_execute($stmtCount);
+    $QryEmailGateway = mysqli_stmt_get_result($stmtCount);
     $JumlahEmailGateway = mysqli_num_rows($QryEmailGateway);
+    mysqli_stmt_close($stmtCount);
     if(empty($JumlahEmailGateway)){
         echo '
             <tr>
@@ -40,7 +44,10 @@
         exit;
     }
     $no = 1;
-    $query = mysqli_query($Conn, "SELECT * FROM setting_email_gateway");
+    // Prepared Statement: fetch Email Gateway records.
+    $stmt = mysqli_prepare($Conn, "SELECT * FROM setting_email_gateway");
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
     while ($data = mysqli_fetch_array($query)) {
         $id_setting_email_gateway = $data['id_setting_email_gateway'];
         $status = $data['status'];
@@ -102,6 +109,7 @@
         ';
         $no++;
     }
+    mysqli_stmt_close($stmt);
 ?>
 <script>
     var JumlahEmailGateway = <?php echo $JumlahEmailGateway; ?>;

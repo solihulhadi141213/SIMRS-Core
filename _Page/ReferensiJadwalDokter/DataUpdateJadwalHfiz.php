@@ -40,8 +40,11 @@
     $id_poliklinik = validateAndSanitizeInput($_POST['id_poliklinik']);
     $id_dokter     = validateAndSanitizeInput($_POST['id_dokter']);
 
-    // Tampilkan Data Jadwal Menggunakan Prepared Statment
-    $JumlahData = mysqli_num_rows(mysqli_query($Conn, "SELECT id_jadwal FROM jadwal_dokter WHERE id_dokter='$id_dokter' AND id_poliklinik='$id_poliklinik'"));
+    // Prepared Statement: hitung jadwal dokter pada poliklinik terpilih.
+    $stmtCount = mysqli_prepare($Conn, "SELECT id_jadwal FROM jadwal_dokter WHERE id_dokter=? AND id_poliklinik=?");
+    mysqli_stmt_bind_param($stmtCount, "ss", $id_dokter, $id_poliklinik);
+    mysqli_stmt_execute($stmtCount);
+    $JumlahData = mysqli_stmt_num_rows(mysqli_stmt_get_result($stmtCount));
     
     //Kondisi jika data jadwal dokter kosong
     if(empty($JumlahData)){
@@ -53,9 +56,9 @@
         exit;
     }else{
         
-        //Tampilkan Data Dengan Prepared Statment
+        // Prepared Statement: ambil jadwal dokter pada poliklinik terpilih.
         $no = 1;
-        $sql = "SELECT*FROM jadwal_dokter WHERE id_dokter='$id_dokter' AND id_poliklinik='$id_poliklinik'";
+        $sql = "SELECT*FROM jadwal_dokter WHERE id_dokter=? AND id_poliklinik=?";
         $stmt = mysqli_prepare($Conn, $sql);
         if (!$stmt) {
             echo '
@@ -65,6 +68,7 @@
             ';
             exit;
         }
+        mysqli_stmt_bind_param($stmt, "ss", $id_dokter, $id_poliklinik);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
 

@@ -13,44 +13,56 @@
     $offset     = ($page - 1) * $limit;
 
     // Optional filter (kalau nanti ada form filter)
-    $keyword    = !empty($_POST['keyword_pasien']) ? mysqli_real_escape_string($Conn, $_POST['keyword_pasien']) : "";
+    $keyword    = !empty($_POST['keyword_pasien']) ? $_POST['keyword_pasien'] : "";
 
     // ==============================
     // KONDISI WHERE
     // ==============================
-    $where = "WHERE 1=1";
-
-    if (!empty($keyword)) {
-        $where .= " AND (
-            nama LIKE '%$keyword%' OR
-            nik LIKE '%$keyword%' OR
-            no_bpjs LIKE '%$keyword%' OR
-            gender LIKE '%$keyword%' OR
-            status LIKE '%$keyword%' OR
-            registered_at LIKE '%$keyword%' OR
-            id_ihs LIKE '%$keyword%'
-        )";
-    }
+    $where = !empty($keyword) ? " AND (
+        nama LIKE ? OR
+        nik LIKE ? OR
+        no_bpjs LIKE ? OR
+        gender LIKE ? OR
+        status LIKE ? OR
+        registered_at LIKE ? OR
+        id_ihs LIKE ?
+    )" : "";
+    $searchPattern = '%' . $keyword . '%';
 
     // ==============================
     // HITUNG TOTAL DATA
     // ==============================
-    $queryCount = mysqli_query($Conn, "SELECT COUNT(*) as total FROM pasien $where");
+    // Prepared Statement: count patients matching the optional search.
+    $stmtCount = mysqli_prepare($Conn, "SELECT COUNT(*) as total FROM pasien WHERE 1=1$where");
+    if (!empty($keyword)) {
+        mysqli_stmt_bind_param($stmtCount, 'sssssss', $searchPattern, $searchPattern, $searchPattern, $searchPattern, $searchPattern, $searchPattern, $searchPattern);
+    }
+    mysqli_stmt_execute($stmtCount);
+    $queryCount = mysqli_stmt_get_result($stmtCount);
     $dataCount  = mysqli_fetch_assoc($queryCount);
     $totalData  = $dataCount['total'];
+    mysqli_stmt_close($stmtCount);
 
     $pageCount  = ($totalData > 0) ? ceil($totalData / $limit) : 0;
 
     // ==============================
     // AMBIL DATA
     // ==============================
-    $query = mysqli_query($Conn, "
+    // Prepared Statement: fetch the paginated patient list.
+    $stmt = mysqli_prepare($Conn, "
         SELECT *
         FROM pasien
-        $where
+        WHERE 1=1$where
         ORDER BY id_pasien DESC
-        LIMIT $offset, $limit
+        LIMIT ?, ?
     ");
+    if (!empty($keyword)) {
+        mysqli_stmt_bind_param($stmt, 'sssssssii', $searchPattern, $searchPattern, $searchPattern, $searchPattern, $searchPattern, $searchPattern, $searchPattern, $offset, $limit);
+    } else {
+        mysqli_stmt_bind_param($stmt, 'ii', $offset, $limit);
+    }
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
 
     // ==============================
     // TAMPILKAN DATA
@@ -151,8 +163,10 @@
 
             $no++;
         }
+        mysqli_stmt_close($stmt);
 
     } else {
+        mysqli_stmt_close($stmt);
 
         echo '
         <tr data-page-count="0" data-current-page="0">

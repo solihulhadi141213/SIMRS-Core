@@ -1,6 +1,33 @@
 <?php
-    $JumlahPengajuanAksesbaru = mysqli_num_rows(mysqli_query($Conn, "SELECT id_akses_pengajuan FROM akses_pengajuan WHERE status='Pending'"));
-    $JumlahLaporanKesalahan   = mysqli_num_rows(mysqli_query($Conn, "SELECT id_akses_laporan FROM akses_laporan WHERE status='Terkirim'"));
+    // Query jumlah pengajuan dengan Prepared Statement.
+    $QryPengajuanAkses = $Conn->prepare(
+        'SELECT COUNT(*) AS jumlah FROM akses_pengajuan WHERE status = ?'
+    );
+    if (!$QryPengajuanAkses) {
+        die($Conn->error);
+    }
+    $StatusPengajuanAkses = 'Pending';
+    $QryPengajuanAkses->bind_param('s', $StatusPengajuanAkses);
+    if (!$QryPengajuanAkses->execute()) {
+        die($QryPengajuanAkses->error);
+    }
+    $JumlahPengajuanAksesbaru = (int) $QryPengajuanAkses->get_result()->fetch_assoc()['jumlah'];
+    $QryPengajuanAkses->close();
+
+    // Query jumlah laporan dengan Prepared Statement.
+    $QryLaporanKesalahan = $Conn->prepare(
+        'SELECT COUNT(*) AS jumlah FROM akses_laporan WHERE status = ?'
+    );
+    if (!$QryLaporanKesalahan) {
+        die($Conn->error);
+    }
+    $StatusLaporanKesalahan = 'Terkirim';
+    $QryLaporanKesalahan->bind_param('s', $StatusLaporanKesalahan);
+    if (!$QryLaporanKesalahan->execute()) {
+        die($QryLaporanKesalahan->error);
+    }
+    $JumlahLaporanKesalahan = (int) $QryLaporanKesalahan->get_result()->fetch_assoc()['jumlah'];
+    $QryLaporanKesalahan->close();
     
     //Kalkulasi Jumlah Notifikasi
     $JumlahNotifikasi = $JumlahPengajuanAksesbaru + $JumlahLaporanKesalahan;

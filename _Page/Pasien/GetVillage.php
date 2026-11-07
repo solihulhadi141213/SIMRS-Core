@@ -10,18 +10,20 @@
         exit;
     }
 
-    // Ambil kecamatan
-    $subdistrict = mysqli_real_escape_string($Conn, $_POST['subdistrict']);
+    $subdistrict = $_POST['subdistrict'];
 
-    // Query desa / kelurahan unik
-    $query = mysqli_query($Conn, "
+    // Prepared Statement: ambil desa/kelurahan berdasarkan kecamatan.
+    $stmt = mysqli_prepare($Conn, "
         SELECT DISTINCT village, tipe_level4
         FROM wilayah
-        WHERE subdistrict = '$subdistrict'
+        WHERE subdistrict = ?
         AND village IS NOT NULL
         AND village != ''
         ORDER BY village ASC
     ");
+    mysqli_stmt_bind_param($stmt, "s", $subdistrict);
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
 
     // Default option
     echo '<option value="">Pilih</option>';

@@ -19,11 +19,13 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'GET') {
     observasiExportFormMessage('Metode request tidak valid.', 405);
 }
 
-$countResult = mysqli_query($Conn, 'SELECT COUNT(*) AS total FROM observation');
-if (!$countResult) {
+// Prepared Statement: hitung observasi yang tersedia untuk ekspor.
+$countStmt = mysqli_prepare($Conn, 'SELECT COUNT(*) AS total FROM observation');
+if (!$countStmt || !mysqli_stmt_execute($countStmt)) {
     error_log('Observasi export: gagal menghitung data: ' . mysqli_error($Conn));
     observasiExportFormMessage('Gagal menghitung data observasi.', 500);
 }
+$countResult = mysqli_stmt_get_result($countStmt);
 $total = (int) (mysqli_fetch_assoc($countResult)['total'] ?? 0);
 mysqli_free_result($countResult);
 ?>

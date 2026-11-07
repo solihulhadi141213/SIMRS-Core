@@ -53,21 +53,6 @@
     }
 
     // =====================================================
-    // ESCAPE FUNCTION
-    // =====================================================
-    function escape($Conn, $value)
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        return mysqli_real_escape_string(
-            $Conn,
-            $value
-        );
-    }
-
-    // =====================================================
     // AMBIL DATA
     // =====================================================
     $category_name     = validate($_POST['category_name'] ?? '');
@@ -139,20 +124,19 @@
     // =====================================================
     // VALIDASI DUPLIKAT
     // =====================================================
-    $observation_name_escape = escape(
-        $Conn,
-        $observation_name
-    );
-
-    $queryCheck = mysqli_query(
+    // Prepared Statement: check whether the observation name already exists.
+    $stmtCheck = mysqli_prepare(
         $Conn,
         "
         SELECT id_observation_reference
         FROM observation_reference
-        WHERE observation_name='$observation_name_escape'
+        WHERE observation_name=?
         LIMIT 1
         "
     );
+    mysqli_stmt_bind_param($stmtCheck, 's', $observation_name);
+    mysqli_stmt_execute($stmtCheck);
+    $queryCheck = mysqli_stmt_get_result($stmtCheck);
 
     if (!$queryCheck) {
 
@@ -164,6 +148,7 @@
     }
 
     if (mysqli_num_rows($queryCheck) > 0) {
+        mysqli_stmt_close($stmtCheck);
 
         response(
             'error',
@@ -171,6 +156,7 @@
         );
 
     }
+    mysqli_stmt_close($stmtCheck);
 
     // =====================================================
     // HANDLE RESULT CODED
@@ -228,27 +214,6 @@
     }
 
     // =====================================================
-    // ESCAPE DATA
-    // =====================================================
-    $category_name     = escape($Conn, $category_name);
-    $category_code     = escape($Conn, $category_code);
-    $category_display  = escape($Conn, $category_display);
-    $category_system   = escape($Conn, $category_system);
-
-    $observation_name    = escape($Conn, $observation_name);
-    $observation_code    = escape($Conn, $observation_code);
-    $observation_display = escape($Conn, $observation_display);
-    $observation_system  = escape($Conn, $observation_system);
-
-    $unit_name     = escape($Conn, $unit_name);
-    $unit_code     = escape($Conn, $unit_code);
-    $unit_display  = escape($Conn, $unit_display);
-    $unit_system   = escape($Conn, $unit_system);
-
-    $result_type   = escape($Conn, $result_type);
-    $result_coded  = escape($Conn, $result_coded);
-
-    // =====================================================
     // HANDLE NULL UNIT
     // =====================================================
     if (
@@ -266,7 +231,8 @@
     // =====================================================
     // QUERY INSERT
     // =====================================================
-    $queryInsert = mysqli_query(
+    // Prepared Statement: insert observation reference values.
+    $stmtInsert = mysqli_prepare(
         $Conn,
         "
         INSERT INTO observation_reference (
@@ -289,39 +255,34 @@
             result_type,
             result_coded
 
-        ) VALUES (
-
-            '$category_name',
-            '$category_code',
-            '$category_display',
-            '$category_system',
-
-            '$observation_name',
-            '$observation_code',
-            '$observation_display',
-            '$observation_system',
-
-            '$unit_name',
-            '$unit_code',
-            '$unit_display',
-            '$unit_system',
-
-            '$result_type',
-
-            " . (
-                $result_coded !== null
-                    ? "'$result_coded'"
-                    : "NULL"
-            ) . "
-
-        )
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         "
     );
+    mysqli_stmt_bind_param(
+        $stmtInsert,
+        'ssssssssssssss',
+        $category_name,
+        $category_code,
+        $category_display,
+        $category_system,
+        $observation_name,
+        $observation_code,
+        $observation_display,
+        $observation_system,
+        $unit_name,
+        $unit_code,
+        $unit_display,
+        $unit_system,
+        $result_type,
+        $result_coded
+    );
+    $queryInsert = mysqli_stmt_execute($stmtInsert);
 
     // =====================================================
     // RESPONSE
     // =====================================================
     if ($queryInsert) {
+        mysqli_stmt_close($stmtInsert);
 
         // Log aktivitas penambahan data
         $id_akses = (int)$SessionIdAkses;
@@ -334,10 +295,12 @@
         );
 
     } else {
+        $insertError = mysqli_stmt_error($stmtInsert);
+        mysqli_stmt_close($stmtInsert);
 
         response(
             'error',
-            'Gagal menyimpan data! ' . mysqli_error($Conn)
+            'Gagal menyimpan data! ' . $insertError
         );
 
     }

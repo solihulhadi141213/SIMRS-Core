@@ -17,7 +17,10 @@ $query = "
         (SELECT COUNT(*) FROM pasien) AS pasien
 ";
 try {
-    $result = mysqli_query($Conn, $query);
+    // Prepared Statement: execute the static dashboard count query.
+    $stmt = mysqli_prepare($Conn, $query);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 } catch (mysqli_sql_exception $exception) {
     error_log('Dashboard count query failed: ' . $exception->getMessage());
     http_response_code(500);
@@ -33,6 +36,7 @@ if (!$result) {
 }
 
 $counts = mysqli_fetch_assoc($result);
+mysqli_stmt_close($stmt);
 echo json_encode([
     'status' => 'success',
     'dokter' => (int) $counts['dokter'],

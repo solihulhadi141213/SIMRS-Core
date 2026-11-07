@@ -21,11 +21,14 @@ if (empty($SessionIdAkses)) {
 }
 
 // Ambil semua fitur sekaligus (lebih optimal)
-$query = mysqli_query($Conn, "
+// Prepared Statement: ambil seluruh fitur untuk ditampilkan.
+$query = mysqli_prepare($Conn, "
     SELECT id_akses_fitur, nama_fitur, kategori
     FROM akses_fitur
     ORDER BY kategori ASC, nama_fitur ASC
 ");
+mysqli_stmt_execute($query);
+$query = mysqli_stmt_get_result($query);
 
 // Kelompokkan data berdasarkan kategori
 $fiturByKategori = [];

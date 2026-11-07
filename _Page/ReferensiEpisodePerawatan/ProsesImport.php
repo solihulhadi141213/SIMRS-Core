@@ -133,7 +133,10 @@ $existingName    = []; // episode_name  (lowercase)
 $existingDisplay = []; // episode_display (lowercase)
 $existingCode    = []; // episode_code  (lowercase)
 
-$q = mysqli_query($Conn, "SELECT episode_name, episode_display, episode_code FROM episode_perawatan_kode");
+// Prepared Statement: ambil daftar kode episode perawatan.
+$q = mysqli_prepare($Conn, "SELECT episode_name, episode_display, episode_code FROM episode_perawatan_kode");
+mysqli_stmt_execute($q);
+$q = mysqli_stmt_get_result($q);
 if (!$q) {
     respond('error', 'Gagal membaca data existing: ' . mysqli_error($Conn));
 }

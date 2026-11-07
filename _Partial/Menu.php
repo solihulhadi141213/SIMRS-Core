@@ -36,12 +36,6 @@
                         ['label' => 'Antrian', 'icon' => 'bi-ticket-perforated', 'url' => 'index.php?Page=Antrian', 'page' => 'Antrian'],
                         ['label' => 'Pasien', 'icon' => 'bi-people', 'url' => 'index.php?Page=Pasien', 'page' => 'Pasien'],
                         ['label' => 'Kunjungan', 'icon' => 'bi-clipboard2-pulse', 'url' => 'index.php?Page=Kunjungan', 'page' => 'Kunjungan'],
-                        ['label' => 'Jadwal Dokter', 'icon' => 'bi-calendar', 'url' => 'index.php?Page=ReferensiJadwalDokter', 'page' => 'ReferensiJadwalDokter'],
-                    ],
-                ],
-                [
-                    'label' => 'Master Data',
-                    'items' => [
                         [
                             'label' => 'Rekam Medis',
                             'icon' => 'bi-clipboard2-check',
@@ -64,6 +58,12 @@
                                 ['label' => 'Resume', 'url' => 'index.php?Page=Resume', 'page' => 'Resume'],
                             ],
                         ],
+                        ['label' => 'Jadwal Dokter', 'icon' => 'bi-calendar', 'url' => 'index.php?Page=ReferensiJadwalDokter', 'page' => 'ReferensiJadwalDokter'],
+                    ],
+                ],
+                [
+                    'label' => 'Master Data',
+                    'items' => [
                         [
                             'label' => 'Referensi Lokal',
                             'icon' => 'bi-journal-medical',
@@ -88,6 +88,14 @@
                             'children' => [
                                 ['label' => 'Referensi ICD (BPJS)', 'url' => 'index.php?Page=ReferensiIcdBpjs', 'page' => 'ReferensiIcdBpjs'],
                                 ['label' => 'Wilayah (BPJS)', 'url' => 'index.php?Page=ReferensiWilayahBpjs', 'page' => 'ReferensiWilayahBpjs'],
+                            ],
+                        ],
+                        [
+                            'label' => 'Referensi SATUSEHAT',
+                            'icon' => 'bi-journal-medical',
+                            'children' => [
+                                ['label' => 'Referensi ICD (SATUSEHAT)', 'url' => 'index.php?Page=ReferensiIcdSatusehat', 'page' => 'ReferensiIcdSatusehat'],
+                                ['label' => 'Wilayah (SATUSEHAT)', 'url' => 'index.php?Page=ReferensiWilayahSatusehat', 'page' => 'ReferensiWilayahSatusehat'],
                             ],
                         ],
                     ],

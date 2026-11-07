@@ -30,13 +30,13 @@
     }
     //batas
     if(!empty($_POST['batas'])){
-        $batas=$_POST['batas'];
+        $batas=max(1, (int) $_POST['batas']);
     }else{
-        $batas="10";
+        $batas=10;
     }
     //ShortBy
     if(!empty($_POST['ShortBy'])){
-        $ShortBy=$_POST['ShortBy'];
+        $ShortBy=strtoupper($_POST['ShortBy']);
         if($ShortBy=="ASC"){
             $NextShort="DESC";
         }else{
@@ -52,9 +52,17 @@
     }else{
         $OrderBy="id_log";
     }
+    $allowedOrderBy = ['id_log', 'waktu', 'nama_log', 'kategori', 'id_akses'];
+    if (!in_array($OrderBy, $allowedOrderBy, true)) {
+        $OrderBy = 'id_log';
+    }
+    if (!in_array($ShortBy, ['ASC', 'DESC'], true)) {
+        $ShortBy = 'ASC';
+        $NextShort = 'DESC';
+    }
     //Atur Page
     if(!empty($_POST['page'])){
-        $page=$_POST['page'];
+        $page=max(1, (int) $_POST['page']);
         $posisi = ( $page - 1 ) * $batas;
     }else{
         $page="1";
@@ -62,13 +70,23 @@
     }
     if(empty($id_akses)){
         if(empty($keyword)){
-            $jml_data = mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM log WHERE id_akses='$SessionIdAkses'"));
+            // Prepared Statement: hitung log pengguna saat tidak ada filter.
+            $stmtCount = mysqli_prepare($Conn, "SELECT COUNT(*) AS total FROM log WHERE id_akses=?");
+            mysqli_stmt_bind_param($stmtCount, "s", $SessionIdAkses);
         }else{
-            $jml_data = mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM log WHERE id_akses='$SessionIdAkses' AND waktu like '%$keyword%' OR nama_log like '%$keyword%' OR kategori like '%$keyword%' OR id_akses like '%$keyword%'"));
+            // Prepared Statement: hitung log pengguna dengan kata kunci.
+            $stmtCount = mysqli_prepare($Conn, "SELECT COUNT(*) AS total FROM log WHERE id_akses=? AND waktu LIKE ? OR nama_log LIKE ? OR kategori LIKE ? OR id_akses LIKE ?");
+            $likeKeyword = "%$keyword%";
+            mysqli_stmt_bind_param($stmtCount, "sssss", $SessionIdAkses, $likeKeyword, $likeKeyword, $likeKeyword, $likeKeyword);
         }
     }else{
-        $jml_data = mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM log WHERE id_akses='$id_akses'"));
+        // Prepared Statement: hitung log untuk akses terpilih.
+        $stmtCount = mysqli_prepare($Conn, "SELECT COUNT(*) AS total FROM log WHERE id_akses=?");
+        mysqli_stmt_bind_param($stmtCount, "s", $id_akses);
     }
+    mysqli_stmt_execute($stmtCount);
+    $countResult = mysqli_fetch_assoc(mysqli_stmt_get_result($stmtCount));
+    $jml_data = (int) ($countResult['total'] ?? 0);
 ?>
 <script>
     //ketika klik next
@@ -137,13 +155,22 @@
                     //KONDISI PENGATURAN MASING FILTER
                     if(empty($id_akses)){
                         if(empty($keyword)){
-                            $query = mysqli_query($Conn, "SELECT*FROM log WHERE id_akses='$SessionIdAkses' ORDER BY $OrderBy $ShortBy LIMIT $posisi, $batas");
+                            // Prepared Statement: ambil halaman log pengguna.
+                            $stmtLogs = mysqli_prepare($Conn, "SELECT * FROM log WHERE id_akses=? ORDER BY $OrderBy $ShortBy LIMIT ?, ?");
+                            mysqli_stmt_bind_param($stmtLogs, "sii", $SessionIdAkses, $posisi, $batas);
                         }else{
-                            $query = mysqli_query($Conn, "SELECT*FROM log WHERE id_akses='$SessionIdAkses' AND waktu like '%$keyword%' OR nama_log like '%$keyword%' OR kategori like '%$keyword%' ORDER BY $OrderBy $ShortBy LIMIT $posisi, $batas");
+                            // Prepared Statement: cari dan ambil halaman log pengguna.
+                            $stmtLogs = mysqli_prepare($Conn, "SELECT * FROM log WHERE id_akses=? AND waktu LIKE ? OR nama_log LIKE ? OR kategori LIKE ? ORDER BY $OrderBy $ShortBy LIMIT ?, ?");
+                            $likeKeyword = "%$keyword%";
+                            mysqli_stmt_bind_param($stmtLogs, "ssssii", $SessionIdAkses, $likeKeyword, $likeKeyword, $likeKeyword, $posisi, $batas);
                         }
                     }else{
-                        $query = mysqli_query($Conn, "SELECT*FROM log WHERE id_akses='$id_akses' ORDER BY $OrderBy $ShortBy LIMIT $posisi, $batas");
+                        // Prepared Statement: ambil halaman log untuk akses terpilih.
+                        $stmtLogs = mysqli_prepare($Conn, "SELECT * FROM log WHERE id_akses=? ORDER BY $OrderBy $ShortBy LIMIT ?, ?");
+                        mysqli_stmt_bind_param($stmtLogs, "sii", $id_akses, $posisi, $batas);
                     }
+                    mysqli_stmt_execute($stmtLogs);
+                    $query = mysqli_stmt_get_result($stmtLogs);
                     while ($data = mysqli_fetch_array($query)) {
                         $id_log= $data['id_log'];
                         $waktu= $data['waktu'];
@@ -151,7 +178,11 @@
                         $kategori= $data['kategori'];
                         $id_akses= $data['id_akses'];
                         //Buka data user
-                        $Qry= mysqli_query($Conn,"SELECT * FROM akses WHERE id_akses='$id_akses'")or die(mysqli_error($Conn));
+                        // Prepared Statement: ambil identitas pemilik log.
+                        $stmtUser = mysqli_prepare($Conn, "SELECT * FROM akses WHERE id_akses=?");
+                        mysqli_stmt_bind_param($stmtUser, "s", $id_akses);
+                        mysqli_stmt_execute($stmtUser);
+                        $Qry = mysqli_stmt_get_result($stmtUser);
                         $Data= mysqli_fetch_array($Qry);
                         $id_akses = $Data['id_akses'];
                         $NamaUser = $Data['nama'];

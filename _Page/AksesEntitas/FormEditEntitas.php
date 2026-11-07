@@ -72,12 +72,15 @@ while ($row = mysqli_fetch_assoc($result_selected)) {
 }
 
 // Ambil semua fitur
-$query_fitur = mysqli_query(
+// Prepared Statement: ambil seluruh fitur untuk ditampilkan.
+$query_fitur = mysqli_prepare(
     $Conn,
     "SELECT id_akses_fitur, nama_fitur, kategori
      FROM akses_fitur
      ORDER BY kategori ASC, nama_fitur ASC"
 );
+mysqli_stmt_execute($query_fitur);
+$query_fitur = mysqli_stmt_get_result($query_fitur);
 
 // Kelompokkan per kategori
 $fiturByKategori = [];

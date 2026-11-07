@@ -7,32 +7,28 @@
     $limit = 20;
     $offset = ($page - 1) * $limit;
 
-    $search_escape = mysqli_real_escape_string($Conn, $search);
+    $where = !empty($search) ? " AND (akses.nama LIKE ? OR akses.akses LIKE ?)" : "";
+    $searchPattern = '%' . $search . '%';
 
-    $query = "
+    // Prepared Statement: fetch the paginated access options.
+    $stmt = mysqli_prepare($Conn, "
         SELECT 
             akses.id_akses,
             akses.nama,
             akses.akses
         FROM akses
         WHERE akses.nama != ''
-    ";
-
-    if (!empty($search_escape)) {
-        $query .= "
-            AND (
-                akses.nama LIKE '%$search_escape%'
-                OR akses.akses LIKE '%$search_escape%'
-            )
-        ";
-    }
-
-    $query .= "
+        $where
         ORDER BY akses.id_akses DESC
-        LIMIT $offset, $limit
-    ";
-
-    $result = mysqli_query($Conn, $query);
+        LIMIT ?, ?
+    ");
+    if (!empty($search)) {
+        mysqli_stmt_bind_param($stmt, 'ssii', $searchPattern, $searchPattern, $offset, $limit);
+    } else {
+        mysqli_stmt_bind_param($stmt, 'ii', $offset, $limit);
+    }
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     $results = [];
 
@@ -43,24 +39,22 @@
             'text' => $data['nama'].' ('.$data['akses'].')'
         ];
     }
+    mysqli_stmt_close($stmt);
 
-    $count_query = "
+    // Prepared Statement: count matching access options.
+    $stmtCount = mysqli_prepare($Conn, "
         SELECT COUNT(*) as total
         FROM akses
         WHERE nama != ''
-    ";
-
-    if (!empty($search_escape)) {
-        $count_query .= "
-            AND (
-                nama LIKE '%$search_escape%'
-                OR akses LIKE '%$search_escape%'
-            )
-        ";
+        $where
+    ");
+    if (!empty($search)) {
+        mysqli_stmt_bind_param($stmtCount, 'ss', $searchPattern, $searchPattern);
     }
-
-    $count_result = mysqli_query($Conn, $count_query);
+    mysqli_stmt_execute($stmtCount);
+    $count_result = mysqli_stmt_get_result($stmtCount);
     $count_data = mysqli_fetch_assoc($count_result);
+    mysqli_stmt_close($stmtCount);
 
     $more = ($offset + $limit) < $count_data['total'];
 

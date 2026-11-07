@@ -77,13 +77,17 @@
     $seenKemenkes = [];
     $existingCvx      = [];
     $existingKemenkes = [];
-    $resExisting = mysqli_query($Conn, "SELECT kode_cvx, kode_kemenkes FROM imunisasi_referensi");
+    // Prepared Statement: load existing vaccine codes.
+    $stmtExisting = mysqli_prepare($Conn, "SELECT kode_cvx, kode_kemenkes FROM imunisasi_referensi");
+    mysqli_stmt_execute($stmtExisting);
+    $resExisting = mysqli_stmt_get_result($stmtExisting);
     if ($resExisting) {
         while ($rExist = mysqli_fetch_assoc($resExisting)) {
             if (!empty($rExist['kode_cvx'])) $existingCvx[] = (string)$rExist['kode_cvx'];
             if (!empty($rExist['kode_kemenkes'])) $existingKemenkes[] = (string)$rExist['kode_kemenkes'];
         }
     }
+    mysqli_stmt_close($stmtExisting);
     $authorId   = (int)$SessionIdAkses;
     $authorName = (string)($SessionNama ?? '');
 
@@ -134,6 +138,7 @@
         if (!empty($kode_cvx)) $seenCvx[] = $kode_cvx;
         if (!empty($kode_kemenkes)) $seenKemenkes[] = $kode_kemenkes;
 
+        // Prepared Statement: insert a validated vaccine row.
         $stmt = mysqli_prepare($Conn, "INSERT INTO imunisasi_referensi (nama_vaksin, kode_cvx, kode_kemenkes, display_vaksin, system_vaksin, target_penyakit, status, datetime_creat, author_id, author_name) VALUES (?,?,?,?,?,?,?,?,?,?)");
         if (!$stmt) {
             $failed++;

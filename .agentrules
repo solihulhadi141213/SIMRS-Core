@@ -107,6 +107,7 @@ Halaman utama `index.php` disusun berdasarkan beberapa komponen terpisah (modula
 2. MYSQL
   - Periksa pada fitur yang sedang diubah atau dibuat mengenai potensi SQL injection.
   - Optimalisasi query yang digunakan.
+  - Jangan gunakan qquery langsung, selalu menggunakan **Prepared Statement**
 3. Javascript
   - Optimalisasikan kinerja sistem dengan menggunakan Jquery.
 ## Ui dan Interaksi Pengguna

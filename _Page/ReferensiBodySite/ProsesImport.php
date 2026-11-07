@@ -45,7 +45,13 @@
 
     // Ambil enum kategori dari database
     $allowed_kategori = [];
-    $qEnum = mysqli_query($Conn, "SHOW COLUMNS FROM body_site WHERE Field = 'body_site_category'");
+    // Prepared Statement: ambil definisi enum kategori body site.
+    $qEnum = mysqli_prepare($Conn, "SELECT COLUMN_TYPE AS `Type` FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?");
+    $tableName = 'body_site';
+    $columnName = 'body_site_category';
+    mysqli_stmt_bind_param($qEnum, "ss", $tableName, $columnName);
+    mysqli_stmt_execute($qEnum);
+    $qEnum = mysqli_stmt_get_result($qEnum);
     if ($qEnum) {
         $rEnum = mysqli_fetch_assoc($qEnum);
         $type = $rEnum['Type'] ?? '';
@@ -219,4 +225,3 @@
         exit;
     }
 ?>
-

@@ -37,7 +37,11 @@
     $posisi = ($page - 1) * $limit;
 
     // Hitung Jumlah Data
-    $query_jml = mysqli_query($Conn, "SELECT id_akses_laporan FROM akses_laporan WHERE id_akses='$SessionIdAkses'");
+    // Prepared Statement: hitung laporan milik pengguna.
+    $stmtJumlah = mysqli_prepare($Conn, "SELECT id_akses_laporan FROM akses_laporan WHERE id_akses=?");
+    mysqli_stmt_bind_param($stmtJumlah, "s", $SessionIdAkses);
+    mysqli_stmt_execute($stmtJumlah);
+    $query_jml = mysqli_stmt_get_result($stmtJumlah);
     $jml_data = mysqli_num_rows($query_jml);
 
     if($jml_data == 0){
@@ -59,7 +63,11 @@
     echo '<ol class="list-group list-group-numbered mb-0">';
     
     // SQL Query dengan LIMIT yang sudah aman (tidak negatif)
-    $QryLaporan = mysqli_query($Conn, "SELECT * FROM akses_laporan WHERE id_akses='$SessionIdAkses' ORDER BY id_akses_laporan DESC LIMIT $posisi, $limit");
+    // Prepared Statement: ambil laporan pengguna dengan pagination.
+    $stmtLaporan = mysqli_prepare($Conn, "SELECT * FROM akses_laporan WHERE id_akses=? ORDER BY id_akses_laporan DESC LIMIT ?, ?");
+    mysqli_stmt_bind_param($stmtLaporan, "sii", $SessionIdAkses, $posisi, $limit);
+    mysqli_stmt_execute($stmtLaporan);
+    $QryLaporan = mysqli_stmt_get_result($stmtLaporan);
 
     while ($DataLaporan = mysqli_fetch_array($QryLaporan)) {
         $id_akses_laporan = $DataLaporan['id_akses_laporan'];

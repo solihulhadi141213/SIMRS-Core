@@ -27,7 +27,10 @@
     }
     
     // Jumlah Data
-    $QrySirsOnline = mysqli_query($Conn, "SELECT id_setting_sirs_online FROM setting_sirs_online");
+    // Prepared Statement: hitung data profil SIRS Online.
+    $QrySirsOnline = mysqli_prepare($Conn, "SELECT id_setting_sirs_online FROM setting_sirs_online");
+    mysqli_stmt_execute($QrySirsOnline);
+    $QrySirsOnline = mysqli_stmt_get_result($QrySirsOnline);
     $JumlahSirsOnline = mysqli_num_rows($QrySirsOnline);
     if(empty($JumlahSirsOnline)){
         echo '
@@ -40,7 +43,10 @@
         exit;
     }
     $no = 1;
-    $query = mysqli_query($Conn, "SELECT * FROM setting_sirs_online ORDER BY id_setting_sirs_online DESC");
+    // Prepared Statement: ambil profil SIRS Online untuk tabel.
+    $query = mysqli_prepare($Conn, "SELECT * FROM setting_sirs_online ORDER BY id_setting_sirs_online DESC");
+    mysqli_stmt_execute($query);
+    $query = mysqli_stmt_get_result($query);
     while ($data = mysqli_fetch_array($query)) {
         $id_setting_sirs_online = $data['id_setting_sirs_online'];
         $status               = $data['status'];

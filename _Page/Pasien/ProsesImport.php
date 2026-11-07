@@ -187,15 +187,6 @@
         }
     }
 
-    function esc($Conn, $value)
-    {
-        if ($value === null) {
-            return "NULL";
-        }
-
-        return "'" . mysqli_real_escape_string($Conn, $value) . "'";
-    }
-
     // =========================================================
     // COUNTER
     // =========================================================
@@ -272,15 +263,20 @@
 
         if (!empty($id_pasien)) {
 
-            $checkPasien = mysqli_query($Conn, "
+            // Prepared Statement: periksa apakah ID pasien sudah ada.
+            $stmtPasien = mysqli_prepare($Conn, "
                 SELECT id_pasien
                 FROM pasien
-                WHERE id_pasien='" . mysqli_real_escape_string($Conn, $id_pasien) . "'
+                WHERE id_pasien=?
             ");
+            mysqli_stmt_bind_param($stmtPasien, "s", $id_pasien);
+            mysqli_stmt_execute($stmtPasien);
+            $checkPasien = mysqli_stmt_get_result($stmtPasien);
 
             if ($checkPasien && mysqli_num_rows($checkPasien) > 0) {
                 $isUpdate = true;
             }
+            mysqli_stmt_close($stmtPasien);
         }
 
         // =====================================================
@@ -289,24 +285,33 @@
         if (!$isUpdate) {
 
             $duplicateWhere = [];
+            $duplicateValues = [];
 
             if (!empty($nik)) {
-                $duplicateWhere[] = "nik='" . mysqli_real_escape_string($Conn, $nik) . "'";
+                $duplicateWhere[] = "nik=?";
+                $duplicateValues[] = $nik;
             }
 
             if (!empty($no_bpjs)) {
-                $duplicateWhere[] = "no_bpjs='" . mysqli_real_escape_string($Conn, $no_bpjs) . "'";
+                $duplicateWhere[] = "no_bpjs=?";
+                $duplicateValues[] = $no_bpjs;
             }
 
             if (!empty($duplicateWhere)) {
 
-                $duplicateSql = implode(' OR ', $duplicateWhere);
-
-                $checkDuplicate = mysqli_query($Conn, "
+                // Prepared Statement: periksa NIK dan nomor BPJS duplikat.
+                $checkDuplicateStmt = mysqli_prepare($Conn, "
                     SELECT id_pasien
                     FROM pasien
-                    WHERE $duplicateSql
+                    WHERE " . implode(' OR ', $duplicateWhere) . "
                 ");
+                $duplicateBind = [$checkDuplicateStmt, str_repeat('s', count($duplicateValues))];
+                foreach ($duplicateValues as $key => $value) {
+                    $duplicateBind[] = &$duplicateValues[$key];
+                }
+                call_user_func_array('mysqli_stmt_bind_param', $duplicateBind);
+                mysqli_stmt_execute($checkDuplicateStmt);
+                $checkDuplicate = mysqli_stmt_get_result($checkDuplicateStmt);
 
                 if ($checkDuplicate && mysqli_num_rows($checkDuplicate) > 0) {
 
@@ -320,115 +325,49 @@
                         'keterangan' => 'Duplikat NIK / No BPJS'
                     ];
 
+                    mysqli_stmt_close($checkDuplicateStmt);
                     continue;
                 }
+                mysqli_stmt_close($checkDuplicateStmt);
             }
         }
 
-        // =====================================================
-        // QUERY UPDATE
-        // =====================================================
+        $fields = [
+            'id_ihs', 'nik', 'no_bpjs', 'nama', 'gender', 'tempat_lahir',
+            'tanggal_lahir', 'province', 'regency', 'subdistrict', 'village',
+            'street', 'postal_code', 'kontak', 'golongan_darah', 'pernikahan',
+            'pekerjaan', 'photo_file_name', 'status', 'id_pasien_relasi',
+            'status_relasi', 'id_akses', 'petugas_pendaftaran', 'registered_at',
+            'updated_at'
+        ];
+        $values = [
+            $id_ihs, $nik, $no_bpjs, $nama, $gender, $tempat_lahir,
+            $tanggal_lahir, $province, $regency, $subdistrict, $village,
+            $street, $postal_code, $kontak, $golongan_darah, $pernikahan,
+            $pekerjaan, $photo_file_name, $status, $id_pasien_relasi,
+            $status_relasi, $id_akses, $petugas_pendaftaran, $registered_at,
+            $updated_at
+        ];
+
         if ($isUpdate) {
-
-            $query = "
-                UPDATE pasien SET
-                    id_ihs              = " . esc($Conn, $id_ihs) . ",
-                    nik                 = " . esc($Conn, $nik) . ",
-                    no_bpjs             = " . esc($Conn, $no_bpjs) . ",
-                    nama                = " . esc($Conn, $nama) . ",
-                    gender              = " . esc($Conn, $gender) . ",
-                    tempat_lahir        = " . esc($Conn, $tempat_lahir) . ",
-                    tanggal_lahir       = " . esc($Conn, $tanggal_lahir) . ",
-                    province            = " . esc($Conn, $province) . ",
-                    regency             = " . esc($Conn, $regency) . ",
-                    subdistrict         = " . esc($Conn, $subdistrict) . ",
-                    village             = " . esc($Conn, $village) . ",
-                    street              = " . esc($Conn, $street) . ",
-                    postal_code         = " . esc($Conn, $postal_code) . ",
-                    kontak              = " . esc($Conn, $kontak) . ",
-                    golongan_darah      = " . esc($Conn, $golongan_darah) . ",
-                    pernikahan          = " . esc($Conn, $pernikahan) . ",
-                    pekerjaan           = " . esc($Conn, $pekerjaan) . ",
-                    photo_file_name     = " . esc($Conn, $photo_file_name) . ",
-                    status              = " . esc($Conn, $status) . ",
-                    id_pasien_relasi    = " . esc($Conn, $id_pasien_relasi) . ",
-                    status_relasi       = " . esc($Conn, $status_relasi) . ",
-                    id_akses            = " . esc($Conn, $id_akses) . ",
-                    petugas_pendaftaran = " . esc($Conn, $petugas_pendaftaran) . ",
-                    updated_at          = " . esc($Conn, $updated_at) . "
-                WHERE id_pasien='" . mysqli_real_escape_string($Conn, $id_pasien) . "'
-            ";
-
+            $updateFields = array_merge(array_slice($fields, 0, 23), ['updated_at']);
+            $updateValues = array_merge(array_slice($values, 0, 23), [$updated_at, $id_pasien]);
+            $query = "UPDATE pasien SET " . implode(' = ?, ', $updateFields) . " = ? WHERE id_pasien = ?";
+            $executeValues = $updateValues;
         } else {
-
-            // =================================================
-            // QUERY INSERT
-            // =================================================
-            $query = "
-                INSERT INTO pasien (
-
-                    id_ihs,
-                    nik,
-                    no_bpjs,
-                    nama,
-                    gender,
-                    tempat_lahir,
-                    tanggal_lahir,
-                    province,
-                    regency,
-                    subdistrict,
-                    village,
-                    street,
-                    postal_code,
-                    kontak,
-                    golongan_darah,
-                    pernikahan,
-                    pekerjaan,
-                    photo_file_name,
-                    status,
-                    id_pasien_relasi,
-                    status_relasi,
-                    id_akses,
-                    petugas_pendaftaran,
-                    registered_at,
-                    updated_at
-
-                ) VALUES (
-
-                    " . esc($Conn, $id_ihs) . ",
-                    " . esc($Conn, $nik) . ",
-                    " . esc($Conn, $no_bpjs) . ",
-                    " . esc($Conn, $nama) . ",
-                    " . esc($Conn, $gender) . ",
-                    " . esc($Conn, $tempat_lahir) . ",
-                    " . esc($Conn, $tanggal_lahir) . ",
-                    " . esc($Conn, $province) . ",
-                    " . esc($Conn, $regency) . ",
-                    " . esc($Conn, $subdistrict) . ",
-                    " . esc($Conn, $village) . ",
-                    " . esc($Conn, $street) . ",
-                    " . esc($Conn, $postal_code) . ",
-                    " . esc($Conn, $kontak) . ",
-                    " . esc($Conn, $golongan_darah) . ",
-                    " . esc($Conn, $pernikahan) . ",
-                    " . esc($Conn, $pekerjaan) . ",
-                    " . esc($Conn, $photo_file_name) . ",
-                    " . esc($Conn, $status) . ",
-                    " . esc($Conn, $id_pasien_relasi) . ",
-                    " . esc($Conn, $status_relasi) . ",
-                    " . esc($Conn, $id_akses) . ",
-                    " . esc($Conn, $petugas_pendaftaran) . ",
-                    " . esc($Conn, $registered_at) . ",
-                    " . esc($Conn, $updated_at) . "
-
-                )
-            ";
+            $query = "INSERT INTO pasien (" . implode(', ', $fields) . ") VALUES (" . implode(', ', array_fill(0, count($fields), '?')) . ")";
+            $executeValues = $values;
         }
 
-        // =====================================================
-        // EXECUTE
-        // =====================================================
-        $execute = mysqli_query($Conn, $query);
+        // Prepared Statement: simpan perubahan data pasien menggunakan nilai terikat.
+        $stmt = mysqli_prepare($Conn, $query);
+        $executeBind = [$stmt, str_repeat('s', count($executeValues))];
+        foreach ($executeValues as $key => $value) {
+            $executeBind[] = &$executeValues[$key];
+        }
+        call_user_func_array('mysqli_stmt_bind_param', $executeBind);
+        $execute = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
 
         // =====================================================
         // RESULT

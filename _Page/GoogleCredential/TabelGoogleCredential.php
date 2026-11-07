@@ -27,7 +27,10 @@
     }
     
     // Jumlah Data
-    $QryGoogleCredential = mysqli_query($Conn, "SELECT id_setting_google FROM setting_google");
+    // Prepared Statement: hitung credential Google.
+    $stmtCredentialCount = mysqli_prepare($Conn, "SELECT id_setting_google FROM setting_google");
+    mysqli_stmt_execute($stmtCredentialCount);
+    $QryGoogleCredential = mysqli_stmt_get_result($stmtCredentialCount);
     $JumlahGoogleCredential = mysqli_num_rows($QryGoogleCredential);
     if(empty($JumlahGoogleCredential)){
         echo '
@@ -40,7 +43,10 @@
         exit;
     }
     $no = 1;
-    $query = mysqli_query($Conn, "SELECT * FROM setting_google");
+    // Prepared Statement: ambil seluruh credential Google.
+    $stmtCredential = mysqli_prepare($Conn, "SELECT * FROM setting_google");
+    mysqli_stmt_execute($stmtCredential);
+    $query = mysqli_stmt_get_result($stmtCredential);
     while ($data = mysqli_fetch_array($query)) {
         $id_setting_google = $data['id_setting_google'];
         $status = $data['status'];

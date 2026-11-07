@@ -26,6 +26,12 @@
         $bulan_grafik=$_POST['bulan_grafik'];
     }
     $BulanTahun="$tahun_grafik-$bulan_grafik";
+    // Prepared Statement: hitung log untuk tiap periode grafik.
+    if (empty($kategori_log)) {
+        $stmtLogCount = mysqli_prepare($Conn, "SELECT COUNT(*) AS total FROM log WHERE waktu LIKE ?");
+    } else {
+        $stmtLogCount = mysqli_prepare($Conn, "SELECT COUNT(*) AS total FROM log WHERE kategori=? AND waktu LIKE ?");
+    }
     if($periode_grafik=="Tahunan"){
         $a=1;
         $b=12;
@@ -48,11 +54,14 @@
             );
             $NamaBulan=$BulanList[$BulanNomor];
             $KeywordGrafik="$tahun_grafik-$BulanNomor";
-            if(empty($kategori_log)){
-                $JumlahSemuaRad=mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM log WHERE waktu like '%$KeywordGrafik%'"));
-            }else{
-                $JumlahSemuaRad=mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM log WHERE kategori='$kategori_log' AND waktu like '%$KeywordGrafik%'"));
+            $periodPattern = "%$KeywordGrafik%";
+            if (empty($kategori_log)) {
+                mysqli_stmt_bind_param($stmtLogCount, "s", $periodPattern);
+            } else {
+                mysqli_stmt_bind_param($stmtLogCount, "ss", $kategori_log, $periodPattern);
             }
+            mysqli_stmt_execute($stmtLogCount);
+            $JumlahSemuaRad = (int) (mysqli_fetch_assoc(mysqli_stmt_get_result($stmtLogCount))['total'] ?? 0);
             $data [] = array(
                 'x' => $NamaBulan,
                 'y' => $JumlahSemuaRad
@@ -82,11 +91,14 @@
             $x="$i $NamaBulan";
             //Hitung Jumlah
             $KeywordGrafik="$tahun_grafik-$BulanNomor-$HariNomor";
-            if(empty($kategori_log)){
-                $JumlahSemuaRad=mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM log WHERE waktu like '%$KeywordGrafik%'"));
-            }else{
-                $JumlahSemuaRad=mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM log WHERE kategori='$kategori_log' AND waktu like '%$KeywordGrafik%'"));
+            $periodPattern = "%$KeywordGrafik%";
+            if (empty($kategori_log)) {
+                mysqli_stmt_bind_param($stmtLogCount, "s", $periodPattern);
+            } else {
+                mysqli_stmt_bind_param($stmtLogCount, "ss", $kategori_log, $periodPattern);
             }
+            mysqli_stmt_execute($stmtLogCount);
+            $JumlahSemuaRad = (int) (mysqli_fetch_assoc(mysqli_stmt_get_result($stmtLogCount))['total'] ?? 0);
             $data [] = array(
                 'x' => $HariNomor,
                 'y' => $JumlahSemuaRad

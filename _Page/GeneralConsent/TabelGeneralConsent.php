@@ -204,10 +204,20 @@ if ($totalData > 0) {
         }
 
         // Menghitung Jumlah General Consent
-        $jumlah_general_consent = mysqli_num_rows(mysqli_query($Conn, "SELECT id_general_consent  FROM general_consent WHERE id_kunjungan = '$id_kunjungan' "));
+        // Prepared Statement: hitung general consent untuk kunjungan.
+        $stmt_general_consent = mysqli_prepare($Conn, "SELECT id_general_consent FROM general_consent WHERE id_kunjungan = ?");
+        mysqli_stmt_bind_param($stmt_general_consent, "s", $id_kunjungan);
+        mysqli_stmt_execute($stmt_general_consent);
+        $result_general_consent = mysqli_stmt_get_result($stmt_general_consent);
+        $jumlah_general_consent = mysqli_num_rows($result_general_consent);
 
         // Jumlah Consent
-        $jumlah_consent = mysqli_num_rows(mysqli_query($Conn, "SELECT id_consent FROM general_consent WHERE id_kunjungan = '$id_kunjungan' AND id_consent!=''"));
+        // Prepared Statement: hitung consent yang sudah terisi.
+        $stmt_consent = mysqli_prepare($Conn, "SELECT id_consent FROM general_consent WHERE id_kunjungan = ? AND id_consent!=''");
+        mysqli_stmt_bind_param($stmt_consent, "s", $id_kunjungan);
+        mysqli_stmt_execute($stmt_consent);
+        $result_consent = mysqli_stmt_get_result($stmt_consent);
+        $jumlah_consent = mysqli_num_rows($result_consent);
         
         // Routing Tombol General Consent Berdasrkan Capaian
         if(empty($jumlah_general_consent)){

@@ -87,12 +87,16 @@
     // =========================================================
     // CEK TINDAKAN
     // =========================================================
-    $query_tindakan = mysqli_query($Conn, "
+    // Prepared Statement: ambil tindakan berdasarkan ID.
+    $stmtTindakan = mysqli_prepare($Conn, "
         SELECT *
         FROM tindakan
-        WHERE id_tindakan='$id_tindakan'
+        WHERE id_tindakan=?
         LIMIT 1
     ");
+    mysqli_stmt_bind_param($stmtTindakan, "s", $id_tindakan);
+    mysqli_stmt_execute($stmtTindakan);
+    $query_tindakan = mysqli_stmt_get_result($stmtTindakan);
 
     if (mysqli_num_rows($query_tindakan) == 0) {
         echo json_encode([
@@ -111,14 +115,18 @@
     // =========================================================
     if (!empty($id_praktisi)) {
 
-        $query_duplikat = mysqli_query($Conn, "
+        // Prepared Statement: cegah penggunaan praktisi ganda.
+        $stmtDuplikat = mysqli_prepare($Conn, "
             SELECT id_tindakan_performer
             FROM tindakan_performer
             WHERE 
-                id_tindakan='$id_tindakan'
-                AND id_praktisi='$id_praktisi'
+                id_tindakan=?
+                AND id_praktisi=?
             LIMIT 1
         ");
+        mysqli_stmt_bind_param($stmtDuplikat, "ss", $id_tindakan, $id_praktisi);
+        mysqli_stmt_execute($stmtDuplikat);
+        $query_duplikat = mysqli_stmt_get_result($stmtDuplikat);
 
         if (mysqli_num_rows($query_duplikat) > 0) {
 
@@ -133,12 +141,8 @@
     // =========================================================
     // INSERT DATA
     // =========================================================
-    $id_praktisi_sql     = !empty($id_praktisi) ? "'$id_praktisi'" : "NULL";
-    $performer_ihs_sql   = !empty($performer_ihs) ? "'$performer_ihs'" : "NULL";
-    $performer_nik_sql   = !empty($performer_nik) ? "'$performer_nik'" : "NULL";
-    $performer_notes_sql = !empty($performer_notes) ? "'$performer_notes'" : "NULL";
-
-    $insert = mysqli_query($Conn, "
+    // Prepared Statement: tambah performer dengan nilai terikat.
+    $stmtInsert = mysqli_prepare($Conn, "
         INSERT INTO tindakan_performer (
             id_tindakan,
             id_praktisi,
@@ -148,15 +152,11 @@
             performer_nama,
             performer_notes
         ) VALUES (
-            '$id_tindakan',
-            $id_praktisi_sql,
-            '$performer_type',
-            $performer_ihs_sql,
-            $performer_nik_sql,
-            '$performer_nama',
-            $performer_notes_sql
+            ?, ?, ?, ?, ?, ?, ?
         )
     ");
+    mysqli_stmt_bind_param($stmtInsert, "sssssss", $id_tindakan, $id_praktisi, $performer_type, $performer_ihs, $performer_nik, $performer_nama, $performer_notes);
+    $insert = mysqli_stmt_execute($stmtInsert);
 
     // =========================================================
     // RESPONSE

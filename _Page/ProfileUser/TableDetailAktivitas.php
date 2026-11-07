@@ -65,7 +65,12 @@
         ';
         echo '<tbody>';
         $no = 1;
-        $query = mysqli_query($Conn, "SELECT id_pasien, registered_at, nama FROM pasien WHERE id_akses='$SessionIdAkses' AND registered_at LIKE '%$periode%'");
+        // Prepared Statement: ambil pasien pada periode yang dipilih.
+        $stmt = mysqli_prepare($Conn, "SELECT id_pasien, registered_at, nama FROM pasien WHERE id_akses=? AND registered_at LIKE ?");
+        $periodeLike = "%$periode%";
+        mysqli_stmt_bind_param($stmt, "ss", $SessionIdAkses, $periodeLike);
+        mysqli_stmt_execute($stmt);
+        $query = mysqli_stmt_get_result($stmt);
         while ($data = mysqli_fetch_array($query)) {
             echo '
                 <tr>

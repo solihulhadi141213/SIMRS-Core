@@ -27,8 +27,12 @@
     }
     
     // Jumlah Data
-    $QrySatuSehat = mysqli_query($Conn, "SELECT id_setting_bpjs FROM setting_bpjs");
+    // Prepared Statement: count BPJS settings.
+    $stmtCount = mysqli_prepare($Conn, "SELECT id_setting_bpjs FROM setting_bpjs");
+    mysqli_stmt_execute($stmtCount);
+    $QrySatuSehat = mysqli_stmt_get_result($stmtCount);
     $JumlahSatuSehat = mysqli_num_rows($QrySatuSehat);
+    mysqli_stmt_close($stmtCount);
     if(empty($JumlahSatuSehat)){
         echo '
             <tr>
@@ -40,7 +44,10 @@
         exit;
     }
     $no = 1;
-    $query = mysqli_query($Conn, "SELECT * FROM setting_bpjs ORDER BY id_setting_bpjs DESC");
+    // Prepared Statement: fetch BPJS settings.
+    $stmt = mysqli_prepare($Conn, "SELECT * FROM setting_bpjs ORDER BY id_setting_bpjs DESC");
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
     while ($data = mysqli_fetch_array($query)) {
         $id_setting_bpjs = $data['id_setting_bpjs'];
         $status          = $data['status'];
@@ -132,6 +139,7 @@
         ';
         $no++;
     }
+    mysqli_stmt_close($stmt);
 ?>
 <script>
     var JumlahSatuSehat = <?php echo $JumlahSatuSehat; ?>;

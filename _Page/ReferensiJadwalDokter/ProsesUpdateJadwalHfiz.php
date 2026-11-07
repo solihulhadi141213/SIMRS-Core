@@ -40,8 +40,11 @@
     $id_poliklinik = validateAndSanitizeInput($_POST['id_poliklinik']);
     $id_dokter     = validateAndSanitizeInput($_POST['id_dokter']);
 
-    // Hitung Jumlah Data
-    $JumlahData = mysqli_num_rows(mysqli_query($Conn, "SELECT id_jadwal FROM jadwal_dokter WHERE id_dokter='$id_dokter' AND id_poliklinik='$id_poliklinik'"));
+    // Prepared Statement: hitung jadwal dokter pada poliklinik terpilih.
+    $stmtCount = mysqli_prepare($Conn, "SELECT id_jadwal FROM jadwal_dokter WHERE id_dokter=? AND id_poliklinik=?");
+    mysqli_stmt_bind_param($stmtCount, "ss", $id_dokter, $id_poliklinik);
+    mysqli_stmt_execute($stmtCount);
+    $JumlahData = mysqli_stmt_num_rows(mysqli_stmt_get_result($stmtCount));
     
     //Jika Data Tidak Ada
     if(empty($JumlahData)){
@@ -66,9 +69,12 @@
         exit;
     }
             
-    // Membuat Payload Jadwal Dokter
-    $QryJadwalDokter = "SELECT * FROM jadwal_dokter WHERE id_dokter='$id_dokter' AND id_poliklinik='$id_poliklinik'";
-    $DataJadwalDokter  =mysqli_query($Conn, $QryJadwalDokter);
+    // Prepared Statement: ambil jadwal yang akan dikirim.
+    $QryJadwalDokter = "SELECT * FROM jadwal_dokter WHERE id_dokter=? AND id_poliklinik=?";
+    $stmtJadwalDokter = mysqli_prepare($Conn, $QryJadwalDokter);
+    mysqli_stmt_bind_param($stmtJadwalDokter, "ss", $id_dokter, $id_poliklinik);
+    mysqli_stmt_execute($stmtJadwalDokter);
+    $DataJadwalDokter = mysqli_stmt_get_result($stmtJadwalDokter);
     $jadwal = array();
     $jadwal['jadwal'] = array();
     while($x = mysqli_fetch_array($DataJadwalDokter)){

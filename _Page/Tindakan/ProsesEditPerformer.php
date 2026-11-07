@@ -96,12 +96,16 @@
     // =========================================================
     // CEK DATA PERFORMER
     // =========================================================
-    $query_performer = mysqli_query($Conn, "
+    // Prepared Statement: ambil performer berdasarkan ID.
+    $stmtPerformer = mysqli_prepare($Conn, "
         SELECT *
         FROM tindakan_performer
-        WHERE id_tindakan_performer='$id_tindakan_performer'
+        WHERE id_tindakan_performer=?
         LIMIT 1
     ");
+    mysqli_stmt_bind_param($stmtPerformer, "s", $id_tindakan_performer);
+    mysqli_stmt_execute($stmtPerformer);
+    $query_performer = mysqli_stmt_get_result($stmtPerformer);
 
     if (mysqli_num_rows($query_performer) == 0) {
 
@@ -119,12 +123,16 @@
     // =========================================================
     // CEK DATA TINDAKAN
     // =========================================================
-    $query_tindakan = mysqli_query($Conn, "
+    // Prepared Statement: ambil tindakan yang memiliki performer tersebut.
+    $stmtTindakan = mysqli_prepare($Conn, "
         SELECT *
         FROM tindakan
-        WHERE id_tindakan='$id_tindakan'
+        WHERE id_tindakan=?
         LIMIT 1
     ");
+    mysqli_stmt_bind_param($stmtTindakan, "s", $id_tindakan);
+    mysqli_stmt_execute($stmtTindakan);
+    $query_tindakan = mysqli_stmt_get_result($stmtTindakan);
 
     if (mysqli_num_rows($query_tindakan) == 0) {
 
@@ -144,15 +152,19 @@
     // =========================================================
     if (!empty($id_praktisi)) {
 
-        $query_duplikat = mysqli_query($Conn, "
+        // Prepared Statement: cegah penggunaan praktisi ganda.
+        $stmtDuplikat = mysqli_prepare($Conn, "
             SELECT id_tindakan_performer
             FROM tindakan_performer
             WHERE 
-                id_tindakan='$id_tindakan'
-                AND id_praktisi='$id_praktisi'
-                AND id_tindakan_performer != '$id_tindakan_performer'
+                id_tindakan=?
+                AND id_praktisi=?
+                AND id_tindakan_performer != ?
             LIMIT 1
         ");
+        mysqli_stmt_bind_param($stmtDuplikat, "sss", $id_tindakan, $id_praktisi, $id_tindakan_performer);
+        mysqli_stmt_execute($stmtDuplikat);
+        $query_duplikat = mysqli_stmt_get_result($stmtDuplikat);
 
         if (mysqli_num_rows($query_duplikat) > 0) {
 
@@ -165,37 +177,21 @@
     }
 
     // =========================================================
-    // FORMAT SQL NULL
-    // =========================================================
-    $id_praktisi_sql = !empty($id_praktisi)
-        ? "'$id_praktisi'"
-        : "NULL";
-
-    $performer_ihs_sql = !empty($performer_ihs)
-        ? "'$performer_ihs'"
-        : "NULL";
-
-    $performer_nik_sql = !empty($performer_nik)
-        ? "'$performer_nik'"
-        : "NULL";
-
-    $performer_notes_sql = !empty($performer_notes)
-        ? "'$performer_notes'"
-        : "NULL";
-
-    // =========================================================
     // UPDATE DATA
     // =========================================================
-    $update = mysqli_query($Conn, "
+    // Prepared Statement: update performer dengan nilai terikat.
+    $stmtUpdate = mysqli_prepare($Conn, "
         UPDATE tindakan_performer SET
-            id_praktisi       = $id_praktisi_sql,
-            performer_type    = '$performer_type',
-            performer_ihs     = $performer_ihs_sql,
-            performer_nik     = $performer_nik_sql,
-            performer_nama    = '$performer_nama',
-            performer_notes   = $performer_notes_sql
-        WHERE id_tindakan_performer='$id_tindakan_performer'
+            id_praktisi       = ?,
+            performer_type    = ?,
+            performer_ihs     = ?,
+            performer_nik     = ?,
+            performer_nama    = ?,
+            performer_notes   = ?
+        WHERE id_tindakan_performer=?
     ");
+    mysqli_stmt_bind_param($stmtUpdate, "sssssss", $id_praktisi, $performer_type, $performer_ihs, $performer_nik, $performer_nama, $performer_notes, $id_tindakan_performer);
+    $update = mysqli_stmt_execute($stmtUpdate);
 
     // =========================================================
     // RESPONSE

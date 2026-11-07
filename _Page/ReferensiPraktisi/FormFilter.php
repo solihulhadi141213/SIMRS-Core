@@ -29,13 +29,16 @@
                 <option value="">Pilih Profesi</option>
         ';
 
-        $query = mysqli_query($Conn, "
+        // Prepared Statement: load available practitioner professions.
+        $stmt = mysqli_prepare($Conn, "
             SELECT DISTINCT profesi_praktisi
             FROM praktisi
             WHERE profesi_praktisi IS NOT NULL
             AND profesi_praktisi != ''
             ORDER BY profesi_praktisi ASC
         ");
+        mysqli_stmt_execute($stmt);
+        $query = mysqli_stmt_get_result($stmt);
 
         while ($data = mysqli_fetch_assoc($query)) {
 
@@ -45,6 +48,7 @@
                 <option value="'.$profesi.'">'.$profesi.'</option>
             ';
         }
+        mysqli_stmt_close($stmt);
 
         echo '
             </select>

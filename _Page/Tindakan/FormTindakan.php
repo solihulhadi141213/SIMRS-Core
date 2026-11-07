@@ -195,7 +195,11 @@
 </div>
 
 <?php
-    $jumlah_tindakan = mysqli_num_rows(mysqli_query($Conn, "SELECT id_tindakan FROM tindakan WHERE id_kunjungan='$id_kunjungan'"));
+    // Prepared Statement: hitung tindakan pada kunjungan terpilih.
+    $stmtJumlahTindakan = mysqli_prepare($Conn, "SELECT id_tindakan FROM tindakan WHERE id_kunjungan=?");
+    mysqli_stmt_bind_param($stmtJumlahTindakan, "s", $id_kunjungan);
+    mysqli_stmt_execute($stmtJumlahTindakan);
+    $jumlah_tindakan = mysqli_stmt_num_rows(mysqli_stmt_get_result($stmtJumlahTindakan));
     // Apabila Data Belum Ada
     if(empty($jumlah_tindakan)){
         echo '
@@ -266,7 +270,11 @@
                             $lokasi_tubuh_display      = $row['lokasi_tubuh_display'];
 
                             // Jumlah Performer
-                            $jumlah_performer = mysqli_num_rows(mysqli_query($Conn, "SELECT id_tindakan_performer FROM tindakan_performer WHERE id_tindakan='$id_tindakan'"));
+                            // Prepared Statement: hitung performer pada tindakan.
+                            $stmtJumlahPerformer = mysqli_prepare($Conn, "SELECT id_tindakan_performer FROM tindakan_performer WHERE id_tindakan=?");
+                            mysqli_stmt_bind_param($stmtJumlahPerformer, "s", $id_tindakan);
+                            mysqli_stmt_execute($stmtJumlahPerformer);
+                            $jumlah_performer = mysqli_stmt_num_rows(mysqli_stmt_get_result($stmtJumlahPerformer));
                             if(empty($jumlah_performer)){
                                 $performer_button = '
                                     <button type="button" class="btn btn-outline-secondary btn-sm modal_performer" data-id="'.$id_tindakan.'">

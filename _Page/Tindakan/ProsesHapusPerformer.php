@@ -51,12 +51,16 @@
     // =========================================================
     // CEK DATA PERFORMER
     // =========================================================
-    $query_performer = mysqli_query($Conn, "
+    // Prepared Statement: ambil performer berdasarkan ID.
+    $stmtPerformer = mysqli_prepare($Conn, "
         SELECT *
         FROM tindakan_performer
-        WHERE id_tindakan_performer='$id_tindakan_performer'
+        WHERE id_tindakan_performer=?
         LIMIT 1
     ");
+    mysqli_stmt_bind_param($stmtPerformer, "s", $id_tindakan_performer);
+    mysqli_stmt_execute($stmtPerformer);
+    $query_performer = mysqli_stmt_get_result($stmtPerformer);
 
     if (mysqli_num_rows($query_performer) == 0) {
 
@@ -75,12 +79,16 @@
     // =========================================================
     // CEK DATA TINDAKAN
     // =========================================================
-    $query_tindakan = mysqli_query($Conn, "
+    // Prepared Statement: ambil tindakan yang memiliki performer tersebut.
+    $stmtTindakan = mysqli_prepare($Conn, "
         SELECT *
         FROM tindakan
-        WHERE id_tindakan='$id_tindakan'
+        WHERE id_tindakan=?
         LIMIT 1
     ");
+    mysqli_stmt_bind_param($stmtTindakan, "s", $id_tindakan);
+    mysqli_stmt_execute($stmtTindakan);
+    $query_tindakan = mysqli_stmt_get_result($stmtTindakan);
 
     if (mysqli_num_rows($query_tindakan) == 0) {
 
@@ -99,10 +107,13 @@
     // =========================================================
     // HAPUS DATA
     // =========================================================
-    $delete = mysqli_query($Conn, "
+    // Prepared Statement: hapus performer berdasarkan ID.
+    $stmtDelete = mysqli_prepare($Conn, "
         DELETE FROM tindakan_performer
-        WHERE id_tindakan_performer='$id_tindakan_performer'
+        WHERE id_tindakan_performer=?
     ");
+    mysqli_stmt_bind_param($stmtDelete, "s", $id_tindakan_performer);
+    $delete = mysqli_stmt_execute($stmtDelete);
 
     // =========================================================
     // RESPONSE

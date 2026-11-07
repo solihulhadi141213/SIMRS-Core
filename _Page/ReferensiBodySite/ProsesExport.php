@@ -72,7 +72,10 @@
         ORDER BY id_body_site ASC
     ";
 
-    $result = mysqli_query($Conn, $query);
+    // Prepared Statement: ambil seluruh data body site untuk export.
+    $stmt = mysqli_prepare($Conn, $query);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     // Row awal
     $rowNum = 2;
@@ -135,4 +138,3 @@
     
     exit;
 ?>
-

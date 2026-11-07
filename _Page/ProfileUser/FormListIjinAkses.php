@@ -31,10 +31,11 @@
         exit;
     }
 
-    $kategori = mysqli_real_escape_string($Conn, $_POST['kategori']);
+    $kategori = $_POST['kategori'];
 
     // Ambil data fitur + status akses dalam satu query (hindari N+1)
-    $query = mysqli_query($Conn, "
+    // Prepared Statement: ambil fitur dan status akses untuk kategori terpilih.
+    $stmt = mysqli_prepare($Conn, "
         SELECT 
             af.id_akses_fitur,
             af.nama_fitur,
@@ -44,10 +45,13 @@
         FROM akses_fitur af
         LEFT JOIN akses_acc aa 
             ON aa.id_akses_fitur = af.id_akses_fitur
-            AND aa.id_akses = '$SessionIdAkses'
-        WHERE af.kategori = '$kategori'
+            AND aa.id_akses = ?
+        WHERE af.kategori = ?
         ORDER BY af.nama_fitur ASC
     ");
+    mysqli_stmt_bind_param($stmt, "ss", $SessionIdAkses, $kategori);
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
 
     if(mysqli_num_rows($query)===0){
         echo '

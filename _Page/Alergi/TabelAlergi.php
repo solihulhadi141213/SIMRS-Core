@@ -201,10 +201,18 @@
             }
 
             // Menghitung Jumlah Data Alergi
-            $jumlah_alergi = mysqli_num_rows(mysqli_query($Conn, "SELECT id_alergi FROM alergi WHERE id_kunjungan = '$id_kunjungan' "));
+            // Prepared Statement: hitung alergi pada kunjungan.
+            $stmt_jumlah_alergi = mysqli_prepare($Conn, "SELECT id_alergi FROM alergi WHERE id_kunjungan = ?");
+            mysqli_stmt_bind_param($stmt_jumlah_alergi, "s", $id_kunjungan);
+            mysqli_stmt_execute($stmt_jumlah_alergi);
+            $jumlah_alergi = mysqli_stmt_get_result($stmt_jumlah_alergi)->num_rows;
 
             // Jumlah Procedure
-            $jumlah_AllergyIntolerance = mysqli_num_rows(mysqli_query($Conn, "SELECT AllergyIntolerance FROM alergi WHERE id_kunjungan = '$id_kunjungan' AND AllergyIntolerance!=''"));
+            // Prepared Statement: hitung AllergyIntolerance yang sudah dikirim.
+            $stmt_jumlah_allergy_intolerance = mysqli_prepare($Conn, "SELECT AllergyIntolerance FROM alergi WHERE id_kunjungan = ? AND AllergyIntolerance!=''");
+            mysqli_stmt_bind_param($stmt_jumlah_allergy_intolerance, "s", $id_kunjungan);
+            mysqli_stmt_execute($stmt_jumlah_allergy_intolerance);
+            $jumlah_AllergyIntolerance = mysqli_stmt_get_result($stmt_jumlah_allergy_intolerance)->num_rows;
             
             // Routing Tombol tINDAKAN Berdasrkan Capaian
             if(empty($jumlah_alergi)){

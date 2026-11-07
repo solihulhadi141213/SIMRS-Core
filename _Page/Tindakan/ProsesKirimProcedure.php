@@ -165,12 +165,16 @@
     // =========================================================
     // VALIDASI PENGATURAN SATUSEHAT
     // =========================================================
-    $query_setting = mysqli_query($Conn,"
+    // Prepared Statement: ambil pengaturan SATUSEHAT yang aktif.
+    $stmtSetting = mysqli_prepare($Conn, "
         SELECT * FROM setting_satusehat 
-        WHERE status_setting_satusehat='1'
+        WHERE status_setting_satusehat=?
         LIMIT 1
     ");
-
+    $activeSetting = '1';
+    mysqli_stmt_bind_param($stmtSetting, "s", $activeSetting);
+    mysqli_stmt_execute($stmtSetting);
+    $query_setting = mysqli_stmt_get_result($stmtSetting);
     $setting = mysqli_fetch_assoc($query_setting);
 
     $baseurl_satusehat = rtrim($setting['url_satusehat'] ?? '', '/');

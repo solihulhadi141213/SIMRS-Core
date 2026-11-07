@@ -2,7 +2,7 @@
     <div id="liveToast" class="toast align-items-center text-success bg-success-subtle border-success border-1" role="alert">
         <div class="d-flex">
             <div class="toast-body" id="toast_message">
-                Pesan Toast Akan Muncul Disini
+                <?php echo "Pesan Toast Akan Muncul Disini";?>
             </div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
         </div>

@@ -27,8 +27,12 @@
     }
     
     // Jumlah Data
-    $QryRadix = mysqli_query($Conn, "SELECT id_setting_radix FROM setting_radix");
+    // Prepared Statement: count Radix settings.
+    $stmtCount = mysqli_prepare($Conn, "SELECT id_setting_radix FROM setting_radix");
+    mysqli_stmt_execute($stmtCount);
+    $QryRadix = mysqli_stmt_get_result($stmtCount);
     $JumlahRadix = mysqli_num_rows($QryRadix);
+    mysqli_stmt_close($stmtCount);
     if(empty($JumlahRadix)){
         echo '
             <tr>
@@ -40,7 +44,10 @@
         exit;
     }
     $no = 1;
-    $query = mysqli_query($Conn, "SELECT * FROM setting_radix ORDER BY id_setting_radix DESC");
+    // Prepared Statement: fetch Radix settings.
+    $stmt = mysqli_prepare($Conn, "SELECT * FROM setting_radix ORDER BY id_setting_radix DESC");
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
     while ($data = mysqli_fetch_array($query)) {
         $id_setting_radix = $data['id_setting_radix'];
         $status               = $data['status'];
@@ -110,6 +117,7 @@
         ';
         $no++;
     }
+    mysqli_stmt_close($stmt);
 ?>
 <script>
     var JumlahRadix = <?php echo $JumlahRadix; ?>;

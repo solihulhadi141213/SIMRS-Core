@@ -65,7 +65,11 @@
     $updatetime     = $Data['updatetime'];
 
     // Menghitung Jumlah Ruangan Dan Tempat Tidur
-    $jumlah_tt      = mysqli_num_rows(mysqli_query($Conn, "SELECT id_tempat_tidur FROM rr_tempat_tidur WHERE id_ruang_rawat='$id_ruang_rawat'"));
+    // Prepared Statement: hitung seluruh tempat tidur di ruang rawat.
+    $stmt_jumlah_tt = mysqli_prepare($Conn, "SELECT id_tempat_tidur FROM rr_tempat_tidur WHERE id_ruang_rawat=?");
+    $stmt_jumlah_tt->bind_param("i", $id_ruang_rawat);
+    $stmt_jumlah_tt->execute();
+    $jumlah_tt = $stmt_jumlah_tt->get_result()->num_rows;
 
     // Label Status
     $label_status = ($status == 1)
@@ -182,7 +186,11 @@
 
                         // Menampilkan Baris Ruangan
                         $no = 1;
-                        $query = mysqli_query($Conn, "SELECT*FROM rr_tempat_tidur WHERE id_ruang_rawat='$id_ruang_rawat'");
+                        // Prepared Statement: ambil seluruh tempat tidur untuk ruang rawat.
+                        $stmt_tempat_tidur = mysqli_prepare($Conn, "SELECT * FROM rr_tempat_tidur WHERE id_ruang_rawat=?");
+                        mysqli_stmt_bind_param($stmt_tempat_tidur, "i", $id_ruang_rawat);
+                        mysqli_stmt_execute($stmt_tempat_tidur);
+                        $query = mysqli_stmt_get_result($stmt_tempat_tidur);
                         while ($data = mysqli_fetch_array($query)) {
                             $id_tempat_tidur = $data['id_tempat_tidur'];
                             $tempat_tidur    = $data['tempat_tidur'];

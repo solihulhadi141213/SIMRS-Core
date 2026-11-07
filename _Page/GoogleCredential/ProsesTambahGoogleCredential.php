@@ -59,7 +59,11 @@
 
         // Jika status aktif, nonaktifkan data lain terlebih dahulu
         if ($status == 1) {
-            mysqli_query($Conn, "UPDATE setting_google SET status='0'");
+            // Prepared Statement: nonaktifkan credential yang sebelumnya aktif.
+            $stmtDeactivate = mysqli_prepare($Conn, "UPDATE setting_google SET status=?");
+            $inactiveStatus = 0;
+            mysqli_stmt_bind_param($stmtDeactivate, "i", $inactiveStatus);
+            mysqli_stmt_execute($stmtDeactivate);
         }
 
         // Simpan data

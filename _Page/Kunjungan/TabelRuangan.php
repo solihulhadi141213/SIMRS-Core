@@ -1,7 +1,7 @@
 <?php
 include "../../_Config/Connection.php";
 
-$id_kelas_rawat = !empty($_POST['id_kelas_rawat']) ? $_POST['id_kelas_rawat'] : 0;
+$id_kelas_rawat = !empty($_POST['id_kelas_rawat']) ? (int) $_POST['id_kelas_rawat'] : 0;
 
 $no = 1;
 
@@ -18,11 +18,15 @@ $query = "
         ) AS jumlah_tt
 
     FROM rr_ruang_rawat rr
-    WHERE rr.id_kelas_rawat = '$id_kelas_rawat'
+    WHERE rr.id_kelas_rawat = ?
     ORDER BY rr.ruang_rawat ASC
 ";
 
-$result = mysqli_query($Conn, $query);
+// Prepared Statement: fetch rooms for the selected care class.
+$stmt = mysqli_prepare($Conn, $query);
+mysqli_stmt_bind_param($stmt, 'i', $id_kelas_rawat);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
 if(mysqli_num_rows($result) > 0){
 
@@ -83,4 +87,5 @@ if(mysqli_num_rows($result) > 0){
         </tr>
     ';
 }
+mysqli_stmt_close($stmt);
 ?>

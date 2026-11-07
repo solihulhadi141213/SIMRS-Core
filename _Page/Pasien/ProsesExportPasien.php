@@ -60,6 +60,8 @@
     // QUERY
     // =========================================================
     $query = "SELECT * FROM pasien";
+    $params = [];
+    $types = "";
 
     // Filter Periode
     if (
@@ -70,15 +72,27 @@
 
         $query .= "
             WHERE DATE(registered_at)
-            BETWEEN '$periode_awal' AND '$periode_akhir'
+            BETWEEN ? AND ?
         ";
+        $params = [$periode_awal, $periode_akhir];
+        $types = "ss";
     }
 
     // Order
     $query .= " ORDER BY id_pasien DESC";
 
     // Execute
-    $result = mysqli_query($Conn, $query);
+    // Prepared Statement: execute export query with optional date filters.
+    $stmt = mysqli_prepare($Conn, $query);
+    if (!empty($params)) {
+        $bindParams = [$stmt, $types];
+        foreach ($params as $key => $value) {
+            $bindParams[] = &$params[$key];
+        }
+        call_user_func_array('mysqli_stmt_bind_param', $bindParams);
+    }
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     // Debug Query
     if (!$result) {

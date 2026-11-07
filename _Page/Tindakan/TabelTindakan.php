@@ -204,10 +204,19 @@ if ($totalData > 0) {
         }
 
         // Menghitung Jumlah Tindakan Yang Dibuat
-        $jumlah_tindakan = mysqli_num_rows(mysqli_query($Conn, "SELECT id_tindakan FROM tindakan WHERE id_kunjungan = '$id_kunjungan' "));
+        // Prepared Statement: hitung tindakan pada kunjungan.
+        $stmtJumlahTindakan = mysqli_prepare($Conn, "SELECT id_tindakan FROM tindakan WHERE id_kunjungan = ?");
+        mysqli_stmt_bind_param($stmtJumlahTindakan, "s", $id_kunjungan);
+        mysqli_stmt_execute($stmtJumlahTindakan);
+        $jumlah_tindakan = mysqli_stmt_num_rows(mysqli_stmt_get_result($stmtJumlahTindakan));
 
         // Jumlah Procedure
-        $jumlah_procedure = mysqli_num_rows(mysqli_query($Conn, "SELECT id_procedure FROM tindakan WHERE id_kunjungan = '$id_kunjungan' AND id_procedure!=''"));
+        // Prepared Statement: hitung procedure pada kunjungan.
+        $stmtJumlahProcedure = mysqli_prepare($Conn, "SELECT id_procedure FROM tindakan WHERE id_kunjungan = ? AND id_procedure != ?");
+        $emptyProcedure = '';
+        mysqli_stmt_bind_param($stmtJumlahProcedure, "ss", $id_kunjungan, $emptyProcedure);
+        mysqli_stmt_execute($stmtJumlahProcedure);
+        $jumlah_procedure = mysqli_stmt_num_rows(mysqli_stmt_get_result($stmtJumlahProcedure));
         
         // Routing Tombol tINDAKAN Berdasrkan Capaian
         if(empty($jumlah_tindakan)){

@@ -40,7 +40,11 @@
                                     }else{
                                         echo '<option value="">Semua</option>';
                                     }
-                                    $QryKategoriList = mysqli_query($Conn, "SELECT DISTINCT kategori FROM log WHERE id_akses='$SessionIdAkses' ORDER BY kategori ASC");
+                                    // Prepared Statement: ambil kategori log pengguna.
+                                    $stmtKategoriList = mysqli_prepare($Conn, "SELECT DISTINCT kategori FROM log WHERE id_akses=? ORDER BY kategori ASC");
+                                    mysqli_stmt_bind_param($stmtKategoriList, "s", $SessionIdAkses);
+                                    mysqli_stmt_execute($stmtKategoriList);
+                                    $QryKategoriList = mysqli_stmt_get_result($stmtKategoriList);
                                     while ($DatakategoriList = mysqli_fetch_array($QryKategoriList)) {
                                         $KategoriList= $DatakategoriList['kategori'];
                                         if($KategoriList==$kategori_log){

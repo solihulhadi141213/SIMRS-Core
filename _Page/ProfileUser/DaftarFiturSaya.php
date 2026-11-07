@@ -1,18 +1,21 @@
 <?php
-// Hitung ringkasan dengan query agregasi agar lebih ringan
-$JumlahLogProfile = (int) mysqli_fetch_assoc(
-    mysqli_query($Conn, "SELECT COUNT(*) AS total FROM log WHERE id_akses='$SessionIdAkses'")
-)['total'];
+// Prepared Statement: hitung ringkasan aktivitas pengguna.
+$stmtLogProfile = mysqli_prepare($Conn, "SELECT COUNT(*) AS total FROM log WHERE id_akses=?");
+mysqli_stmt_bind_param($stmtLogProfile, "s", $SessionIdAkses);
+mysqli_stmt_execute($stmtLogProfile);
+$JumlahLogProfile = (int) (mysqli_fetch_assoc(mysqli_stmt_get_result($stmtLogProfile))['total'] ?? 0);
 $JumlahLogProfileFormat = number_format($JumlahLogProfile, 0, ',', '.');
 
-$JumlahLaporanPengguna = (int) mysqli_fetch_assoc(
-    mysqli_query($Conn, "SELECT COUNT(*) AS total FROM laporan_pengguna WHERE id_akses='$SessionIdAkses'")
-)['total'];
+// Prepared Statement: hitung laporan pengguna.
+$stmtLaporanProfile = mysqli_prepare($Conn, "SELECT COUNT(*) AS total FROM laporan_pengguna WHERE id_akses=?");
+mysqli_stmt_bind_param($stmtLaporanProfile, "s", $SessionIdAkses);
+mysqli_stmt_execute($stmtLaporanProfile);
+$JumlahLaporanPengguna = (int) (mysqli_fetch_assoc(mysqli_stmt_get_result($stmtLaporanProfile))['total'] ?? 0);
 $JumlahLaporanPenggunaFormat = number_format($JumlahLaporanPengguna, 0, ',', '.');
 
-// Ambil seluruh fitur + status akses dalam satu query untuk menghindari N+1
+// Prepared Statement: ambil seluruh fitur + status akses tanpa N+1 query.
 $featuresByCategory = [];
-$qryFitur = mysqli_query(
+$stmtFitur = mysqli_prepare(
     $Conn,
     "SELECT ar.kategori,
             ar.id_akses_ref,
@@ -21,9 +24,12 @@ $qryFitur = mysqli_query(
             COALESCE(aa.status, 'No') AS status
      FROM akses_ref ar
      LEFT JOIN akses_acc aa
-       ON aa.id_akses = '$SessionIdAkses' AND aa.id_akses_ref = ar.id_akses_ref
+       ON aa.id_akses = ? AND aa.id_akses_ref = ar.id_akses_ref
      ORDER BY ar.kategori ASC, ar.id_akses_ref ASC"
 );
+mysqli_stmt_bind_param($stmtFitur, "s", $SessionIdAkses);
+mysqli_stmt_execute($stmtFitur);
+$qryFitur = mysqli_stmt_get_result($stmtFitur);
 
 while ($row = mysqli_fetch_assoc($qryFitur)) {
     $featuresByCategory[$row['kategori']][] = $row;

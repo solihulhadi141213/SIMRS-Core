@@ -33,7 +33,7 @@
     // Buat Variabel Dan Sanitasi
     $id_api_key = validateAndSanitizeInput($_POST['id_api_key']);
 
-    // Buka Data Dengan Prepared Statment
+    // Prepared Statement: load the selected API key.
     $sql  = "SELECT * FROM  api_key WHERE id_api_key = ?";
     $stmt = $Conn->prepare($sql);
 
@@ -55,8 +55,13 @@
     $datetime_creat   = $DataSettingGeneral['datetime_creat'] ?? null;
     $datetime_update  = $DataSettingGeneral['datetime_update'] ?? null;
 
-     // Hitung Log Token
-    $log_token = mysqli_num_rows(mysqli_query($Conn, "SELECT id_api_token FROM api_token WHERE id_api_key='$id_api_key'"));
+    // Prepared Statement: count token logs for the selected API key.
+    $stmtTokenCount = $Conn->prepare("SELECT id_api_token FROM api_token WHERE id_api_key=?");
+    $stmtTokenCount->bind_param('i', $id_api_key);
+    $stmtTokenCount->execute();
+    $tokenRows = $stmtTokenCount->get_result();
+    $log_token = mysqli_num_rows($tokenRows);
+    $stmtTokenCount->close();
     if ($log_token >= 1000000) {
         $log_token_show = round($log_token / 1000000, 1) . ' M';
     } elseif ($log_token >= 1000) {

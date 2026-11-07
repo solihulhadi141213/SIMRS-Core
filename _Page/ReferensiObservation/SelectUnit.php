@@ -12,30 +12,28 @@ $page   = (int)($_GET['page'] ?? 1);
 $limit  = 20;
 $offset = ($page - 1) * $limit;
 
-$where = "";
+$searchPattern = '%' . $search . '%';
+$where = !empty($search)
+    ? "WHERE unit_name LIKE ? OR unit_code LIKE ? OR unit_display LIKE ?"
+    : "";
 
-if(!empty($search)){
-    $search = mysqli_real_escape_string($Conn, $search);
-
-    $where = "WHERE 
-        unit_name LIKE '%$search%' OR
-        unit_code LIKE '%$search%' OR
-        unit_display LIKE '%$search%'
-    ";
-}
-
-// Hitung total
-$queryCount = mysqli_query($Conn, "
+// Prepared Statement: count matching distinct units.
+$stmtCount = mysqli_prepare($Conn, "
     SELECT COUNT(DISTINCT unit_name) as total
     FROM observation_reference
     $where
 ");
-
+if (!empty($search)) {
+    mysqli_stmt_bind_param($stmtCount, 'sss', $searchPattern, $searchPattern, $searchPattern);
+}
+mysqli_stmt_execute($stmtCount);
+$queryCount = mysqli_stmt_get_result($stmtCount);
 $dataCount = mysqli_fetch_assoc($queryCount);
 $total = $dataCount['total'] ?? 0;
+mysqli_stmt_close($stmtCount);
 
-// Ambil data
-$query = mysqli_query($Conn, "
+// Prepared Statement: fetch the requested unit page.
+$stmt = mysqli_prepare($Conn, "
     SELECT DISTINCT
         unit_name,
         unit_code,
@@ -44,8 +42,15 @@ $query = mysqli_query($Conn, "
     FROM observation_reference
     $where
     ORDER BY unit_name ASC
-    LIMIT $limit OFFSET $offset
+    LIMIT ? OFFSET ?
 ");
+if (!empty($search)) {
+    mysqli_stmt_bind_param($stmt, 'sssii', $searchPattern, $searchPattern, $searchPattern, $limit, $offset);
+} else {
+    mysqli_stmt_bind_param($stmt, 'ii', $limit, $offset);
+}
+mysqli_stmt_execute($stmt);
+$query = mysqli_stmt_get_result($stmt);
 
 $results = [];
 
@@ -60,6 +65,7 @@ if ($query) {
         ];
     }
 }
+mysqli_stmt_close($stmt);
 
 $response = [
     'results' => $results,

@@ -143,7 +143,10 @@
     $json_payload = json_encode($payload,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
     // Buka Pengaturan SATUSEHAT
-    $query_setting     = mysqli_query($Conn,"SELECT * FROM setting_satusehat WHERE status_setting_satusehat='1' LIMIT 1");
+    // Prepared Statement: ambil pengaturan SATUSEHAT yang aktif.
+    $query_setting = mysqli_prepare($Conn, "SELECT * FROM setting_satusehat WHERE status_setting_satusehat='1' LIMIT 1");
+    mysqli_stmt_execute($query_setting);
+    $query_setting = mysqli_stmt_get_result($query_setting);
     $setting           = mysqli_fetch_assoc($query_setting);
     $baseurl_satusehat = rtrim($setting['url_satusehat'] ?? '', '/');
     if (empty($baseurl_satusehat)) {

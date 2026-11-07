@@ -121,7 +121,11 @@
     // OPTIONAL: JIKA STATUS AKTIF → NONAKTIFKAN YANG LAIN
     // ===============================
     if ($status == 1) {
-        mysqli_query($Conn, "UPDATE setting_sirs_online SET status=0 WHERE id_setting_sirs_online != $id_setting_sirs_online");
+        // Prepared Statement: nonaktifkan profil SIRS Online lainnya.
+        $stmtDeactivate = mysqli_prepare($Conn, "UPDATE setting_sirs_online SET status=0 WHERE id_setting_sirs_online != ?");
+        mysqli_stmt_bind_param($stmtDeactivate, "i", $id_setting_sirs_online);
+        mysqli_stmt_execute($stmtDeactivate);
+        mysqli_stmt_close($stmtDeactivate);
     }
 
     // ===============================

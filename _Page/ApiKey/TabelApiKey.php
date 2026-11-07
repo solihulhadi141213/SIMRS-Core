@@ -27,8 +27,12 @@
     }
     
     // Jumlah Data
-    $QryApiKey = mysqli_query($Conn, "SELECT id_api_key FROM api_key");
+    // Prepared Statement: count API key records.
+    $stmtCount = mysqli_prepare($Conn, "SELECT id_api_key FROM api_key");
+    mysqli_stmt_execute($stmtCount);
+    $QryApiKey = mysqli_stmt_get_result($stmtCount);
     $JumlahApiKey = mysqli_num_rows($QryApiKey);
+    mysqli_stmt_close($stmtCount);
     if(empty($JumlahApiKey)){
         echo '
             <tr>
@@ -40,12 +44,21 @@
         exit;
     }
     $no = 1;
-    $query = mysqli_query($Conn, "SELECT * FROM api_key");
+    // Prepared Statement: fetch API key records.
+    $stmtKeys = mysqli_prepare($Conn, "SELECT * FROM api_key");
+    mysqli_stmt_execute($stmtKeys);
+    $query = mysqli_stmt_get_result($stmtKeys);
     while ($data = mysqli_fetch_array($query)) {
         $id_api_key = $data['id_api_key'];
         
         // Hitung Log Token
-        $log_token = mysqli_num_rows(mysqli_query($Conn, "SELECT id_api_token FROM api_token WHERE id_api_key='$id_api_key'"));
+        // Prepared Statement: count API token logs for this key.
+        $stmtTokenCount = mysqli_prepare($Conn, "SELECT id_api_token FROM api_token WHERE id_api_key=?");
+        mysqli_stmt_bind_param($stmtTokenCount, 's', $id_api_key);
+        mysqli_stmt_execute($stmtTokenCount);
+        $tokenRows = mysqli_stmt_get_result($stmtTokenCount);
+        $log_token = mysqli_num_rows($tokenRows);
+        mysqli_stmt_close($stmtTokenCount);
         if ($log_token >= 1000000) {
             $log_token_show = round($log_token / 1000000, 1) . ' M';
         } elseif ($log_token >= 1000) {
@@ -116,6 +129,7 @@
         ';
         $no++;
     }
+    mysqli_stmt_close($stmtKeys);
 ?>
 <script>
     var JumlahApiKey = <?php echo $JumlahApiKey; ?>;

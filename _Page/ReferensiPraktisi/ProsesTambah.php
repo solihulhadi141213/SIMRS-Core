@@ -47,15 +47,6 @@
     $id_akses          = trim($_POST['id_akses'] ?? '');
     $id_dokter         = trim($_POST['id_dokter'] ?? '');
 
-    // Escape String
-    $nama_praktisi     = mysqli_real_escape_string($Conn, $nama_praktisi);
-    $nik_praktisi      = mysqli_real_escape_string($Conn, $nik_praktisi);
-    $kontak_praktisi   = mysqli_real_escape_string($Conn, $kontak_praktisi);
-    $email_praktisi    = mysqli_real_escape_string($Conn, $email_praktisi);
-    $id_practitioner   = mysqli_real_escape_string($Conn, $id_practitioner);
-    $tipe_praktisi     = mysqli_real_escape_string($Conn, $tipe_praktisi);
-    $profesi_praktisi  = mysqli_real_escape_string($Conn, $profesi_praktisi);
-
     // =========================================================================
     // VALIDASI REQUIRED
     // =========================================================================
@@ -98,36 +89,48 @@
     // =========================================================================
     // VALIDASI DUPLIKAT NIK
     // =========================================================================
-    $queryNik = mysqli_query($Conn, "
+    // Prepared Statement: check whether the practitioner NIK is already used.
+    $stmtNik = mysqli_prepare($Conn, "
         SELECT id_praktisi 
         FROM praktisi 
-        WHERE nik_praktisi='$nik_praktisi'
+        WHERE nik_praktisi=?
         LIMIT 1
     ");
+    mysqli_stmt_bind_param($stmtNik, 's', $nik_praktisi);
+    mysqli_stmt_execute($stmtNik);
+    $queryNik = mysqli_stmt_get_result($stmtNik);
 
     if (mysqli_num_rows($queryNik) > 0) {
+        mysqli_stmt_close($stmtNik);
         $response['message'] = 'NIK praktisi sudah terdaftar.';
         echo json_encode($response);
         exit;
     }
+    mysqli_stmt_close($stmtNik);
 
     // =========================================================================
     // VALIDASI DUPLIKAT EMAIL
     // =========================================================================
     if (!empty($email_praktisi)) {
 
-        $queryEmail = mysqli_query($Conn, "
+        // Prepared Statement: check whether the practitioner email is already used.
+        $stmtEmail = mysqli_prepare($Conn, "
             SELECT id_praktisi 
             FROM praktisi 
-            WHERE email_praktisi='$email_praktisi'
+            WHERE email_praktisi=?
             LIMIT 1
         ");
+        mysqli_stmt_bind_param($stmtEmail, 's', $email_praktisi);
+        mysqli_stmt_execute($stmtEmail);
+        $queryEmail = mysqli_stmt_get_result($stmtEmail);
 
         if (mysqli_num_rows($queryEmail) > 0) {
+            mysqli_stmt_close($stmtEmail);
             $response['message'] = 'Email praktisi sudah digunakan.';
             echo json_encode($response);
             exit;
         }
+        mysqli_stmt_close($stmtEmail);
     }
 
     // =========================================================================
@@ -135,18 +138,24 @@
     // =========================================================================
     if (!empty($id_practitioner)) {
 
-        $queryPractitioner = mysqli_query($Conn, "
+        // Prepared Statement: check whether the practitioner ID is already used.
+        $stmtPractitioner = mysqli_prepare($Conn, "
             SELECT id_praktisi 
             FROM praktisi 
-            WHERE id_practitioner='$id_practitioner'
+            WHERE id_practitioner=?
             LIMIT 1
         ");
+        mysqli_stmt_bind_param($stmtPractitioner, 's', $id_practitioner);
+        mysqli_stmt_execute($stmtPractitioner);
+        $queryPractitioner = mysqli_stmt_get_result($stmtPractitioner);
 
         if (mysqli_num_rows($queryPractitioner) > 0) {
+            mysqli_stmt_close($stmtPractitioner);
             $response['message'] = 'ID Practitioner sudah digunakan.';
             echo json_encode($response);
             exit;
         }
+        mysqli_stmt_close($stmtPractitioner);
     }
 
     // =========================================================================
@@ -156,18 +165,24 @@
 
         $id_akses = (int) $id_akses;
 
-        $queryAkses = mysqli_query($Conn, "
+        // Prepared Statement: validate the selected access record.
+        $stmtAkses = mysqli_prepare($Conn, "
             SELECT id_akses 
             FROM akses 
-            WHERE id_akses='$id_akses'
+            WHERE id_akses=?
             LIMIT 1
         ");
+        mysqli_stmt_bind_param($stmtAkses, 'i', $id_akses);
+        mysqli_stmt_execute($stmtAkses);
+        $queryAkses = mysqli_stmt_get_result($stmtAkses);
 
         if (mysqli_num_rows($queryAkses) == 0) {
+            mysqli_stmt_close($stmtAkses);
             $response['message'] = 'ID akses tidak valid.';
             echo json_encode($response);
             exit;
         }
+        mysqli_stmt_close($stmtAkses);
     } else {
         $id_akses = "NULL";
     }
@@ -179,18 +194,24 @@
 
         $id_dokter = (int) $id_dokter;
 
-        $queryDokter = mysqli_query($Conn, "
+        // Prepared Statement: validate the selected doctor record.
+        $stmtDokter = mysqli_prepare($Conn, "
             SELECT id_dokter 
             FROM dokter 
-            WHERE id_dokter='$id_dokter'
+            WHERE id_dokter=?
             LIMIT 1
         ");
+        mysqli_stmt_bind_param($stmtDokter, 'i', $id_dokter);
+        mysqli_stmt_execute($stmtDokter);
+        $queryDokter = mysqli_stmt_get_result($stmtDokter);
 
         if (mysqli_num_rows($queryDokter) == 0) {
+            mysqli_stmt_close($stmtDokter);
             $response['message'] = 'ID dokter tidak valid.';
             echo json_encode($response);
             exit;
         }
+        mysqli_stmt_close($stmtDokter);
     } else {
         $id_dokter = "NULL";
     }
@@ -198,7 +219,14 @@
     // =========================================================================
     // INSERT DATA
     // =========================================================================
-    $insert = mysqli_query($Conn, "
+    $id_practitioner_db = !empty($id_practitioner) ? $id_practitioner : null;
+    $kontak_praktisi_db = !empty($kontak_praktisi) ? $kontak_praktisi : null;
+    $email_praktisi_db = !empty($email_praktisi) ? $email_praktisi : null;
+    $id_akses_db = $id_akses === "NULL" ? null : $id_akses;
+    $id_dokter_db = $id_dokter === "NULL" ? null : $id_dokter;
+
+    // Prepared Statement: insert the new practitioner.
+    $stmtInsert = mysqli_prepare($Conn, "
         INSERT INTO praktisi (
             id_practitioner,
             tipe_praktisi,
@@ -209,18 +237,23 @@
             email_praktisi,
             id_akses,
             id_dokter
-        ) VALUES (
-            ".(!empty($id_practitioner) ? "'$id_practitioner'" : "NULL").",
-            '$tipe_praktisi',
-            '$profesi_praktisi',
-            '$nama_praktisi',
-            '$nik_praktisi',
-            ".(!empty($kontak_praktisi) ? "'$kontak_praktisi'" : "NULL").",
-            ".(!empty($email_praktisi) ? "'$email_praktisi'" : "NULL").",
-            $id_akses,
-            $id_dokter
-        )
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
+    mysqli_stmt_bind_param(
+        $stmtInsert,
+        'sssssssii',
+        $id_practitioner_db,
+        $tipe_praktisi,
+        $profesi_praktisi,
+        $nama_praktisi,
+        $nik_praktisi,
+        $kontak_praktisi_db,
+        $email_praktisi_db,
+        $id_akses_db,
+        $id_dokter_db
+    );
+    $insert = mysqli_stmt_execute($stmtInsert);
+    mysqli_stmt_close($stmtInsert);
 
     // =========================================================================
     // INSERT RESULT

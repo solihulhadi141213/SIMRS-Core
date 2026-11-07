@@ -204,10 +204,18 @@ if ($totalData > 0) {
         }
 
         // Menghitung Jumlah Diagnosis Yang Diisi
-        $jumlah_diagnosis = mysqli_num_rows(mysqli_query($Conn, "SELECT id_diagnosis FROM diagnosis WHERE id_kunjungan = '$id_kunjungan' "));
+        // Prepared Statement: hitung diagnosis pada kunjungan.
+        $stmt_jumlah_diagnosis = mysqli_prepare($Conn, "SELECT id_diagnosis FROM diagnosis WHERE id_kunjungan = ?");
+        mysqli_stmt_bind_param($stmt_jumlah_diagnosis, "s", $id_kunjungan);
+        mysqli_stmt_execute($stmt_jumlah_diagnosis);
+        $jumlah_diagnosis = mysqli_stmt_get_result($stmt_jumlah_diagnosis)->num_rows;
 
         // Jumlah Condition
-        $jumlah_condition = mysqli_num_rows(mysqli_query($Conn, "SELECT id_diagnosis FROM diagnosis WHERE id_kunjungan = '$id_kunjungan' AND id_condition!=''"));
+        // Prepared Statement: hitung diagnosis dengan Condition yang terisi.
+        $stmt_jumlah_condition = mysqli_prepare($Conn, "SELECT id_diagnosis FROM diagnosis WHERE id_kunjungan = ? AND id_condition!=''");
+        mysqli_stmt_bind_param($stmt_jumlah_condition, "s", $id_kunjungan);
+        mysqli_stmt_execute($stmt_jumlah_condition);
+        $jumlah_condition = mysqli_stmt_get_result($stmt_jumlah_condition)->num_rows;
         
         // Routing Tombol Diagnosis Berdasrkan Capaian
         if(empty($jumlah_diagnosis)){

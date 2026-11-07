@@ -13,30 +13,45 @@
     $offset     = ($page - 1) * $limit;
 
     // Optional filter (kalau nanti ada form filter)
-    $keyword    = !empty($_POST['keyword']) ? mysqli_real_escape_string($Conn, $_POST['keyword']) : "";
+    $keyword    = !empty($_POST['keyword']) ? $_POST['keyword'] : "";
 
     // ==============================
     // KONDISI WHERE
     // ==============================
     $where = "WHERE 1=1";
+    $params = [];
+    $types = "";
 
     if (!empty($keyword)) {
         $where .= " AND (
-            id_pasien LIKE '%$keyword%' OR
-            nama LIKE '%$keyword%' OR
-            nik LIKE '%$keyword%' OR
-            no_bpjs LIKE '%$keyword%' OR
-            gender LIKE '%$keyword%' OR
-            status LIKE '%$keyword%' OR
-            registered_at LIKE '%$keyword%' OR
-            id_ihs LIKE '%$keyword%'
+            id_pasien LIKE ? OR
+            nama LIKE ? OR
+            nik LIKE ? OR
+            no_bpjs LIKE ? OR
+            gender LIKE ? OR
+            status LIKE ? OR
+            registered_at LIKE ? OR
+            id_ihs LIKE ?
         )";
+        $likeKeyword = "%$keyword%";
+        $params = array_fill(0, 8, $likeKeyword);
+        $types = "ssssssss";
     }
 
     // ==============================
     // HITUNG TOTAL DATA
     // ==============================
-    $queryCount = mysqli_query($Conn, "SELECT COUNT(*) as total FROM pasien $where");
+    // Prepared Statement: hitung total pasien dengan filter opsional.
+    $stmtCount = mysqli_prepare($Conn, "SELECT COUNT(*) as total FROM pasien $where");
+    if (!empty($params)) {
+        $countBind = [$stmtCount, $types];
+        foreach ($params as $key => $value) {
+            $countBind[] = &$params[$key];
+        }
+        call_user_func_array('mysqli_stmt_bind_param', $countBind);
+    }
+    mysqli_stmt_execute($stmtCount);
+    $queryCount = mysqli_stmt_get_result($stmtCount);
     $dataCount  = mysqli_fetch_assoc($queryCount);
     $totalData  = $dataCount['total'];
 
@@ -45,13 +60,25 @@
     // ==============================
     // AMBIL DATA
     // ==============================
-    $query = mysqli_query($Conn, "
+    // Prepared Statement: ambil halaman data pasien.
+    $stmt = mysqli_prepare($Conn, "
         SELECT *
         FROM pasien
         $where
         ORDER BY id_pasien DESC
-        LIMIT $offset, $limit
+        LIMIT ?, ?
     ");
+    $queryParams = $params;
+    $queryTypes = $types . "ii";
+    $queryParams[] = $offset;
+    $queryParams[] = $limit;
+    $queryBind = [$stmt, $queryTypes];
+    foreach ($queryParams as $key => $value) {
+        $queryBind[] = &$queryParams[$key];
+    }
+    call_user_func_array('mysqli_stmt_bind_param', $queryBind);
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
 
     // ==============================
     // TAMPILKAN DATA

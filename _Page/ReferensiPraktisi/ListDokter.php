@@ -7,28 +7,27 @@
     $limit = 20;
     $offset = ($page - 1) * $limit;
 
-    $search_escape = mysqli_real_escape_string($Conn, $search);
+    $where = !empty($search) ? " AND nama LIKE ?" : "";
+    $searchPattern = '%' . $search . '%';
 
-    $query = "
+    // Prepared Statement: fetch the paginated doctor options.
+    $stmt = mysqli_prepare($Conn, "
         SELECT 
             id_dokter,
             nama
         FROM dokter
         WHERE nama != ''
-    ";
-
-    if (!empty($search_escape)) {
-        $query .= "
-            AND nama LIKE '%$search_escape%'
-        ";
-    }
-
-    $query .= "
+        $where
         ORDER BY id_dokter DESC
-        LIMIT $offset, $limit
-    ";
-
-    $result = mysqli_query($Conn, $query);
+        LIMIT ?, ?
+    ");
+    if (!empty($search)) {
+        mysqli_stmt_bind_param($stmt, 'sii', $searchPattern, $offset, $limit);
+    } else {
+        mysqli_stmt_bind_param($stmt, 'ii', $offset, $limit);
+    }
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     $results = [];
 
@@ -39,21 +38,22 @@
             'text' => $data['nama']
         ];
     }
+    mysqli_stmt_close($stmt);
 
-    $count_query = "
+    // Prepared Statement: count matching doctor options.
+    $stmtCount = mysqli_prepare($Conn, "
         SELECT COUNT(*) as total
         FROM dokter
         WHERE nama != ''
-    ";
-
-    if (!empty($search_escape)) {
-        $count_query .= "
-            AND nama LIKE '%$search_escape%'
-        ";
+        $where
+    ");
+    if (!empty($search)) {
+        mysqli_stmt_bind_param($stmtCount, 's', $searchPattern);
     }
-
-    $count_result = mysqli_query($Conn, $count_query);
+    mysqli_stmt_execute($stmtCount);
+    $count_result = mysqli_stmt_get_result($stmtCount);
     $count_data = mysqli_fetch_assoc($count_result);
+    mysqli_stmt_close($stmtCount);
 
     $more = ($offset + $limit) < $count_data['total'];
 

@@ -34,39 +34,52 @@
     // Query
     if(!empty($search)){
 
-        $query = mysqli_query($Conn, "
+        // Prepared Statement: cari dan paginasi praktisi.
+        $likeSearch = "%$search%";
+        $stmt = mysqli_prepare($Conn, "
             SELECT 
                 *
             FROM praktisi
             WHERE 
-                nama_praktisi LIKE '%$search%'
-                OR profesi_praktisi LIKE '%$search%'
-                OR nik_praktisi LIKE '%$search%'
+                nama_praktisi LIKE ?
+                OR profesi_praktisi LIKE ?
+                OR nik_praktisi LIKE ?
             ORDER BY id_praktisi DESC
-            LIMIT $offset, $limit
+            LIMIT ?, ?
         ");
+        mysqli_stmt_bind_param($stmt, "sssii", $likeSearch, $likeSearch, $likeSearch, $offset, $limit);
+        mysqli_stmt_execute($stmt);
+        $query = mysqli_stmt_get_result($stmt);
 
-        $count = mysqli_num_rows(mysqli_query($Conn, "
-            SELECT id_praktisi 
+        // Prepared Statement: hitung hasil pencarian praktisi.
+        $stmtCount = mysqli_prepare($Conn, "
+            SELECT COUNT(*) AS total
             FROM praktisi
             WHERE 
-                nama_praktisi LIKE '%$search%'
-                OR profesi_praktisi LIKE '%$search%'
-                OR nik_praktisi LIKE '%$search%'
-        "));
+                nama_praktisi LIKE ?
+                OR profesi_praktisi LIKE ?
+                OR nik_praktisi LIKE ?
+        ");
+        mysqli_stmt_bind_param($stmtCount, "sss", $likeSearch, $likeSearch, $likeSearch);
+        mysqli_stmt_execute($stmtCount);
+        $count = (int) (mysqli_fetch_assoc(mysqli_stmt_get_result($stmtCount))['total'] ?? 0);
     }else{
 
-        $query = mysqli_query($Conn, "
+        // Prepared Statement: ambil halaman seluruh praktisi.
+        $stmt = mysqli_prepare($Conn, "
             SELECT *
             FROM praktisi
             ORDER BY id_praktisi DESC
-            LIMIT $offset, $limit
+            LIMIT ?, ?
         ");
+        mysqli_stmt_bind_param($stmt, "ii", $offset, $limit);
+        mysqli_stmt_execute($stmt);
+        $query = mysqli_stmt_get_result($stmt);
 
-        $count = mysqli_num_rows(mysqli_query($Conn, "
-            SELECT id_praktisi 
-            FROM praktisi
-        "));
+        // Prepared Statement: hitung seluruh praktisi.
+        $stmtCount = mysqli_prepare($Conn, "SELECT COUNT(*) AS total FROM praktisi");
+        mysqli_stmt_execute($stmtCount);
+        $count = (int) (mysqli_fetch_assoc(mysqli_stmt_get_result($stmtCount))['total'] ?? 0);
     }
 
     $data_arr = [];

@@ -202,7 +202,10 @@
         ';
     }else{
         // Buka Pengaturan Satusehat
-        $query_setting = mysqli_query($Conn,"SELECT * FROM setting_satusehat WHERE status_setting_satusehat='1' LIMIT 1");
+        // Prepared Statement: ambil pengaturan SATUSEHAT yang aktif.
+        $query_setting = mysqli_prepare($Conn, "SELECT * FROM setting_satusehat WHERE status_setting_satusehat='1' LIMIT 1");
+        mysqli_stmt_execute($query_setting);
+        $query_setting = mysqli_stmt_get_result($query_setting);
         $setting = mysqli_fetch_assoc($query_setting);
         $baseurl_satusehat = rtrim($setting['url_satusehat'] ?? '', '/');
         if (empty($baseurl_satusehat)) {
@@ -421,7 +424,11 @@
                 <tbody>
                    
                     <?php
-                        $jumlah_alergi = mysqli_num_rows(mysqli_query($Conn, "SELECT id_alergi FROM alergi WHERE id_pasien='$id_pasien'"));
+                        // Prepared Statement: hitung alergi pasien yang tersimpan.
+                        $stmt_jumlah_alergi = mysqli_prepare($Conn, "SELECT id_alergi FROM alergi WHERE id_pasien=?");
+                        mysqli_stmt_bind_param($stmt_jumlah_alergi, "i", $id_pasien);
+                        mysqli_stmt_execute($stmt_jumlah_alergi);
+                        $jumlah_alergi = mysqli_stmt_get_result($stmt_jumlah_alergi)->num_rows;
                         if(empty($jumlah_alergi)){
                             echo '
                                 <tr>

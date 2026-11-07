@@ -10,18 +10,20 @@ if (empty($_POST['province'])) {
     exit;
 }
 
-// Ambil province
-$province = mysqli_real_escape_string($Conn, $_POST['province']);
+$province = $_POST['province'];
 
-// Query kabupaten/kota unik
-$query = mysqli_query($Conn, "
+// Prepared Statement: ambil kabupaten/kota berdasarkan provinsi.
+$stmt = mysqli_prepare($Conn, "
     SELECT DISTINCT regency, tipe_level2
     FROM wilayah
-    WHERE province = '$province'
+    WHERE province = ?
     AND regency IS NOT NULL
     AND regency != ''
     ORDER BY regency ASC
 ");
+mysqli_stmt_bind_param($stmt, "s", $province);
+mysqli_stmt_execute($stmt);
+$query = mysqli_stmt_get_result($stmt);
 
 // Default option
 echo '<option value="">Pilih</option>';

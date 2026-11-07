@@ -109,7 +109,11 @@
                                 $namadokter=$JsonData[$a]['namadokter'];
                                 $kodedokter=$JsonData[$a]['kodedokter'];
                                 //Cek apakah kode tersebut sudah ada pada data dokter
-                                $cek_kode=mysqli_query($Conn, "SELECT * FROM dokter WHERE kode='$kodedokter'");
+                                // Prepared Statement: cek kode dokter dari hasil BPJS.
+                                $cek_kode = mysqli_prepare($Conn, "SELECT * FROM dokter WHERE kode=?");
+                                mysqli_stmt_bind_param($cek_kode, "s", $kodedokter);
+                                mysqli_stmt_execute($cek_kode);
+                                $cek_kode = mysqli_stmt_get_result($cek_kode);
                                 $cek_kode_row=mysqli_num_rows($cek_kode);
                                 if(!empty($cek_kode_row)){
                                     $status="<label class='label label-success'><i class='bi bi-check-square'></i> Tersedia</label>";
@@ -130,4 +134,3 @@
         </div>
     </div>
 </div>
-

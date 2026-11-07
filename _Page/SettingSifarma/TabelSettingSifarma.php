@@ -18,8 +18,12 @@
         exit;
     }
 
-    $QrySifarma = mysqli_query($Conn, "SELECT id_setting_sifarma FROM setting_sifarma");
+    // Prepared Statement: count Sifarma settings.
+    $stmtCount = mysqli_prepare($Conn, "SELECT id_setting_sifarma FROM setting_sifarma");
+    mysqli_stmt_execute($stmtCount);
+    $QrySifarma = mysqli_stmt_get_result($stmtCount);
     $JumlahSifarma = mysqli_num_rows($QrySifarma);
+    mysqli_stmt_close($stmtCount);
 
     if (empty($JumlahSifarma)) {
         echo '
@@ -33,7 +37,10 @@
     }
 
     $no = 1;
-    $query = mysqli_query($Conn, "SELECT * FROM setting_sifarma ORDER BY id_setting_sifarma DESC");
+    // Prepared Statement: fetch Sifarma settings.
+    $stmt = mysqli_prepare($Conn, "SELECT * FROM setting_sifarma ORDER BY id_setting_sifarma DESC");
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
     while ($data = mysqli_fetch_array($query)) {
         $status = $data['status'] ?? 0;
 
@@ -101,6 +108,7 @@
         ';
         $no++;
     }
+    mysqli_stmt_close($stmt);
 ?>
 <script>
     var JumlahSifarma = <?php echo $JumlahSifarma; ?>;

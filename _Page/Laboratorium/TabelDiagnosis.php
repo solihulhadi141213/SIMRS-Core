@@ -31,23 +31,35 @@
     $offset     = ($page - 1) * $limit;
 
     // Optional filter (kalau nanti ada form filter)
-    $keyword    = !empty($_POST['keyword']) ? mysqli_real_escape_string($Conn, $_POST['keyword']) : "";
+    $keyword    = !empty($_POST['keyword']) ? $_POST['keyword'] : "";
 
    // KONDISI WHERE
-    $where = "WHERE 1=1";
-
-    if (!empty($keyword)) {
-        $where .= " AND (kode LIKE '%$keyword%' OR long_des LIKE '%$keyword%' OR short_des LIKE '%$keyword%')";
-    }
+    $where = !empty($keyword) ? " AND (kode LIKE ? OR long_des LIKE ? OR short_des LIKE ?)" : "";
+    $searchPattern = '%' . $keyword . '%';
 
     // HITUNG TOTAL DATA
-    $queryCount = mysqli_query($Conn, "SELECT COUNT(*) as total FROM dokter $where");
+    // Prepared Statement: count diagnoses matching the optional search.
+    $stmtCount = mysqli_prepare($Conn, "SELECT COUNT(*) as total FROM dokter WHERE 1=1$where");
+    if (!empty($keyword)) {
+        mysqli_stmt_bind_param($stmtCount, 'sss', $searchPattern, $searchPattern, $searchPattern);
+    }
+    mysqli_stmt_execute($stmtCount);
+    $queryCount = mysqli_stmt_get_result($stmtCount);
     $dataCount  = mysqli_fetch_assoc($queryCount);
     $totalData  = $dataCount['total'];
+    mysqli_stmt_close($stmtCount);
     $pageCount  = ($totalData > 0) ? ceil($totalData / $limit) : 0;
 
     /// AMBIL DATA
-    $query = mysqli_query($Conn, "SELECT * FROM icd $where ORDER BY kode DESC LIMIT $offset, $limit");
+    // Prepared Statement: fetch the paginated diagnosis list.
+    $stmt = mysqli_prepare($Conn, "SELECT * FROM icd WHERE 1=1$where ORDER BY kode DESC LIMIT ?, ?");
+    if (!empty($keyword)) {
+        mysqli_stmt_bind_param($stmt, 'sssii', $searchPattern, $searchPattern, $searchPattern, $offset, $limit);
+    } else {
+        mysqli_stmt_bind_param($stmt, 'ii', $offset, $limit);
+    }
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
 
     // TAMPILKAN DATA
     $no = $offset + 1;
@@ -70,6 +82,7 @@
             ';
             $no++;
         }
+        mysqli_stmt_close($stmt);
         echo json_encode([
             "status"     => "success",
             "html"       => $html,
@@ -79,6 +92,7 @@
         ]);
         exit;
     } else {
+        mysqli_stmt_close($stmt);
 
          echo json_encode([
             "status" => "error",

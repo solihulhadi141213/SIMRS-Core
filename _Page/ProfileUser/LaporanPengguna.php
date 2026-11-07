@@ -33,13 +33,20 @@
                         <tbody>
                             <?php
                                 $No=1;
-                                $JumlahLaporanPengguna=mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM laporan_pengguna WHERE id_akses='$SessionIdAkses'"));
+                                // Prepared Statement: hitung laporan milik pengguna.
+                                $stmtJumlahLaporan = mysqli_prepare($Conn, "SELECT id_laporan_pengguna FROM laporan_pengguna WHERE id_akses=?");
+                                mysqli_stmt_bind_param($stmtJumlahLaporan, "s", $SessionIdAkses);
+                                mysqli_stmt_execute($stmtJumlahLaporan);
+                                $JumlahLaporanPengguna = mysqli_stmt_num_rows(mysqli_stmt_get_result($stmtJumlahLaporan));
                                 if(empty($JumlahLaporanPengguna)){
                                     echo '<tr>';
                                     echo '  <td colspan="3">Belum Ada Data Laporan Yang Dimuat</td>';
                                     echo '</tr>';
                                 }else{
-                                    $QryLaporanPengguna = mysqli_query($Conn, "SELECT*FROM laporan_pengguna ORDER BY id_laporan_pengguna DESC");
+                                    // Prepared Statement: ambil daftar seluruh laporan.
+                                    $stmtLaporanPengguna = mysqli_prepare($Conn, "SELECT * FROM laporan_pengguna ORDER BY id_laporan_pengguna DESC");
+                                    mysqli_stmt_execute($stmtLaporanPengguna);
+                                    $QryLaporanPengguna = mysqli_stmt_get_result($stmtLaporanPengguna);
                                     while ($DataLaporanPengguna = mysqli_fetch_array($QryLaporanPengguna)) {
                                         $id_laporan_pengguna= $DataLaporanPengguna['id_laporan_pengguna'];
                                         $nama= $DataLaporanPengguna['nama'];

@@ -51,13 +51,22 @@
     $offset    = ($page - 1) * $limit;
 
     // HITUNG TOTAL DATA
-    $queryCount = mysqli_query($Conn, "SELECT COUNT(*) as total FROM kunjungan WHERE id_pasien='$id_pasien'");
+    // Prepared Statement: count this patient's visits.
+    $stmtCount = mysqli_prepare($Conn, "SELECT COUNT(*) as total FROM kunjungan WHERE id_pasien=?");
+    mysqli_stmt_bind_param($stmtCount, 'i', $id_pasien);
+    mysqli_stmt_execute($stmtCount);
+    $queryCount = mysqli_stmt_get_result($stmtCount);
     $dataCount  = mysqli_fetch_assoc($queryCount);
     $totalData  = $dataCount['total'];
+    mysqli_stmt_close($stmtCount);
     $pageCount  = ($totalData > 0) ? ceil($totalData / $limit) : 0;
 
     /// AMBIL DATA
-    $query = mysqli_query($Conn, "SELECT id_kunjungan, id_encounter, jenis_kunjungan, pembayaran_metode, poliklinik, ruang_rawat, datetime_daftar FROM kunjungan WHERE id_pasien='$id_pasien' ORDER BY id_kunjungan DESC LIMIT $offset, $limit");
+    // Prepared Statement: fetch this patient's paginated visits.
+    $stmt = mysqli_prepare($Conn, "SELECT id_kunjungan, id_encounter, jenis_kunjungan, pembayaran_metode, poliklinik, ruang_rawat, datetime_daftar FROM kunjungan WHERE id_pasien=? ORDER BY id_kunjungan DESC LIMIT ?, ?");
+    mysqli_stmt_bind_param($stmt, 'iii', $id_pasien, $offset, $limit);
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
 
     // Nomor Baris
     $no = $offset + 1;
@@ -96,6 +105,7 @@
         }else{
             $unit_instalasi = $ruang_rawat;
         }
+        mysqli_stmt_close($stmt);
 
 
         $html .= '

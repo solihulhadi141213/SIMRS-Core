@@ -146,55 +146,79 @@
         if(!empty($pembayaran) && !in_array($pembayaran, $allowed_pembayaran)){ $keterangan[] = 'Pembayaran tidak valid'; }
 
         // =====================================================
-        // VALIDASI DATABASE (Menggunakan mysqli_real_escape_string untuk keamanan)
+        // VALIDASI DATABASE
         // =====================================================
         if(!empty($id_pasien)){
-            $id_pasien_safe = mysqli_real_escape_string($Conn, $id_pasien);
-            $query_pasien = mysqli_query($Conn, "SELECT nama FROM pasien WHERE id_pasien='$id_pasien_safe'");
+            // Prepared Statement: find the patient by imported identifier.
+            $stmtPasien = $Conn->prepare("SELECT nama FROM pasien WHERE id_pasien=?");
+            $stmtPasien->bind_param('s', $id_pasien);
+            $stmtPasien->execute();
+            $query_pasien = $stmtPasien->get_result();
             if($data_pasien = mysqli_fetch_assoc($query_pasien)){
                 $nama_pasien = $data_pasien['nama'];
             }else{
                 $keterangan[] = 'Pasien tidak ditemukan';
             }
+            $stmtPasien->close();
         }
 
         if(!empty($id_kunjungan)){
-            $id_k_safe = mysqli_real_escape_string($Conn, $id_kunjungan);
-            $check_kunjungan = mysqli_query($Conn, "SELECT id_kunjungan FROM kunjungan WHERE id_kunjungan='$id_k_safe'");
+            // Prepared Statement: check the imported visit identifier.
+            $stmtKunjungan = $Conn->prepare("SELECT id_kunjungan FROM kunjungan WHERE id_kunjungan=?");
+            $stmtKunjungan->bind_param('s', $id_kunjungan);
+            $stmtKunjungan->execute();
+            $check_kunjungan = $stmtKunjungan->get_result();
             if(mysqli_num_rows($check_kunjungan) > 0){ $keterangan[] = 'ID kunjungan sudah digunakan'; }
+            $stmtKunjungan->close();
         }
 
         if(!empty($kode_dokter)){
-            $kd_safe = mysqli_real_escape_string($Conn, $kode_dokter);
-            $query_dokter = mysqli_query($Conn, "SELECT id_dokter, nama FROM dokter WHERE kode='$kd_safe'");
+            // Prepared Statement: find the receiving doctor by code.
+            $stmtDokter = $Conn->prepare("SELECT id_dokter, nama FROM dokter WHERE kode=?");
+            $stmtDokter->bind_param('s', $kode_dokter);
+            $stmtDokter->execute();
+            $query_dokter = $stmtDokter->get_result();
             if($data_dokter = mysqli_fetch_assoc($query_dokter)){
                 $id_dokter = $data_dokter['id_dokter'];
                 $nama_dokter = $data_dokter['nama'];
             }else{ $keterangan[] = 'Dokter penerima tidak valid'; }
+            $stmtDokter->close();
         }
 
         if(!empty($kode_dpjp)){
-            $kdpjp_safe = mysqli_real_escape_string($Conn, $kode_dpjp);
-            $query_dpjp = mysqli_query($Conn, "SELECT id_dokter, nama FROM dokter WHERE kode='$kdpjp_safe'");
+            // Prepared Statement: find the DPJP by code.
+            $stmtDpjp = $Conn->prepare("SELECT id_dokter, nama FROM dokter WHERE kode=?");
+            $stmtDpjp->bind_param('s', $kode_dpjp);
+            $stmtDpjp->execute();
+            $query_dpjp = $stmtDpjp->get_result();
             if($data_dpjp = mysqli_fetch_assoc($query_dpjp)){
                 $dpjp_id = $data_dpjp['id_dokter'];
                 $dpjp_nama = $data_dpjp['nama'];
             }else{ $keterangan[] = 'Dokter DPJP tidak valid'; }
+            $stmtDpjp->close();
         }
 
         if(!empty($kode_poli)){
-            $kp_safe = mysqli_real_escape_string($Conn, $kode_poli);
-            $query_poli = mysqli_query($Conn, "SELECT id_poliklinik, poliklinik FROM poliklinik WHERE kode='$kp_safe'");
+            // Prepared Statement: find the clinic by code.
+            $stmtPoli = $Conn->prepare("SELECT id_poliklinik, poliklinik FROM poliklinik WHERE kode=?");
+            $stmtPoli->bind_param('s', $kode_poli);
+            $stmtPoli->execute();
+            $query_poli = $stmtPoli->get_result();
             if($data_poli = mysqli_fetch_assoc($query_poli)){
                 $id_poliklinik = $data_poli['id_poliklinik'];
                 $nama_poli = $data_poli['poliklinik'];
             }else{ $keterangan[] = 'Poliklinik tidak valid'; }
+            $stmtPoli->close();
         }
 
         if(!empty($id_akses)){
-            $id_ak_safe = mysqli_real_escape_string($Conn, $id_akses);
-            $query_akses = mysqli_query($Conn, "SELECT id_akses FROM akses WHERE id_akses='$id_ak_safe'");
+            // Prepared Statement: validate the importing user's access identifier.
+            $stmtAkses = $Conn->prepare("SELECT id_akses FROM akses WHERE id_akses=?");
+            $stmtAkses->bind_param('s', $id_akses);
+            $stmtAkses->execute();
+            $query_akses = $stmtAkses->get_result();
             if(mysqli_num_rows($query_akses) == 0){ $keterangan[] = 'ID akses petugas tidak valid'; }
+            $stmtAkses->close();
         }
 
         // =====================================================
@@ -203,6 +227,7 @@
         $status_import = 'Berhasil';
         if(empty($keterangan)){
             // Perbaikan bind_param type (semua s untuk keamanan format ID/String)
+            // Prepared Statement: insert the validated visit.
             $stmt = $Conn->prepare("INSERT INTO kunjungan (id_encounter, id_pasien, sep, prioritas, keluhan, jenis_kunjungan, id_dokter, kode_dokter, dokter, dpjp_id, dpjp_kode, dpjp_nama, id_poliklinik, kode_poliklinik, poliklinik, kelas, ruang_rawat, tempat_tidur, pembayaran_metode, pembayaran_penanggung, kontak_darurat_nomor, kontak_darurat_nama, kontak_darurat_hubungan, cara_keluar, status, petugas_id, petugas_nama, datetime_daftar, datetime_pelayanan, datetime_selesai) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
             if($stmt){

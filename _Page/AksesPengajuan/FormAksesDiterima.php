@@ -9,7 +9,10 @@
 
                 // Query data entitas akses
                 $query = "SELECT id_akses_entitas, akses FROM akses_entitas ORDER BY akses ASC";
-                $result = mysqli_query($Conn, $query);
+                // Prepared Statement: ambil pilihan entitas akses.
+                $stmt = mysqli_prepare($Conn, $query);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
                 if ($result && mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         $id   = htmlspecialchars($row['id_akses_entitas']);

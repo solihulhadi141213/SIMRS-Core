@@ -76,11 +76,13 @@ if ($expectedCount === false || $expectedCount === null) {
     stopObservasiExport('Jumlah data konfirmasi tidak valid.', 400);
 }
 
-$countResult = mysqli_query($Conn, 'SELECT COUNT(*) AS total FROM observation');
-if (!$countResult) {
+// Prepared Statement: hitung ulang observasi sebelum ekspor.
+$countStmt = mysqli_prepare($Conn, 'SELECT COUNT(*) AS total FROM observation');
+if (!$countStmt || !mysqli_stmt_execute($countStmt)) {
     error_log('Observasi export: gagal menghitung ulang data: ' . mysqli_error($Conn));
     stopObservasiExport('Gagal memeriksa jumlah data observasi.', 500);
 }
+$countResult = mysqli_stmt_get_result($countStmt);
 $currentCount = (int) (mysqli_fetch_assoc($countResult)['total'] ?? 0);
 mysqli_free_result($countResult);
 if ($currentCount < 1) {

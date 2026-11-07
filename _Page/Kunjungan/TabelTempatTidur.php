@@ -1,8 +1,8 @@
 <?php
 include "../../_Config/Connection.php";
 
-$id_kelas_rawat = !empty($_POST['id_kelas_rawat']) ? $_POST['id_kelas_rawat'] : 0;
-$id_ruang_rawat = !empty($_POST['id_ruang_rawat']) ? $_POST['id_ruang_rawat'] : 0;
+$id_kelas_rawat = !empty($_POST['id_kelas_rawat']) ? (int) $_POST['id_kelas_rawat'] : 0;
+$id_ruang_rawat = !empty($_POST['id_ruang_rawat']) ? (int) $_POST['id_ruang_rawat'] : 0;
 
 $no = 1;
 
@@ -18,13 +18,17 @@ $query = "
     FROM rr_tempat_tidur tt
 
     WHERE 
-        tt.id_kelas_rawat = '$id_kelas_rawat'
-        AND tt.id_ruang_rawat = '$id_ruang_rawat'
+        tt.id_kelas_rawat = ?
+        AND tt.id_ruang_rawat = ?
 
     ORDER BY tt.tempat_tidur ASC
 ";
 
-$result = mysqli_query($Conn, $query);
+// Prepared Statement: fetch beds for the selected class and room.
+$stmt = mysqli_prepare($Conn, $query);
+mysqli_stmt_bind_param($stmt, 'ii', $id_kelas_rawat, $id_ruang_rawat);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
 if(mysqli_num_rows($result) > 0){
 
@@ -101,4 +105,5 @@ if(mysqli_num_rows($result) > 0){
         </tr>
     ';
 }
+mysqli_stmt_close($stmt);
 ?>

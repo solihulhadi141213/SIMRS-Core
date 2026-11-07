@@ -26,7 +26,10 @@ $query = "
     ORDER BY kr.kelas ASC
 ";
 
-$result = mysqli_query($Conn, $query);
+// Prepared Statement: fetch the care-class listing.
+$stmt = mysqli_prepare($Conn, $query);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
 if(mysqli_num_rows($result) > 0){
 
@@ -95,4 +98,5 @@ if(mysqli_num_rows($result) > 0){
         </tr>
     ';
 }
+mysqli_stmt_close($stmt);
 ?>

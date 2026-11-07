@@ -10,13 +10,16 @@ if (empty($SessionIdAkses)) {
 }
 
 try {
-    $result = mysqli_query(
+    // Prepared Statement: execute the static service category query.
+    $stmt = mysqli_prepare(
         $Conn,
         "SELECT
             COALESCE(SUM(jenis_kunjungan = 'Rajal'), 0) AS rajal,
             COALESCE(SUM(jenis_kunjungan = 'Ranap'), 0) AS ranap
          FROM kunjungan"
     );
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 } catch (mysqli_sql_exception $exception) {
     error_log('Dashboard service category query failed: ' . $exception->getMessage());
     http_response_code(500);
@@ -32,6 +35,7 @@ if (!$result) {
 }
 
 $counts = mysqli_fetch_assoc($result);
+mysqli_stmt_close($stmt);
 echo json_encode([
     'status' => 'success',
     'labels' => ['Rajal', 'Ranap'],

@@ -80,7 +80,10 @@
 
         // Jika status aktif, nonaktifkan data lain terlebih dahulu
         if ($status == 1) {
-            mysqli_query($Conn, "UPDATE setting_email_gateway SET status='0'");
+            // Prepared Statement: deactivate existing Email Gateway records.
+            $stmtDeactivate = mysqli_prepare($Conn, "UPDATE setting_email_gateway SET status='0'");
+            mysqli_stmt_execute($stmtDeactivate);
+            mysqli_stmt_close($stmtDeactivate);
         }
 
         // Simpan data
@@ -94,6 +97,7 @@
                     status
                 ) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
+        // Prepared Statement: insert the Email Gateway record.
         $stmt = mysqli_prepare($Conn, $query);
 
         mysqli_stmt_bind_param(

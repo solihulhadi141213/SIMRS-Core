@@ -36,7 +36,7 @@
     // =====================================
     // VALIDASI ID
     // =====================================
-    $id_setting_email_gateway = $_POST['id_setting_email_gateway'] ?? '';
+    $id_setting_email_gateway = (int) ($_POST['id_setting_email_gateway'] ?? 0);
 
     if (empty($id_setting_email_gateway)) {
         echo json_encode([
@@ -109,31 +109,39 @@
     // =====================================
     // CEK DATA ADA
     // =====================================
-    $cek = mysqli_query(
+    // Prepared Statement: verify that the Email Gateway record exists.
+    $stmtCheck = mysqli_prepare(
         $Conn,
         "SELECT id_setting_email_gateway 
         FROM setting_email_gateway 
-        WHERE id_setting_email_gateway='$id_setting_email_gateway'"
+        WHERE id_setting_email_gateway=?"
     );
+    mysqli_stmt_bind_param($stmtCheck, 'i', $id_setting_email_gateway);
+    mysqli_stmt_execute($stmtCheck);
+    $cek = mysqli_stmt_get_result($stmtCheck);
 
     if (mysqli_num_rows($cek) == 0) {
+        mysqli_stmt_close($stmtCheck);
         echo json_encode([
             'status' => 'error',
             'message' => 'Data Email Gateway tidak ditemukan.'
         ]);
         exit;
     }
+    mysqli_stmt_close($stmtCheck);
 
     // =====================================
     // JIKA STATUS AKTIF -> NONAKTIFKAN YANG LAIN
     // =====================================
     if ($status == 1) {
-        mysqli_query(
+        // Prepared Statement: deactivate every other Email Gateway record.
+        $stmtDeactivate = mysqli_prepare(
             $Conn,
-            "UPDATE setting_email_gateway 
-            SET status='0'
-            WHERE id_setting_email_gateway != '$id_setting_email_gateway'"
+            "UPDATE setting_email_gateway SET status='0' WHERE id_setting_email_gateway != ?"
         );
+        mysqli_stmt_bind_param($stmtDeactivate, 'i', $id_setting_email_gateway);
+        mysqli_stmt_execute($stmtDeactivate);
+        mysqli_stmt_close($stmtDeactivate);
     }
 
     // =====================================
@@ -149,6 +157,7 @@
                 status=?
             WHERE id_setting_email_gateway=?";
 
+    // Prepared Statement: update the Email Gateway record.
     $stmt = mysqli_prepare($Conn, $query);
 
     mysqli_stmt_bind_param(

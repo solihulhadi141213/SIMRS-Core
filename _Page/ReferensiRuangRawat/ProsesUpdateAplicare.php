@@ -46,7 +46,10 @@ function curlRequest($url, $headers, $payload){
 }
 
 // ================= AMBIL SETTING BPJS
-$q = mysqli_query($Conn,"SELECT * FROM setting_bpjs WHERE status=1 LIMIT 1");
+// Prepared Statement: ambil pengaturan BPJS yang aktif.
+$q = mysqli_prepare($Conn, "SELECT * FROM setting_bpjs WHERE status=1 LIMIT 1");
+mysqli_stmt_execute($q);
+$q = mysqli_stmt_get_result($q);
 $setting = mysqli_fetch_assoc($q);
 
 if(empty($setting)){
@@ -74,17 +77,24 @@ $headers = [
 ];
 
 // ================= TOTAL DATA
-$total_q = mysqli_query($Conn,"SELECT COUNT(*) as total FROM rr_ruang_rawat WHERE status=1");
+// Prepared Statement: hitung ruang rawat yang aktif.
+$total_q = mysqli_prepare($Conn, "SELECT COUNT(*) as total FROM rr_ruang_rawat WHERE status=1");
+mysqli_stmt_execute($total_q);
+$total_q = mysqli_stmt_get_result($total_q);
 $total = mysqli_fetch_assoc($total_q)['total'];
 
 // ================= AMBIL DATA BATCH
-$q = mysqli_query($Conn,"
+// Prepared Statement: ambil batch ruang rawat.
+$q = mysqli_prepare($Conn, "
     SELECT r.*, k.kelas, k.kode_kelas
     FROM rr_ruang_rawat r
     JOIN rr_kelas_rawat k ON r.id_kelas_rawat=k.id_kelas_rawat
     WHERE r.status=1
-    LIMIT $offset,$limit
+    LIMIT ?,?
 ");
+mysqli_stmt_bind_param($q, "ii", $offset, $limit);
+mysqli_stmt_execute($q);
+$q = mysqli_stmt_get_result($q);
 
 $html = '';
 $no = $offset + 1;
@@ -97,14 +107,18 @@ while($row = mysqli_fetch_assoc($q)){
     $kode_kelas = $row['kode_kelas'];
 
     // ================= HITUNG TT (OPTIMASI)
-    $tt = mysqli_fetch_assoc(mysqli_query($Conn,"
+    // Prepared Statement: hitung kapasitas tempat tidur ruang rawat.
+    $stmt_tt = mysqli_prepare($Conn, "
         SELECT 
             SUM(pria=1) as pria,
             SUM(wanita=1) as wanita,
             SUM(bebas=1) as bebas
         FROM rr_tempat_tidur
-        WHERE id_ruang_rawat='$id_ruang' AND status=1
-    "));
+        WHERE id_ruang_rawat=? AND status=1
+    ");
+    mysqli_stmt_bind_param($stmt_tt, "i", $id_ruang);
+    mysqli_stmt_execute($stmt_tt);
+    $tt = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt_tt));
 
     $kapasitas = $tt['pria'] + $tt['wanita'] + $tt['bebas'];
 
@@ -167,4 +181,3 @@ echo json_encode([
     'html'=>$html,
     'total'=>$total
 ]);
-

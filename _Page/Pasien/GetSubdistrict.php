@@ -10,18 +10,20 @@
         exit;
     }
 
-    // Ambil data regency
-    $regency = mysqli_real_escape_string($Conn, $_POST['regency']);
+    $regency = $_POST['regency'];
 
-    // Query kecamatan unik
-    $query = mysqli_query($Conn, "
+    // Prepared Statement: ambil kecamatan berdasarkan kabupaten/kota.
+    $stmt = mysqli_prepare($Conn, "
         SELECT DISTINCT subdistrict
         FROM wilayah
-        WHERE regency = '$regency'
+        WHERE regency = ?
         AND subdistrict IS NOT NULL
         AND subdistrict != ''
         ORDER BY subdistrict ASC
     ");
+    mysqli_stmt_bind_param($stmt, "s", $regency);
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
 
     // Default option
     echo '<option value="">Pilih</option>';

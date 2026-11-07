@@ -26,8 +26,11 @@
         $Hari = $_POST['Hari'];
     }
 
-    // Menghitung Jumlah Data
-    $jumlah_data = mysqli_num_rows(mysqli_query($Conn, "SELECT id_jadwal FROM jadwal_dokter WHERE hari = '$Hari'"));
+    // Prepared Statement: hitung jadwal pada hari terpilih.
+    $stmtCount = mysqli_prepare($Conn, "SELECT id_jadwal FROM jadwal_dokter WHERE hari = ?");
+    mysqli_stmt_bind_param($stmtCount, "s", $Hari);
+    mysqli_stmt_execute($stmtCount);
+    $jumlah_data = mysqli_stmt_num_rows(mysqli_stmt_get_result($stmtCount));
     if(empty($jumlah_data)){
         echo '
             <tr>
@@ -41,7 +44,8 @@
 
     // Menampilkan Data Jadwal Dokter
     $no = 1;
-    $sql = "SELECT*FROM jadwal_dokter WHERE hari = '$Hari'";
+    // Prepared Statement: ambil jadwal pada hari terpilih.
+    $sql = "SELECT*FROM jadwal_dokter WHERE hari = ?";
     $stmt = mysqli_prepare($Conn, $sql);
     if (!$stmt) {
         echo '
@@ -53,6 +57,7 @@
         ';
         exit;
     }
+    mysqli_stmt_bind_param($stmt, "s", $Hari);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 

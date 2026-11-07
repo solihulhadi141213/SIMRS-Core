@@ -23,8 +23,14 @@
     // =========================================================
     // AMBIL ENUM body_site_category
     // =========================================================
-    $query = "SHOW COLUMNS FROM body_site WHERE Field = 'body_site_category'";
-    $result = mysqli_query($Conn, $query);
+    $query = "SELECT COLUMN_TYPE AS `Type` FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?";
+    // Prepared Statement: ambil definisi enum kategori body site.
+    $stmt = mysqli_prepare($Conn, $query);
+    $tableName = 'body_site';
+    $columnName = 'body_site_category';
+    mysqli_stmt_bind_param($stmt, "ss", $tableName, $columnName);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     if (!$result) {
         echo '<option value="">Gagal memuat data</option>';
@@ -51,4 +57,3 @@
         echo '<option value="' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '</option>';
     }
 ?>
-

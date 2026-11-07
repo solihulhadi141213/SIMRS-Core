@@ -18,7 +18,10 @@
         exit;
     }
 
-    $QryAnalyza = mysqli_query($Conn, "SELECT id_setting_analyza FROM setting_analyza");
+    // Prepared Statement: hitung data setting analyza.
+    $stmtAnalyza = mysqli_prepare($Conn, "SELECT id_setting_analyza FROM setting_analyza");
+    mysqli_stmt_execute($stmtAnalyza);
+    $QryAnalyza = mysqli_stmt_get_result($stmtAnalyza);
     $JumlahAnalyza = mysqli_num_rows($QryAnalyza);
 
     if (empty($JumlahAnalyza)) {
@@ -33,7 +36,10 @@
     }
 
     $no = 1;
-    $query = mysqli_query($Conn, "SELECT * FROM setting_analyza ORDER BY id_setting_analyza DESC");
+    // Prepared Statement: ambil seluruh setting analyza.
+    $stmt = mysqli_prepare($Conn, "SELECT * FROM setting_analyza ORDER BY id_setting_analyza DESC");
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
     while ($data = mysqli_fetch_array($query)) {
         $status = $data['status'] ?? 0;
 
