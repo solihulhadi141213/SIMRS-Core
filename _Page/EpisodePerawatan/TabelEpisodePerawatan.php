@@ -297,7 +297,7 @@
                         ' . $buttonEoc . '
                     </td>
                     <td class="icon-btn text-center">
-                        <button type="button" class="btn btn-md btn-secondary btn-floating" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-md btn-floating btn-option-outline" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Opsi Episode Perawatan">
                             <i class="bi bi-three-dots-vertical"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">

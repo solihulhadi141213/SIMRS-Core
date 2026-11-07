@@ -15910,6 +15910,20 @@ canvas
     border: none;
 }
 
+.btn-floating.btn-option-outline {
+    background-color: #fff;
+    border: 1px solid #164a57;
+    color: #164a57;
+}
+
+.btn-floating.btn-option-outline:hover,
+.btn-floating.btn-option-outline:focus,
+.btn-floating.btn-option-outline:focus-visible {
+    background-color: #164a57;
+    border-color: #164a57;
+    color: #fff;
+}
+
 /* Menghilangkan tanda panah dropdown */
 .dropdown-toggle-no-caret::after {
     display: none !important;
@@ -16265,4 +16279,3 @@ select[readonly],
     background-color: var(--mdb-secondary-bg, #eeeeee);
     opacity: 1;
 }
-

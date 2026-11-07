@@ -264,6 +264,10 @@
   color: #4a6971;
 }
 
+#pcoded .pcoded-navbar .pcoded-item li.active > a {
+  background: #73EC8B;
+}
+
 #pcoded .pcoded-navbar .pcoded-submenu > li.active > a {
   background: #435f66;
   color: #448aff;

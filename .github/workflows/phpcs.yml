@@ -1,3 +1,4 @@
+
 name: PHPCS Quality Check
 
 on:
@@ -12,12 +13,12 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.5' # Sesuaikan dengan versi PHP project Anda
+        php-version: '8.5'
         tools: phpcs
 
     - name: Install Dependencies

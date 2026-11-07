@@ -241,18 +241,18 @@
 
         echo "
         <tr>
-            <td class='text-center'><small class='text-muted'>{$no}</small></td>
+            <td class='text-center'><span class='text-muted'>{$no}</span></td>
             <td>
-                <a href='javascript:void(0);' class='text-decoration-underline text-primary modal_detail' data-id='{$id_akses}'>
-                    <small>{$nama}</small>
+                <a href='javascript:void(0);' class='text-primary modal_detail' data-id='{$id_akses}'>
+                    {$nama}
                 </a>
             </td>
-            <td><small class='text-muted'>{$email}</small></td>
-            <td class='text-center'><small class='text-muted'>{$akses}</small></td>
-            <td><small class='text-muted'>{$tanggal}</small></td>
-            <td><small class='text-muted'>{$updatetime}</small></td>
+            <td><span class='text-muted'>{$email}</span></td>
+            <td class='text-center'><span class='text-muted'>{$akses}</span></td>
+            <td><span class='text-muted'>{$tanggal}</span></td>
+            <td><span class='text-muted'>{$updatetime}</span></td>
             <td class='text-center'>
-                <a href='javascript:void(0);' class='btn-floating btn-sm' data-bs-toggle='dropdown'>
+                <a href='javascript:void(0);' class='btn-floating btn-sm btn-option-outline' data-bs-toggle='dropdown'>
                     <i class='bi bi-three-dots-vertical'></i>
                 </a>
                 <ul class='dropdown-menu shadow'>
