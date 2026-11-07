@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <div class="page-header dashboard-page-header profile-page-header">
     <div class="dashboard-heading">
         <a href="index.php?Page=Profile" class="dashboard-title-link">

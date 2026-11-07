@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!--- Modal Tambah SIRS Online --->
 <div class="modal fade" id="ModalTambahSettingSirsOnline" tabindex="-1" aria-labelledby="ModalTambahSettingSirsOnline" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">

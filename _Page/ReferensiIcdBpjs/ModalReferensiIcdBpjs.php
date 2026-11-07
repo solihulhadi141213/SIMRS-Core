@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!--- Modal Detail ICD --->
 <div class="modal fade" id="ModalDetailIcd" tabindex="-1" aria-labelledby="ModalDetailIcd" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">

@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!--- Modal Tambah Sifarma --->
 <div class="modal fade" id="ModalTambahSettingSifarma" tabindex="-1" aria-labelledby="ModalTambahSettingSifarma" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">

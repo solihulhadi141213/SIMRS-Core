@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!--- Modal Tambah Analyza --->
 <div class="modal fade" id="ModalTambahSettingAnalyza" tabindex="-1" aria-labelledby="ModalTambahSettingAnalyza" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">

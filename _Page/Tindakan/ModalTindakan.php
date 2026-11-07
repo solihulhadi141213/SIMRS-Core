@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 
 <!-- Filter Data -->
 <div class="modal fade" id="ModalFilter" tabindex="-1">

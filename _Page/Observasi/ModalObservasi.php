@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <div class="modal fade" id="ModalFilter" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">

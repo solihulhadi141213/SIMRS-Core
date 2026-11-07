@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!--- Modal Tambah Radix --->
 <div class="modal fade" id="ModalTambahSettingRadix" tabindex="-1" aria-labelledby="ModalTambahSettingRadix" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">

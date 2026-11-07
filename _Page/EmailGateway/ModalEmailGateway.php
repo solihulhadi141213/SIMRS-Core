@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!--- Modal Tambah Email Gateway --->
 <div class="modal fade" id="ModalTambahEmailGateway" tabindex="-1" aria-labelledby="ModalTambahEmailGateway" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">

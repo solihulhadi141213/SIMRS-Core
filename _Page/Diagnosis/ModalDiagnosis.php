@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!-- Informasi Jenis Diagnosis -->
 <div class="modal fade" id="ModalInfo" tabindex="-1">
     <div class="modal-dialog modal-md">

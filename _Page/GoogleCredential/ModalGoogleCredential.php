@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!--- Modal Tambah Google Credential --->
 <div class="modal fade" id="ModalTambahGoogleCredential" tabindex="-1" aria-labelledby="ModalTambahGoogleCredential" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">

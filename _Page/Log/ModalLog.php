@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!-- Modal  Periode Grafik -->
 <div class="modal fade" id="ModalPeriodeGrafik" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-md">

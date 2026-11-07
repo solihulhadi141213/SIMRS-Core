@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!--- Modal Tambah Satu Sehat --->
 <div class="modal fade" id="ModalTambahSettingSatuSehat" tabindex="-1" aria-labelledby="ModalTambahSettingSatuSehat" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">

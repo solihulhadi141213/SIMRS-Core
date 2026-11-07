@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!--- Modal Tambah Bridging BPJS --->
 <div class="modal fade" id="ModalTambahSettingBpjs" tabindex="-1" aria-labelledby="ModalTambahSettingBpjs" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg" role="document">

@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <!-- Modal Logout -->
 <div class="modal fade" id="ModalLogout" tabindex="-1" aria-labelledby="ModalLogoutLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">

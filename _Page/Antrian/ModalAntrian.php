@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 
 <!-- filter -->
 <div class="modal fade" id="ModalFilter" tabindex="-1" aria-hidden="true">

@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <div class="mb-4">
     <b class="text-secondary">
         1. Admission

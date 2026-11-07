@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <div class="theme-loader" aria-hidden="true">
     <div class="loader-track">
         <div class="preloader-wrapper">

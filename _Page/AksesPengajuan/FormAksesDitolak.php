@@ -1,3 +1,4 @@
+<?php echo "<i></i>"; ?>
 <div class="row mt-4 mb-4" id="form_keterangan">
     <div class="col-12">
         <label for="alasan_penolakan">Alasan Penolakan</label>
