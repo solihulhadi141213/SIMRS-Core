@@ -70,7 +70,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tabel_poliklinik">
-                                                <!-- Konten Google Credential Akan Tampil Disini -->
+                                                <!-- Konten Poliklinik Akan Tampil Disini -->
                                                 <tr>
                                                     <td align="center" colspan="8">
                                                         <small class="text text-muted">No Data</small>

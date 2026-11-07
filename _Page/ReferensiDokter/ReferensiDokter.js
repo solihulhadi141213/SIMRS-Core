@@ -1,7 +1,7 @@
 // Tabel Dokter
 function TabelDokter() {
     var ProsesFilter = $('#ProsesFilter').serialize();
-    let target = $('#tabel_poliklinik');
+    let target = $('#tabel_dokter');
 
     target.addClass('blur-loading');
 

@@ -46,6 +46,7 @@
                             'label' => 'Rekam Medis',
                             'icon' => 'bi-clipboard2-check',
                             'children' => [
+                                ['label' => 'Encounter', 'url' => 'index.php?Page=Encounter', 'page' => 'Encounter'],
                                 ['label' => 'General Consent', 'url' => 'index.php?Page=GeneralConsent', 'page' => 'GeneralConsent'],
                                 ['label' => 'Observasi', 'url' => 'index.php?Page=Observasi', 'page' => 'Observasi'],
                                 ['label' => 'Diagnosis', 'url' => 'index.php?Page=Diagnosis', 'page' => 'Diagnosis'],
@@ -81,6 +82,14 @@
                                 ['label' => 'Wilayah', 'url' => 'index.php?Page=ReferensiWilayah', 'page' => 'ReferensiWilayah'],
                             ],
                         ],
+                        [
+                            'label' => 'Referensi BPJS',
+                            'icon' => 'bi-journal-medical',
+                            'children' => [
+                                ['label' => 'Referensi ICD (BPJS)', 'url' => 'index.php?Page=ReferensiIcdBpjs', 'page' => 'ReferensiIcdBpjs'],
+                                ['label' => 'Wilayah (BPJS)', 'url' => 'index.php?Page=ReferensiWilayahBpjs', 'page' => 'ReferensiWilayahBpjs'],
+                            ],
+                        ],
                     ],
                 ],
                 [
@@ -99,7 +108,6 @@
                             'label' => 'Log SATUSEHAT',
                             'icon' => 'bi-file-earmark',
                             'children' => [
-                                ['label' => 'Encounter', 'url' => 'index.php?Page=Encounter', 'page' => 'Encounter'],
                                 ['label' => 'Condition', 'url' => 'index.php?Page=Condition', 'page' => 'Condition'],
                                 ['label' => 'Observation', 'url' => 'index.php?Page=Observation', 'page' => 'Observation'],
                                 ['label' => 'Procedure', 'url' => 'index.php?Page=Procedure', 'page' => 'Procedure'],
@@ -142,6 +150,7 @@
                                 ['label' => 'Sifarma', 'url' => 'index.php?Page=SettingSifarma', 'page' => 'SettingSifarma'],
                             ],
                         ],
+                        ['label' => 'Laporan Kesalahan', 'icon' => 'bi-send', 'url' => 'index.php?Page=LaporanKesalahan', 'page' => 'LaporanKesalahan'],
                         ['label' => 'Migrasi', 'icon' => 'bi-database', 'url' => 'index.php?Page=Migrasi', 'page' => 'Migrasi'],
                         ['label' => 'Log', 'icon' => 'bi-record', 'url' => 'index.php?Page=Log', 'page' => 'Log'],
                         ['label' => 'Dokumentasi', 'icon' => 'bi-bookmark', 'url' => 'index.php?Page=Dokumentasi', 'page' => 'Dokumentasi'],

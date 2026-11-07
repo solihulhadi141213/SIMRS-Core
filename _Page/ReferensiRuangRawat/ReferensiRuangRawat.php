@@ -1,6 +1,6 @@
 <?php
     if(GetStatusAccess($Conn, $SessionIdAkses, '8prgG5vbhC')==false){
-        include "_Page\Error\no_access_permission.php";
+        include "_Page/Error/no_access_permission.php";
     }else{
 ?>
     <div class="page-header">

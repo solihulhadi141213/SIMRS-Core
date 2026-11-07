@@ -1,7 +1,16 @@
 <?php
-    //Membuka data profile brdiging
-    $QryBridging = mysqli_query($Conn,"SELECT * FROM bridging WHERE status='Aktiv'")or die(mysqli_error($Conn));
-    $DataBridging = mysqli_fetch_array($QryBridging);
+    //Membuka data profile bridging
+    $QryBridging = $Conn->prepare('SELECT * FROM bridging WHERE status = ?');
+    if (!$QryBridging) {
+        die(mysqli_error($Conn));
+    }
+    $statusBridging = 'Aktiv';
+    $QryBridging->bind_param('s', $statusBridging);
+    if (!$QryBridging->execute()) {
+        die(mysqli_stmt_error($QryBridging));
+    }
+    $DataBridging = $QryBridging->get_result()->fetch_assoc();
+    $QryBridging->close();
     $id_bridging       = $DataBridging['id_bridging'];
     $nama_bridging     = $DataBridging['nama_bridging'];
     $consid            = $DataBridging['consid'];

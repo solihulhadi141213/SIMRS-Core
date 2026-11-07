@@ -1,3 +1,8 @@
+<?php
+    if(GetStatusAccess($Conn, $SessionIdAkses, 'RKhN2MSMep')==false){
+        include "_Page/Error/no_access_permission.php";
+    }else{
+?>
 <div class="page-header">
     <div class="page-block">
         <div class="row align-items-center">
@@ -35,7 +40,7 @@
                                 <div class="row">
                                     <div class="col-12 text-end icon-btn">
                                         <button type="button" class="btn btn-md btn-icon btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalFilter" title="Filter Data">
-                                            <i class="bi bi-filter"></i>
+                                            <i class="bi bi-search"></i>
                                         </button>
                                         <button type="button" class="btn btn-md btn-icon btn-primary" data-bs-toggle="modal" data-bs-target="#ModalTambahAkses" title="Tambah Akses Pengguna">
                                             <i class="bi bi-plus"></i>
@@ -91,3 +96,4 @@
         </div>
     </div>
 </div>
+<?php } ?>

@@ -27,8 +27,16 @@
     }
     
     // Jumlah Data
-    $QrySatuSehat = mysqli_query($Conn, "SELECT id_setting_satusehat FROM setting_satusehat");
-    $JumlahSatuSehat = mysqli_num_rows($QrySatuSehat);
+    $QrySatuSehat = $Conn->prepare("SELECT id_setting_satusehat FROM setting_satusehat");
+    if (!$QrySatuSehat) {
+        die($Conn->error);
+    }
+    if (!$QrySatuSehat->execute()) {
+        die($QrySatuSehat->error);
+    }
+    $ResultSatuSehat = $QrySatuSehat->get_result();
+    $JumlahSatuSehat = $ResultSatuSehat->num_rows;
+    $QrySatuSehat->close();
     if(empty($JumlahSatuSehat)){
         echo '
             <tr>
@@ -40,8 +48,15 @@
         exit;
     }
     $no = 1;
-    $query = mysqli_query($Conn, "SELECT * FROM setting_satusehat ORDER BY id_setting_satusehat DESC");
-    while ($data = mysqli_fetch_array($query)) {
+    $query = $Conn->prepare("SELECT * FROM setting_satusehat ORDER BY id_setting_satusehat DESC");
+    if (!$query) {
+        die($Conn->error);
+    }
+    if (!$query->execute()) {
+        die($query->error);
+    }
+    $ResultSatuSehat = $query->get_result();
+    while ($data = $ResultSatuSehat->fetch_assoc()) {
         $id_setting_satusehat = $data['id_setting_satusehat'];
         $status               = $data['status_setting_satusehat'];
 
@@ -102,6 +117,7 @@
         ';
         $no++;
     }
+    $query->close();
 ?>
 <script>
     var JumlahSatuSehat = <?php echo $JumlahSatuSehat; ?>;

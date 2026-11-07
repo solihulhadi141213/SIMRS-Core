@@ -56,8 +56,8 @@
                                                     <td align="center"><small><b>Opsi</b></small></td>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tabel_poliklinik">
-                                                <!-- Konten Google Credential Akan Tampil Disini -->
+                                            <tbody id="tabel_dokter">
+                                                <!-- Konten Referensi Dokter Akan Tampil Disini -->
                                                 <tr>
                                                     <td align="center" colspan="7">
                                                         <small class="text text-muted">No Data</small>

@@ -14,6 +14,14 @@
         return $captcha;
     }
 
+    function simrsQuoteSqlIdentifier($identifier) {
+        if (!is_string($identifier) || !preg_match('/\A[A-Za-z_][A-Za-z0-9_]*\z/', $identifier)) {
+            throw new InvalidArgumentException('Identifier database tidak valid.');
+        }
+
+        return '`' . $identifier . '`';
+    }
+
     // Generate Captcha
     function GenerateCaptcha($Conn, $feature_name, $id_captcha){
         // Zona Waktu UTC
@@ -44,12 +52,6 @@
         // Generate UID 32 karakter
          // 32 char
 
-        // Escape input
-        $feature_name = mysqli_real_escape_string($Conn, $feature_name);
-        $id_captcha   = mysqli_real_escape_string($Conn, $id_captcha);
-        $captcha_hash = mysqli_real_escape_string($Conn, $captcha_hash);
-
-        // Simpan ke database
         $query = "
             INSERT INTO captcha (
                 id_captcha,
@@ -57,16 +59,18 @@
                 code_captcha,
                 creat_at,
                 expired_at
-            ) VALUES (
-                '$id_captcha',
-                '$feature_name',
-                '$captcha_hash',
-                '$created_at',
-                '$expired_at'
-            )
+            ) VALUES (?, ?, ?, ?, ?)
         ";
 
-        $result = mysqli_query($Conn, $query);
+        $stmt = mysqli_prepare($Conn, $query);
+        if (!$stmt) {
+            error_log('Prepare GenerateCaptcha gagal: ' . mysqli_error($Conn));
+            return false;
+        }
+
+        mysqli_stmt_bind_param($stmt, 'sssss', $id_captcha, $feature_name, $captcha_hash, $created_at, $expired_at);
+        $result = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
 
         if(!$result){
             return false;
@@ -87,32 +91,49 @@
         $utc = new DateTime('now', new DateTimeZone('UTC'));
         $current_utc = $utc->format('Y-m-d H:i:s');
 
-        // Query hapus captcha expired
-        $query = "
-            DELETE FROM captcha
-            WHERE expired_at < '$current_utc'
-        ";
-
-        $result = mysqli_query($Conn, $query);
-
-        // Hanya cek query berhasil atau gagal
-        if($result){
-            return true;
-        }else{
+        $stmt = mysqli_prepare($Conn, 'DELETE FROM captcha WHERE expired_at < ?');
+        if (!$stmt) {
+            error_log('Prepare DeleteExpiredCaptcha gagal: ' . mysqli_error($Conn));
             return false;
         }
+
+        mysqli_stmt_bind_param($stmt, 's', $current_utc);
+        $result = mysqli_stmt_execute($stmt);
+        if (!$result) {
+            error_log('Execute DeleteExpiredCaptcha gagal: ' . mysqli_stmt_error($stmt));
+        }
+        mysqli_stmt_close($stmt);
+
+        return (bool)$result;
     }
 
     // Menampilkan List Kolom
     function getColomList($Conn,$NamaKolom){
         $ListKolom = array();
-        $QryKolom ="SHOW COLUMNS FROM $NamaKolom";
-        $HasilQryKolom = mysqli_query($Conn,$QryKolom);
-        while($RowList = mysqli_fetch_array($HasilQryKolom)){
-            $NamaKolom=$RowList['Field'];
-            $h['nama_kolom'] =$NamaKolom;
-            array_push($ListKolom, $h);
+        $stmt = mysqli_prepare(
+            $Conn,
+            'SELECT COLUMN_NAME
+             FROM INFORMATION_SCHEMA.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?
+             ORDER BY ORDINAL_POSITION'
+        );
+        if (!$stmt) {
+            throw new RuntimeException('Gagal menyiapkan daftar kolom: ' . mysqli_error($Conn));
         }
+
+        mysqli_stmt_bind_param($stmt, 's', $NamaKolom);
+        if (!mysqli_stmt_execute($stmt)) {
+            $error = mysqli_stmt_error($stmt);
+            mysqli_stmt_close($stmt);
+            throw new RuntimeException('Gagal membaca daftar kolom: ' . $error);
+        }
+
+        $result = mysqli_stmt_get_result($stmt);
+        while ($RowList = mysqli_fetch_assoc($result)) {
+            $ListKolom[] = ['nama_kolom' => $RowList['COLUMN_NAME']];
+        }
+        mysqli_stmt_close($stmt);
+
         return $ListKolom;
     }
 
@@ -168,9 +189,23 @@
 
     //Memanggil Detail Data
     function getDataDetail($Conn,$NamaDb,$NamaParam,$IdParam,$Kolom){
-        $QryParam = mysqli_query($Conn,"SELECT * FROM $NamaDb WHERE $NamaParam='$IdParam'")or die(mysqli_error($Conn));
-        $DataParam = mysqli_fetch_array($QryParam);
-        if(empty($DataParam[$Kolom])){
+        $table = simrsQuoteSqlIdentifier($NamaDb);
+        $parameter = simrsQuoteSqlIdentifier($NamaParam);
+        $column = simrsQuoteSqlIdentifier($Kolom);
+        $stmt = $Conn->prepare("SELECT $column FROM $table WHERE $parameter = ?");
+        if (!$stmt) {
+            throw new RuntimeException('Gagal menyiapkan detail data: ' . $Conn->error);
+        }
+        $stmt->bind_param('s', $IdParam);
+        if (!$stmt->execute()) {
+            $error = $stmt->error;
+            $stmt->close();
+            throw new RuntimeException('Gagal membaca detail data: ' . $error);
+        }
+        $DataParam = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if (empty($DataParam) || empty($DataParam[$Kolom])) {
             $Response="";
         }else{
             $Response=$DataParam[$Kolom];
@@ -180,29 +215,24 @@
 
     //Memanggil Detail Data Versi Baru
     function getDataDetail_v2($Conn, $NamaDb, $NamaParam, $IdParam, $Kolom) {
-        // Sanitize input parameters to prevent injection or other issues
-        $NamaDb    = mysqli_real_escape_string($Conn, $NamaDb);
-        $NamaParam = mysqli_real_escape_string($Conn, $NamaParam);
-        $IdParam   = mysqli_real_escape_string($Conn, $IdParam);
-        $Kolom     = mysqli_real_escape_string($Conn, $Kolom);
-    
-        // Prepare the SQL query using a prepared statement
-        $stmt = $Conn->prepare("SELECT $Kolom FROM $NamaDb WHERE $NamaParam = ?");
-        $stmt->bind_param("s", $IdParam);  // "s" for string parameter (adjust type if needed)
-    
-        // Execute the query
-        $stmt->execute();
-        $result = $stmt->get_result();
-    
-        // Check if a result was returned
-        if ($result && $row = $result->fetch_assoc()) {
-            return $row[$Kolom] ?? null;  // Return the column value or null if not found
-        } else {
-            return null;  // Return null if no result was found
+        $table = simrsQuoteSqlIdentifier($NamaDb);
+        $parameter = simrsQuoteSqlIdentifier($NamaParam);
+        $column = simrsQuoteSqlIdentifier($Kolom);
+        $stmt = $Conn->prepare("SELECT $column FROM $table WHERE $parameter = ?");
+        if (!$stmt) {
+            throw new RuntimeException('Gagal menyiapkan detail data: ' . $Conn->error);
         }
-    
-        // Close the statement
+        $stmt->bind_param('s', $IdParam);
+        if (!$stmt->execute()) {
+            $error = $stmt->error;
+            $stmt->close();
+            throw new RuntimeException('Gagal membaca detail data: ' . $error);
+        }
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
         $stmt->close();
+
+        return $row[$Kolom] ?? null;
     }
     
     function getDataDetail2($Conn2,$NamaDb,$NamaParam,$IdParam,$Kolom){
@@ -254,9 +284,21 @@
         return $namaBulan;
     }
     function getEmailSetting($Conn,$NamaKolom){
-        $QrySettingEmail = mysqli_query($Conn,"SELECT * FROM setting_email_gateway WHERE status='Active'")or die(mysqli_error($Conn));
-        $DataEmail = mysqli_fetch_array($QrySettingEmail);
-        if(empty($DataEmail[$NamaKolom])){
+        $stmt = $Conn->prepare("SELECT * FROM setting_email_gateway WHERE status = ?");
+        if (!$stmt) {
+            throw new RuntimeException('Gagal menyiapkan pengaturan email: ' . $Conn->error);
+        }
+        $status = 'Active';
+        $stmt->bind_param('s', $status);
+        if (!$stmt->execute()) {
+            $error = $stmt->error;
+            $stmt->close();
+            throw new RuntimeException('Gagal membaca pengaturan email: ' . $error);
+        }
+        $DataEmail = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if (empty($DataEmail) || empty($DataEmail[$NamaKolom])) {
             $Response="";
         }else{
             $Response=$DataEmail[$NamaKolom];
@@ -273,35 +315,50 @@
         return $randomString;
     }
     function saveAccData($Conn,$id_akses,$id_akses_ref,$status){
-        //Cek apakah data sudah ada?
-        $CekData = mysqli_num_rows(mysqli_query($Conn, "SELECT*FROM akses_acc WHERE id_akses='$id_akses' AND id_akses_ref='$id_akses_ref'"));
-        if(empty($CekData)){
-            $entry="INSERT INTO akses_acc (
-                id_akses,
-                id_akses_ref,
-                status
-            )VALUES (
-                '$id_akses',
-                '$id_akses_ref',
-                '$status'
-            )";
-            $hasil=mysqli_query($Conn, $entry);
-            if($hasil){
-                $response="Berhasil";
-            }else{
-                $response="Insert Gagal";
-            }
-        }else{
-            $Update= mysqli_query($Conn,"UPDATE akses_acc SET 
-                status='$status'
-            WHERE id_akses='$id_akses' AND id_akses_ref='$id_akses_ref'") or die(mysqli_error($Conn));
-            if($Update){
-                $response="Berhasil";
-            }else{
-                $response="Update Gagal";
-            }
+        $check = $Conn->prepare('SELECT 1 FROM akses_acc WHERE id_akses = ? AND id_akses_ref = ? LIMIT 1');
+        if (!$check) {
+            error_log('Prepare saveAccData check gagal: ' . $Conn->error);
+            return 'Check Gagal';
         }
-        return $response;
+        $check->bind_param('ss', $id_akses, $id_akses_ref);
+        if (!$check->execute()) {
+            error_log('Execute saveAccData check gagal: ' . $check->error);
+            $check->close();
+            return 'Check Gagal';
+        }
+        $exists = $check->get_result()->num_rows > 0;
+        $check->close();
+
+        if (!$exists) {
+            $stmt = $Conn->prepare('INSERT INTO akses_acc (id_akses, id_akses_ref, status) VALUES (?, ?, ?)');
+            if (!$stmt) {
+                error_log('Prepare saveAccData insert gagal: ' . $Conn->error);
+                return 'Insert Gagal';
+            }
+            $stmt->bind_param('sss', $id_akses, $id_akses_ref, $status);
+            $success = $stmt->execute();
+            if (!$success) {
+                error_log('Execute saveAccData insert gagal: ' . $stmt->error);
+            }
+            $stmt->close();
+            return $success ? 'Berhasil' : 'Insert Gagal';
+        }
+
+        $stmt = $Conn->prepare(
+            'UPDATE akses_acc SET status = ? WHERE id_akses = ? AND id_akses_ref = ?'
+        );
+        if (!$stmt) {
+            error_log('Prepare saveAccData update gagal: ' . $Conn->error);
+            return 'Update Gagal';
+        }
+        $stmt->bind_param('sss', $status, $id_akses, $id_akses_ref);
+        $success = $stmt->execute();
+        if (!$success) {
+            error_log('Execute saveAccData update gagal: ' . $stmt->error);
+        }
+        $stmt->close();
+
+        return $success ? 'Berhasil' : 'Update Gagal';
     }
 
 

@@ -1,6 +1,6 @@
 <?php
     if(GetStatusAccess($Conn, $SessionIdAkses, '3zL8ERMPEe')==false){
-        include "_Page\Error\no_access_permission.php";
+        include "_Page/Error/no_access_permission.php";
     }else{
 ?>
     <div class="page-header">
@@ -109,7 +109,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tabel_jadwal_dokter">
-                                                <!-- Konten Google Credential Akan Tampil Disini -->
+                                                <!-- Konten Jadwal Dokter Akan Tampil Disini -->
                                                 <tr>
                                                     <td align="center" colspan="8">
                                                         <small class="text text-muted">No Data</small>

@@ -421,7 +421,6 @@
         $no++;
     }
     
-      
     echo json_encode([
         "status"     => "success",
         "html"       => $html,

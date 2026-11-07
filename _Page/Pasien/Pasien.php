@@ -1,6 +1,6 @@
 <?php
     if(GetStatusAccess($Conn, $SessionIdAkses, 'iTITO449dV')==false){
-        include "_Page\Error\no_access_permission.php";
+        include "_Page/Error/no_access_permission.php";
     }else{
 ?>
 
@@ -31,12 +31,9 @@
                             <div class="card w-100">
                                 <div class="card-header">
                                     <div class="row">
-                                        <div class="col-4">
-                                            
-                                        </div>
-                                        <div class="col-8 text-end icon-btn">
+                                        <div class="col-12 text-end icon-btn">
                                             <button type="button" class="btn btn-md btn-icon btn-outline-secondary" data-bs-toggle="dropdown" title="Export Data">
-                                                <i class="bi bi-filetype-xlsx"></i>
+                                                <i class="bi bi-download"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                                 <li>
@@ -47,7 +44,7 @@
                                                 </li>
                                             </ul>
                                             <button type="button" class="btn btn-md btn-icon btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalFilter" title="Filter Data">
-                                                <i class="bi bi-filter"></i>
+                                                <i class="bi bi-search"></i>
                                             </button>
                                             <button type="button" class="btn btn-md btn-icon btn-primary" data-bs-toggle="modal" data-bs-target="#ModalTambah" title="Tambah Pasien baru">
                                                 <i class="bi bi-plus"></i>

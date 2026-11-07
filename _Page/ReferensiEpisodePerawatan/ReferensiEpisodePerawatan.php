@@ -77,7 +77,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tabel_episode_perawatan">
-                                                <!-- Data Akan Ditampilkan Disini -->
+                                                <!-- Data Episode Perwatan Akan Ditampilkan Disini -->
                                                 <tr>
                                                     <td align="center" colspan="9">
                                                         <span class="spinner-border spinner-border-sm text-primary me-2" role="status" aria-label="Memuat"></span>
