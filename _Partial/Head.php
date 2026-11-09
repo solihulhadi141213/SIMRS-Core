@@ -57,4 +57,7 @@
 
     <!-- bootstrap-icons -->
     <link href="node_modules/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Flaticon -->
+     <link href="node_modules/@flaticon/flaticon-uicons/css/all/all.css" rel="stylesheet">
 </head>

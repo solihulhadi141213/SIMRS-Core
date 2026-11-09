@@ -65,7 +65,7 @@
                     'items' => [
                         [
                             'label' => 'Referensi Lokal',
-                            'icon' => 'bi-journal-medical',
+                            'icon' => 'fi fi-ts-hospital-user',
                             'children' => [
                                 ['label' => 'Poliklinik', 'url' => 'index.php?Page=ReferensiPoliklinik', 'page' => 'ReferensiPoliklinik'],
                                 ['label' => 'Dokter', 'url' => 'index.php?Page=ReferensiDokter', 'page' => 'ReferensiDokter'],
@@ -84,7 +84,7 @@
                         ],
                         [
                             'label' => 'Bridging BPJS',
-                            'icon' => 'bi-journal-medical',
+                            'icon' => 'fi fi-rr-treatment',
                             'children' => [
                                 ['label' => 'Referensi ICD (BPJS)', 'url' => 'index.php?Page=ReferensiIcdBpjs', 'page' => 'ReferensiIcdBpjs'],
                                 ['label' => 'Wilayah (BPJS)', 'url' => 'index.php?Page=ReferensiWilayahBpjs', 'page' => 'ReferensiWilayahBpjs'],
@@ -92,7 +92,7 @@
                         ],
                         [
                             'label' => 'SATUSEHAT',
-                            'icon' => 'bi-journal-medical',
+                            'icon' => 'fi fi-tr-treatment',
                             'children' => [
                                 ['label' => 'ICD', 'url' => 'index.php?Page=ReferensiIcdSatusehat', 'page' => 'ReferensiIcdSatusehat'],
                                 ['label' => 'Wilayah', 'url' => 'index.php?Page=ReferensiWilayahSatusehat', 'page' => 'ReferensiWilayahSatusehat'],
