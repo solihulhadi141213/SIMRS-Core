@@ -61,7 +61,7 @@ CREATE TABLE `akses_acc` (
   KEY `id_akses_fitur` (`id_akses_fitur`),
   CONSTRAINT `acc_to_akses` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `acc_to_fitur` FOREIGN KEY (`id_akses_fitur`) REFERENCES `akses_fitur` (`id_akses_fitur`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6320 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Mapping akses ke akses_fitur';
+) ENGINE=InnoDB AUTO_INCREMENT=8023 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Mapping akses ke akses_fitur';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,7 +112,7 @@ CREATE TABLE `akses_fitur` (
   `kode` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL COMMENT 'kode akses fitur',
   `keterangan` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Penjelasan fitur/halaman',
   PRIMARY KEY (`id_akses_fitur`)
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='daftar fitur aplikasi';
+) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='daftar fitur aplikasi';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +152,7 @@ CREATE TABLE `akses_login` (
   PRIMARY KEY (`id_akses_login`),
   KEY `akses_to_login` (`id_akses`),
   CONSTRAINT `login_to_access` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=278 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=288 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -439,7 +439,7 @@ CREATE TABLE `diagnosis` (
   CONSTRAINT `diagnosis_dokter` FOREIGN KEY (`dokter_id`) REFERENCES `dokter` (`id_dokter`) ON DELETE SET NULL,
   CONSTRAINT `diagnosis_kunjungan` FOREIGN KEY (`id_kunjungan`) REFERENCES `kunjungan` (`id_kunjungan`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `diagnosis_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -517,7 +517,7 @@ CREATE TABLE `episode_perawatan` (
   CONSTRAINT `episode_perawatan_to_dokter` FOREIGN KEY (`id_dokter`) REFERENCES `dokter` (`id_dokter`) ON DELETE SET NULL ON UPDATE RESTRICT,
   CONSTRAINT `episode_perawatan_to_kode` FOREIGN KEY (`id_episode_perawatan_kode`) REFERENCES `episode_perawatan_kode` (`id_episode_perawatan_kode`) ON DELETE SET NULL ON UPDATE RESTRICT,
   CONSTRAINT `episode_perawatan_to_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Episode Perawatan Kunjungan pasien';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Episode Perawatan Kunjungan pasien';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -542,7 +542,7 @@ CREATE TABLE `episode_perawatan_kode` (
   PRIMARY KEY (`id_episode_perawatan_kode`),
   KEY `episode_perawatan_kode_to_akses` (`creat_by_id`),
   CONSTRAINT `episode_perawatan_kode_to_akses` FOREIGN KEY (`creat_by_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Referensi kode episode of care';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Referensi kode episode of care';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -747,7 +747,7 @@ CREATE TABLE `kunjungan` (
   CONSTRAINT `kunjungan_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `kunjungan_petugas_id` FOREIGN KEY (`petugas_id`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL,
   CONSTRAINT `kunjungan_poliklinik` FOREIGN KEY (`id_poliklinik`) REFERENCES `poliklinik` (`id_poliklinik`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=30563 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30564 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -768,7 +768,7 @@ CREATE TABLE `log` (
   PRIMARY KEY (`id_log`),
   KEY `id_akses` (`id_akses`),
   CONSTRAINT `log_to_akses` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Mencatat kejadian penting';
+) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Mencatat kejadian penting';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -866,7 +866,7 @@ CREATE TABLE `pasien` (
   KEY `nik` (`nik`),
   KEY `no_bpjs` (`no_bpjs`),
   CONSTRAINT `pasien_to_akses` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=56959 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56960 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -911,6 +911,74 @@ CREATE TABLE `praktisi` (
   CONSTRAINT `praktisi_akses` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE SET NULL,
   CONSTRAINT `praktisi_dokter` FOREIGN KEY (`id_dokter`) REFERENCES `dokter` (`id_dokter`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Data praktisi kesehatan yang terlibat dalam RME';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rencana_perawatan`
+--
+
+DROP TABLE IF EXISTS `rencana_perawatan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rencana_perawatan` (
+  `id_rencana_perawatan` int unsigned NOT NULL AUTO_INCREMENT,
+  `id_care_plan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_kunjungan` int unsigned NOT NULL,
+  `id_pasien` int unsigned NOT NULL,
+  `id_dokter` int unsigned DEFAULT NULL,
+  `rencana_perawatan_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rencana_perawatan_description` text COLLATE utf8mb4_unicode_ci,
+  `status` enum('draft','active','on-hold','revoked','completed','entered-in-error','unknown') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
+  `intent` enum('proposal','plan','order','option') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'plan',
+  `period_start` datetime DEFAULT NULL,
+  `period_end` datetime DEFAULT NULL,
+  `created_by_id` int unsigned DEFAULT NULL,
+  `created_by_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_rencana_perawatan`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rencana_perawatan_category`
+--
+
+DROP TABLE IF EXISTS `rencana_perawatan_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rencana_perawatan_category` (
+  `id_rencana_perawatan_category` int unsigned NOT NULL AUTO_INCREMENT,
+  `id_rencana_perawatan` int unsigned NOT NULL,
+  `id_rencana_perawatan_referensi` int unsigned NOT NULL,
+  `rencana_perawatan_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rencana_perawatan_display` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rencana_perawatan_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rencana_perawatan_system` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id_rencana_perawatan_category`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Menghubungkan rencana perawatan dengan referensi';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rencana_perawatan_referensi`
+--
+
+DROP TABLE IF EXISTS `rencana_perawatan_referensi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rencana_perawatan_referensi` (
+  `id_rencana_perawatan_referensi` int unsigned NOT NULL AUTO_INCREMENT,
+  `rencana_perawatan_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nama kategori rencana perawatan dalam istilah lokal',
+  `rencana_perawatan_display` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nama rencana perawatan sesuai referensi standar',
+  `rencana_perawatan_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Kode referensi sesuai standar',
+  `rencana_perawatan_system` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'System yang digunakan',
+  `status` tinyint(1) NOT NULL COMMENT '0:Inactive|1:Active',
+  `crate_by_id` int unsigned NOT NULL COMMENT 'ID akses pembuat',
+  `crate_by_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nama pembuat',
+  `crate_at` datetime NOT NULL COMMENT 'Tanggal & Jam Dibuat',
+  `update_at` datetime NOT NULL COMMENT 'Tanggal & Jam terakhir Di Update',
+  PRIMARY KEY (`id_rencana_perawatan_referensi`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Menampung referensi category rencana perawatan';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1063,7 +1131,7 @@ CREATE TABLE `setting_bpjs` (
   `url_icare` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id_setting_bpjs`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1136,6 +1204,7 @@ CREATE TABLE `setting_satusehat` (
   `nama_setting_satusehat` varchar(255) NOT NULL,
   `url_satusehat` varchar(255) NOT NULL,
   `organization_id` varchar(255) NOT NULL,
+  `default_location_id` varchar(255) DEFAULT NULL,
   `client_key` varchar(255) NOT NULL,
   `secret_key` varchar(255) NOT NULL,
   `token` varchar(255) DEFAULT NULL,
@@ -1323,4 +1392,4 @@ CREATE TABLE `wilayah` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-11-05 21:58:57
+-- Dump completed on 2026-11-10  1:19:18

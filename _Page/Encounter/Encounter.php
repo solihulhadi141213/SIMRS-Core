@@ -46,19 +46,18 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-hover table-sm align-middle">
+                                            <table class="table table-hover align-middle">
                                                 <thead>
                                                     <tr>
                                                         <td align="center" class="align-middle"><small><b>No</b></small></td>
-                                                        <td align="left" class="align-middle"><small><b>No.RM</b></small></td>
                                                         <td align="left" class="align-middle"><small><b>Nama Pasien</b></small></td>
+                                                        <td align="left" class="align-middle"><small><b>RM</b></small></td>
                                                         <td align="left" class="align-middle"><small><b>ID IHS</b></small></td>
-                                                        <td align="left" class="align-middle"><small><b>Tanggal</b></small></td>
+                                                        <td align="left" class="align-middle"><small><b>Tanggal Kunjungan</b></small></td>
                                                         <td align="left" class="align-middle"><small><b>Tujuan</b></small></td>
-                                                        <td align="left" class="align-middle"><small><b>Practitioner</b></small></td>
+                                                        <td align="left" class="align-middle"><small><b>Dokter DPJP</b></small></td>
                                                         <td align="left" class="align-middle"><small><b>Status</b></small></td>
                                                         <td align="left" class="align-middle"><small><b><i>ID Encounter</i></b></small></td>
-                                                        <td align="center" class="align-middle"><small><b>Opsi</b></small></td>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tabel_encounter">

@@ -1,0 +1,75 @@
+{
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "data": [
+        {
+            "code": "AMB",
+            "display": "Ambulatory",
+            "description": "Pelayanan rawat jalan."
+        },
+        {
+            "code": "IMP",
+            "display": "Inpatient Encounter",
+            "description": "Pelayanan rawat inap."
+        },
+        {
+            "code": "EMER",
+            "display": "Emergency",
+            "description": "Pelayanan gawat darurat."
+        },
+        {
+            "code": "VR",
+            "display": "Virtual",
+            "description": "Pelayanan kesehatan secara virtual."
+        },
+        {
+            "code": "HH",
+            "display": "Home Health",
+            "description": "Pelayanan kesehatan di rumah pasien."
+        },
+        {
+            "code": "OBSENC",
+            "display": "Observation Encounter",
+            "description": "Pelayanan observasi pasien."
+        },
+        {
+            "code": "PRENC",
+            "display": "Pre-Admission",
+            "description": "Pelayanan sebelum pasien masuk rawat inap."
+        },
+        {
+            "code": "SS",
+            "display": "Short Stay",
+            "description": "Pelayanan rawat singkat."
+        },
+        {
+            "code": "FLD",
+            "display": "Field",
+            "description": "Pelayanan kesehatan di lapangan."
+        },
+        {
+            "code": "DAY",
+            "display": "Day Hospital",
+            "description": "Pelayanan rumah sakit harian."
+        },
+        {
+            "code": "ACUTE",
+            "display": "Inpatient Acute",
+            "description": "Pelayanan rawat inap akut."
+        },
+        {
+            "code": "NONAC",
+            "display": "Inpatient Non-Acute",
+            "description": "Pelayanan rawat inap non-akut."
+        },
+        {
+            "code": "OBS",
+            "display": "Observation",
+            "description": "Pelayanan observasi."
+        },
+        {
+            "code": "PRENC",
+            "display": "Pre-Admission",
+            "description": "Tahap sebelum admisi rawat inap."
+        }
+    ]
+}

@@ -58,11 +58,10 @@
                                 ['label' => 'Resume', 'url' => 'index.php?Page=Resume', 'page' => 'Resume'],
                             ],
                         ],
-                        ['label' => 'Jadwal Dokter', 'icon' => 'bi-calendar', 'url' => 'index.php?Page=ReferensiJadwalDokter', 'page' => 'ReferensiJadwalDokter'],
                     ],
                 ],
                 [
-                    'label' => 'Master Data',
+                    'label' => 'Referensi',
                     'items' => [
                         [
                             'label' => 'Referensi Lokal',
@@ -70,6 +69,7 @@
                             'children' => [
                                 ['label' => 'Poliklinik', 'url' => 'index.php?Page=ReferensiPoliklinik', 'page' => 'ReferensiPoliklinik'],
                                 ['label' => 'Dokter', 'url' => 'index.php?Page=ReferensiDokter', 'page' => 'ReferensiDokter'],
+                                ['label' => 'Jadwal Dokter', 'url' => 'index.php?Page=ReferensiJadwalDokter', 'page' => 'ReferensiJadwalDokter'],
                                 ['label' => 'Tenaga Medis', 'url' => 'index.php?Page=ReferensiPraktisi', 'page' => 'ReferensiPraktisi'],
                                 ['label' => 'Ruang Rawat', 'url' => 'index.php?Page=ReferensiRuangRawat', 'page' => 'ReferensiRuangRawat'],
                                 ['label' => 'ICD', 'url' => 'index.php?Page=ReferensiIcd', 'page' => 'ReferensiIcd'],
@@ -83,7 +83,7 @@
                             ],
                         ],
                         [
-                            'label' => 'Referensi BPJS',
+                            'label' => 'Bridging BPJS',
                             'icon' => 'bi-journal-medical',
                             'children' => [
                                 ['label' => 'Referensi ICD (BPJS)', 'url' => 'index.php?Page=ReferensiIcdBpjs', 'page' => 'ReferensiIcdBpjs'],
@@ -91,11 +91,12 @@
                             ],
                         ],
                         [
-                            'label' => 'Referensi SATUSEHAT',
+                            'label' => 'SATUSEHAT',
                             'icon' => 'bi-journal-medical',
                             'children' => [
-                                ['label' => 'Referensi ICD (SATUSEHAT)', 'url' => 'index.php?Page=ReferensiIcdSatusehat', 'page' => 'ReferensiIcdSatusehat'],
-                                ['label' => 'Wilayah (SATUSEHAT)', 'url' => 'index.php?Page=ReferensiWilayahSatusehat', 'page' => 'ReferensiWilayahSatusehat'],
+                                ['label' => 'ICD', 'url' => 'index.php?Page=ReferensiIcdSatusehat', 'page' => 'ReferensiIcdSatusehat'],
+                                ['label' => 'Wilayah', 'url' => 'index.php?Page=ReferensiWilayahSatusehat', 'page' => 'ReferensiWilayahSatusehat'],
+                                ['label' => 'Location', 'url' => 'index.php?Page=ReferensiLocationSatusehat', 'page' => 'ReferensiLocationSatusehat'],
                             ],
                         ],
                     ],

@@ -250,23 +250,39 @@
         <hr>
 
         <div class="row mb-2 mt-2">
-            <div class="col-12"><small><b>C. Dokter Penerima & DPJP</b></small></div>
+            <div class="col-12"><small><b>C. Dokter Penerima</b></small></div>
         </div>
         <div class="row mb-2">
             <div class="col-4"><small>Dokter Penerima</small></div>
             <div class="col-1"><small>:</small></div>
-            <div class="col-7"><small class="text-muted">'.$dokter.' ('.$kode_dokter.')</small></div>
+            <div class="col-7"><small class="text-muted">'.$kode_dokter.'</small></div>
         </div>
         <div class="row mb-2">
-            <div class="col-4"><small>Dokter DPJP</small></div>
+            <div class="col-4"><small>Nama Dokter</small></div>
             <div class="col-1"><small>:</small></div>
-            <div class="col-7"><small class="text-muted">'.$dpjp_nama.' ('.$dpjp_kode.')</small></div>
+            <div class="col-7"><small class="text-muted">'.$dokter.'</small></div>
+        </div>
+
+        <hr>
+
+        <div class="row mb-2 mt-2">
+            <div class="col-12"><small><b>D. Dokter DPJP</b></small></div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-4"><small>Kode Dokter</small></div>
+            <div class="col-1"><small>:</small></div>
+            <div class="col-7"><small class="text-muted">'.$dpjp_kode.'</small></div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-4"><small>Nama DPJP</small></div>
+            <div class="col-1"><small>:</small></div>
+            <div class="col-7"><small class="text-muted">'.$dpjp_nama.'</small></div>
         </div>
 
         <hr>
         
         <div class="row mb-2 mt-2">
-            <div class="col-12"><small><b>D. Poliklinik, Kelas, Ruang, Tempat Tidur</b></small></div>
+            <div class="col-12"><small><b>E. Poliklinik, Kelas, Ruang, Tempat Tidur</b></small></div>
         </div>
         <div class="row mb-2">
             <div class="col-4"><small>Poliklinik</small></div>
@@ -292,7 +308,7 @@
         <hr>
 
         <div class="row mb-2 mt-2">
-            <div class="col-12"><small><b>E. Kontak Darurat</b></small></div>
+            <div class="col-12"><small><b>F. Kontak Darurat</b></small></div>
         </div>
         <div class="row mb-2">
             <div class="col-4"><small>Nama Kontak</small></div>
@@ -313,7 +329,7 @@
         <hr>
 
         <div class="row mb-2 mt-2">
-            <div class="col-12"><small><b>F. Waktu Pelayanan</b></small></div>
+            <div class="col-12"><small><b>G. Waktu Pelayanan</b></small></div>
         </div>
         <div class="row mb-2">
             <div class="col-4"><small>Waktu Pendaftaran</small></div>
@@ -334,7 +350,7 @@
         <hr>
 
         <div class="row mb-2 mt-2">
-            <div class="col-12"><small><b>F. Informasi Lainnya</b></small></div>
+            <div class="col-12"><small><b>H. Informasi Lainnya</b></small></div>
         </div>
         <div class="row mb-2">
             <div class="col-4"><small>Petugas Pendaftaran</small></div>

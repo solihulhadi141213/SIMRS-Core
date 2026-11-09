@@ -30,7 +30,9 @@
     $stmtCount = mysqli_prepare($Conn, "SELECT id_jadwal FROM jadwal_dokter WHERE hari = ?");
     mysqli_stmt_bind_param($stmtCount, "s", $Hari);
     mysqli_stmt_execute($stmtCount);
-    $jumlah_data = mysqli_stmt_num_rows(mysqli_stmt_get_result($stmtCount));
+    $resultCount = mysqli_stmt_get_result($stmtCount);
+    $jumlah_data = mysqli_num_rows($resultCount);
+    mysqli_stmt_close($stmtCount);
     if(empty($jumlah_data)){
         echo '
             <tr>

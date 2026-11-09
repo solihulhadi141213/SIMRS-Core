@@ -124,7 +124,7 @@
             k.id_pasien,
             p.nama AS nama_pasien,
             p.id_ihs,
-            k.datetime_pelayanan,
+            k.datetime_daftar,
             k.jenis_kunjungan,
             k.dpjp_nama,
             k.status,
@@ -168,15 +168,24 @@
             $id_pasien          = $row['id_pasien'] ?? '';
             $nama_pasien        = htmlspecialchars((string)($row['nama_pasien'] ?? '-'));
             $id_ihs             = htmlspecialchars((string)($row['id_ihs'] ?? '-'));
-            $datetime_pelayanan = !empty($row['datetime_pelayanan']) ? date('d/m/Y H:i', strtotime((string)$row['datetime_pelayanan'])) : '-';
+            $datetime_pelayanan = !empty($row['datetime_daftar']) ? date('d/m/Y H:i T', strtotime((string)$row['datetime_daftar'])) : '-';
             $jenis_kunjungan    = htmlspecialchars((string)($row['jenis_kunjungan'] ?? '-'));
             $dpjp_nama          = htmlspecialchars((string)($row['dpjp_nama'] ?? '-'));
             $status             = (string)($row['status'] ?? '');
             
+            // Label Status
+            $kelas_warna = match ($status) {
+                'Terdaftar' => 'text-muted',
+                'Dilayani'  => 'text-dark',
+                'Selesai'   => 'text-success',
+                'Batal'     => 'text-warning',
+                'Meninggal' => 'text-danger',
+                default     => 'text-secondary', // Nilai cadangan jika status tidak terdaftar
+            };
 
-            $label_status = ($status !== '' && strtolower($status) !== 'batal')
-                ? '<span class="text-success"><small><b>' . htmlspecialchars($status) . '</b></small></span>'
-                : '<span class="text-secondary"><small><b>' . htmlspecialchars($status) . '</b></small></span>';
+            // Pastikan $status juga di-escape untuk mencegah XSS jika berasal dari database
+            $label_status = '<span class="' . $kelas_warna . '">' . htmlspecialchars($status) . '</span>';
+           
 
             $paging_attribute = ($no == ($offset + 1)) ? ' data-page-count="'.$pageCount.'" data-current-page="'.$page.'"' : '';
 
@@ -191,32 +200,93 @@
                 $id_encounter = htmlspecialchars((string)($row['id_encounter']));
                 $id_encounter_short = (strlen($id_encounter) > 10) ? substr($id_encounter, 0, 10) . '***' : $id_immunization;
                 $label_encounter = '
-                    <a href="javascript:void(0);" class="px-2 py-1 bg-info-subtle text-info rounded-2 modal_detail" data-id="'.$id_encounter.'">
-                        <i class="bi bi-arrow-up-right-square"></i> '.$id_encounter_short.'
+                    <a href="javascript:void(0);" class="px-2 py-1 bg-info-subtle text-info rounded-2" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots-vertical"></i> '.$id_encounter_short.'
                     </a>
-                ';
-            }
-            echo '
-            <tr'.$paging_attribute.'>
-                <td class="text-center"><small class="text-muted">'.$no.'</small></td>
-                <td><small class="text-muted">'.$id_pasien.'</small></td>
-                <td><small class="text-dark">'.$nama_pasien.'</small></td>
-                <td><small class="text-muted">'.$id_ihs.'</small></td>
-                <td><small class="text-muted">'.$datetime_pelayanan.'</small></td>
-                <td><small class="text-muted">'.$jenis_kunjungan.'</small></td>
-                <td><small class="text-muted">'.$dpjp_nama.'</small></td>
-                <td class="text-center">'.$label_status.'</td>
-                <td>'.$label_encounter.'</td>
-                <td class="text-center icon-btn">
-                    <button type="button" class="btn btn-sm btn-outline-dark btn-floating" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                         <li class="dropdown-header text-start"><h6>Option</h6></li>
-                        <li><a class="dropdown-item modal_detail" href="javascript:void(0);" data-id="'.$id_kunjungan.'"><i class="bi bi-info-circle"></i> Detail</a></li>
-                        <li><a class="dropdown-item modal_edit" href="javascript:void(0);" data-id="'.$id_kunjungan.'"><i class="bi bi-pencil"></i> Edit</a></li>
-                        <li><a class="dropdown-item modal_hapus" href="javascript:void(0);" data-id="'.$id_kunjungan.'"><i class="bi bi-trash"></i> Hapus</a></li>
+                        <li>
+                            <a class="dropdown-item modal_detail" href="javascript:void(0);" data-id="'.$id_encounter.'"><i class="bi bi-info-circle"></i> Detail</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item modal_edit" href="javascript:void(0);" data-id="'.$id_encounter.'"><i class="bi bi-pencil"></i> Edit</a>
+                        </li>
                     </ul>
-                </td>
-            </tr>
+                ';
+            }
+
+            // Ubah Zona Waktu sesuai USER
+            $datetime_daftar = '-';
+            if (!empty($row['datetime_daftar'])) {
+                try {
+                    // 1. Buat objek DateTime dengan mengasumsikan waktu dari database adalah UTC
+                    $dt = new DateTime((string)$row['datetime_daftar'], new DateTimeZone('UTC'));
+
+                    // 2. Ubah zona waktu ke zona waktu user ($SessionUserTimezone, misal: 'Asia/Jakarta')
+                    if (!empty($SessionUserTimezone)) {
+                        $dt->setTimezone(new DateTimeZone($SessionUserTimezone));
+                    }
+
+                    // 3. Format output sesuai keinginan
+                    $datetime_daftar = $dt->format('d/m/Y H:i T');
+                } catch (Exception $e) {
+                    // Mencegah error fatal jika format tanggal dari database tidak valid
+                    $datetime_daftar = '-';
+                }
+            }
+
+            // Routing Jenis Kunjungan
+            if($jenis_kunjungan === 'Rajal'){
+                $jenis_kunjungan = '<span class="text-muted">RAJAL</span>';
+            }else{
+                $jenis_kunjungan = '<span class="text-dark">RANAP</span>';
+            }
+
+            // Potong Karakter Nama
+            $raw_nama = (string)($row['nama_pasien'] ?? '-');
+            if (mb_strlen($raw_nama) > 15) {
+                // Potong 15 karakter pertama, amankan dengan htmlspecialchars, lalu tambahkan titik tiga
+                $nama_pasien_potong = htmlspecialchars(mb_substr($raw_nama, 0, 15)) . '...';
+            } else {
+                $nama_pasien_potong = htmlspecialchars($raw_nama);
+            }
+
+            // Potong Karakter Dokter
+            $raw_dokter = (string)($row['dpjp_nama'] ?? '-');
+            if (mb_strlen($raw_dokter) > 15) {
+                // Potong 15 karakter pertama, amankan dengan htmlspecialchars, lalu tambahkan titik tiga
+                $dpjp_nama_potong = htmlspecialchars(mb_substr($raw_dokter, 0, 15)) . '...';
+            } else {
+                $dpjp_nama_potong = htmlspecialchars($raw_dokter);
+            }
+            echo '
+                <tr'.$paging_attribute.'>
+                    <td class="text-center"><small class="text-muted">'.$no.'</small></td>
+                    <td>
+                        <a href="javascript:void(0);" class="text-primary modal_detail_pasien" data-id="'.$id_pasien.'" title="'.$nama_pasien.'">
+                            '.$nama_pasien_potong.'
+                        </a>
+                    </td>
+                    <td><small class="text-muted">'.$id_pasien.'</small></td>
+                    <td>
+                        <a href="javascript:void(0);" class="text-info modal_detail_ihs" data-id="'.$id_ihs.'">
+                            '.$id_ihs.'
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" class="text-info modal_detail_kunjungan" data-id="'.$id_kunjungan.'">
+                            '.$datetime_daftar.'
+                        </a>
+                    </td>
+                    <td>'.$jenis_kunjungan.'</td>
+                    <td>
+                        <span class="text-muted" title="'.$dpjp_nama.'">
+                            '.$dpjp_nama_potong.'
+                        </span>
+                    </td>
+                    <td class="text-center">'.$label_status.'</td>
+                    <td>'.$label_encounter.'</td>
+                </tr>
             ';
             $no++;
         }

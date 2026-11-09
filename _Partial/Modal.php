@@ -42,6 +42,7 @@
         'ReferensiImunisasi'        => '_Page/ReferensiImunisasi/ModalReferensiImunisasi.php',
         'ReferensiBodySite'         => '_Page/ReferensiBodySite/ModalReferensiBodySite.php',
         'ReferensiEpisodePerawatan' => '_Page/ReferensiEpisodePerawatan/ModalReferensiEpisodePerawatan.php',
+        'ReferensiLocationSatusehat' => '_Page/ReferensiLocationSatusehat/ModalReferensiLocationSatusehat.php',
         'Pasien'                    => '_Page/Pasien/ModalPasien.php',
         'Kunjungan'                 => '_Page/Kunjungan/ModalKunjungan.php',
         'Antrian'                   => '_Page/Antrian/ModalAntrian.php',

@@ -67,7 +67,7 @@
                                 <option value="id_pasien">No.RM</option>
                                 <option value="nama">Nama Pasien</option>
                                 <option value="id_ihs">ID IHS</option>
-                                <option value="datetime_pelayanan">Tanggal Kunjungan</option>
+                                <option value="datetime_daftar">Tanggal Kunjungan</option>
                                 <option value="jenis_kunjungan">Tujuan Kunjungan</option>
                                 <option value="dpjp_nama">Practitioner</option>
                                 <option value="status">Status</option>
@@ -101,6 +101,90 @@
     </div>
 </div>
 
+<!--- MODAL DETAIL PASIEN --->
+<div class="modal fade" id="ModalDetailPasien" tabindex="-1" aria-labelledby="ModalDetailPasien" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="title_detail">
+                    <i class="bi bi-info-circle"></i> Detail Pasien
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="row">
+                    <div class="col-12" id="FormDetailPasien">
+                        <!-- Form Detail Pasien Akan Muncul Disini -->
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i> Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--- MODAL DETAIL IHS --->
+<div class="modal fade" id="ModalDetailIhs" tabindex="-1" aria-labelledby="ModalDetailIhs" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="title_detail">
+                    <i class="bi bi-info-circle"></i> Detail IHS
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="row">
+                    <div class="col-12" id="FormDetailIhs">
+                        <!-- Form Detail IHS Akan Muncul Disini -->
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i> Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--- MODAL DETAIL KUNJUNGAN --->
+<div class="modal fade" id="ModalDetailKunjungan" tabindex="-1" aria-labelledby="ModalDetailKunjungan" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="title_detail">
+                    <i class="bi bi-info-circle"></i> Detail Kunjungan
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="row">
+                    <div class="col-12" id="FormDetailKunjungan">
+                        <!-- Form Detail Kunjungan Akan Muncul Disini -->
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i> Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- TAMBAH ENCOUNTER -->
 <div class="modal fade" id="ModalTambah" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -129,7 +213,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" disabled class="btn btn-primary" id="ButtonTambah">
-                        <i class="bi bi-send"></i> Kirim
+                        <i class="bi bi-send"></i> Kirim Encounter
                     </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
@@ -145,7 +229,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="title_detail">
-                    <i class="bi bi-info-circle"></i> Detail Imunisasi
+                    <i class="bi bi-info-circle"></i> Detail Encounter
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -173,7 +257,7 @@
         <div class="modal-content">
             <form action="javascript:void(0);" method="POST" id="ProsesEdit" autocomplete="off">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-pencil"></i> Edit Imunisasi</h5>
+                    <h5 class="modal-title"><i class="bi bi-pencil"></i> Edit Encounter</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -203,50 +287,14 @@
     </div>
 </div>
 
-<!--- Modal Hapus --->
-<div class="modal fade" id="ModalHapus" tabindex="-1" aria-labelledby="ModalHapus" aria-hidden="true">
-    <div class="modal-dialog modal-dialog modal-md" role="document">
-        <div class="modal-content">
-            <form action="javascript:void(0);" method="POST" id="ProsesHapus" autocomplete="off">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-trash"></i> Hapus Imunisasi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                   
-                    <div class="row">
-                        <div class="col-12" id="FormHapus">
-                           <!-- Form Hapus Akan Muncul Disini -->
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12" id="NotifikasiHapus">
-                           <!-- Notifikasi Hapus  Akan Muncul Disini -->
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-md btn-primary" id="ButtonHapus">
-                        <i class="bi bi-check"></i> Ya, Hapus
-                    </button>
-                    <button type="button" class="btn btn-md btn-secondary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="bi bi-x-lg"></i> Tutup
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <!-- MODAL EXPORT -->
 <div class="modal fade" id="ModalExport" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <form action="_Page\Imunisasi\ProsesExport.php" method="POST" target="_blank" autocomplete="off">
+            <form action="_Page/Encounter/ProsesExport.php" method="POST" target="_blank" autocomplete="off">
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        <i class="bi bi-download"></i> Export Data Imunisasi
+                        <i class="bi bi-download"></i> Export Encounter
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>

@@ -636,7 +636,7 @@
         $url_satusehat        = rtrim($Data['url_satusehat'], '/');
         $client_key           = trim($Data['client_key']);
         $secret_key           = trim($Data['secret_key']);
-        $token_db             = trim($Data['token']);
+        $token_db             = trim((string)($Data['token'] ?? ''));
         $expired_db           = trim($Data['datetime_expired']);
 
         // =====================================================
@@ -833,7 +833,7 @@
     function CreatLocation($baseurl_satusehat,$Json,$Token){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Location',
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Location',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -853,7 +853,7 @@
     function UpdateLocation($baseurl_satusehat,$Json,$Token,$id_location){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Location/'.$id_location.'',
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Location/'.$id_location.'',
             //For New Version
             // CURLOPT_RETURNTRANSFER => true,
             // CURLOPT_ENCODING => '',
@@ -885,7 +885,7 @@
         $KeywordLocation = str_replace(" ", "%20", $KeywordLocation);
         $curl = curl_init();
         curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Location?name='.$KeywordLocation.'',
+        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Location?name='.$KeywordLocation.'',
        //For New Version
         // CURLOPT_RETURNTRANSFER => true,
         // CURLOPT_ENCODING => '',
@@ -915,7 +915,7 @@
         $KeywordLocation = str_replace(" ", "%20", $KeywordLocation);
         $curl = curl_init();
         curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Location/'.$KeywordLocation.'',
+        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Location/'.$KeywordLocation.'',
         //For New Version
         // CURLOPT_RETURNTRANSFER => true,
         // CURLOPT_ENCODING => '',
@@ -944,7 +944,7 @@
     function organizationLocation($baseurl_satusehat,$Token,$ID_Org){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Location?organization='.$ID_Org.'',
+        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Location?organization='.$ID_Org.'',
        //For New Version
         // CURLOPT_RETURNTRANSFER => true,
         // CURLOPT_ENCODING => '',
@@ -1268,7 +1268,7 @@
     function EncounterById($baseurl_satusehat,$Token,$id){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter/'.$id.'',
+        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Encounter/'.$id.'',
         
         //For New Version 7.4
         // CURLOPT_RETURNTRANSFER => true,
@@ -1298,7 +1298,7 @@
     function EncounterBySubject($baseurl_satusehat,$Token,$id_subject){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-        CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter?subject='.$id_subject.'',
+        CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Encounter?subject='.$id_subject.'',
        //For New Version 7.4
         // CURLOPT_RETURNTRANSFER => true,
         // CURLOPT_ENCODING => '',
@@ -1327,7 +1327,7 @@
     function CreatEncounter($baseurl_satusehat,$Json,$Token){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter',
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Encounter',
             //For New Version 7.4
             // CURLOPT_RETURNTRANSFER => true,
             // CURLOPT_ENCODING => '',
@@ -1358,7 +1358,7 @@
     function UpdateEncounter($baseurl_satusehat,$Json,$Token,$id_encounter){
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => ''.$baseurl_satusehat.'/Encounter/'.$id_encounter.'',
+            CURLOPT_URL => ''.$baseurl_satusehat.'/fhir-r4/v1/Encounter/'.$id_encounter.'',
            //For New Version 7.4
             // CURLOPT_RETURNTRANSFER => true,
             // CURLOPT_ENCODING => '',

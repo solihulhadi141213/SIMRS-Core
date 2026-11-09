@@ -1,0 +1,47 @@
+[
+    {
+        "code": "planned",
+        "display": "Planned",
+        "description": "Kunjungan telah direncanakan."
+    },
+    {
+        "code": "arrived",
+        "display": "Arrived",
+        "description": "Pasien telah tiba di fasilitas kesehatan."
+    },
+    {
+        "code": "triaged",
+        "display": "Triaged",
+        "description": "Pasien telah melalui proses triase."
+    },
+    {
+        "code": "in-progress",
+        "display": "In Progress",
+        "description": "Pelayanan pasien sedang berlangsung."
+    },
+    {
+        "code": "onleave",
+        "display": "On Leave",
+        "description": "Pasien sedang meninggalkan pelayanan sementara."
+    },
+    {
+        "code": "finished",
+        "display": "Finished",
+        "description": "Pelayanan pasien telah selesai."
+    },
+    {
+        "code": "cancelled",
+        "display": "Cancelled",
+        "description": "Kunjungan dibatalkan."
+    },
+    {
+        "code": "entered-in-error",
+        "display": "Entered in Error",
+        "description": "Kunjungan tercatat akibat kesalahan input."
+    },
+    {
+        "code": "unknown",
+        "display": "Unknown",
+        "description": "Status kunjungan tidak diketahui."
+    }
+]
