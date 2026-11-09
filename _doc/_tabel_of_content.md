@@ -1,16 +1,9 @@
-# Tabel Of Content
-## Aksesibilitas
-1. [Cara melakukan login dan bagaimana carakerja validasi pengguna oleh sistem.](login.md)
+# Table of Contents
 
-## Profil Pengguna
-1. [Ubah Alamat Email.](ubah-email.md)
-2. [Ubah Password.](ubah-password.md)
-
-## Kelola Akses (aksesibilitas)
-1. [Kelola Kode Fitur Aplikasi.](Fitur-Aplikasi.md)
-2. [Kelola Entitas Akses.](Entitas-Akses.md)
-## Pengaturan Aplikasi
-## Integrasi Sistem
-## Monitoring Aktivitas
-## Referensi
-
+| No. | Kategori | Judul | Action |
+|:---:|---|---|:---:|
+| 1 | Aksesibilitas | Cara Melakukan Login dan Validasi Pengguna oleh Sistem | [Lihat Dokumentasi](login.md) |
+| 2 | Profil Pengguna | Ubah Alamat Email | [Lihat Dokumentasi](ubah-email.md) |
+| 3 | Profil Pengguna | Ubah Password | [Lihat Dokumentasi](ubah-password.md) |
+| 4 | Kelola Akses (Aksesibilitas) | Kelola Kode Fitur Aplikasi | [Lihat Dokumentasi](Fitur-Aplikasi.md) |
+| 5 | Kelola Akses (Aksesibilitas) | Kelola Entitas Akses | [Lihat Dokumentasi](Entitas-Akses.md) |

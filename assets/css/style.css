@@ -16282,18 +16282,245 @@ select[readonly],
 
 
 /* Menampilkan dokumentasi */
-.content_md pre {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 6px;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-    margin-bottom: 0;
+
+/* =========================================
+   MARKDOWN DOCUMENTATION
+========================================= */
+
+.markdown-document {
+    width: 100%;
+    color: #343a40;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-wrap: break-word;
 }
 
-.content_md pre code {
-    font-family: Consolas, monospace;
-    font-size: 13px;
+/* Heading */
+
+.markdown-document h1,
+.markdown-document h2,
+.markdown-document h3,
+.markdown-document h4,
+.markdown-document h5,
+.markdown-document h6 {
     color: #343a40;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.markdown-document h1 {
+    font-size: 1.6rem;
+}
+
+.markdown-document h2 {
+    font-size: 1.35rem;
+}
+
+.markdown-document h3 {
+    font-size: 1.15rem;
+}
+
+/* Paragraph */
+
+.markdown-document p {
+    margin-bottom: 1rem;
+}
+
+/* Table */
+
+.markdown-document table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 13px;
+    border: 1px solid #dee2e6;
+}
+
+.markdown-document table th,
+.markdown-document table td {
+    border: 1px solid #dee2e6;
+    padding: 9px 12px;
+    vertical-align: middle;
+}
+
+.markdown-document table th {
+    background-color: #f1f3f5;
+    color: #343a40;
+    font-weight: 600;
+    text-align: left;
+}
+
+.markdown-document table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.markdown-document table tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+/* Action Button pada kolom terakhir tabel */
+
+.markdown-document table td:last-child a {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 2px 0;
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 500;
+    text-decoration: none;
+    color: #0d6efd;
+    background-color: #fff;
+    border: 1px solid #0d6efd;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.markdown-document table td:last-child a:hover {
+    color: #fff;
+    background-color: #0d6efd;
+}
+
+/* List */
+
+.markdown-document ul,
+.markdown-document ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.markdown-document li {
+    margin-bottom: 0.3rem;
+}
+
+/* Link */
+
+.markdown-document a {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.markdown-document a:hover {
+    text-decoration: underline;
+}
+
+/* Blockquote */
+
+.markdown-document blockquote {
+    margin: 1rem 0;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-left: 4px solid #0d6efd;
+    color: #6c757d;
+}
+
+/* Inline Code */
+
+.markdown-document code {
+    padding: 2px 5px;
+    color: #d63384;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* Code Block */
+
+.markdown-document pre {
+    padding: 15px;
+    overflow-x: auto;
+    background-color: #212529;
+    border-radius: 6px;
+    margin: 1rem 0;
+}
+
+.markdown-document pre code {
+    padding: 0;
+    color: #f8f9fa;
+    background: transparent;
+    font-size: 13px;
+}
+
+/* Horizontal Rule */
+
+.markdown-document hr {
+    margin: 1.5rem 0;
+    border-color: #dee2e6;
+}
+
+/* Images */
+
+.markdown-document img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Responsive Table */
+
+.markdown-document {
+    overflow-x: auto;
+}
+
+.markdown-document table {
+    min-width: 550px;
+}
+
+/* Raw Markdown */
+
+.markdown-document > pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+/* Markdown - Raw Mode */
+.content_md.raw-mode {
+    background-color: #f1f3f5;
+    color: #212529;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 16px;
+}
+
+/* Area teks */
+.content_md.raw-mode pre {
+    background-color: transparent !important;
+    color: #212529 !important;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    white-space: pre;
+    overflow-x: auto;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* Elemen code */
+.content_md.raw-mode pre code {
+    background: transparent !important;
+    color: #212529 !important;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* Penanda Markdown */
+.content_md.raw-mode .hljs-meta,
+.content_md.raw-mode .hljs-punctuation {
+    color: #c62828 !important;
+}
+
+.content_md.raw-mode .hljs-section,
+.content_md.raw-mode .hljs-title {
+    color: #1565c0 !important;
+}
+
+.content_md.raw-mode .hljs-string,
+.content_md.raw-mode .hljs-link {
+    color: #087443 !important;
+}
+
+.content_md.raw-mode .hljs-keyword,
+.content_md.raw-mode .hljs-attr {
+    color: #7b1fa2 !important;
 }
