@@ -142,7 +142,7 @@
                                             </a>
                                         </li>
                                         <li class="waves-effect waves-light border-bottom border-1 border-bottom-default">
-                                            <a href="index.php?Page=Help" class="profile-menu-link">
+                                            <a href="index.php?Page=Dokumentasi" class="profile-menu-link">
                                                 <i class="bi bi-question-circle" aria-hidden="true"></i> <span>Bantuan</span>
                                             </a>
                                         </li>

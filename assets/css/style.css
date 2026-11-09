@@ -16279,3 +16279,21 @@ select[readonly],
     background-color: var(--mdb-secondary-bg, #eeeeee);
     opacity: 1;
 }
+
+
+/* Menampilkan dokumentasi */
+.content_md pre {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 6px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    margin-bottom: 0;
+}
+
+.content_md pre code {
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    color: #343a40;
+}

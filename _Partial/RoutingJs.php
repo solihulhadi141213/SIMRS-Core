@@ -9,6 +9,7 @@
     
     // Daftar halaman dan lokasi file JS-nya
     $pages = [
+        // Fitur Utama
         "Profile"                   => "_Page/ProfileUser/ProfileUser.js?v='.$version.'",
         "Setting"                   => "_Page/Setting/Setting.js?v='.$version.'",
         "ApiKey"                    => "_Page/ApiKey/ApiKey.js?v='.$version.'",
@@ -54,6 +55,7 @@
         "Laboratorium"              => "_Page/Laboratorium/Laboratorium.js?v=A'.$version.'",
         "Encounter"                 => "_Page/Encounter/Encounter.js?v=A'.$version.'",
         "EpisodePerawatan"          => "_Page/EpisodePerawatan/EpisodePerawatan.js?v=A'.$version.'",
+        "Dokumentasi"          => "_Page/Dokumentasi/Dokumentasi.js?v=A'.$version.'",
     ];
 
     // Load file JS sesuai halaman aktif

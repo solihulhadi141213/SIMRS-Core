@@ -47,6 +47,7 @@
         'Laboratorium'              => '_Page/Laboratorium/Laboratorium.php',
         'Encounter'                 => '_Page/Encounter/Encounter.php',
         'EpisodePerawatan'          => '_Page/EpisodePerawatan/EpisodePerawatan.php',
+        'Dokumentasi'          => '_Page/Dokumentasi/Dokumentasi.php',
     ];
 
     // Berikut ini adalah array yang berisi informasi breadcrumb untuk setiap halaman. Setiap entri memiliki format:
@@ -97,6 +98,7 @@
         'Laboratorium'              => ['Laboratorium', null, null],
         'Encounter'                 => ['Encounter', null, null],
         'EpisodePerawatan'          => ['Episode Perawatan', null, null],
+        'Dokumentasi'          => ['Dokumentasi', null, null],
     ];
 
     $page = trim($_GET['Page'] ?? '');

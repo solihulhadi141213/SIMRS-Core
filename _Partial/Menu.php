@@ -160,15 +160,14 @@
                             ],
                         ],
                         ['label' => 'Laporan Kesalahan', 'icon' => 'bi-send', 'url' => 'index.php?Page=LaporanKesalahan', 'page' => 'LaporanKesalahan'],
-                        ['label' => 'Migrasi', 'icon' => 'bi-database', 'url' => 'index.php?Page=Migrasi', 'page' => 'Migrasi'],
-                        ['label' => 'Log', 'icon' => 'bi-record', 'url' => 'index.php?Page=Log', 'page' => 'Log'],
-                        ['label' => 'Dokumentasi', 'icon' => 'bi-bookmark', 'url' => 'index.php?Page=Dokumentasi', 'page' => 'Dokumentasi'],
+                        ['label' => 'Pencadangan', 'icon' => 'bi-database', 'url' => 'index.php?Page=Migrasi', 'page' => 'Migrasi'],
+                        ['label' => 'Log Pengguna', 'icon' => 'bi-record', 'url' => 'index.php?Page=Log', 'page' => 'Log'],
                     ],
                 ],
                 [
                     'label' => 'Lainnya',
                     'items' => [
-                        ['label' => 'Bantuan', 'icon' => 'bi-question-circle', 'url' => 'index.php?Page=Bantuan', 'page' => 'Bantuan'],
+                        ['label' => 'Dokumentasi', 'icon' => 'bi-question-circle', 'url' => 'index.php?Page=Dokumentasi', 'page' => 'Dokumentasi'],
                         [
                             'label' => 'Logout',
                             'icon' => 'bi-box-arrow-right',

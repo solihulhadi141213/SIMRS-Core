@@ -53,6 +53,16 @@
     }
 ?>
 
+<!-- markedjs -->
+<?php 
+    // Berguna untuk menampilkan dokumen .md pada halaman dokumentasi
+    if($Page=="Dokumentasi"){
+        echo '
+            <script src="node_modules/marked/lib/marked.umd.js"></script>
+        ';
+    }
+?>
+
 <!-- jQuery-Mask-Plugin -->
 <script src="node_modules/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
 
